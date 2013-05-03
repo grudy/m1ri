@@ -1,16 +1,17 @@
 //
 //  main.c
 //  simpleaddingproofofconcept
-//
-//   2013 William Alumbaugh.
+// This is intended to represent  the addition logic  used 
+//    in  the paper TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW,  BITSLICING AND THE METHOD OF FOUR RUSSIANS OVER LARGER FINITE FIELDS
+//   
 //
 
 
 
 #include <stdio.h>
 
-#include <stdbool.h>
-
+#include <stdbool.h>   //For a declaration of bools
+                        //This representation isn't bitpacked properly 
 
 int main(int argc, const char * argv[])
 {
@@ -23,8 +24,7 @@ int main(int argc, const char * argv[])
     
     const int nn = n * n;
     
-    bool x[nn];
-    
+    bool x[nn];  //boolean array, not a  bit vector.   Values actually take up 
     
     
     bool y[nn];
@@ -32,17 +32,17 @@ int main(int argc, const char * argv[])
     bool r[nn];
     
     
-    int  q;
+    int  q;   //
     
     
     
     
-    for (q = 0; q < nn; q = q + 2) {
+    for (q = 0; q < nn; q = q + 2) {  //This shows the logic of addition over GF(3)   
         
+                                            
         
-        
-        bool s = (x[q]^y[q + 1]^x[q + 1]);
-        bool t = (x[q+1]^y[q]^y[q+1]);
+        bool s = (x[q]^y[q + 1]^x[q + 1]);      //  For  represnting the S=  x[0]  XOR  y[1] XOR [x1] 
+        bool t = (x[q+1]^y[q]^y[q+1]);          //          
         r[q] = ((x[q]^y[q+1])&&(x[q+1]^y[q]));
         r[q + 1] = (s || t);
         
