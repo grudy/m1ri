@@ -24,12 +24,12 @@ int main(int argc, const char * argv[])
     
     const int nn = n * n;
     
-    bool x[nn];  //boolean array, not a  bit vector.   Values actually take up 
+    bool x[nn];  //boolean array, not a  bit vector.   Values actually take up an entire integer
     
     
-    bool y[nn];
+    bool y[nn];   //second boolean array 
     
-    bool r[nn];
+    bool r[nn];   //will represent the sum of x and y 
     
     
     int  q;   //
