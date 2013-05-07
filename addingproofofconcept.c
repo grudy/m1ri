@@ -241,8 +241,11 @@ int main(int argc, const char * argv[])
     int xsize = sizeof(x);
     int ysize = sizeof(y);
     int rsize  = sizeof(r);
-    printf("x is %d bytes wide, y is %d bytes wide, r is %d bytes wide \n \n" ,xsize, ysize, rsize);
-    printf("-------------------");
+    printf("x is %d bytes wide, y is %d bytes wide, r is %d bytes wide \n \n" ,xsize, ysize, rsize);//prints the size of the bit vectors, should be 4 bytes
+    
+    
+    
+    printf("-------------------");  //print the 3 matrices
     printf("    Matrix x \n");
     printf("-------------------");
     print(x);
