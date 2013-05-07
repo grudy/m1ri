@@ -239,6 +239,7 @@ int main(int argc, const char * argv[])
     
     
     printf("-------------------");  //print the 3 matrices
+    printf("\n");
     printf("    Matrix x \n");
     printf("-------------------");
     print(x);
