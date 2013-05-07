@@ -14,14 +14,7 @@
 #define fn(a, b, c, d)  ((a^b)&(c^d))   //for finding R[0] (the first half of the value representingthe sum of vectory and vectorx, vectorr)
 #define st(a, b , c)    (a^b^c)   //performing the  (S=  x[0]  XOR  y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
 
-#include <stdio.h>
-#include<stddef.h>
-#include<stdbool.h>
 
-#define true  1
-#define false 0
-#define fn(a, b, c, d)  (a^b^c^d)   //for finding R[0] (the first half of the value representing the sum of vec.x and vec.y, vec.r)
-#define st(a, b , c)    (a^b^c)   // for finding the R[1] (second half of the value representing the sum 
 
 typedef union vector{       //defines a 32-bit  bit vector
     struct {
