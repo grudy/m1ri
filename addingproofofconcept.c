@@ -1,32 +1,37 @@
 //
-//  main.c
-//  proofofconcept of  the addition logic used   in  the paper  published by
-//  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
-//    RUSSIANS OVER LARGER FINITE FIELDS"
+// main.c
+// proofofconcept of the addition logic used in the paper published by
+// TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
+// RUSSIANS OVER LARGER FINITE FIELDS"
 //
-// William Andrew Alumbaugh 
+// William Andrew Alumbaugh
 
 
 #include <stdio.h>
 #include<stddef.h>
-#define true  1 
+#include<stdlib.h>
+#define true 1
 #define false 0
-#define fn(a, b, c, d)  ((a^b)&(c^d))   //for finding R[0] (the first half of the value representingthe sum of vectory and vectorx, vectorr)
-#define st(a, b , c)    (a^b^c)   //performing the  (S=  x[0]  XOR  y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
+#define fn(a, b, c, d) (a^b)&(c^d) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
+#define st(a, b , c) (a^b^c) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
 
 
 
-typedef union vector{       //defines a 32-bit  bit vector
-    struct {
-        unsigned int v1  :1;
-        unsigned int v2  :1;
-        unsigned int v3  :1;
-        unsigned int v4  :1;
-        unsigned int v5  :1;
-        unsigned int v6  :1;
-        unsigned int v7  :1;
-        unsigned int v8  :1;
-        unsigned int v9  :1;
+typedef union vector{ //defines a 64-bit bit vector
+    
+    unsigned long long v;
+    
+  
+     struct jack{
+        unsigned long v1 :1;
+        unsigned int v2 :1;
+        unsigned int v3 :1;
+        unsigned int v4 :1;
+        unsigned int v5 :1;
+        unsigned int v6 :1;
+        unsigned int v7 :1;
+        unsigned int v8 :1;
+        unsigned int v9 :1;
         unsigned int v10 :1;
         unsigned int v11 :1;
         unsigned int v12 :1;
@@ -50,210 +55,123 @@ typedef union vector{       //defines a 32-bit  bit vector
         unsigned int v30 :1;
         unsigned int v31 :1;
         unsigned int v32 :1;
+        unsigned int v33 :1;
+        unsigned int v34 :1;
+        unsigned int v35 :1;
+        unsigned int v36 :1;
+        unsigned int v37 :1;
+        unsigned int v38 :1;
+        unsigned int v39 :1;
+        unsigned int v40 :1;
+        unsigned int v41 :1;
+        unsigned int v42 :1;
+        unsigned int v43 :1;
+        unsigned int v44 :1;
+        unsigned int v45 :1;
+        unsigned int v46 :1;
+        unsigned int v47 :1;
+        unsigned int v48 :1;
+        unsigned int v49 :1;
+        unsigned int v50 :1;
+        unsigned int v51 :1;
+        unsigned int v52 :1;
+        unsigned int v53 :1;
+        unsigned int v54 :1;
+        unsigned int v55 :1;
+        unsigned int v56 :1;
+        unsigned int v57 :1;
+        unsigned int v58 :1;
+        unsigned int v59 :1;
+        unsigned int v60 :1; 
+        unsigned int v61 :1; 
+        unsigned int v62 :1; 
+        unsigned int v63 :1; 
+        unsigned int v64 :1;
     } bit;
     
 } vec;
 
 
-int print(vec a)
+
+
+
+int print(vec a, vec b)
 {
     printf("\n \n");
-    printf("[%d %d][%d %d][%d %d][%d %d] \n" , a.bit.v1, a.bit.v2, a.bit.v3, a.bit.v4, a.bit.v5, a.bit.v6, a.bit.v7, a.bit.v8  );
-    printf("[%d %d][%d %d][%d %d][%d %d] \n", a.bit.v9, a.bit.v10, a.bit.v11, a.bit.v12, a.bit.v13, a.bit.v14, a.bit.v15, a.bit.v16);
-    printf("[%d %d][%d %d][%d %d][%d %d] \n", a.bit.v17, a.bit.v18, a.bit.v19, a.bit.v20, a.bit.v21, a.bit.v22, a.bit.v23, a.bit.v24);
-    printf("[%d %d][%d %d][%d %d][%d %d] \n" ,a.bit.v25, a.bit.v26, a.bit.v27, a.bit.v28,  a.bit.v29, a.bit.v30, a.bit.v31, a.bit.v32);
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] \n" , a.bit.v1, b.bit.v1,  a.bit.v2 , b.bit.v2, a.bit.v3,b.bit.v3, a.bit.v4,b.bit.v4, a.bit.v5,b.bit.v5, a.bit.v6,b.bit.v6, a.bit.v7, b.bit.v7, a.bit.v8, b.bit.v8 );
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] \n", a.bit.v9, b.bit.v9,  a.bit.v10 , b.bit.v10, a.bit.v11,b.bit.v11, a.bit.v12,b.bit.v12, a.bit.v13,b.bit.v13, a.bit.v14,b.bit.v14, a.bit.v15, b.bit.v15, a.bit.v16, b.bit.v16 );
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] \n", a.bit.v17, b.bit.v17,  a.bit.v18 , b.bit.v18, a.bit.v19,b.bit.v19, a.bit.v20,b.bit.v20, a.bit.v21,b.bit.v21, a.bit.v22,b.bit.v22, a.bit.v23, b.bit.v23, a.bit.v24, b.bit.v24 );
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] \n",  a.bit.v25, b.bit.v25,  a.bit.v26 , b.bit.v26, a.bit.v27,b.bit.v27, a.bit.v28,b.bit.v28, a.bit.v29,b.bit.v29, a.bit.v30,b.bit.v30, a.bit.v31, b.bit.v31, a.bit.v32, b.bit.v32 );
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] \n", a.bit.v33, b.bit.v33,  a.bit.v34 , b.bit.v34, a.bit.v35,b.bit.v35, a.bit.v36,b.bit.v36, a.bit.v37,b.bit.v37, a.bit.v38,b.bit.v38, a.bit.v39, b.bit.v39, a.bit.v40, b.bit.v40 );
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] \n", a.bit.v41, b.bit.v41,  a.bit.v42 , b.bit.v42, a.bit.v43,b.bit.v43, a.bit.v44,b.bit.v44, a.bit.v45,b.bit.v45, a.bit.v46,b.bit.v46, a.bit.v47, b.bit.v47, a.bit.v48, b.bit.v48 );
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] \n", a.bit.v49, b.bit.v49,  a.bit.v50 , b.bit.v50, a.bit.v51,b.bit.v51, a.bit.v52,b.bit.v52, a.bit.v53,b.bit.v53, a.bit.v54,b.bit.v54, a.bit.v55, b.bit.v55, a.bit.v56, b.bit.v56 );
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] \n", a.bit.v57, b.bit.v57,  a.bit.v58 , b.bit.v58, a.bit.v59,b.bit.v59, a.bit.v60,b.bit.v60, a.bit.v61,b.bit.v61, a.bit.v62,b.bit.v62, a.bit.v63, b.bit.v63, a.bit.v64, b.bit.v64 );
+    
 
     printf("\n \n");
     return 0;
-   
+    
 }
 
 
 
 int main(int argc, const char * argv[])
 {
+    
+    
+    union{
+    vec x; //vector x first half
+     vec xn; //vector xn,  second half of (X)
+    } xtotal;
+    
+    
+    union{
+    vec y; //vector y
+    vec yn; // vector yn,  second half of (Y)
+    }ytotal;
+  
+    
+    union{
+        vec r;
+        vec rn;
+    }rtotal;
+    //setting the values
+    xtotal.xn.v = 5454535452452435;
+    ytotal.yn.v = 42545454545353452;
+    ytotal.yn.v = 45245234523452345;
+    xtotal.x.v = 245240352043592345;
+    
+    
 
-    vec x;  //vector x
-    vec y;  //vector y 
-    vec r;  //vector r
-    
-    // setting variabes for vector x
-    x.bit.v1 = true;
-    x.bit.v2 = true;
-    x.bit.v3 = false;
-    x.bit.v4 = true;
-    x.bit.v5 = true;
-    x.bit.v6 = false;
-    x.bit.v7 = true;
-    x.bit.v8 = true;
-    x.bit.v9 = true;
-    x.bit.v10 = true;
-    x.bit.v11 = true;
-    x.bit.v12 = true;
-    x.bit.v13 = true;
-    x.bit.v14 = true;
-    x.bit.v15 = true;
-    x.bit.v16 = true;
-    x.bit.v17 = false;
-    x.bit.v18 = false;
-    x.bit.v19 = true;
-    x.bit.v20 = true;
-    x.bit.v21 = false;
-    x.bit.v22 = true;
-    x.bit.v23 = true;
-    x.bit.v24 = false;
-    x.bit.v25 = false;
-    x.bit.v26 = true;
-    x.bit.v27 = false;
-    x.bit.v28 = true;
-    x.bit.v29 = false;
-    x.bit.v30 = false;
-    x.bit.v31 = true,
-    x.bit.v32 = false;
-    
-    
-    // setting variabes for vector y
-    y.bit.v1 = true;  
-    y.bit.v2 = true;
-    y.bit.v3 = false;
-    y.bit.v4 = true;
-    y.bit.v5 = true;
-    y.bit.v6 = false;
-    y.bit.v7 = true;
-    y.bit.v8 = true;
-    y.bit.v9 = true;
-    y.bit.v10 = true;
-    y.bit.v11 = true;
-    y.bit.v12 = true;
-    y.bit.v13 = true;
-    y.bit.v14 = true;
-    y.bit.v15 = true;
-    y.bit.v16 = true;
-    y.bit.v17 = false;
-    y.bit.v18 = false;
-    y.bit.v19 = true;
-    y.bit.v20 = true;
-    y.bit.v21 = false;
-    y.bit.v22 = true;
-    y.bit.v23 = true;
-    y.bit.v24 = false;
-    y.bit.v25 = false;
-    y.bit.v26 = true;
-    y.bit.v27 = false;
-    y.bit.v28 = true;
-    y.bit.v29 = false;
-    y.bit.v30 = false;
-    y.bit.v31 = true;
-    y.bit.v32 = false;
-    
-    
-    
-    
-    
-    
-    
-    
-    // setting variabes for vector r
-    
-    r.bit.v1 = false;
-    r.bit.v2 = false;
-    r.bit.v3 = false;
-    r.bit.v4 = false;
-    r.bit.v5 = false;
-    r.bit.v6 = false;
-    r.bit.v7 = false;
-    r.bit.v8 = false;
-    r.bit.v9 = false;
-    r.bit.v10 = false;
-    r.bit.v11 = false;
-    r.bit.v12 = false;      
-    r.bit.v13 = false;
-    r.bit.v14 = false;
-    r.bit.v15 = false;
-    r.bit.v16 = false;
-    r.bit.v17 = false;
-    r.bit.v18 = false;
-    r.bit.v19 = false;
-    r.bit.v20 = false;
-    r.bit.v21 = false;
-    r.bit.v22 = false;
-    r.bit.v23 = false;
-    r.bit.v24 = false;
-    r.bit.v25 = false;
-    r.bit.v26 = false;
-    r.bit.v27 = false;
-    r.bit.v28 = false;
-    r.bit.v29 = false;
-    r.bit.v30 = false;
-    r.bit.v31 = false;
-    r.bit.v32 = false;
-    
-    
-    
-    
-    r.bit.v1 = fn(x.bit.v1, y.bit.v2, x.bit.v2, y.bit.v1);  //for representing  
-    r.bit.v3 = fn(x.bit.v3, y.bit.v4, x.bit.v4, y.bit.v3);///r0 ← (x0 ⊕y1)∧(x1 ⊕y0)
-    r.bit.v5 = fn(x.bit.v5, y.bit.v6, x.bit.v6, y.bit.v5);
-    r.bit.v7 = fn(x.bit.v7, y.bit.v8, x.bit.v8, y.bit.v7);
-    r.bit.v9 = fn(x.bit.v9, y.bit.v10, x.bit.v10, y.bit.v9);
-    r.bit.v11 = fn(x.bit.v11, y.bit.v12, x.bit.v12, y.bit.v11);
-    r.bit.v13 = fn(x.bit.v13, y.bit.v14, x.bit.v14, y.bit.v13);
-    r.bit.v15 = fn(x.bit.v15, y.bit.v16, x.bit.v16, y.bit.v15);
-    r.bit.v17 = fn(x.bit.v17, y.bit.v18, x.bit.v18, y.bit.v17);
-    r.bit.v19 = fn(x.bit.v19, y.bit.v20, x.bit.v20, y.bit.v19);
-    r.bit.v21 = fn(x.bit.v21, y.bit.v22, x.bit.v22, y.bit.v21);
-    r.bit.v23 = fn(x.bit.v23, y.bit.v24, x.bit.v24, y.bit.v23);
-    r.bit.v25 = fn(x.bit.v25, y.bit.v26, x.bit.v26, y.bit.v25);
-    r.bit.v27 = fn(x.bit.v27, y.bit.v28, x.bit.v28, y.bit.v27);
-    r.bit.v29 = fn(x.bit.v29, y.bit.v30, x.bit.v30, y.bit.v29);
-    r.bit.v31 = fn(x.bit.v31, y.bit.v32, x.bit.v32, y.bit.v31);
-    
-    
-    
-    r.bit.v2 = (st(x.bit.v1, y.bit.v2, x.bit.v2)      |   st(x.bit.v2, y.bit.v1, y.bit.v2));
-    r.bit.v4 = (st(x.bit.v3, y.bit.v4, x.bit.v4)      |   st(x.bit.v4, y.bit.v3, y.bit.v4)); //for representing
-    r.bit.v6 = (st(x.bit.v5, y.bit.v6, x.bit.v6)      |   st(x.bit.v6, y.bit.v5, y.bit.v6));// r1 ← s XOR t.
-    r.bit.v8 = (st(x.bit.v7, y.bit.v8, x.bit.v8)      |   st(x.bit.v8, y.bit.v7, y.bit.v8));
-    r.bit.v10 = (st(x.bit.v9, y.bit.v10, x.bit.v10)   |   st(x.bit.v10, y.bit.v9, y.bit.v10));
-    r.bit.v12 = (st(x.bit.v11, y.bit.v12, x.bit.v12)  |   st(x.bit.v12, y.bit.v11, y.bit.v12));
-    r.bit.v14 = (st(x.bit.v13, y.bit.v14, x.bit.v14)  |   st(x.bit.v14, y.bit.v13, y.bit.v14));
-    r.bit.v16 = (st(x.bit.v15, y.bit.v16, x.bit.v16)  |   st(x.bit.v16, y.bit.v15, y.bit.v16));
-    r.bit.v18 = (st(x.bit.v17, y.bit.v18, x.bit.v18)  |   st(x.bit.v18, y.bit.v17, y.bit.v18));
-    r.bit.v20 = (st(x.bit.v19, y.bit.v20, x.bit.v20)  |   st(x.bit.v20, y.bit.v19, y.bit.v20));
-    r.bit.v22 = (st(x.bit.v21, y.bit.v22, x.bit.v22)  |   st(x.bit.v22, y.bit.v21, y.bit.v22));
-    r.bit.v24 = (st(x.bit.v23, y.bit.v24, x.bit.v24)  |   st(x.bit.v24, y.bit.v23, y.bit.v24));
-    r.bit.v26 = (st(x.bit.v25, y.bit.v26, x.bit.v26)  |   st(x.bit.v26, y.bit.v25, y.bit.v26));
-    r.bit.v28 = (st(x.bit.v27, y.bit.v28, x.bit.v28)  |   st(x.bit.v28, y.bit.v27, y.bit.v28));
-    r.bit.v30 = (st(x.bit.v29, y.bit.v30, x.bit.v30)  |   st(x.bit.v30, y.bit.v29, y.bit.v30));
-    r.bit.v32 = (st(x.bit.v31, y.bit.v32, x.bit.v32)      |   st(x.bit.v32, y.bit.v31, y.bit.v32));
-    
-    
-    
+// The Arithmatic for addition
+    rtotal.r.v = (xtotal.x.v ^ ytotal.yn.v) & (xtotal.xn.v ^ ytotal.y.v);   //  ///r0 ← (x0 ⊕y1)∧(x1 ⊕y0);
+    rtotal.rn.v = (st(xtotal.x.v, ytotal.yn.v, xtotal.xn.v ) | st(xtotal.xn.v, ytotal.y.v, ytotal.yn.v));  //// r1 ← s XOR t.
+  
     
     // testing if bit packing was done properly
-    int xsize = sizeof(x);
-    int ysize = sizeof(y);
-    int rsize  = sizeof(r);
+    int xsize = sizeof(xtotal.xn.v);
+    int ysize = sizeof(ytotal.yn.v);
+    int rsize = sizeof(rtotal.rn.v);
     printf("x is %d bytes wide, y is %d bytes wide, r is %d bytes wide \n \n" ,xsize, ysize, rsize);//prints the size of the bit vectors, should be 4 bytes
     
     
     
-    printf("-------------------");  //print the 3 matrices
+    printf("-------------------"); //print the 3 matrices
     printf("\n");
-    printf("    Matrix x \n");
+    printf(" Matrix x \n");
     printf("-------------------");
-    print(x);
-    printf("-------------------");
-    printf("\n");
-    printf("    Matrix y \n");
-    printf("-------------------");
-    print(y);
+    print(xtotal.x, xtotal.xn);
     printf("-------------------");
     printf("\n");
-    printf("    Matrix r \n");
+    printf(" Matrix y \n");
     printf("-------------------");
-    print(r);
-
+    print(ytotal.y, ytotal.yn );
+    printf("-------------------");
+    printf("\n");
+    printf(" Matrix r \n");
+    printf("-------------------");
+    print(rtotal.r, rtotal.rn);
+    
     
     
     return 0;
