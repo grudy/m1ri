@@ -37,7 +37,7 @@ typedef union vector{ //defines a 64-bit bit vector
     unsigned long long v;
     
   
-     struct jack{
+     struct vectorbits{
         unsigned long v1 :1;
         unsigned int v2 :1;
         unsigned int v3 :1;
