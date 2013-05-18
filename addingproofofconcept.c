@@ -2,7 +2,7 @@
 // TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
 // RUSSIANS OVER LARGER FINITE FIELDS"
 //
-/*Copyright 2013 William Andrw Alumbaugh <williamandrewalumbaugh@gmail.com>
+/*Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
