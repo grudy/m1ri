@@ -2,7 +2,7 @@
 // TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
 // RUSSIANS OVER LARGER FINITE FIELDS"
 //
-/*Copyright 2013 William Andrw Alumbaugh <williamandrewalumbaugh@gmail.com>
+/*Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -37,15 +37,16 @@ typedef union vector{ //defines a 64-bit bit vector
     
     
     struct vectorbits{
-        unsigned long v1 :1;
-        unsigned int v2 :1;
-        unsigned int v3 :1;
-        unsigned int v4 :1;
-        unsigned int v5 :1;
-        unsigned int v6 :1;
-        unsigned int v7 :1;
-        unsigned int v8 :1;
-        unsigned int v9 :1;
+        unsigned int v0 :1;
+        unsigned int v1 :1;
+        unsigned int v2  :1;
+        unsigned int v3  :1;
+        unsigned int v4  :1;
+        unsigned int v5  :1;
+        unsigned int v6  :1;
+        unsigned int v7  :1;
+        unsigned int v8  :1;
+        unsigned int v9  :1;
         unsigned int v10 :1;
         unsigned int v11 :1;
         unsigned int v12 :1;
@@ -100,7 +101,7 @@ typedef union vector{ //defines a 64-bit bit vector
         unsigned int v61 :1;
         unsigned int v62 :1;
         unsigned int v63 :1;
-        unsigned int v64 :1;
+      
     } bit;
     
 } vec;
@@ -113,18 +114,45 @@ typedef union{  //calls a union of 128 bits
 
 
 
-matrixgf3 addgf3(matrixgf3 x, matrixgf3 y, matrixgf3 r)
+void addgf3(matrixgf3 * r, matrixgf3 * x, matrixgf3 * y)
 
 {
-    r.units.v = (x.units.v ^ y.sign.v) & (x.sign.v ^ y.units.v); // ///r0 ← (x0 ⊕y1)∧(x1 ⊕y0);
-    r.sign.v = (st(x.units.v, y.sign.v, x.sign.v ) | st(x.units.v, y.units.v, y.sign.v)); //// r1 ← s XOR t.
+    r->units.v = (x->units.v ^ y->sign.v) & (x->sign.v ^ y->units.v); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
+    r->sign.v = (st(x->units.v, y->sign.v, x->sign.v ) | st(x->units.v, y->units.v, y->sign.v)); //// r1 ← s XOR t.
     
     
-    return r;
+   
 }
 
+/*
+ 
+ cdef inline vec3 v3_addc(vec3 a, vec3 b):
+ cdef long t
+ 
+ a.s = b.u ^ a.s
+ t = a.s & a.u
+ t = t ^ b.s
+ a.u = b.u ^ a.u
+ a.u = a.u | t
+ a.s = t & a.s
+ 
+ return a
+ */
 
-void subgf3(matrixgf3 *x, matrixgf3 *y, matrixgf3 *r)               //multiply matrix x by by matrix y.   The product is matrix r.
+matrixgf3 addgf3r(matrixgf3  x, matrixgf3 y)
+{
+    vec t;
+    x.sign.v  = y.units.v ^ x.sign.v;
+    t.v = (x.sign.v & x.units.v) ^ y.sign.v;
+    x.units.v = (y.units.v ^ x.units.v) |  t.v;
+    x.sign.v = t.v & x.sign.v;
+    return x;
+    
+    
+    
+}
+
+void subgf3( matrixgf3 *r, matrixgf3 *x, matrixgf3 *y)               //multiply matrix x by by matrix y.   The product is matrix r.
 
 {
     r->units.v = ((x->units.v^y->units.v) | (x->sign.v^y->sign.v));
@@ -133,23 +161,8 @@ void subgf3(matrixgf3 *x, matrixgf3 *y, matrixgf3 *r)               //multiply m
     
 
 }
-/*
- 
- cdef inline vec3 v3_subc(vec3 a, vec3 b):
- cdef long t
- cdef vec3 r
- 
- r.s = b.u ^ a.u
- r.u = b.s ^ a.s
- r.u = r.u | r.s
- r.s = r.s ^ b.s
- t = b.u ^ a.s
- r.s = t & r.s
- 
- return r
 
- 
-*/
+
 
 matrixgf3 subgf3r(matrixgf3 x, matrixgf3 y)               //multiply matrix x by by matrix y.   The product is matrix r.
 
@@ -165,14 +178,11 @@ matrixgf3 subgf3r(matrixgf3 x, matrixgf3 y)               //multiply matrix x by
 
 
 
-/*
- r.s = b.s ^ a.s
- r.s = r.s & r.u
-*/
 
 
 
-void  mplygf3(matrixgf3 *x, matrixgf3 *y, matrixgf3 *r)             //multiply matrix x by y saving the output to r
+
+void  mplygf3( matrixgf3 *r, matrixgf3 *x, matrixgf3 *y)             //multiply matrix x by y assinging the output to r
 {
     r->units.v = y->units.v ^ x->units.v ;
     r->sign.v = (y->sign.v ^ x->sign.v) & (r->units.v);
@@ -183,6 +193,53 @@ void  mplygf3(matrixgf3 *x, matrixgf3 *y, matrixgf3 *r)             //multiply m
 
 
 
+
+matrixgf3 mplygf3r(matrixgf3 x, matrixgf3 y)    //return the value of the matrix 
+{
+    
+    matrixgf3 r;
+    r.units.v = y.units.v & y.units.v;
+    r.sign.v  = (y.sign.v ^ x.sign.v) & (r.units.v);
+    
+    return r;
+    
+}
+
+
+void iaddgf3(matrixgf3 *r,matrixgf3 *x)  ////matrix r = (direct sum matrix r + matrix x) 
+{
+    
+    vec t;
+    
+    t.v = x->units.v ^ r->sign.v;
+    r->sign.v = x->units.v ^ r->units.v;
+    r->units.v = x->units.v ^ r->units.v;
+    r->sign.v = r->sign.v & t.v;
+    t.v = t.v ^ x->sign.v;
+    r->units.v = t.v | r->units.v;
+    
+    
+    
+    
+    
+}
+
+
+void isubgf3(matrixgf3 *r,matrixgf3 *x)  //matrix r = (matrix r - matrix x)
+{
+    vec t;
+    
+    r->units.v = x->units.v ^ r->units.v;
+    t .v = r->units.v | r->sign.v;
+    t.v = t.v ^ x->sign.v;
+    r->sign.v = r->units.v;
+    r->sign.v = r->sign.v & t.v;
+    r->units.v = t.v | r->units.v;
+    
+    
+    
+    
+}
 
 
 

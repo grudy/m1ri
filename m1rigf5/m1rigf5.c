@@ -2,7 +2,7 @@
 // TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
 // RUSSIANS OVER LARGER FINITE FIELDS"
 //
-/*Copyright 2013 William Andrw Alumbaugh <williamandrewalumbaugh@gmail.com>
+/*Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,51 +18,24 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-// m1rigf3.c
+// m1rigf5.c
 
 
 
 #include <stdio.h>
 #include<stddef.h>
 #include<stdlib.h>
-#include"m1rigf3.h"
-#define true 1
-#define false 0
-#define fn(a, b, c, d) (a^b)&(c^d) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
-#define st(a, b , c) (a^b^c) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
-
-
-
-
-
-
-
-
 
 
 int main(int argc, const char * argv[])
 {
     
-    matrixgf3 r;
-    matrixgf3 x;
-    matrixgf3 y;
-
-
-    
-  
-    //setting the values
-    x.units.v = 5454535452452435;
-    y.sign.v = 42545454545353452;
-    
-    y.units.v = 245240352043592345;
-    x.sign.v   =  45245234523452345;
-    
-
-    
-    r = addgf3(x, y, r);
     
     
-
+    
+    
+    
+    
     
     
     
