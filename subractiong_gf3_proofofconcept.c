@@ -1,25 +1,29 @@
-//// proofofconcept of the addition logic used in the paper published by
+//// proofofconcept of the subtraction logic used in the paper published by
 // TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
 // RUSSIANS OVER LARGER FINITE FIELDS"
 //
 /*Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
-// Addingproofofconcept.c
-
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+// subractionggf3proofofconcept.c
+// proofofconcept of the addition logic used in the paper published by
+// TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
+// RUSSIANS OVER LARGER FINITE FIELDS"
+//
+// William Andrew Alumbaugh
 
 
 #include <stdio.h>
@@ -27,8 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include<stdlib.h>
 #define true 1
 #define false 0
-#define fn(a, b, c, d) (a^b)&(c^d) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
-#define st(a, b , c) (a^b^c) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
 
 
 
@@ -37,7 +39,7 @@ typedef union vector{ //defines a 64-bit bit vector
     unsigned long long v;
     
   
-     struct vectorbits{
+     struct jack{
         unsigned long v1 :1;
         unsigned int v2 :1;
         unsigned int v3 :1;
@@ -102,6 +104,14 @@ typedef union vector{ //defines a 64-bit bit vector
         unsigned int v62 :1; 
         unsigned int v63 :1; 
         unsigned int v64 :1;
+         
+         
+         
+         
+      
+         
+         
+         
     } bit;
     
 } vec;
@@ -151,17 +161,17 @@ int main(int argc, const char * argv[])
         vec rn;
     }rtotal;
     //setting the values
-    xtotal.xn.v = 5454535452452435;
-    ytotal.yn.v = 42545454545353452;
-    ytotal.yn.v = 45245234523452345;
+    xtotal.xn.v = 1234569652452435;
+    ytotal.yn.v = 4254545455656452;
+    ytotal.yn.v = 0b0000001010101001011;
     xtotal.x.v = 245240352043592345;
     
     
 
-// The Arithmatic for addition
-    rtotal.r.v = (xtotal.x.v ^ ytotal.yn.v) & (xtotal.xn.v ^ ytotal.y.v);   //  ///r0 ← (x0 ⊕y1)∧(x1 ⊕y0);
-    rtotal.rn.v = (st(xtotal.x.v, ytotal.yn.v, xtotal.xn.v ) | st(xtotal.xn.v, ytotal.y.v, ytotal.yn.v));  //// r1 ← s XOR t.
-  
+// The Arithmatic for subtraction
+    rtotal.r.v = ((xtotal.x.v^ytotal.y.v) | (xtotal.xn.v^ytotal.yn.v));
+    rtotal.rn.v = (((xtotal.x.v^ytotal.y.v)^ytotal.yn.v)&(ytotal.y.v ^ xtotal.xn.v));
+    
     
     // testing if bit packing was done properly
     int xsize = sizeof(xtotal.xn.v);
@@ -169,7 +179,7 @@ int main(int argc, const char * argv[])
     int rsize = sizeof(rtotal.rn.v);
     printf("x is %d bytes wide, y is %d bytes wide, r is %d bytes wide \n \n" ,xsize, ysize, rsize);//prints the size of the bit vectors, should be 4 bytes
     
-    
+    // 
     
     printf("-------------------"); //print the 3 matrices
     printf("\n");

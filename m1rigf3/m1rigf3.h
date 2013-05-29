@@ -194,7 +194,11 @@ void  mplygf3( matrixgf3 *r, matrixgf3 *x, matrixgf3 *y)             //multiply 
 
 
 
+<<<<<<< HEAD:m1rigf3/m1rigf3.h
 matrixgf3 mplygf3r(matrixgf3 x, matrixgf3 y)    //return the value of the matrix 
+=======
+matrixgf3 mplygf3r(matrixgf3 x, matrixgf3 y)
+>>>>>>> 1cb087420f7d22a6258d0f3c3128e38168472ae6:m1rigf3.h
 {
     
     matrixgf3 r;
@@ -206,7 +210,11 @@ matrixgf3 mplygf3r(matrixgf3 x, matrixgf3 y)    //return the value of the matrix
 }
 
 
+<<<<<<< HEAD:m1rigf3/m1rigf3.h
 void iaddgf3(matrixgf3 *r,matrixgf3 *x)  ////matrix r = (direct sum matrix r + matrix x) 
+=======
+void iaddgf3(matrixgf3 *r,matrixgf3 *x)
+>>>>>>> 1cb087420f7d22a6258d0f3c3128e38168472ae6:m1rigf3.h
 {
     
     vec t;
@@ -225,7 +233,11 @@ void iaddgf3(matrixgf3 *r,matrixgf3 *x)  ////matrix r = (direct sum matrix r + m
 }
 
 
+<<<<<<< HEAD:m1rigf3/m1rigf3.h
 void isubgf3(matrixgf3 *r,matrixgf3 *x)  //matrix r = (matrix r - matrix x)
+=======
+void isubgf3(matrixgf3 *r,matrixgf3 *x)
+>>>>>>> 1cb087420f7d22a6258d0f3c3128e38168472ae6:m1rigf3.h
 {
     vec t;
     
