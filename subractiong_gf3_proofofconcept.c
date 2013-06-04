@@ -144,19 +144,19 @@ int main(int argc, const char * argv[])
 {
     
     
-    union{
+    struct{
     vec x; //vector x first half
      vec xn; //vector xn,  second half of (X)
     } xtotal;
     
     
-    union{
+    struct{
     vec y; //vector y
     vec yn; // vector yn,  second half of (Y)
     }ytotal;
   
     
-    union{
+    struct{
         vec r;
         vec rn;
     }rtotal;
