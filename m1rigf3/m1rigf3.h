@@ -106,7 +106,7 @@ typedef union vector{ //defines a 64-bit bit vector
     
 } vec;
 
-typedef union{  //calls a union of 128 bits
+typedef struct{  //calls a struct of 128 bits
     
     vec units;
     vec sign;
