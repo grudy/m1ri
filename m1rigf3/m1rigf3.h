@@ -25,7 +25,7 @@
 #define m1rigf3_m1rigf3_h
 #define fn(a, b, c, d) (a^b)&(c^d) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
 #define st(a, b , c) (a^b^c) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
-
+#include <stdlib.h>
 
 
 
@@ -110,11 +110,42 @@ typedef union{  //calls a union of 128 bits
     
     vec units;
     vec sign;
-} matrixgf3;
+} vbg;
 
 
 
-void addgf3(matrixgf3 * r, matrixgf3 * x, matrixgf3 * y)
+
+
+
+/*
+vbg ** creatematrix(nrows, ncols, gfs)   //rows, columns, field size
+{
+    vbg ** matrix;
+    matrix = malloc(nrows *  sizeof(vbg *));
+    if(matrix == 0)
+    {
+        //error message to implement later 
+        return 0;
+    }
+
+for(int i = 0; i < nrows; i++)
+    {
+        matrix[i] = malloc(ncols * sizeof(vbg));
+        
+    }
+
+    return matrix;
+
+}
+*/  //first design of a matrix
+
+
+
+
+
+
+
+void addgf3(vbg * r, vbg * x, vbg * y)
 
 {
     r->units.v = (x->units.v ^ y->sign.v) & (x->sign.v ^ y->units.v); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
@@ -139,7 +170,7 @@ void addgf3(matrixgf3 * r, matrixgf3 * x, matrixgf3 * y)
  return a
  */
 
-matrixgf3 addgf3r(matrixgf3  x, matrixgf3 y)
+vbg addgf3r(vbg  x, vbg y)
 {
     vec t;
     x.sign.v  = y.units.v ^ x.sign.v;
@@ -152,7 +183,7 @@ matrixgf3 addgf3r(matrixgf3  x, matrixgf3 y)
     
 }
 
-void subgf3( matrixgf3 *r, matrixgf3 *x, matrixgf3 *y)               //multiply matrix x by by matrix y.   The product is matrix r.
+void subgf3( vbg *r, vbg *x, vbg *y)               //multiply matrix x by by matrix y.   The product is matrix r.
 
 {
     r->units.v = ((x->units.v^y->units.v) | (x->sign.v^y->sign.v));
@@ -164,10 +195,10 @@ void subgf3( matrixgf3 *r, matrixgf3 *x, matrixgf3 *y)               //multiply 
 
 
 
-matrixgf3 subgf3r(matrixgf3 x, matrixgf3 y)               //multiply matrix x by by matrix y.   The product is matrix r.
+vbg subgf3r(vbg x, vbg y)               //multiply matrix x by by matrix y.   The product is matrix r.
 
 {
-    matrixgf3 r;
+    vbg r;
     r.units.v = ((x.units.v^y.units.v) | (x.sign.v^y.sign.v));
     r.sign.v = (((x.units.v^y.units.v)^x.sign.v)&(y.units.v ^ x.sign.v));
     
@@ -182,7 +213,7 @@ matrixgf3 subgf3r(matrixgf3 x, matrixgf3 y)               //multiply matrix x by
 
 
 
-void  mplygf3( matrixgf3 *r, matrixgf3 *x, matrixgf3 *y)             //multiply matrix x by y assinging the output to r
+void  mplygf3( vbg *r, vbg *x, vbg *y)             //multiply matrix x by y assinging the output to r
 {
     r->units.v = y->units.v ^ x->units.v ;
     r->sign.v = (y->sign.v ^ x->sign.v) & (r->units.v);
@@ -194,14 +225,10 @@ void  mplygf3( matrixgf3 *r, matrixgf3 *x, matrixgf3 *y)             //multiply 
 
 
 
-<<<<<<< HEAD:m1rigf3/m1rigf3.h
-matrixgf3 mplygf3r(matrixgf3 x, matrixgf3 y)    //return the value of the matrix 
-=======
-matrixgf3 mplygf3r(matrixgf3 x, matrixgf3 y)
->>>>>>> 1cb087420f7d22a6258d0f3c3128e38168472ae6:m1rigf3.h
+vbg mplygf3r(vbg x, vbg y)    //return the value of the matrix 
 {
     
-    matrixgf3 r;
+    vbg r;
     r.units.v = y.units.v & y.units.v;
     r.sign.v  = (y.sign.v ^ x.sign.v) & (r.units.v);
     
@@ -210,11 +237,7 @@ matrixgf3 mplygf3r(matrixgf3 x, matrixgf3 y)
 }
 
 
-<<<<<<< HEAD:m1rigf3/m1rigf3.h
-void iaddgf3(matrixgf3 *r,matrixgf3 *x)  ////matrix r = (direct sum matrix r + matrix x) 
-=======
-void iaddgf3(matrixgf3 *r,matrixgf3 *x)
->>>>>>> 1cb087420f7d22a6258d0f3c3128e38168472ae6:m1rigf3.h
+void iaddgf3(vbg *r,vbg *x)  ////matrix r = (direct sum matrix r + matrix x) 
 {
     
     vec t;
@@ -233,11 +256,7 @@ void iaddgf3(matrixgf3 *r,matrixgf3 *x)
 }
 
 
-<<<<<<< HEAD:m1rigf3/m1rigf3.h
-void isubgf3(matrixgf3 *r,matrixgf3 *x)  //matrix r = (matrix r - matrix x)
-=======
-void isubgf3(matrixgf3 *r,matrixgf3 *x)
->>>>>>> 1cb087420f7d22a6258d0f3c3128e38168472ae6:m1rigf3.h
+void isubgf3(vbg *r,vbg *x)  //matrix r = (matrix r - matrix x)
 {
     vec t;
     

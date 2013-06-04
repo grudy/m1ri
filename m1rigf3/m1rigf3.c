@@ -22,11 +22,8 @@
 
 
 
-#include <stdio.h>
-#include<stddef.h>
 #include<stdlib.h>
 #include"m1rigf3.h"
-#include"m1rigf3combine.h"
 #define true 1
 #define false 0
 #define fn(a, b, c, d) (a^b)&(c^d) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
@@ -42,12 +39,12 @@
 int main(int argc, const char * argv[])
 {
     
-    matrixgf3 r;
-    matrixgf3 x;
-    matrixgf3 y;
+    vbg r;
+    vbg x;
+    vbg y;
 
 
-    
+   
   
     //setting the values
     x.units.v = 5454535452452435;
