@@ -1,4 +1,4 @@
-// Thanks to TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW  and there work on "BITSLICING AND THE METHOD OF FOUR
+// Thanks to TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW  and their work on "BITSLICING AND THE METHOD OF FOUR
 // RUSSIANS OVER LARGER FINITE FIELDS
 //
 /*Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
