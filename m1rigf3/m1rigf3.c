@@ -24,6 +24,7 @@
 
 #include<stdlib.h>
 #include"m1rigf3.h"
+#include"smallm1ri.h"
 #define true 1
 #define false 0
 #define fn(a, b, c, d) (a^b)&(c^d) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)

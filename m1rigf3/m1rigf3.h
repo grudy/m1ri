@@ -26,7 +26,7 @@
 #define fn(a, b, c, d) (a^b)&(c^d) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
 #define st(a, b , c) (a^b^c) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
 #include <stdlib.h>
-
+#include <stdio.h>
 
 
 
@@ -106,14 +106,30 @@ typedef union vector{ //defines a 64-bit bit vector
     
 } vec;
 
-typedef struct{  //calls a struct of 128 bits
+typedef struct{  //calls a union of 128 bits
     
     vec units;
     vec sign;
 } vbg;
 
 
-
+int print(vec a, vec b)
+{
+    printf("\n \n");
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] " , a.bit.v0, b.bit.v0, a.bit.v1, b.bit.v1, a.bit.v2 , b.bit.v2, a.bit.v3,b.bit.v3, a.bit.v4,b.bit.v4, a.bit.v5,b.bit.v5, a.bit.v6,b.bit.v6, a.bit.v7, b.bit.v7 );
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] " ,  a.bit.v8, b.bit.v8,  a.bit.v9, b.bit.v9, a.bit.v10 , b.bit.v10, a.bit.v11,b.bit.v11, a.bit.v12,b.bit.v12, a.bit.v13,b.bit.v13, a.bit.v14,b.bit.v14, a.bit.v15, b.bit.v15);
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] ", a.bit.v16, b.bit.v16, a.bit.v17, b.bit.v17, a.bit.v18 , b.bit.v18, a.bit.v19,b.bit.v19, a.bit.v20,b.bit.v20, a.bit.v21,b.bit.v21, a.bit.v22,b.bit.v22, a.bit.v23, b.bit.v23);
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] ", a.bit.v24, b.bit.v24 , a.bit.v25, b.bit.v25, a.bit.v26 , b.bit.v26, a.bit.v27,b.bit.v27, a.bit.v28,b.bit.v28, a.bit.v29,b.bit.v29, a.bit.v30,b.bit.v30, a.bit.v31, b.bit.v31);
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] ", a.bit.v32, b.bit.v32 , a.bit.v33, b.bit.v33, a.bit.v34 , b.bit.v34, a.bit.v35,b.bit.v35, a.bit.v36,b.bit.v36, a.bit.v37,b.bit.v37, a.bit.v38,b.bit.v38, a.bit.v39, b.bit.v39);
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] " , a.bit.v40, b.bit.v40 , a.bit.v41, b.bit.v41, a.bit.v42 , b.bit.v42, a.bit.v43,b.bit.v43, a.bit.v44,b.bit.v44, a.bit.v45,b.bit.v45, a.bit.v46,b.bit.v46, a.bit.v47, b.bit.v47 );
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] ", a.bit.v48, b.bit.v48, a.bit.v49, b.bit.v49, a.bit.v50 , b.bit.v50, a.bit.v51,b.bit.v51, a.bit.v52,b.bit.v52, a.bit.v53,b.bit.v53, a.bit.v54,b.bit.v54, a.bit.v55, b.bit.v55);
+    printf("[%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d][%d %d] ", a.bit.v56, b.bit.v56 , a.bit.v57, b.bit.v57, a.bit.v58 , b.bit.v58, a.bit.v59,b.bit.v59, a.bit.v60, b.bit.v60, a.bit.v61, b.bit.v61, a.bit.v62, b.bit.v62, a.bit.v63, b.bit.v63  );
+    
+    
+    printf("\n \n");
+    return 0;
+    
+}
 
 
 
