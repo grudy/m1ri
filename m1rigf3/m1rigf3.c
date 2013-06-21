@@ -23,8 +23,10 @@
 
 
 #include<stdlib.h>
-#include"m1rigf3.h"
-#include"smallm1ri.h"
+#include "stdio.h" 
+#include "m1rigf3.h"
+#include "m1riwrappers.h"
+#include "m1rielarith.h"
 #define true 1
 #define false 0
 #define fn(a, b, c, d) (a^b)&(c^d) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
@@ -37,30 +39,26 @@
 
 
 
+
 int main(int argc, const char * argv[])
 {
-    
-    vbg r;
-    vbg x;
-    vbg y;
+   srand((unsigned int)time(0));
+    m3d_t a;
+   m3d_create(&a, 300  , 300);
+    a.block =  m3d_rand(&a);
+     vbg x = m3d_read_elems(&a, (a.ncols - 3)    , (a.nrows - 44) , 1);
 
 
-   
-  
-    //setting the values
-    x.units.v = 5454535452452435;
-y.sign.v = 42545454545353452;
-    
-    y.units.v = 245240352043592345;
-    x.sign.v   =  45245234523452345;
-    
-
-    
-    r = addgf3r(x, y);
     
     
-
+    printf("Sign: %lld \n\n", x.sign);
+    printf("Units: %lld \n\n", x.units);
+    m3d_write_elem(&a, (a.ncols -3), (a.nrows - 44), 1, 0);
     
+    
+    x = m3d_read_elems(&a, (a.ncols - 3)    , (a.nrows - 44) , 1);
+    printf("Signbit: %lld \n\n", x.sign);
+    printf("Unitbit: %lld \n\n", x.units);
     
     
     return 0;
