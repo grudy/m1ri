@@ -6,6 +6,10 @@
 // RUSSIANS OVER LARGER FINITE FIELDS"
 //
 /*Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> b4bba2d58cf4924bb7104b3756afcd17c5dba4b5
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
@@ -17,10 +21,14 @@
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+<<<<<<< HEAD
  */
 
 
 
+=======
+*/
+>>>>>>> b4bba2d58cf4924bb7104b3756afcd17c5dba4b5
 #ifndef m1rigf3_strassen_h
 #define m1rigf3_strassen_h
 #include "m1rigf3.h"

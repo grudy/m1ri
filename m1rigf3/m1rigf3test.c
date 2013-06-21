@@ -1,4 +1,4 @@
-//// GF5 arithmatic
+//// testing, may just use  m1rigf3.c
 // TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
 // RUSSIANS OVER LARGER FINITE FIELDS"
 //
@@ -17,28 +17,6 @@
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ 
+    m1rigf3test.c
  */
-// m1rigf5.c
-
-
-
-#include <stdio.h>
-#include<stddef.h>
-#include<stdlib.h>
-
-
-int main(int argc, const char * argv[])
-{
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    return 0;
-}
-
