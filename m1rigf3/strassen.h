@@ -7,9 +7,14 @@
 //
 /*Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
  
 >>>>>>> 
+=======
+
+
+>>>>>>> ff5b2b342a1c60afd5b26258e5d1070644cc496c
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
@@ -26,8 +31,11 @@
 
 
 
+<<<<<<< HEAD
 =======
 */
+=======
+>>>>>>> ff5b2b342a1c60afd5b26258e5d1070644cc496c
 
 #ifndef m1rigf3_strassen_h
 #define m1rigf3_strassen_h
