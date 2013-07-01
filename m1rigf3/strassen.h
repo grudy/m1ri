@@ -9,7 +9,7 @@
 <<<<<<< HEAD
 =======
  
->>>>>>> b4bba2d58cf4924bb7104b3756afcd17c5dba4b5
+>>>>>>> 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
@@ -28,7 +28,7 @@
 
 =======
 */
->>>>>>> b4bba2d58cf4924bb7104b3756afcd17c5dba4b5
+
 #ifndef m1rigf3_strassen_h
 #define m1rigf3_strassen_h
 #include "m1rigf3.h"

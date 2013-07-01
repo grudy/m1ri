@@ -1,15 +1,14 @@
 // GF3 arithmatic
 //  m1rielarith.h
 //  m1riproject
-//
-//  Created by grudy on 6/11/13.
+
 //  Copyright (c) 2013 William Alumbaugh. All rights reserved.
 //
 
-#ifndef m1riproject_m1rielarith_h
-#define m1riproject_m1rielarith_h
+#ifndef M1RIPROJECT_M1RIELARITH_H
+#define M1RIPROJECT_M1RIELARITH_H
 
-#include "m1rigf3.h"
+#include "m1ri_3dt.h"
 
 void addgf3(vbg * r, vbg * x, vbg * y)
 
@@ -67,31 +66,6 @@ vbg subgf3r(vbg x, vbg y)               //multiply matrix x by by matrix y.   Th
 
 
 
-void  mplygf3( vbg *r, vbg *x, vbg *y)             //multiply matrix x by y assinging the output to r
-{
-    r->units = y->units ^ x->units ;
-    r->sign = (y->sign ^ x->sign) & (r->units);
-    
-}
-
-
-
-
-
-
-vbg mplygf3r(vbg x, vbg y)    //return the value of the matrix
-{
-    
-    vbg r;
-    r.units = y.units & y.units;
-    r.sign  = (y.sign ^ x.sign) & (r.units);
-    
-    return r;
-    
-}
-
-
-
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
@@ -130,20 +104,70 @@ void isubgf3(vbg *r,vbg *x)  //matrix r = (matrix r - matrix x)
 }
 
 
+
+void  vbg_mul( vbg *r, vbg *x, vbg *y)             //multiply matrix x by y assinging the output to r
+{
+    r->units = y->units ^ x->units ;
+    r->sign = (y->sign ^ x->sign) & (r->units);
+    
+}
+
+
+
+
+//return the value of the matrix multiplied
+
+
+vbg vbg_mul_i(vbg x, vbg y)
+{
+    
+    vbg r;
+    r.units = x.units & y.units;
+    r.sign  = (y.sign ^ x.sign) & (r.units);
+    
+    return r;
+    
+}
+
+
+
+/*
+    Hadamard multiplication
+*/
+m3d_t m3d_hadamard(m3d_t *a, m3d_t *b)
+{
+    
+    
+    m3d_t c;
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+         c = *a;
+        int i, j;
+        for( i = 0; i < a->nrows; i++)
+        {
+            for(j = 0; j < a->width; i++)
+            {
+            
+                c.rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
+            }
+                
+                
+        }
+
+        }
+    
+    return c;
+
+    
+}
+
+
 /* * * * * * * * * * * * * * * * * * * *
- Subtract a 1 Megabyte Matrix from another
- 1 megabyte Matrix
+ Subtract a 1 kilobyte Matrix from another
+ 1 kilobyte Matrix
  * * * * * * * * * * * * * * * * * * * * */
 
-void isub_64gf3(vbg * R, vbg * A)
 
-{
-    int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
-    {
-        isubgf3((R+i), (A+i));
-    }
-}
 
 void sub_64gf3(vbg *R, vbg *A, vbg *B)
 {
@@ -155,6 +179,11 @@ void sub_64gf3(vbg *R, vbg *A, vbg *B)
 }
 
 
+/* * * * * * * * * * * * * * * * * * * * * *
+ Add a 1 kilobyte Matrix from another
+ 1 kilobyte Matrix
+ * * * * * * * * * * * * * * * * * * * * * * */
+
 void add_64gf3(vbg *R, vbg *A, vbg *B)
 {
     int i;
@@ -163,33 +192,13 @@ void add_64gf3(vbg *R, vbg *A, vbg *B)
         R[i] = addgf3r(A[i], B[i]);
     }
     
-}
-
-//Adds two 64x matrix blocks
-void iadd_64gf3(vbg *R, vbg *A)
-{
-    int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
-    {
-        iaddgf3((R+i), (A+i));
-    }
+    
+    
     
 }
 
 
 
-
-
-
-
-void isub_128(vbg *R, vbg *A)
-{
-    int i;
-    for (i = 0; i < (4 * (sizeof(vec))); i++ )
-    {
-        isubgf3((R+i), (A+i));
-    }
-}
 
 
 
