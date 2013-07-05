@@ -1,15 +1,29 @@
-// GF3 arithmatic
-//  m1rielarith.h
-//  m1riproject
 
-//  Copyright (c) 2013 William Alumbaugh. All rights reserved.
-//
+/*
+ Matrix Represenations and basic operations
+ TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
+ RUSSIANS OVER LARGER FINITE FIELDS"
+ 
+ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ 
+ m1ri_arith.c
+ */
 
-#ifndef M1RIPROJECT_M1RIELARITH_H
-#define M1RIPROJECT_M1RIELARITH_H
-
-#include "m1ri_3dt.h"
-
+#include "m1riarith.h"
 void addgf3(vbg * r, vbg * x, vbg * y)
 
 {
@@ -36,8 +50,7 @@ vbg addgf3r(vbg  x, vbg y)
     
 }
 
-void subgf3( vbg *r, vbg *x, vbg *y)               //multiply matrix x by by matrix y.   The product is matrix r.
-
+void subgf3( vbg *r, vbg *x, vbg *y)            
 {
     r->units = ((x->units^y->units) | (x->sign^y->sign));
     r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
@@ -48,7 +61,7 @@ void subgf3( vbg *r, vbg *x, vbg *y)               //multiply matrix x by by mat
 
 
 
-vbg subgf3r(vbg x, vbg y)               //multiply matrix x by by matrix y.   The product is matrix r.
+vbg subgf3r(vbg x, vbg y)             
 
 {
     vbg r;
@@ -61,14 +74,6 @@ vbg subgf3r(vbg x, vbg y)               //multiply matrix x by by matrix y.   Th
 
 
 
-
-
-
-
-
-/********************************************
- matrix r = (direct sum matrix r + matrix x)
- ********************************************/
 void iaddgf3(vbg *r,vbg *x)
 {
     
@@ -87,7 +92,7 @@ void iaddgf3(vbg *r,vbg *x)
     
 }
 
-void isubgf3(vbg *r,vbg *x)  //matrix r = (matrix r - matrix x)
+void isubgf3(vbg *r,vbg *x)  
 {
     vec t;
     
@@ -105,8 +110,7 @@ void isubgf3(vbg *r,vbg *x)  //matrix r = (matrix r - matrix x)
 
 
 
-void  vbg_mul( vbg *r, vbg *x, vbg *y)             //multiply matrix x by y assinging the output to r
-{
+void  vbg_mul( vbg *r, vbg *x, vbg *y)            {
     r->units = y->units ^ x->units ;
     r->sign = (y->sign ^ x->sign) & (r->units);
     
@@ -115,7 +119,6 @@ void  vbg_mul( vbg *r, vbg *x, vbg *y)             //multiply matrix x by y assi
 
 
 
-//return the value of the matrix multiplied
 
 
 vbg vbg_mul_i(vbg x, vbg y)
@@ -131,9 +134,7 @@ vbg vbg_mul_i(vbg x, vbg y)
 
 
 
-/*
-    Hadamard multiplication
-*/
+
 m3d_t m3d_hadamard(m3d_t *a, m3d_t *b)
 {
     
@@ -141,48 +142,41 @@ m3d_t m3d_hadamard(m3d_t *a, m3d_t *b)
     m3d_t c;
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-         c = *a;
+        c = *a;
         int i, j;
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < a->width; i++)
             {
-            
+                
                 c.rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
             }
-                
-                
+            
+            
         }
-
-        }
+        
+    }
     
     return c;
-
+    
     
 }
 
-
-/* * * * * * * * * * * * * * * * * * * *
- Subtract a 1 kilobyte Matrix from another
- 1 kilobyte Matrix
- * * * * * * * * * * * * * * * * * * * * */
 
 
 
 void sub_64gf3(vbg *R, vbg *A, vbg *B)
 {
     int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
+    for (i
+         
+         = 0; i < (sizeof(vec)); i++ )
     {
         R[i] = subgf3r(A[i], B[i]);
     }
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * *
- Add a 1 kilobyte Matrix from another
- 1 kilobyte Matrix
- * * * * * * * * * * * * * * * * * * * * * * */
 
 void add_64gf3(vbg *R, vbg *A, vbg *B)
 {
@@ -196,10 +190,3 @@ void add_64gf3(vbg *R, vbg *A, vbg *B)
     
     
 }
-
-
-
-
-
-
-#endif

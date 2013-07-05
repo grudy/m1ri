@@ -18,47 +18,23 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
- m1ri.c
+ m1ri_test.c
  */ 
 
-
-
-#include<stdlib.h>
-#include "stdio.h" 
 #include "m1ri_3dt.h"
 #include "m1riwrappers.h"
-#include "m1rielarith.h"
-#include "m1ristrassen.h"
+#include "m1ri_3dt.h"
+#include "m1riarith.h"
+#include "m1ri_cubes.h"
 #include "m1ri_small.h"
-#include "m1ri_classical.h"
+#include "m1ri_strassen.h"
 #include "m7d.h"
 #include "m5d.h"
-#include "m1ri_cubes.h"
 #include "m1ri_combine.h"
-#include <time.h>
-
-
-
-
+#include "m1ri_classical.h"
 
 int main(int argc, const char * argv[])
 {
-   srand((unsigned int)time(0));
-    m3d_t a = m3d_identity(&a, 256);
-    //a.block =  m3d_rand(&a);
-    vbg    x;
-    x.sign =  ibits;
-    x.units = leftbit;
-  
-    a =  m3d_identity_set(&a);
-
-  
-  
- 
-    printf("Signbit: %lld \n\n", x.sign);
-    printf("Unitbit: %lld \n\n", x.units);
-
-    
     
     return 0;
 }

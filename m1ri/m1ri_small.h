@@ -23,7 +23,7 @@
 #define M1RIGF3_SMALLGF3_H
 #include"m1ri_3dt.h"
 #include "m1ri_combine.h"
-#include "m1rielarith.h"
+#include "m1riarith.h"
 #include "m1riwrappers.h"
 
 
@@ -35,176 +35,23 @@
 
 
 //64 * 64,4096 bit, 512 byte matrix(slice) multiplication
-void mul_64(vbg *R, vbg *A, vbg *B)
-{
-    int i;
-    vbg t1, t2, r1, r2, a;
-    vec v1, v2;
-    
-    vbg  tables6[9][64];
-    vbg tables5[2][32];
-    for (i = 0; i < 9; i ++)
-        combine6(tables6[i], (B  +  6*i));// Deleted a redundant + 0
-    for (i = 0; i < 2; i ++)
-        combine5(tables5[i], (B + 54 + 5*i));
-    for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
-    {
-        a = A[i];
-        v2 = a.sign;
-        v1 = (a.units ^ v2);
-        r1 = tables6[0][v1&63];
-        v1 >>= 6;
-        r2 = tables6[0][v2&63];
-        v2 >>= 6;
-        t1 = tables6[1][v1&63]; iaddgf3(&r1, &t1); v1 >>= 6;
-        t2 = tables6[1][v2&63]; iaddgf3(&r2, &t2); v2 >>= 6;
-        t1 = tables6[2][v1&63]; iaddgf3(&r1, &t1); v1 >>= 6;
-        t2 = tables6[2][v2&63]; iaddgf3(&r2, &t2); v2 >>= 6;
-        t1 = tables6[3][v1&63]; iaddgf3(&r1, &t1); v1 >>= 6;
-        t2 = tables6[3][v2&63]; iaddgf3(&r2, &t2); v2 >>= 6;
-        t1 = tables6[4][v1&63]; iaddgf3(&r1, &t1); v1 >>= 6;
-        t2 = tables6[4][v2&63]; iaddgf3(&r2, &t2); v2 >>= 6;
-        t1 = tables6[5][v1&63]; iaddgf3(&r1, &t1); v1 >>= 6;
-        t2 = tables6[5][v2&63]; iaddgf3(&r2, &t2); v2 >>= 6;
-        t1 = tables6[6][v1&63]; iaddgf3(&r1, &t1); v1 >>= 6;
-        t2 = tables6[6][v2&63]; iaddgf3(&r2, &t2); v2 >>= 6;
-        t1 = tables6[7][v1&63]; iaddgf3(&r1, &t1); v1 >>= 6;
-        t2 = tables6[7][v2&63]; iaddgf3(&r2, &t2); v2 >>= 6;
-        t1 = tables6[8][v1&63]; iaddgf3(&r1, &t1); v1 >>= 6;
-        t2 = tables6[8][v2&63]; iaddgf3(&r2, &t2); v2 >>= 6;
-        t1 = tables5[0][v1&31]; iaddgf3(&r1, &t1); v1 >>= 5;
-        t2 = tables5[0][v2&31]; iaddgf3(&r2, &t2); v2 >>= 5;
-        t1 = tables5[1][v1&31]; iaddgf3(&r1, &t1);
-        t2 = tables5[1][v2&31]; iaddgf3(&r2, &t2);
-        
-        iaddgf3(&r1, &r2);
-        R[i] = r1;
-    }
-}
+void mul_64(vbg *, vbg *, vbg *);
 
 //32 * 64,2048 bit, 256 byte matrix(slice) multiplication
-void mul_32(vbg *R, vbg *A, vbg *B)
-{
-    long i;
-    vbg t1, t2, r1, r2, a;
-    long v1, v2;
-    
-    vbg tables5[4][32];
-    vbg tables4[3][16];
-    for (i = 1; i < 4; i ++)
-        
-        combine5(tables5[i], B + 0 + 5*i);
-    for (i = 0; i < 3; i++)
-        combine4(tables4[i], B + 20 + 4*i);
-    
-    for (i = 0;i < 32; i++)
-    {
-        
-        a = A[i];
-        v2 = a.sign;
-        v1 = a.units ^ v2;
-        t1 = tables5[0][v1&31]; v1 >>= 5;
-        t2 = tables5[0][v2&31]; v2 >>= 5;
-        t1 = tables5[1][v1&31]; iaddgf3(&r1, &t1); v1 >>= 5;
-        t2 = tables5[1][v2&31]; iaddgf3(&r2, &t2); v2 >>= 5;
-        t1 = tables5[2][v1&31]; iaddgf3(&r1, &t1); v1 >>= 5;
-        t2 = tables5[2][v2&31]; iaddgf3(&r2, &t2); v2 >>= 5;
-        t1 = tables5[3][v1&31]; iaddgf3(&r1, &t1); v1 >>= 5;
-        t2 = tables5[3][v2&31]; iaddgf3(&r2, &t2); v2 >>= 5;
-        t1 = tables4[0][v1&15]; iaddgf3(&r1, &t1); v1 >>= 4;
-        t2 = tables4[0][v2&15]; iaddgf3(&r2, &t2); v2 >>= 4;
-        t1 = tables4[1][v1&15]; iaddgf3(&r1, &t1); v1 >>= 4;
-        t2 = tables4[1][v2&15]; iaddgf3(&r2, &t2); v2 >>= 4;
-        t1 = tables4[2][v1&15]; iaddgf3(&r1, &t1);
-        t2 = tables4[2][v2&15]; iaddgf3(&r2, &t2);
-        
-        isubgf3(&r1, &r2);
-        R[i] = r1;
-    }
-    
-}
+void mul_32(vbg *, vbg *, vbg *);
 
 //16 * 64,1024 bit, 128 byte matrix(slice) multiplication
-void mul_16(vbg *R, vbg *A, vbg *B)
-{
-    long i;
-    vbg t1, t2, r1, r2, a;
-    long v1, v2;
-    
-    vbg tables4[4][16];
-    for (i = 0; i < 4; i++)
-        combine4(tables4[i], B + 0 + 4*i);
-    for (i = 0;  i < 16; i++)
-        a = A[i];
-    v2 = a.sign;
-    v1 = a.units ^ v2;
-    r1 = tables4[0][v1&15]; v1 >>= 4;
-    r2 = tables4[0][v2&15]; v2 >>= 4;
-    t1 = tables4[1][v1&15]; iaddgf3(&r1, &t1); v1 >>= 4;
-    t2 = tables4[1][v2&15]; iaddgf3(&r2, &t2); v2 >>= 4;
-    t1 = tables4[2][v1&15]; iaddgf3(&r1, &t1); v1 >>= 4;
-    t2 = tables4[2][v2&15]; iaddgf3(&r2, &t2); v2 >>= 4;
-    t1 = tables4[3][v1&15]; iaddgf3(&r1, &t1);
-    t2 = tables4[3][v2&15]; iaddgf3(&r2, &t2);
-    
-    isubgf3(&r1, &r2);
-    R[i] = r1;
-    
-}
+void mul_16(vbg *, vbg *, vbg *);
 
 //8 * 64,512 bit, 64 byte matrix(slice) multiplication
-void mul_8(vbg *R, vbg *A, vbg *B)
-
-{
-    int i;
-    vbg t1, t2, r1, r2, a;
-    vec v1, v2;
-    
-    vbg tables4[2][16];
-    for (i = 0; i < 2; i++)
-        combine4(tables4[i], B + 0 + 4*i);
-    for (i = 0; i < 8; i++)
-        a = A[i];
-    v2 = a.sign;
-    v1 = a.units ^ v2;
-    r1 = tables4[0][v1&15]; v1 >>= 4;
-    r2 = tables4[0][v2&15]; v2 >>= 4;
-    t1 = tables4[1][v1&15]; iaddgf3(&r1, &t1);
-    t2 = tables4[1][v2&15]; iaddgf3(&r2, &t2);
-    
-    // isubgf3((&r1, &r2);
-    R[i] = r1;
-}
-
+void mul_8(vbg *, vbg *, vbg *);
 
 
 
 
 
 //4 * 64,256 bit, 32 byte matrix(slice) multiplication
-void mul_4(vbg *R, vbg *A, vbg *B)
-{
-    int i;
-    vbg r1, r2, a;
-    vec v1, v2;
-    
-    vbg table4[16];
-    for (i = 0; i < 1; i++)
-        combine4(table4, B + 0 + 4*i);
-    for(i = 0; i < 4; i++)
-    {
-        a = A[i];
-        v2 = a.sign;
-        v1 = a.units ^ v2;
-        r1 = table4[v1&15];
-        r2 = table4[v2&15];
-        
-        isubgf3(&r1, &r2);
-        R[i] = r1;
-    }
-    
-}
-
+void mul_4(vbg *R, vbg *A, vbg *B);
 
 
 

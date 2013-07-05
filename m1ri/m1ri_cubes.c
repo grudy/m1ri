@@ -1,6 +1,6 @@
-/*  Cube Form 
- //  
- //  m1riproject
+
+/*
+ Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -20,70 +20,87 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
- //  Copyright (c) 2013 William Alumbaugh. All rights reserved.
- 
  m1ri_cubes.h
  */
 
-
-#ifndef m1riproject_m1ri_cubes_h
-#define m1riproject_m1ri_cubes_h
-#include "m1riwrappers.h"
-#include "m1ri_3dt.h"
-
-
-typedef struct {
-    
-    rci_t nrows; //< number of rows
-    
-    rci_t ncols; //< number of columns
-    
-    wi_t width; //< the number of vbg's needed to hold columns
-    
-    
-    
-    vbg * block;  //< block containing the data contiguous in memory
-    
-    vbg ** rows;  // < pointers to rows of the matrix
-    
-
-    
-    u_int8_t flags;
-    
-    
-    
-    
-    
-} m3d_cbe;
-
-vbg  * m3d_cube_block(vbg * , rci_t  ,  wi_t  );
+#include "m1ri_cubes.h"
 
 
 
 
-vbg ** m3d_cube_rows(vbg * block, vbg **, wi_t, rci_t );
-
-
-m3d_cbe m3dcbe_create( m3d_cbe * , rci_t , rci_t);
-/*
-m3d_cbe m3d_cbe_form(m3d_t *a)
+vbg  * m3d_cube_block(vbg * block, rci_t  nrows,  wi_t  width)
 {
-   
-   
-
     
-    for(int i = 0; i < a->nrows; i = i + 64)
-    {
-        
-
     
-    }
-        
-        
-        
-        
+    block  = m1ri_malloc(nrows * width * sizeof(vbg) );
+    
+    
+    
+    return block;
+    
+    
+    
 }
 
-*/
+/*
+ 
+ */
 
-#endif
+
+
+
+vbg ** m3d_cube_rows(vbg * block, vbg ** rows, wi_t width, rci_t nrows)
+{
+    
+    
+    
+    
+    rows = m1ri_malloc( nrows * width * sizeof(vbg *));
+    
+    
+    for (int i = 0; i <  nrows;  i++ )
+    {
+        rows[i]  = (block + (i * width));
+        
+        
+    };
+    
+    return rows;
+}
+
+
+
+m3d_cbe m3dcbe_create( m3d_cbe * a, rci_t nrows, rci_t ncols)
+{
+    
+    
+    a->ncols = ncols;
+    a->nrows = nrows;
+    a->width =  RU64(ncols);
+    a->block = m3d_block_allocate(a->block,  a->nrows,    a->width);
+    a->rows  = m3d_row_alloc(a->block, a->rows, a->width, a->nrows);
+    a->flags = iswindowed;
+    
+    return *a;
+    
+}
+/*
+ m3d_cbe m3d_cbe_form(m3d_t *a)
+ {
+ 
+ 
+ 
+ 
+ for(int i = 0; i < a->nrows; i = i + 64)
+ {
+ 
+ 
+ 
+ }
+ 
+ 
+ 
+ 
+ }
+ 
+ */

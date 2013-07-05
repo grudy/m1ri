@@ -36,12 +36,12 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #include <stdlib.h>
 #include <time.h>
 
-u_int64_t const leftbit = 0x8000000000000000;
-u_int64_t const rightbit = 0x1;
+static u_int64_t const leftbit = 0x8000000000000000;
+static u_int64_t const rightbit = 0x1;
 typedef  u_int64_t vec ;
 
 
-u_int64_t const  ibits = 0x8040201008040201;
+static u_int64_t const  ibits = 0x8040201008040201;
 
 
 

@@ -20,28 +20,8 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
- m1ri_combine.h
+m1ri_strassen.c
  */
-#ifndef M1RIPROJECT_COMBINE_H
-#define M1RIPROJECT_COMBINE_H
-
-#include "m1riwrappers.h"
-#include "m1ri_3dt.h"
-#include "m1riarith.h"
-
-void *  combine3(vbg *, vbg * );
 
 
-void combine4(vbg *, vbg * );
-
-void combine5(vbg *, vbg * );
-void combine6(vbg *, vbg * );
-
-void combine7(vbg *, vbg * );
-
-
-void combine8(vbg *, vbg *);
-
-
-
-#endif
+#include "m1ri_strassen.h"

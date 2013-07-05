@@ -103,154 +103,27 @@ typedef  struct{
 }m5d_windows;
 
 
-/*
- Read n bits from a sign portion of an element
- x = rows
- y = columns
- M = Matrix read from
- */
-
-vec m5d_rm_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
-    
-    
-    
-    
-    
-    wi_t  block = (y  ) / 64;
-    
-    int  spill = (y  % 64) + n - 64;
-    
-    vec bits;
-    
-    bits = (spill <= 0) ? M->rows[x][block].middle << -spill : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].middle >> spill);
-    
-    
-    return bits;
-    
-    
-}
-
-
-vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
-    
-    
-    
-    
-    
-    wi_t  block = (y  ) / 64;
-    
-    int  spill = (y  % 64) + n - 64;
-    
-    vec bits;
-    
-    bits = (spill <= 0) ? M->rows[x][block].sign << -spill : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].sign >> spill);
-    
-    
-    return bits;
-    
-    
-}
-/*
- Read n bits from units
- x = rows
- y = columns
- M = Matrix read from
- */
-
-vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
-    
-    
-    
-    
-    
-    wi_t  block = (y  ) / 64;
-    
-    int  spill = (y  % 64) + n - 64;
-    
-    vec bits;
-    
-    bits = (spill <= 0) ? M->rows[x][block].units << -spill : (M->rows[x][block + 1].units<< (64 - spill)) | (M->rows[x][block].units>> spill);
-    
-    
-    
-    
-    
-    return bits;
-    
-    
-}
 
 
 
 
 
-/*
- Read n elements
- x = rows
- y = columns
- M = Matrix read from
- */
+vec m5d_rm_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) ;
 
-vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  n) {
-    
-    
-    
-    
-    wi_t  block = (y  ) / 64;
-    
-    int  spill = (y  % 64) + n - 64;
-    
-    vfd elem;
-    
-    elem.units = (spill <= 0) ? M->rows[x][block].units << -spill : ((M->rows[x][(block + 1)].units<< (64 - spill)) | (M->rows[x][block].units >> spill));
-    
-    elem.sign = (spill <= 0) ?  (M->rows[x][block].sign << -spill) : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].sign>> spill);
-    
-    elem.middle = (spill <= 0) ?  (M->rows[x][block].middle << -spill) : (M->rows[x][block + 1].middle << (64 - spill)) | (M->rows[x][block].middle>> spill);
-    
-    elem.middle = (elem.middle >> (64 - n));
-    
-    elem.units = (elem.units >> (64 - n));
-    
-    elem.sign = (elem.sign >> (64 - n));
-    
-    
-    
-    return elem;
-    
-    
-}
+
+vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n);
+
+vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n);
 
 
 
 
 
-/*
- Swap rows in a matrix;
- */
-void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
-{
-    
-    
-    if((M->nrows >= (row_a ) && (M->nrows >= row_b)))
-    {
-        vfd * temp =  m1ri_malloc(M->width * sizeof(vfd));
-        temp =  M->rows[row_a -1];
-        M->rows[row_a -1] = M->rows[row_b -1];
-        M->rows[row_b -1] =  temp;
-        
-        
-        
-    }
-    
-    
-    {
-        
-        
-    }
-    return 0;
-}
+vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  n);
 
+
+
+void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b);
 
 /*
  
@@ -258,30 +131,7 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
 
 
 //unfinished
-void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u )
-{
-    
-    
-    
-    wi_t  block = (y  ) / 64;
-    
-    int   spill = (y  % 64) - 63;
-    
-    
-    
-    s = ~(s == 0);
-    u = ~(u == 0);
-    
-    
-    M->rows[x][block].units  = (u == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
-    
-    M->rows[x][block].sign  = (s == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
-    M->rows[x][block].middle  = (s == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
-    
-    return 0;
-    
-    
-}
+void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u );
 
 
 /*
@@ -290,20 +140,7 @@ void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u )
 
 
 
-vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width)
-{
-    
-    
-    block  = m1ri_malloc(nrows * width * sizeof(vfd) );
-    
-    
-    
-    return block;
-    
-    
-    
-}
-
+vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width);
 /*
  
  */
@@ -311,69 +148,17 @@ vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width)
 
 
 
-vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows)
-{
-    
-    
-    
-    
-    rows = m1ri_malloc( nrows * width * sizeof(vfd *));
-    
-    
-    for (int i = 0; i <  nrows;  i++ )
-    {
-        rows[i]  = (block + (i * width));
-        
-        
-    };
-    
-    return rows;
-}
-
+vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows);
 /*
  
  */
 
-m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
-{
-    
-    
-    a->ncols = ncols;
-    a->nrows = nrows;
-    a->width =  RU64(ncols);
-    a->block = m5d_block_allocate(a->block,  a->nrows,    a->width);
-    a->rows  = m5d_row_alloc(a->block, a->rows, a->width, a->nrows);
-    a->flags = iswindowed;
-    
-    return *a;
-    
-}
-
+m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols);
 /*
  
  */
 
-vfd * m5d_rand(m5d_t * a)
-{
-    
-    for(int i = 0; i < (a->nrows * a->width); i++)
-    {
-        
-        a->block[i].sign = m1ri_rand();
-        
-        
-        a->block[i].middle = m1ri_rand();
-        
-        a->block[i].units = m1ri_rand();
-        
-        
-        
-        
-    }
-    return a->block;
-}
-
-
+vfd * m5d_rand(m5d_t * a);
 /*
  Make an Identity Matrix
  a = Identity matrix
@@ -383,41 +168,13 @@ vfd * m5d_rand(m5d_t * a)
  */
 
 
-m5d_t  m5d_identity_set(m5d_t * a)
-
-{
-    if (a->nrows == a->ncols)
-    {
-        
-        
-        
-        for(int i = 0; i < (a->nrows/64); i++ )
-        {
-            
-            a->rows[i][i].units = ibits;
-            
-        }
-        
-        
-    }
-    return *a;
-}
-
+m5d_t  m5d_identity_set(m5d_t * a);
 /*
  
  */
 
 
-m5d_t   m5d_identity(m5d_t  *a, rci_t n)
-{
-    *a = m5d_create(a, n, n);
-    *a = m5d_identity_set(a);
-    
-    return *a;
-    
-    
-}
-
+m5d_t   m5d_identity(m5d_t  *a, rci_t n);
 
 /*
  
@@ -427,40 +184,7 @@ m5d_t   m5d_identity(m5d_t  *a, rci_t n)
 
 
 
-m5d_windows m5d_windows_create(m5d_t *a)
-{
-    m5d_windows b;
-    int demi= DN((a->width * a->nrows * a->ncols), 4 );
-    
-    b.a0.block =  m1ri_malloc(demi);
-    b.a1.block =  m1ri_malloc(demi);
-    b.a2.block =  m1ri_malloc(demi);
-    b.a3.block =  m1ri_malloc(demi);
-    {
-        
-        b.a0.block = a->block;
-        b.a1.block  = a->block + demi;
-        b.a2.block = a->block + (2 * demi);
-        b.a3.block = a->block + ( 3 * demi);
-        
-        
-        
-        
-        
-        
-        
-        
-    }
-    b.a0.flags = notwindowed;
-    b.a1.flags = notwindowed;
-    b.a2.flags = notwindowed;
-    b.a3.flags = notwindowed;
-    
-    return b;
-    
-}
-
-
+m5d_windows m5d_windows_create(m5d_t *a);
 
 
 
@@ -472,63 +196,22 @@ m5d_windows m5d_windows_create(m5d_t *a)
 
 
 
-void m5d_free( m5d_t *  tofree)
-{
-    
-    
-    m1ri_free(tofree->rows);
-    m1ri_free(tofree->block);
-    
-}
+void m5d_free( m5d_t *  );
 
-
-void addgf5(vfd * r, vfd * x, vfd * y)
-
-{
-    
-    vec s;
-    r->sign = x->sign ^ y->sign;
-    r->middle = ~r->sign^ x->middle ^ y->middle;
-    r->units = ~r->middle^ x->units ^ y->units;
-    s = ~r->units;
-    r->sign = s ^ x->sign ^ y->sign;
-    r->middle = ~r->sign^ x->middle ^ y->middle;
-    r->units = ~r->middle^ x->units ^ y->units;
-    
-    
-}
+void addgf5(vfd *, vfd * , vfd *);
 
 
 
-vfd addgf5r(vfd  *x, vfd *y)
-{
-    vfd  r;
-    r.sign = x->sign ^ y->sign;
-    r.middle = ~r.sign^ x->middle ^ y->middle;
-    r.units = ~r.middle^ x->units ^ y->units;
-    r.sign = ~r.units ^ x->sign ^ y->sign;
-    r.middle = ~r.sign^ x->middle ^ y->middle;
-    r.units = ~r.middle^ x->units ^ y->units;
-    
-    return r;
-}
+vfd addgf5r(vfd  *, vfd *);
 
-void subgf5( vfd *r, vfd *x, vfd *y)               //multiply matrix x by by matrix y.   The product is matrix r.
 
-{
-    
-    
-    
-}
+void subgf5( vfd *, vfd *, vfd *);               //multiply vector x by by vector y.   The product is vector r.
 
 
 
-vfd subgf5r(vfd x, vfd y)               //multiply matrix x by by matrix y.   The product is matrix r.
 
-{
-    vfd r;
-    return r;
-}
+
+vfd subgf5r(vfd , vfd );               //multiply vector x by by vector y.   The product is vector r.
 
 
 
@@ -536,103 +219,22 @@ vfd subgf5r(vfd x, vfd y)               //multiply matrix x by by matrix y.   Th
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-void iaddgf5(vfd *r,vfd *x)
-{
-    
-    
-    
-    
-    
-    
-    
-}
+void iaddgf5(vfd *,vfd *);
 
-void isubgf5(vfd *r,vfd *x)  //matrix r = (matrix r - matrix x)
-{
-    
-    
-    
-}
+void isubgf5(vfd *,vfd *);
 
 
+void  m5d_mul( vfd *, vfd *, vfd *);
 
-void  m5d_mul( vfd *r, vfd *x, vfd *y)             //multiply matrix x by y assinging the output to r
-{
-    
-}
+vfd m5d_mul_i(vfd , vfd );
 
 
+m5d_t m5d_transpose(m5d_t * );
 
 
-//return the value of the matrix multiplied
+void sub_64gf5(vfd *, vfd *, vfd *);
 
-
-vfd m5d_mul_i(vfd x, vfd y)
-{
-   
-    vfd r;
-    r.units = x.units & y.units;
-    r.sign  = (y.sign ^ x.sign) & (r.units);
-    
-    return r;
-    
-}
-
-
-
-m5d_t m5_transpose(m5d_t * a)
-{
-    m5d_t b = m5d_create(a, a->ncols , a->nrows);
-    int i, j;
-    
-    for(i = 0; i < a->nrows; i++)
-        
-        
-        for(j = 0; j < a->ncols; j++)
-        {
-            a->rows[i][j] = b.rows[j][i];
-            
-            
-            
-        }
-    
-    
-    return b;
-    
-    
-}
-
-
-
-/* * * * * * * * * * * * * * * * * * * *
- Subtract a 1 kilobyte Matrix from another
- 1 kilobyte Matrix
- * * * * * * * * * * * * * * * * * * * * */
-
-
-
-void sub_64gf5(vfd *R, vfd *A, vfd *B)
-{
-    int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
-    {
-        R[i] = subgf5r(A[i], B[i]);
-    }
-}
-
-
-void add_64gf5(vfd *R, vfd *A, vfd *B)
-{
-    int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
-    {
-        R[i] = addgf5r(&A[i], &B[i]);
-    }
-    
-}
-
-
-
+void add_64gf5(vfd *, vfd *, vfd *);
 
 
 
