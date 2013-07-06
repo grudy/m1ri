@@ -18,10 +18,10 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
- m1ri_test.c
+ m1ri_io.c
  
  
- */ 
+ */
 
 #include "m1ri_io.h"
 
@@ -46,18 +46,18 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
         
         
         
-    
+        
         out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
         if((out == 1) && (b & (leftbit  >> x)))
         {
-               printf("[-%d ]", out);
+            printf("[-%d ]", out);
             
         }
         else
         {
-           printf("[ %d ]", out);
+            printf("[ %d ]", out);
         }
-     
+        
         
         
         
@@ -85,30 +85,137 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
 void m3d_print(m3d_t *a)
 {
     int i, m;
-   
-        printf("\n \n");
-
-    for( i  = 0; i < a->nrows -1; i++)
+    
+    printf("\n \n");
+    
+    for( i  = 0; i < a->nrows ; i++)
     {
         
-        
-         print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, 0);
-        
+        if(a->width > 1)
+        {
+            print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, 0);
+        }
         m = 0;
         while((m + 1)< (a->width -2))
         {
             print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, 0);
             ++m;
         }
+        if(m == 0)
+        {
+            print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, a->fcol, (64 - a->ncols%64) );
+            printf("\n");
+            
+        }
+        
         if(m > 0)
-         print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, a->fcol, (64 - a->ncols%64) );
-        printf("\n");
-      
+        {
+            
+            print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, (64 - a->ncols%64) );
+        }
+        
     }
- 
- 
+    printf("\n \n \n ");
 }
 
+
+void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
+{
+    bool out[3];
+    short value ;
+    for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
+    {
+        
+        
+        
+        
+        out[0] = (( a & (leftbit >>  x)));
+        out[1] =  (( b & (leftbit >>  x)));
+        out[2]  = (( c & (leftbit >>  x)));
+        
+        if (out[0]) {
+            value = 1;
+        }
+        
+        
+        if (out[1]) {
+            value = value + 2;
+        }
+        
+        
+        if(out[2])
+        {
+            value = value + 4;
+            
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }
+    
+    
+    
+}
+
+
+void print_m5_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
+{
+    bool out[3];
+    short value ;
+    for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
+    {
+        
+        
+        
+        
+        out[0] = (( a & (leftbit >>  x)));
+        out[1] =  (( b & (leftbit >>  x)));
+        out[2]  = (( c & (leftbit >>  x)));
+        
+        if (out[0]) {
+            value = 1;
+        }
+        
+        
+        if (out[1]) {
+            value = value + 2;
+        }
+        
+        
+        if(out[2])
+        {
+            value = value + 4;
+            
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+}
 
 
 
