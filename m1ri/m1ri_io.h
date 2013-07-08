@@ -19,19 +19,21 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
  m1ri_io.h
- 
- 
- */
-
+*/
 #ifndef m1riproject_m1ro_io_h
 #define m1riproject_m1ro_io_h
 #include "m1ri_3dt.h"
+#include "m7d.h"
+#include "m5d.h"
 #include <stdio.h>
 
 
-inline void m3d_print(m3d_t *);
-inline void print_m3d_block(vec , vec , u_int32_t , u_int32_t );
+ void m3d_print(m3d_t *);
+ void print_m3d_block(vec , vec , u_int32_t , u_int32_t );
 
-
-
+/*
+ void print_m7d_block(vec , vec , vec,  u_int32_t , u_int32_t );
+ void print_m5d_block(vec , vec , vec,  u_int32_t , u_int32_t );
+ static void m5d_print(m5d_t *);
+*/
 #endif
