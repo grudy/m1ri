@@ -118,6 +118,7 @@ vbg m3d_read_elems(m3d_t *M, rci_t  x, rci_t  y, int  n) {
     
 }
 
+
 void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
 {
     if((M->ncols >= (col_a ) && (M->nrows >= col_b)))
@@ -164,7 +165,7 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
     
     return M;
 }
-void *  m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
+void   m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
 {
     
     
@@ -182,8 +183,6 @@ void *  m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
     M->rows[x][block].units  = (u == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
     
     M->rows[x][block].sign  = (s == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
-    
-    return 0;
     
     
 }
@@ -227,7 +226,7 @@ vbg ** m3d_row_alloc(vbg * block, vbg ** rows, wi_t width, rci_t nrows)
     
     for (int i = 0; i <  nrows;  i++ )
     {
-        rows[i]  = (block + (i * width));
+        rows[i]  = block + i * width;
         
         
     };
@@ -249,7 +248,7 @@ m3d_t m3d_create( m3d_t * a, rci_t nrows, rci_t ncols)
     a->block = m3d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m3d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = notwindowed;
-    
+    a->fblock = 0;
     return *a;
     
 }
@@ -258,7 +257,7 @@ m3d_t m3d_create( m3d_t * a, rci_t nrows, rci_t ncols)
  
  */
 
-vbg * m3d_rand(m3d_t * a)
+m3d_t  m3d_rand(m3d_t * a)
 {
     
     for(int i = 0; i < (a->nrows * a->width); i++)
@@ -275,7 +274,9 @@ vbg * m3d_rand(m3d_t * a)
         
         
     }
-    return a->block;
+    
+    return *a;
+
 }
 
 
@@ -285,32 +286,77 @@ vbg * m3d_rand(m3d_t * a)
  n = matrix size (row length and column width)
  
  
- */
+
+*/
 
 
 m3d_t    m3d_identity_set(m3d_t * a)
 
 {
-    if (a->nrows == a->ncols)
+    
+    
+    if(a->ncols == a->nrows)
     {
-        
-        
-        
-        for(int i = 0; i < (a->nrows/64); i++ )
+        int k,i,  j,l;
+    for( i  = 1; i < (a->width  ) ; ++i)
+    {
+         l =  ((i - 1) * 64);
+        j = i - 1;
+        for ( k = 0 ; k < 64; k++)
         {
             
-            a->rows[i][i].units = ibits;
+            a->rows[l][j].units = lbit[k];
+            l++;
             
         }
+            
+            
         
         
+        
+        
+    }
+    
+     
+        
+        
+      if((a->ncols%64) != 0)
+      {
+        l = a->ncols %64;
+        k = ((a->width -1) * 64);
+          l = 64 - l;
+        for(i = 0; i < (64 - l); i++)
+        {
+        
+            a->rows[k + i][a->width-1].units = lbit[i];
+        }
+            
+      }
+       
+        
+    if ((a->ncols%64) == 0)
+      {
+          
+          l = (a->width - 1) * 64;
+          for(i  = 0; i < 64; i++)
+              
+          {
+              a->rows[l][a->width -1].units = lbit[i];
+              l++;
+      
+          }
+      
+      }
+      
+         
     }
     return *a;
 }
 
-/*
+
+
  
- */
+ 
 
 
 m3d_t   m3d_identity(m3d_t  *a, rci_t n)
@@ -433,7 +479,7 @@ m3d_t * m3d_window(m3d_t *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endco
 {
     
     m3d_t * submatrix;
-    submatrix = m1ri_malloc(sizeof(m3d_t * ));
+    submatrix = m1ri_malloc(sizeof(m3d_t  ));
     submatrix->nrows = endrow - strow + 1;
     submatrix->nrows = endcol - stcol + 1;
     submatrix->flags = iswindowed;
@@ -441,8 +487,18 @@ m3d_t * m3d_window(m3d_t *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endco
     submatrix->block = &c->block[(strow * c->width) + (stcol/64) ];
     submatrix->rows = m1ri_malloc(submatrix->width * submatrix->nrows * sizeof(vbg *));
     
-    for(int  i = 0; i < submatrix->nrows; i++)
+    int k, i;
+    
+    for(  i =   0; i < submatrix->nrows; i++)
     {
+        for(k = 0; k < submatrix->ncols; k++)
+        {
+            
+            
+            
+        }
+            
+            
         submatrix->rows[i] = c->rows[i + strow] + (stcol/64);
         
         
@@ -469,7 +525,7 @@ m3d_t * m3d_window(m3d_t *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endco
  
  
  
- /*
+ 
  Matrix Windows
  ______________
  
@@ -479,7 +535,7 @@ m3d_t * m3d_window(m3d_t *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endco
  
  
  */
-m3d_qrt  m3d_swindows(m3d_t *c)
+m3d_qrt  m3d_qtrwindows(m3d_t *c)
 {
     m3d_qrt b;
     
@@ -487,46 +543,46 @@ m3d_qrt  m3d_swindows(m3d_t *c)
     
     int inim = DN((c->width * c->nrows * sizeof(vbg * )), 4);
     
-    b.a0.block =  m1ri_malloc(demi);
+    b.a0->block =  m1ri_malloc(demi);
+
+    b.a1->block =  m1ri_malloc(demi);
     
-    b.a1.block =  m1ri_malloc(demi);
+    b.a2->block =  m1ri_malloc(demi);
     
-    b.a2.block =  m1ri_malloc(demi);
+    b.a3->block =  m1ri_malloc(demi);
+    b.a0->fblock  =
+    b.a0->ncols = b.a1->ncols = b.a2->ncols = b.a3->ncols = DN(c->ncols,2);
     
-    b.a3.block =  m1ri_malloc(demi);
+    b.a0->nrows = b.a1->nrows = b.a2->nrows = b.a3->nrows = DN(c->nrows, 2);
     
-    b.a0.ncols = b.a1.ncols = b.a2.ncols = b.a3.ncols = DN(c->ncols,2);
+    b.a0->flags = b.a1->flags = b.a2->flags = b.a3->flags = notwindowed;
     
-    b.a0.nrows = b.a1.nrows = b.a2.nrows = b.a3.nrows = DN(c->nrows, 2);
+    b.a0->width = b.a1->width = b.a2->width = b.a3->width = DN(c->width, 2);
     
-    b.a0.flags = b.a1.flags = b.a2.flags = b.a3.flags = notwindowed;
+    b.a0->rows = m1ri_malloc(inim);
     
-    b.a0.width = b.a1.width = b.a2.width = b.a3.width = DN(c->width, 2);
+    b.a1->rows = m1ri_malloc(inim);
     
-    b.a0.rows = m1ri_malloc(inim);
+    b.a2->rows = m1ri_malloc(inim);
     
-    b.a1.rows = m1ri_malloc(inim);
+    b.a3->rows = m1ri_malloc(inim);
     
-    b.a2.rows = m1ri_malloc(inim);
-    
-    b.a3.rows = m1ri_malloc(inim);
-    
-    int  xtrbts = b.a0.ncols%64;
+    int  xtrbts = b.a0->ncols%64;
     
     if (xtrbts == 0)
     {
-        for( int i = 0; i < b.a0.nrows; i++)
+        for( int i = 0; i < b.a0->nrows; i++)
         {
             
             
             
-            b.a0.rows[i] =   c->rows[i];
+            b.a0->rows[i] =   c->rows[i];
             
-            b.a1.rows[i] =   c->rows[i] +(i * b.a1.width);
+            b.a1->rows[i] =   c->rows[i] +(i * b.a1->width);
             
-            b.a2.rows[i] =   c->rows[i + b.a1.nrows] ;
+            b.a2->rows[i] =   c->rows[i + b.a1->nrows] ;
             
-            b.a3.rows[i] =   c->rows[i + b.a1.nrows] +(i * b.a3.width);
+            b.a3->rows[i] =   c->rows[i + b.a1->nrows] +(i * b.a3->width);
             
             
             
