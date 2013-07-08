@@ -1,6 +1,4 @@
-
-/*
- Matrix Represenations and basic operations
+/* M1RI
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -20,22 +18,27 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
-m1ri_strassen.c
- */
+ m3d_arith_test.c
+ */ 
 
 
+
+
+
+#include "m1ri_3dt.h"
+#include "m1riwrappers.h"
+#include "m1ri_3dt.h"
+#include "m1riarith.h"
+#include "m1ri_cubes.h"
+#include "m1ri_small.h"
 #include "m1ri_strassen.h"
-
-
-void  m3d_strassen_(m3d_t *C, m3d_t *A, m3d_t*B)
+#include "m1ri_combine.h"
+#include "m1ri_classical.h"
+#include "m1ri_io.h"
+int m3d_arith_test(int argc, const char * argv[])
 {
     
-    /*
-    m3d_qrt cs =  m3d_qtrwindows(C);
-    m3d_qrt bs =  m3d_qtrwindows(B);
-    m3d_qrt as =  m3d_qtrwindows(A);
-    
-   */
-
+    printf("hello");
+    return 0;
 }
 

@@ -38,7 +38,7 @@
  Creates  a union of 192 bits
  ********************************************/
 
-typedef struct {
+ typedef struct {
     
     vec units;
     
@@ -49,6 +49,17 @@ typedef struct {
 } vfd;
 
 
+
+
+static inline  vfd fold5( vec s3, vec s2, vec s1, vec s0)
+{
+    vfd r;
+    vec t = s2 | s1;
+    r.units = s0 ^ t;
+    r.middle = (r.units & s0) ^ (s3 ^ s1);
+    r.sign = (t ^ s2 ) | (r.middle & s3  );
+    return r;
+}
 
 
 /*
@@ -68,6 +79,8 @@ typedef struct {
     vfd * block;  //< block containing the data contiguous in memory
     
     vfd ** rows;  // < pointers to rows of the matrix
+    u_int32_t  fblock; //  first block pointed to in a window
+    u_int32_t fcol;  //column offset of first block
     
     
     u_int8_t flags;
@@ -181,7 +194,7 @@ m5d_t   m5d_identity(m5d_t  *a, rci_t n);
  */
 
 
-
+m5d_t m5d_hadamard(m5d_t * , m5d_t * );
 
 
 m5d_windows m5d_windows_create(m5d_t *a);
@@ -202,16 +215,16 @@ void addgf5(vfd *, vfd * , vfd *);
 
 
 
-vfd addgf5r(vfd  *, vfd *);
+vfd m5d_add_r(vfd  *, vfd *);
 
 
-void subgf5( vfd *, vfd *, vfd *);               //multiply vector x by by vector y.   The product is vector r.
+void m5d_sub( vfd *, vfd *, vfd *);               //multiply vector x by by vector y.   The product is vector r.
 
 
 
 
 
-vfd subgf5r(vfd , vfd );               //multiply vector x by by vector y.   The product is vector r.
+vfd m5d_sub_r(vfd , vfd );               //multiply vector x by by vector y.   The product is vector r.
 
 
 

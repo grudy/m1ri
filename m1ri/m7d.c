@@ -171,26 +171,27 @@ void * m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
 
 
 //unfinished
-void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec u )
+void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
 {
-    
     
     
     wi_t  block = (y  ) / 64;
     
-    int   spill = (y  % 64) - 63;
+    int   spill =  (y  % 64) ;
     
     
     
-    s = ~(s == 0);
-    u = ~(u == 0);
     
     
-    M->rows[x][block].units  = (u == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
+    M->rows[x][block].units  = (u == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
     
-    M->rows[x][block].sign  = (s == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
-    M->rows[x][block].middle  = (s == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
+    M->rows[x][block].middle  = (m == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].middle))  : ((leftbit  >> spill) | (M->rows[x][block].middle));
+
     
+    M->rows[x][block].sign  = (s == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].sign))  : ((leftbit  >> spill) | (M->rows[x][block].sign));
+       
+    
+
     return 0;
     
     
@@ -265,8 +266,27 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
 /*
  
  */
+vtri * m7d_allone(m7d_t * a)
+{
+    
+    for(int i = 0; i < (a->nrows * a->width); i++)
+    {
+        
+        a->block[i].sign = 0xffffffffffffffff;
+        
+        
+        a->block[i].middle = 0xffffffffffffffff;
+        
+        a->block[i].units = 0xffffffffffffffff;
+        
+        
+        
+        
+    }
+    return a->block;
+}
 
-vtri * m7d_rand(m7d_t * a)
+m7d_t  m7d_rand(m7d_t * a)
 {
     
     for(int i = 0; i < (a->nrows * a->width); i++)
@@ -283,58 +303,8 @@ vtri * m7d_rand(m7d_t * a)
         
         
     }
-    return a->block;
-}
-
-
-/*
- Make an Identity Matrix
- a = Identity matrix
- n = matrix size (row length and column width)
- 
- 
- */
-
-
-m7d_t  m7d_identity_set(m7d_t * a)
-
-{
-    if (a->nrows == a->ncols)
-    {
-        
-        
-        
-        for(int i = 0; i < (a->nrows/64); i++ )
-        {
-            
-            a->rows[i][i].units = ibits;
-            
-        }
-        
-        
-    }
     return *a;
 }
-
-/*
- 
- */
-
-
-m7d_t   m7d_identity(m7d_t  *a, rci_t n)
-{
-    *a = m7d_create(a, n, n);
-    *a = m7d_identity_set(a);
-    
-    return *a;
-    
-    
-}
-
-
-/*
- 
- */
 
 
 

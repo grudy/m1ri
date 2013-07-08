@@ -60,7 +60,7 @@ vec m3d_rs_bits(m3d_t *M, rci_t  x, rci_t  y, int  n) {
     
     vec bits;
     
-    bits = (spill <= 0) ? M->rows[x][block].sign << -spill : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].sign >> spill);
+    bits  = (n == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].sign))  : ((leftbit >> spill) | (M->rows[x][block].units));
     
     
     return bits;
@@ -81,8 +81,11 @@ vec m3d_ru_bits(m3d_t *M, rci_t  x, rci_t  y, int  n) {
     
     vec bits;
     
-    bits = (spill <= 0) ? M->rows[x][block].units << -spill : (M->rows[x][block + 1].units<< (64 - spill)) | (M->rows[x][block].units>> spill);
     
+    
+   bits  = (n == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
+    
+   
     
     
     
@@ -124,14 +127,16 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
     if((M->ncols >= (col_a ) && (M->nrows >= col_b)))
     {
         
-        rci_t block_a = col_a/64;
-        rci_t block_b = col_b/64;
-        rci_t dif_a = col_a%64;
-        rci_t dif_b = col_b%64;
-        rci_t a_place =  rightbit >>  (dif_a - 1);
-        rci_t b_place =  rightbit >> (dif_b - 1);
+        vec block_a = col_a/64;
+        vec block_b = col_b/64;
+        vec dif_a = col_a%64;
+        vec dif_b = col_b%64;
+        vec a_place =  leftbit >>  dif_a ;
+        vec b_place =  leftbit >> dif_b ;
         vbg tempa;
         vbg tempb;
+      
+        
         for(int i = 0; i > M->nrows; i++)
         {
             
@@ -141,13 +146,11 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
             tempa.units = (M->rows[i][block_a].units) & a_place;
             tempb.units = (M->rows[i][block_b].units) & b_place;
             tempb.sign = (M->rows[i][block_b].sign) & b_place;
+            M->rows[i][block_b].units = (tempa.sign == 0)? (~(leftbit >> dif_b) &  (M->rows[i][block_b].units))  : ((leftbit >> dif_b) | (M->rows[i][block_b].units));
+            M->rows[i][block_b].sign = (tempa.sign == 0)? (~(leftbit >> dif_b) &  (M->rows[i][block_b].sign))  : ((leftbit >> dif_b) | (M->rows[i][block_b].sign));
             
-            
-            M->rows[i][block_b].units = (tempa.sign == 0)? (M->rows[i][block_b].units &  ~b_place): (M->rows[i][block_b].units | b_place);
-            M->rows[i][block_b].sign = (tempa.units == 0)? (M->rows[i][block_b].sign &  ~b_place): (M->rows[i][block_b].sign   | b_place);
-            
-            M->rows[i][block_a].units = (tempa.sign == 0)? (M->rows[i][block_a].units &  ~a_place): (M->rows[i][block_a].units | a_place);
-            M->rows[i][block_a].sign = (tempa.units == 0)? (M->rows[i][block_a].sign &  ~a_place): (M->rows[i][block_a].sign  | a_place);
+            M->rows[i][block_a].units = (tempb.sign == 0)? (~(leftbit >> dif_a) &  (M->rows[i][block_a].sign))  : ((leftbit >> dif_a) | (M->rows[i][block_a].sign));
+            M->rows[i][block_a].sign = (tempb.units == 0)? (~(leftbit >> dif_a) &  (M->rows[i][block_a].units))  : ((leftbit >> dif_a) | (M->rows[i][block_a].units));
             
             
             
@@ -165,24 +168,25 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
     
     return M;
 }
-void   m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
+void  m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
 {
     
     
     
     wi_t  block = (y  ) / 64;
     
-    int   spill = (y  % 64) - 63;
+    int   spill =  (y  % 64) ;
     
     
     
-    s = ~(s == 0);
-    u = ~(u == 0);
+   
+    
+    M->rows[x][block].units  = (u == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
+    
+    M->rows[x][block].sign  = (s == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].sign))  : ((leftbit  >> spill) | (M->rows[x][block].sign));
     
     
-    M->rows[x][block].units  = (u == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
-    
-    M->rows[x][block].sign  = (s == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
+
     
     
 }
@@ -249,6 +253,7 @@ m3d_t m3d_create( m3d_t * a, rci_t nrows, rci_t ncols)
     a->rows  = m3d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = notwindowed;
     a->fblock = 0;
+    a->fcol = 0;
     return *a;
     
 }

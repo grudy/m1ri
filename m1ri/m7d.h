@@ -47,6 +47,8 @@ typedef struct {
     
     vec sign;
     
+    
+    
 } vtri;
 
 
@@ -70,6 +72,8 @@ typedef struct {
     
     vtri ** rows;  // < pointers to rows of the matrix
     
+    u_int32_t  fblock; //  first block pointed to in a window
+    u_int32_t fcol;  //column offset of first block
     
     u_int8_t flags;
     
@@ -133,7 +137,7 @@ void * m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
 
 
 //unfinished
-void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec u );
+void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s,  vec m , vec u );
 
 
 /*
@@ -160,7 +164,7 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols);
  
  */
 
-vtri * m7d_rand(m7d_t * a);
+m7d_t m7d_rand(m7d_t * a);
 /*
  Make an Identity Matrix
  a = Identity matrix

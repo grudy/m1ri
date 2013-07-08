@@ -35,7 +35,7 @@
 
 
 /********************************************
-Creates  a union of 128 bits
+Creates  a struct of 128 bits
 ********************************************/
 
 typedef struct {
@@ -73,8 +73,8 @@ typedef struct {
     
     
     
-    u_int32_t * pero; //First block in  a row without all zeroes
-    u_int32_t * cnt;  //Number of rows with of each respective width from the start of the row
+    u_int32_t  fblock; //  first block pointed to in a window
+    u_int32_t fcol;  //column offset of first block 
     
     
     
@@ -98,10 +98,10 @@ typedef struct {
  
  */
 typedef  struct{
-    m3d_t   a0;
-    m3d_t  a1;
-    m3d_t a2;
-    m3d_t  a3;
+    m3d_t  * a0;
+    m3d_t  * a1;
+    m3d_t  * a2;
+    m3d_t  * a3;
     
     
 }m3d_qrt;
@@ -157,7 +157,7 @@ void * m3d_colswap(m3d_t *, rci_t , rci_t );
 
 
 
-void *  m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
+ void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
 
 vbg  * m3d_block_allocate(vbg * , rci_t  ,  wi_t  );
 
@@ -168,7 +168,7 @@ vbg ** m3d_row_alloc(vbg * , vbg ** , wi_t , rci_t );
 m3d_t m3d_create( m3d_t * , rci_t nrows, rci_t );
  
 
-vbg * m3d_rand(m3d_t * );
+m3d_t m3d_rand(m3d_t * );
 
 
 /*
@@ -178,7 +178,7 @@ vbg * m3d_rand(m3d_t * );
  
  
 */
-
+m3d_t m3d_identitysixfour(m3d_t *, int, int);
 
 m3d_t    m3d_identity_set(m3d_t * );
 
@@ -200,8 +200,7 @@ m3d_t * m3d_window(m3d_t *, rci_t , rci_t , rci_t , rci_t );
  
  
 */
-m3d_qrt  m3d_qtrwindows(m3d_t *);
-
+m3d_qrt    m3d_qtrwindows(m3d_t *);
 
 
 /*

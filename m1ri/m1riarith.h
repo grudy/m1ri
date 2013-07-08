@@ -28,6 +28,9 @@
 
 #include "m1ri_3dt.h"
 
+
+
+
 void addgf3(vbg * r, vbg * x, vbg * y);
 
 
@@ -75,6 +78,8 @@ vbg vbg_mul_i(vbg , vbg );
     Hadamard multiplication
 */
 m3d_t m3d_hadamard(m3d_t *, m3d_t *);
+
+
 
 
 /* * * * * * * * * * * * * * * * * * * *

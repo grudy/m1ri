@@ -135,7 +135,7 @@ vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  n) {
     elem.units = (elem.units >> (64 - n));
     
     elem.sign = (elem.sign >> (64 - n));
-    
+    //a->frows
     
     
     return elem;
@@ -308,15 +308,56 @@ vfd * m5d_rand(m5d_t * a)
 m5d_t  m5d_identity_set(m5d_t * a)
 
 {
-    if (a->nrows == a->ncols)
+    if(a->ncols == a->nrows)
     {
+        int k,i,  j,l;
+        for( i  = 1; i < (a->width  ) ; ++i)
+        {
+            l =  ((i - 1) * 64);
+            j = i - 1;
+            for ( k = 0 ; k < 64; k++)
+            {
+                
+                a->rows[l][j].units = lbit[k];
+                l++;
+                
+            }
+            
+            
+            
+            
+            
+            
+        }
         
         
         
-        for(int i = 0; i < (a->nrows/64); i++ )
+        
+        if((a->ncols%64) != 0)
+        {
+            l = a->ncols %64;
+            k = ((a->width -1) * 64);
+            l = 64 - l;
+            for(i = 0; i < (64 - l); i++)
+            {
+                
+                a->rows[k + i][a->width-1].units = lbit[i];
+            }
+            
+        }
+        
+        
+        if ((a->ncols%64) == 0)
         {
             
-            a->rows[i][i].units = ibits;
+            l = (a->width - 1) * 64;
+            for(i  = 0; i < 64; i++)
+                
+            {
+                a->rows[l][a->width -1].units = lbit[i];
+                l++;
+                
+            }
             
         }
         
@@ -407,35 +448,35 @@ void m5d_free( m5d_t *  tofree)
 void addgf5(vfd * r, vfd * x, vfd * y)
 
 {
+    S A;
+    A.s0 =  x->sign ^ y->sign;
+    A.s1 =  (x->middle ^ y->middle) ^ A.s0;
+    A.s2 = (x->units ^ y->units)  ^ A.s1;
+    A.s3 = (x->units & y->units);
+   
+    *r = fold5(A.s3, A.s2, A.s1, A.s0);
     
-    vec s;
-    r->sign = x->sign ^ y->sign;
-    r->middle = ~r->sign^ x->middle ^ y->middle;
-    r->units = ~r->middle^ x->units ^ y->units;
-    s = ~r->units;
-    r->sign = s ^ x->sign ^ y->sign;
-    r->middle = ~r->sign^ x->middle ^ y->middle;
-    r->units = ~r->middle^ x->units ^ y->units;
     
     
 }
 
 
 
-vfd addgf5r(vfd  *x, vfd *y)
+vfd m5d_add_r(vfd  *x, vfd *y)
 {
-    vfd  r;
-    r.sign = x->sign ^ y->sign;
-    r.middle = ~r.sign^ x->middle ^ y->middle;
-    r.units = ~r.middle^ x->units ^ y->units;
-    r.sign = ~r.units ^ x->sign ^ y->sign;
-    r.middle = ~r.sign^ x->middle ^ y->middle;
-    r.units = ~r.middle^ x->units ^ y->units;
+   S A;
+    A.s0 =  x->sign ^ y->sign;
+    A.s1 =  (x->middle ^ y->middle) ^ A.s0;
+    A.s2 = (x->units ^ y->units)  ^ A.s1;
+    A.s3 = (x->units & y->units);
     
+    vfd r = fold5(A.s3, A.s2, A.s1, A.s0);
     return r;
+    
 }
 
-void subgf5( vfd *r, vfd *x, vfd *y)               //multiply matrix x by by matrix y.   The product is matrix r.
+
+void m5d_sub( vfd *r, vfd *x, vfd *y)    
 
 {
     
@@ -445,7 +486,7 @@ void subgf5( vfd *r, vfd *x, vfd *y)               //multiply matrix x by by mat
 
 
 
-vfd subgf5r(vfd x, vfd y)               //multiply matrix x by by matrix y.   The product is matrix r.
+vfd m5d_sub_r(vfd x, vfd y)
 
 {
     vfd r;
@@ -461,6 +502,13 @@ vfd subgf5r(vfd x, vfd y)               //multiply matrix x by by matrix y.   Th
 void iaddgf5(vfd *r,vfd *x)
 {
     
+    S A;
+    A.s0 =  x->sign ^ r->sign;
+    A.s1 =  (x->middle ^ r->middle) ^ A.s0;
+    A.s2 = (x->units ^ r->units)  ^ A.s1;
+    A.s3 = (x->units & r->units);
+    
+     *r = fold5(A.s3, A.s2, A.s1, A.s0);
     
     
     
@@ -487,6 +535,16 @@ void  m5d_mul( vfd *r, vfd *x, vfd *y)             //multiply matrix x by y assi
 
 
 //return the value of the matrix multiplied
+
+
+m5d_t m5d_hadamard(m5d_t * a, m5d_t * b)
+{
+    m5d_t h_5;
+
+
+    return h_5;
+}
+
 
 
 vfd m5d_mul_i(vfd x, vfd y)
@@ -532,7 +590,7 @@ void sub_64gf5(vfd *R, vfd *A, vfd *B)
     int i;
     for (i = 0; i < (sizeof(vec)); i++ )
     {
-        R[i] = subgf5r(A[i], B[i]);
+        R[i] = m5d_sub_r(A[i], B[i]);
     }
 }
 
@@ -542,7 +600,7 @@ void add_64gf5(vfd *R, vfd *A, vfd *B)
     int i;
     for (i = 0; i < (sizeof(vec)); i++ )
     {
-        R[i] = addgf5r(&A[i], &B[i]);
+        R[i] = m5d_add_r(&A[i], &B[i]);
     }
     
 }

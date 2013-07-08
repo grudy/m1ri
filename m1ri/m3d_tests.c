@@ -28,13 +28,39 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #include "m1ri_cubes.h"
 #include "m1ri_small.h"
 #include "m1ri_strassen.h"
-#include "m7d.h"
-#include "m5d.h"
 #include "m1ri_combine.h"
 #include "m1ri_classical.h"
-
+#include "m1ri_io.h"
 int main(int argc, const char * argv[])
 {
+ 
+    printf("Row Swap Test \n");
+    printf("-------------  \n");
+    m3d_t row_swap_test;
+    row_swap_test =  m3d_create(&row_swap_test,8     , 8);
+    m3d_identity_set(&row_swap_test);
+    printf("Before the swap \n");
+    printf("-------------  \n");    m3d_print(&row_swap_test);
+    
+    m3d_rowswap(&row_swap_test, 2, 4);
+    printf("After the swap");
+    printf("-------------  \n");    m3d_print(&row_swap_test);
+      printf("Col Swap Test \n");
+      printf("-------------  \n");
+    m3d_t col_swap_test;
+    col_swap_test =  m3d_create(&col_swap_test,6     , 6);
+    m3d_identity_set(&col_swap_test);
+    printf("Before the swap \n");
+    printf("-------------  \n");
+    m3d_print(&col_swap_test);
+    
+    m3d_rowswap(&col_swap_test, 2, 4);
+    
+    printf("After the swap");
+   printf("-------------  \n");
+    m3d_print(&col_swap_test);
+    
+    
     
     return 0;
 }

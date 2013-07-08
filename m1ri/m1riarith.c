@@ -24,6 +24,8 @@
  */
 
 #include "m1riarith.h"
+#include "m5d.h"
+#include "m7d.h"
 void addgf3(vbg * r, vbg * x, vbg * y)
 
 {
