@@ -122,11 +122,12 @@ void m3d_print(m3d_t *a)
             
          if(a->ncols%64 != 0)
          {
-         print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, a->fcol, (64 - a->ncols%64) );
+             
+         print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, (64 - a->ncols%64) );
          }
         if(a->ncols%64 == 0)
         {
-             print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, a->fcol, 0 );
+             print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, 0 );
         }
       
         }
@@ -137,7 +138,7 @@ void m3d_print(m3d_t *a)
 }
        printf("\n \n \n ");
 }
-/*
+
 
 void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
 {
@@ -275,7 +276,7 @@ void m5d_print(m5d_t * a)
 
 
 }
-/*
+
 
 
 

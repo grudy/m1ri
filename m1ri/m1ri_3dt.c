@@ -469,6 +469,8 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
  return *a;
  
  
+ u_int32_t  fblock; //  first block pointed to in a window
+ u_int32_t fcol;  //column offset of first block
  
  
  }
@@ -486,7 +488,8 @@ m3d_t * m3d_window(m3d_t *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endco
     submatrix->width = DN(submatrix->ncols, 64);
     submatrix->block = &c->block[(strow * c->width) + (stcol/64) ];
     submatrix->rows = m1ri_malloc(submatrix->width * submatrix->nrows * sizeof(vbg *));
-    
+   // a->fblock = (strow  * c->width) + (stcol/64);
+   // a->fcol = c->
     int k, i;
     
     for(  i =   0; i < submatrix->nrows; i++)
