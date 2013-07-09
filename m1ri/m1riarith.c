@@ -1,4 +1,3 @@
-
 /*
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
@@ -144,11 +143,12 @@ m3d_t m3d_hadamard(m3d_t *a, m3d_t *b)
     m3d_t c;
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-        c = *a;
+        c = m3d_create(&c, a->nrows , b->ncols);
         int i, j;
+        
         for( i = 0; i < a->nrows; i++)
         {
-            for(j = 0; j < a->width; i++)
+            for(j = 0; j < (a->width ); j++)
             {
                 
                 c.rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
@@ -163,6 +163,8 @@ m3d_t m3d_hadamard(m3d_t *a, m3d_t *b)
     
     
 }
+
+
 
 
 
