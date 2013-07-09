@@ -38,7 +38,7 @@
 int m3d_arith_test(int argc, const char * argv[])
 {
     
-    printf("hello");
+    
     return 0;
 }
 

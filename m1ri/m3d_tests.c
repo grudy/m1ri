@@ -21,7 +21,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  m1ri_test.c
  */ 
 
-#include "m1ri_3dt.h"
+
 #include "m1riwrappers.h"
 #include "m1ri_3dt.h"
 #include "m1riarith.h"
@@ -34,32 +34,10 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 int main(int argc, const char * argv[])
 {
  
-    printf("Row Swap Test \n");
-    printf("-------------  \n");
-    m3d_t row_swap_test;
-    row_swap_test =  m3d_create(&row_swap_test,8     , 8);
-    m3d_identity_set(&row_swap_test);
-    printf("Before the swap \n");
-    printf("-------------  \n");    m3d_print(&row_swap_test);
-    
-    m3d_rowswap(&row_swap_test, 2, 4);
-    printf("After the swap");
-    printf("-------------  \n");    m3d_print(&row_swap_test);
-      printf("Col Swap Test \n");
-      printf("-------------  \n");
-    m3d_t col_swap_test;
-    col_swap_test =  m3d_create(&col_swap_test,6     , 6);
-    m3d_identity_set(&col_swap_test);
-    printf("Before the swap \n");
-    printf("-------------  \n");
-    m3d_print(&col_swap_test);
-    
-    m3d_rowswap(&col_swap_test, 2, 4);
-    
-    printf("After the swap");
-   printf("-------------  \n");
-    m3d_print(&col_swap_test);
-    
+   m3d_t a = m3d_create(&a , 65, 65);
+                        
+   // m3d_identity_set(&a);
+    m3d_print(&a);
     
     
     return 0;
