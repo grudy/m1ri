@@ -254,9 +254,32 @@ m3d_t m3d_create( m3d_t * a, rci_t nrows, rci_t ncols)
     a->flags = notwindowed;
     a->fblock = 0;
     a->fcol = 0;
+    a->svbg = 0;
     return *a;
     
 }
+
+m3d_t *  m3d_create_p( m3d_t * a, rci_t nrows, rci_t ncols)
+{
+    
+    
+    a->ncols = ncols;
+    a->nrows = nrows;
+    a->width =  RU64(ncols);
+    a->block = m3d_block_allocate(a->block,  a->nrows,    a->width);
+    a->rows  = m3d_row_alloc(a->block, a->rows, a->width, a->nrows);
+    a->flags = notwindowed;
+    a->fblock = 0;
+    a->fcol = 0;
+    return a;
+    
+
+    
+}
+
+
+
+
 
 /*
  
@@ -482,36 +505,45 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
  */
 
 //A pointer to a submatrix
-m3d_t * m3d_window(m3d_t *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endcol)
+m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endcol)
 {
     
-    m3d_t * submatrix;
-    submatrix = m1ri_malloc(sizeof(m3d_t  ));
-    submatrix->nrows = endrow - strow + 1;
-    submatrix->nrows = endcol - stcol + 1;
-    submatrix->flags = iswindowed;
-    submatrix->width = DN(submatrix->ncols, 64);
-    submatrix->block = &c->block[(strow * c->width) + (stcol/64) ];
-    submatrix->rows = m1ri_malloc(submatrix->width * submatrix->nrows * sizeof(vbg *));
-   // a->fblock = (strow  * c->width) + (stcol/64);
-   // a->fcol = c->
-    int k, i;
+    m3d_t  submatrix;
+    submatrix.nrows = endrow - strow + 1;
+    submatrix.ncols = endcol - stcol;
+    submatrix.flags = iswindowed;
+    submatrix.width = DN(submatrix.ncols, 64);//
+    if((stcol%64) > (endcol%64))
+    submatrix.width = submatrix.width + 1;
+    submatrix.flags = iswindowed;
+     
     
-    for(  i =   0; i < submatrix->nrows; i++)
+    submatrix.rows = m1ri_malloc(submatrix.width * submatrix.nrows * sizeof(vbg *));
+    submatrix.fblock = (strow  * c->width) + (stcol/64);
+    submatrix.fcol   = stcol%64;
+    submatrix.svbg = stcol/64;
+    
+    
+    int i;
+    
+    for(  i =   strow; i < endrow + 1; i++)
     {
-        for(k = 0; k < submatrix->ncols; k++)
-        {
-            
-            
-            
-        }
-            
-            
-        submatrix->rows[i] = c->rows[i + strow] + (stcol/64);
+      
         
-        
+       
+           submatrix.rows[i - strow] = c->rows[i];
+    
+            
+            
     }
-    //submatrix->
+    
+            
+            
+      
+        
+        
+    
+
     
     
     
@@ -523,87 +555,6 @@ m3d_t * m3d_window(m3d_t *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endco
 
 
 
-/*
- Matrix  Windows split into 4 quadrants
- ______________
- 
- A = [A0 | A1]
- [A2 | A3]
- 
- 
- 
- 
- 
- Matrix Windows
- ______________
- 
- A = [A0 | A1]
- [A2 | A3]
- 
- 
- 
- */
-m3d_qrt  m3d_qtrwindows(m3d_t *c)
-{
-    m3d_qrt b;
-    
-    int demi= DN((c->width * c->nrows  * sizeof(vbg)), 4 );
-    
-    int inim = DN((c->width * c->nrows * sizeof(vbg * )), 4);
-    
-    b.a0->block =  m1ri_malloc(demi);
-
-    b.a1->block =  m1ri_malloc(demi);
-    
-    b.a2->block =  m1ri_malloc(demi);
-    
-    b.a3->block =  m1ri_malloc(demi);
-    b.a0->fblock  =
-    b.a0->ncols = b.a1->ncols = b.a2->ncols = b.a3->ncols = DN(c->ncols,2);
-    
-    b.a0->nrows = b.a1->nrows = b.a2->nrows = b.a3->nrows = DN(c->nrows, 2);
-    
-    b.a0->flags = b.a1->flags = b.a2->flags = b.a3->flags = notwindowed;
-    
-    b.a0->width = b.a1->width = b.a2->width = b.a3->width = DN(c->width, 2);
-    
-    b.a0->rows = m1ri_malloc(inim);
-    
-    b.a1->rows = m1ri_malloc(inim);
-    
-    b.a2->rows = m1ri_malloc(inim);
-    
-    b.a3->rows = m1ri_malloc(inim);
-    
-    int  xtrbts = b.a0->ncols%64;
-    
-    if (xtrbts == 0)
-    {
-        for( int i = 0; i < b.a0->nrows; i++)
-        {
-            
-            
-            
-            b.a0->rows[i] =   c->rows[i];
-            
-            b.a1->rows[i] =   c->rows[i] +(i * b.a1->width);
-            
-            b.a2->rows[i] =   c->rows[i + b.a1->nrows] ;
-            
-            b.a3->rows[i] =   c->rows[i + b.a1->nrows] +(i * b.a3->width);
-            
-            
-            
-            
-        }
-        
-    }
-    
-    return b;
-    
-    
-    
-}
 
 
 /*

@@ -46,7 +46,7 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
         
         
         
-    
+        
         out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
         if((out == 1) && (b & (leftbit  >> x)))
         {
@@ -62,7 +62,7 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
         
         
         
-        
+     
         
         
         
@@ -87,7 +87,9 @@ void m3d_print(m3d_t *a)
     int i, m;
    
         printf("\n \n");
-
+    if (a->flags == notwindowed) {
+    
+    
     for( i  = 0; i < a->nrows ; i++)
     {
         
@@ -106,7 +108,8 @@ void m3d_print(m3d_t *a)
              
              if(a->ncols%64 == 0)
              {
-                 print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, a->fcol, 0 );
+                 print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, 0 );
+                 
              }
              
              if(a->ncols%64 != 0)
@@ -123,7 +126,9 @@ void m3d_print(m3d_t *a)
          if(a->ncols%64 != 0)
          {
              
-         print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, (64 - a->ncols%64) );
+         print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, (64 - (a->ncols + a->fcol)%64) );
+             
+             
          }
         if(a->ncols%64 == 0)
         {
@@ -131,17 +136,77 @@ void m3d_print(m3d_t *a)
         }
       
         }
-    
+      
    
+      
+        
+        }
+    }
+    
+    if (a->flags == iswindowed) {
+    
+                for( i  = 0; i < a->nrows ; i++)
+{
+    
+            if(a->width > 1)
+                {
+                        print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, 0);
+        
+                        m = 1;
+                        while(m < (a->width -1))
+                            {
+                                print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, 0);
+                                ++m;
+                            }
+        
+        
+        
+                    if(a->ncols%64 == 0)
+                    {
+                print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, a->fcol, 0 );
+            
+                    }
+        
+                    if(a->ncols%64 != 0)
+                    {
+                        print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, (63 - (a->ncols + a->fcol)%64) );
+                    }
+        
+        
+                }
+    
+        if(a->width  ==  1)
+        {
+        
+        if(a->ncols%64 != 0)
+        {
+            
+            print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, (64 - (a->ncols + a->fcol)%64) );
+            
+            
+        }
+        if(a->ncols%64 == 0)
+        {
+            print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, 0 );
+        }
+        
+     
+        
+      
+        }
+
         printf("\n");
- 
+    }
+
+        
+       
 }
-       printf("\n \n \n ");
+
+    printf("\n \n \n ");
+    
+    
+
 }
-
-
-
-
 void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
 {
     bool out[3];
@@ -338,7 +403,11 @@ void m7d_print(m7d_t *a)
         printf("\n");
         
     }
+    
     printf("\n \n \n ");
+    
+    
+    
 }
 
 

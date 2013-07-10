@@ -67,7 +67,7 @@ typedef struct {
     vbg ** rows;  // < pointers to rows of the matrix
     
     
-    vec * cero;   //Identifies zeroes (with an XOR statement)a0
+     vec  svbg;   //Identifies first vbg used in row
    
     // wi_t rowstride;  //vbg's in block to traverse to  get to first
     
@@ -97,14 +97,7 @@ typedef struct {
  
  
  */
-typedef  struct{
-    m3d_t  * a0;
-    m3d_t  * a1;
-    m3d_t  * a2;
-    m3d_t  * a3;
-    
-    
-}m3d_qrt;
+
 
 /*
  Read n bits from a s portion of an element
@@ -187,20 +180,7 @@ m3d_t    m3d_identity_set(m3d_t * );
 m3d_t   m3d_identity(m3d_t  *, rci_t );
 
 
-m3d_t * m3d_window(m3d_t *, rci_t , rci_t , rci_t , rci_t );
-
-
- /*
- Matrix  Windows split into 4 quadrants
- ______________
- 
- A = [A0 | A1]
- [A2 | A3]
- 
- 
- 
-*/
-m3d_qrt    m3d_qtrwindows(m3d_t *);
+m3d_t  m3d_window(m3d_t *, rci_t , rci_t , rci_t , rci_t );
 
 
 /*
@@ -242,13 +222,12 @@ int m3d_equal(m3d_t *, m3d_t *);
 
 void m3d_free( m3d_t *  );
 
+m3d_t *  m3d_create_pnt( m3d_t *, rci_t , rci_t );
 
 
 
 
-
-
-
+m3d_t *  m3d_create_p( m3d_t * , rci_t , rci_t );
 
 
 
