@@ -32,58 +32,17 @@
 #include "m1ri_3dt.h"
 
 
-typedef struct {
-    
-    rci_t nrows; //< number of rows
-    
-    rci_t ncols; //< number of columns
-    
-    wi_t width; //< the number of vbg's needed to hold columns
-    
-    
-    
-    vbg * block;  //< block containing the data contiguous in memory
-    
-    vbg ** rows;  // < pointers to rows of the matrix
-    
-
-    
-    u_int8_t flags;
-    
-    
-    
-    
-    
-} m3d_cbe;
-
-vbg  * m3d_cube_block(vbg * , rci_t  ,  wi_t  );
-
-
-
-
-vbg ** m3d_cube_rows(vbg * block, vbg **, wi_t, rci_t );
-
-
-m3d_cbe m3dcbe_create( m3d_cbe * , rci_t , rci_t);
-/*
-m3d_cbe m3d_cbe_form(m3d_t *a)
+typedef struct
 {
-   
-   
-
+    rci_t nrows;
+    wi_t width;
     
-    for(int i = 0; i < a->nrows; i = i + 64)
-    {
-        
-
+    m3d_t * blocks;
+    m3d_t ** rows;
     
-    }
-        
-        
-        
-        
-}
+}m3_smt;
 
-*/
+
+
 
 #endif

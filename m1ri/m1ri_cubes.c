@@ -24,83 +24,98 @@
  */
 
 #include "m1ri_cubes.h"
-
-
-
-
-vbg  * m3d_cube_block(vbg * block, rci_t  nrows,  wi_t  width)
-{
-    
-    
-    block  = m1ri_malloc(nrows * width * sizeof(vbg) );
-    
-    
-    
-    return block;
-    
-    
-    
-}
-
 /*
- 
- */
+    Matrix partitioned into 64 by 64 slices
+*/
 
 
 
-
-vbg ** m3d_cube_rows(vbg * block, vbg ** rows, wi_t width, rci_t nrows)
+void * m3d_64_cubes(m3d_t *a, m3_smt * b)
 {
+   
     
-    
-    
-    
-    rows = m1ri_malloc( nrows * width * sizeof(vbg *));
-    
-    
-    for (int i = 0; i <  nrows;  i++ )
-    {
-        rows[i]  = (block + (i * width));
+        if((a->nrows%64 || a->nrows%64   )  != 0)
+        {
+            
+            //Could not make partitioned matrix
+          
         
-        
-    };
+        }
+        else if((a->nrows%64 && a->nrows%64   )  == 0)
+        {
+           
+            b->width  = a->width/8;
+            b->nrows  = a->nrows/64;
+            int n = b->width * b->nrows ;
+            
+            
+            b->blocks = malloc(n * sizeof(m3d_t *) );
+            b->rows  = malloc(n * sizeof(m3d_t ) );
+            
+           
+            u_int32_t i, k, j, v, l, vd, ld, md;
+            j = b->nrows%8;
+            k = b->width%8;
+           
+            
+            
+           
+            
+            
+            
+            for(j = 0; j < (b->nrows - j) ; j = j + 8 )
+            {
+              
+                v = j * 64;
+                vd = v + 64; 
+                for(i = 0; (i > b->width -  k) ; i = i  + 8 )
+                {
+                    l = i * 512;
+                    ld = l + 64;
+                    
+                    b->blocks[(j * b->width)  +  i]  = m3d_window(a ,  v      ,  l   , vd  ,ld );
+                    b->blocks[(j * b->width ) + (i +1)]    = m3d_window( a, v     ,   l + 64,       vd , ld + 64);//256, 320, 384, 448, 512
+                   b->blocks[(j * b->width )+  i +2 ]    = m3d_window(a,  v     ,  l + 128 ,       vd  ,  ld+ 128);
+                   b->blocks[(j * b->width ) + i +3 ]     = m3d_window (a, v      ,  l + 196 ,       vd , ld +  196);
+                   b->blocks[(j * b->width ) + i +4 ]     = m3d_window (a, v      ,  l + 256  ,      vd ,ld +  256);
+                    b->blocks[(j * b->width ) + i + 5 ]    = m3d_window(a, v      , l + 320   ,      vd  , ld +320);
+                   b->blocks[(j * b->width ) + i + 6]    = m3d_window(a, v      ,l + 384 ,      vd,  ld + 384);
+                    b->blocks[(j * b->width ) + i  + 7]    = m3d_window(a, v     , l + 448 ,     vd  ,ld + 448);
+                }
+                md = 0;
+                while (k > md) {
+                       b->blocks[(((j + 1 ) * b->width)  - k ) ]  = m3d_window(a ,  v      ,  l   , vd  ,ld );
+                    
+                    
+                    k--;
+                }
+                
+                b->rows[j] = b->blocks + (j * b->width);
+            }
+                
+                
+               
+            
+           
+            
+                
+            }
+            
+            
+            
     
-    return rows;
+            
+           
+              return b;  
+                
+                
 }
+            
+            
+
+    
 
 
-
-m3d_cbe m3dcbe_create( m3d_cbe * a, rci_t nrows, rci_t ncols)
-{
-    
-    
-    a->ncols = ncols;
-    a->nrows = nrows;
-    a->width =  RU64(ncols);
-    a->block = m3d_block_allocate(a->block,  a->nrows,    a->width);
-    a->rows  = m3d_row_alloc(a->block, a->rows, a->width, a->nrows);
-    a->flags = iswindowed;
-    
-    return *a;
-    
-}
-/*
- m3d_cbe m3d_cbe_form(m3d_t *a)
- {
- 
- 
- 
- 
- for(int i = 0; i < a->nrows; i = i + 64)
- {
- 
- 
- 
- }
- 
- 
- 
- 
- }
- 
- */
+                     
+                     
+                
