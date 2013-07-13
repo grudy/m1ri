@@ -1,3 +1,4 @@
+
 /*
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
@@ -25,7 +26,7 @@
 #include "m1riarith.h"
 #include "m5d.h"
 #include "m7d.h"
-void addgf3(vbg * r, vbg * x, vbg * y)
+void add_m3d(vbg * r, vbg const * x, vbg const * y)
 
 {
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
@@ -38,7 +39,7 @@ void addgf3(vbg * r, vbg * x, vbg * y)
 
 
 
-vbg addgf3r(vbg  x, vbg y)
+vbg add_m3dr(vbg  x, vbg const y)
 {
     vec t;
     x.sign  = y.units ^ x.sign;
@@ -51,7 +52,7 @@ vbg addgf3r(vbg  x, vbg y)
     
 }
 
-void subgf3( vbg *r, vbg *x, vbg *y)            
+void sub_m3d( vbg *r, vbg const *x, vbg const *y)
 {
     r->units = ((x->units^y->units) | (x->sign^y->sign));
     r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
@@ -62,7 +63,7 @@ void subgf3( vbg *r, vbg *x, vbg *y)
 
 
 
-vbg subgf3r(vbg x, vbg y)             
+vbg sub_m3dr(vbg const x, vbg const y)
 
 {
     vbg r;
@@ -75,7 +76,7 @@ vbg subgf3r(vbg x, vbg y)
 
 
 
-void iaddgf3(vbg *r,vbg *x)
+void iadd_m3d(vbg *r,vbg const *x)
 {
     
     vec t;
@@ -93,7 +94,7 @@ void iaddgf3(vbg *r,vbg *x)
     
 }
 
-void isubgf3(vbg *r,vbg *x)  
+void isub_m3d(vbg  *r,vbg const *x)
 {
     vec t;
     
@@ -111,7 +112,7 @@ void isubgf3(vbg *r,vbg *x)
 
 
 
-void  vbg_mul( vbg *r, vbg *x, vbg *y)            {
+void  vbg_mul( vbg *r, vbg const *x, vbg const *y)            {
     r->units = y->units ^ x->units ;
     r->sign = (y->sign ^ x->sign) & (r->units);
     
@@ -122,7 +123,7 @@ void  vbg_mul( vbg *r, vbg *x, vbg *y)            {
 
 
 
-vbg vbg_mul_i(vbg x, vbg y)
+vbg vbg_mul_i(vbg const x, vbg const y)
 {
     
     vbg r;
@@ -134,9 +135,12 @@ vbg vbg_mul_i(vbg x, vbg y)
 }
 
 
+void m3d_hadamard_row_inline(vbg  *c, vbg const *a, vbg const *b)
+{
+    
+}
 
-
-m3d_t m3d_hadamard(m3d_t *a, m3d_t *b)
+m3d_t m3d_hadamard(m3d_t const *a, m3d_t const *b)
 {
     
     
@@ -167,27 +171,25 @@ m3d_t m3d_hadamard(m3d_t *a, m3d_t *b)
 
 
 
-
-
-void sub_64gf3(vbg *R, vbg *A, vbg *B)
+void sub_64_m3d(vbg *R, vbg const *A, vbg const *B)
 {
     int i;
     for (i
          
          = 0; i < (sizeof(vec)); i++ )
     {
-        R[i] = subgf3r(A[i], B[i]);
+        R[i] = sub_m3dr(A[i], B[i]);
     }
 }
 
 
 
-void add_64gf3(vbg *R, vbg *A, vbg *B)
+void add_64_m3d(vbg *R, vbg const  *A, vbg const *B)
 {
     int i;
     for (i = 0; i < (sizeof(vec)); i++ )
     {
-        R[i] = addgf3r(A[i], B[i]);
+        R[i] = add_m3dr(A[i], B[i]);
     }
     
     

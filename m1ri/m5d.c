@@ -389,45 +389,6 @@ m5d_t   m5d_identity(m5d_t  *a, rci_t n)
 
 
 
-
-m5d_windows m5d_windows_create(m5d_t *a)
-{
-    m5d_windows b;
-    int demi= DN((a->width * a->nrows * a->ncols), 4 );
-    
-    b.a0.block =  m1ri_malloc(demi);
-    b.a1.block =  m1ri_malloc(demi);
-    b.a2.block =  m1ri_malloc(demi);
-    b.a3.block =  m1ri_malloc(demi);
-    {
-        
-        b.a0.block = a->block;
-        b.a1.block  = a->block + demi;
-        b.a2.block = a->block + (2 * demi);
-        b.a3.block = a->block + ( 3 * demi);
-        
-        
-        
-        
-        
-        
-        
-        
-    }
-    b.a0.flags = notwindowed;
-    b.a1.flags = notwindowed;
-    b.a2.flags = notwindowed;
-    b.a3.flags = notwindowed;
-    
-    return b;
-    
-}
-
-
-
-
-
-
 /*
  
  Releases a m5d_t into the wilderness.
@@ -460,8 +421,6 @@ void addgf5(vfd * r, vfd * x, vfd * y)
     
 }
 
-
-
 vfd m5d_add_r(vfd  *x, vfd *y)
 {
    S A;
@@ -475,7 +434,6 @@ vfd m5d_add_r(vfd  *x, vfd *y)
     
 }
 
-
 void m5d_sub( vfd *r, vfd *x, vfd *y)    
 
 {
@@ -483,8 +441,6 @@ void m5d_sub( vfd *r, vfd *x, vfd *y)
     
     
 }
-
-
 
 vfd m5d_sub_r(vfd x, vfd y)
 
@@ -540,8 +496,6 @@ void  m5d_mul( vfd *r, vfd *x, vfd *y)             //multiply matrix x by y assi
 m5d_t m5d_hadamard(m5d_t * a, m5d_t * b)
 {
     m5d_t h_5;
-
-
     return h_5;
 }
 
@@ -549,7 +503,6 @@ m5d_t m5d_hadamard(m5d_t * a, m5d_t * b)
 
 vfd m5d_mul_i(vfd x, vfd y)
 {
-    
     vfd r;
     r.units = x.units & y.units;
     r.sign  = (y.sign ^ x.sign) & (r.units);
@@ -571,9 +524,7 @@ m5d_t m5_transpose(m5d_t * a)
         for(j = 0; j < a->ncols; j++)
         {
             a->rows[i][j] = b.rows[j][i];
-            
-            
-            
+    
         }
     
     

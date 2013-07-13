@@ -29,10 +29,9 @@ m1ri_strassen.h
 #include "m1ri_3dt.h"
 #include "m1riarith.h"
 #include "m1ri_small.h"
-
+#include "m1ri_cubes.h"
 void  m3d_strassen(m3d_t *, m3d_t *, m3d_t*);
-
-
+void mul_128(vbg *C, vbg *A, vbg *B);
 
 #endif
 

@@ -40,6 +40,7 @@ static   const u_int64_t leftbit = 0x8000000000000000;
 static  const u_int64_t rightbit = 0x1;
 typedef  u_int64_t vec ;
 
+static  const u_int64_t m1ri_word = 64;
 
 static u_int64_t const  ibits = 0x8040201008040201;
 typedef int rci_t ;
@@ -49,7 +50,7 @@ typedef int wi_t ;
 
 typedef unsigned int vbit;
 
-typedef u_int64_t m1ri_word;
+
 
 static inline void * m1ri_malloc(size_t size)
 {
@@ -146,7 +147,10 @@ static inline void m1ri_swap_vec(vec *a, vec *b)
 
 }
 
-
+/*
+ 
+ For when 4 vecs are needs for operations on a 3 vec structure 
+*/
 typedef struct {
     
     vec s3;
@@ -156,6 +160,13 @@ typedef struct {
     
     
 } S;
+
+
+
+static  u_int64_t const b_ate[8] = {(leftbit), (leftbit >> 8), (leftbit >> 16), (leftbit >> 24), (leftbit >> 32) , (leftbit >> 40), (leftbit >>48),
+    (leftbit >> 56)
+    
+};
 
 
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))

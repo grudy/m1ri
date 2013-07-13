@@ -35,23 +35,23 @@
 
 
 //64 * 64,4096 bit, 512 byte matrix(slice) multiplication
-void mul_64(vbg *, vbg *, vbg *);
+void mul_64_m3d(vbg *, vbg *, vbg *);
 
 //32 * 64,2048 bit, 256 byte matrix(slice) multiplication
-void mul_32(vbg *, vbg *, vbg *);
+void mul_32_m3d(vbg *, vbg *, vbg *);
 
 //16 * 64,1024 bit, 128 byte matrix(slice) multiplication
-void mul_16(vbg *, vbg *, vbg *);
+void mul_16_m3d(vbg *, vbg *, vbg *);
 
 //8 * 64,512 bit, 64 byte matrix(slice) multiplication
-void mul_8(vbg *, vbg *, vbg *);
+void mul_8_m3d(vbg *, vbg *, vbg *);
 
 
 
 
 
 //4 * 64,256 bit, 32 byte matrix(slice) multiplication
-void mul_4(vbg *R, vbg *A, vbg *B);
+void mul_4_m3d(vbg *R, vbg *A, vbg *B);
 
 
 

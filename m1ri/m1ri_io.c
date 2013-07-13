@@ -37,16 +37,9 @@
  */
 void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
 {
-    
-    
     bool out;
     for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
-        
-        
-        
-        
-        
         out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
         if((out == 1) && (b & (leftbit  >> x)))
         {
@@ -58,27 +51,8 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
            printf("[ %d ]", out);
         }
      
-        
-        
-        
-        
-     
-        
-        
-        
-        
-        
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+  
     
 }
 
@@ -104,8 +78,6 @@ void m3d_print(m3d_t *a)
                  ++m;
              }
              
-             
-             
              if(a->ncols%64 == 0)
              {
                  print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, 0 );
@@ -116,8 +88,6 @@ void m3d_print(m3d_t *a)
              {
               print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, (64 - a->ncols%64) );
              }
-             
-             
          }
     
         if(a->width  ==  1)
@@ -136,10 +106,7 @@ void m3d_print(m3d_t *a)
         }
       
         }
-      
-   
-      
-        
+     printf("\n");   
         }
     }
     
@@ -330,14 +297,7 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
             
         }
         printf("[ %d ]", value);
-        
-        
-        
-        
-        
-        
-        
-        
+
         
         
     }
@@ -412,3 +372,35 @@ void m7d_print(m7d_t *a)
 
 
 
+
+void m3d_specs(m3d_t * a)
+{
+    
+    
+    if (a->flags == iswindowed) {
+        printf("Is windowed  %d \n", a->flags );
+    }
+    else if (a->flags == notwindowed)
+    {
+        printf("Is not windowed  %d \n", a->flags );
+    }
+    printf("Number of columns: %d \n", a->ncols );
+    printf("Number of rows   : %d \n", a->nrows );
+    printf("Width------------: %d \n", a->width );
+    
+    
+    
+}
+
+
+void m3d_fullinfo(m3d_t * a)
+{
+    m3d_print(a);
+    m3d_specs(a);
+    
+    
+    
+    
+    
+    
+}

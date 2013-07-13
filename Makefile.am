@@ -14,7 +14,8 @@ m1ri_small.c\
 m1ri_combine.c\
 m7d.c\
 m5d.c\
-m1ri_test.c
+m1ri_io.c
+
 
 
 pkgincludesubdir = $(includedir)/m1ri
@@ -26,7 +27,6 @@ m1ri_small.h\
 m1ri_cubes.h\
 m1ri_strassen.h\
 m1riwrappers.h\
+m1riarith.h\
 m1ri_classical.h\
-m1riarith.h
-
-
+m1ri_io.h

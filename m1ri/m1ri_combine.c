@@ -35,15 +35,15 @@ void *  combine3(vbg *table, vbg *input )
     table[2] = b;
     table[4] = c;
     
-    addgf3(&t, &a, &b);
+    add_m3d(&t, &a, &b);
     table[3] = t;
-    iaddgf3(&t, &c);
+    iadd_m3d(&t, &c);
     table[7] = t;
-    isubgf3(&t, &a);
+    isub_m3d(&t, &a);
     table[6] = t;
     
-    addgf3((table + 5), &a , &b);
-    
+    add_m3d((table + 5), &a , &b);
+
     
     
     return 0;
@@ -66,33 +66,33 @@ void combine4(vbg *table, vbg *input )
     table[4] = c;
     table[8] = d;
     
-    addgf3(&t, &c, &d);
+    add_m3d(&t, &c, &d);
     
     table[12] = t;
     
-    addgf3(&t,&b,&c);
+    add_m3d(&t,&b,&c);
     table[6] = t;
-    iaddgf3(&t,&d);
+    iadd_m3d(&t,&d);
     table[14] = t;
-    isubgf3(&t,&c);
+    isub_m3d(&t,&c);
     table[10] = t;
     
-    addgf3(&t,&b,&c);
+    add_m3d(&t,&b,&c);
     table[3] = t;
-    iaddgf3(&t, &d);
+    iadd_m3d(&t, &d);
     
     
     
     table[11] = t;
-    iaddgf3(&t, &c);
+    iadd_m3d(&t, &c);
     table[15] = t;
-    isubgf3(&t, &d);
+    isub_m3d(&t, &d);
     table[7] = t;
-    isubgf3(&t, &b);
+    isub_m3d(&t, &b);
     table[5] = t;
-    iaddgf3(&t, &d);
+    iadd_m3d(&t, &d);
     table[13] = t;
-    isubgf3(&t, &c);
+    isub_m3d(&t, &c);
     table[9] = t;
     
     
@@ -111,7 +111,7 @@ void combine5(vbg *table, vbg *input )
     table[16] = e;
     
     for (int i = 1; i < 16 ; i ++ ) {
-        addgf3(t4 + i, table + i, &e);
+        add_m3d(t4 + i, table + i, &e);
     }
 
 
@@ -130,7 +130,7 @@ void combine6(vbg *table, vbg *input )
     table [32] = f;
     
     for (i = 1; i < 32; i++)
-        addgf3((t5 + i), (table + i), &f);
+        add_m3d((t5 + i), (table + i), &f);
     
     
 }
@@ -148,7 +148,7 @@ void combine7(vbg *table, vbg *input )
     table[64] = g;
     
     for (i = 1; i < 64; i = i +1) {
-        addgf3((t6 + i), (table + i), &g );
+        add_m3d((t6 + i), (table + i), &g );
     }
     
     
@@ -170,5 +170,5 @@ void combine8(vbg *table, vbg *input)
     table[128] = h;
     
     for (i = 1; i < 128; i++)
-        addgf3((t7 + i), (table+i), &h);
+        add_m3d((t7 + i), (table+i), &h);
 }

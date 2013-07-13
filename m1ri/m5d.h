@@ -106,43 +106,16 @@ typedef struct {
  
  
  */
-typedef  struct{
-    m5d_t  a0;
-    m5d_t  a1;
-    m5d_t  a2;
-    m5d_t a3;
-    
-    
-}m5d_windows;
-
-
-
-
-
 
 
 vec m5d_rm_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) ;
-
-
 vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n);
-
 vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n);
-
-
-
-
-
 vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  n);
-
-
-
 void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b);
-
 /*
  
- */
-
-
+*/
 //unfinished
 void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u );
 
@@ -195,11 +168,6 @@ m5d_t   m5d_identity(m5d_t  *a, rci_t n);
 
 
 m5d_t m5d_hadamard(m5d_t * , m5d_t * );
-
-
-m5d_windows m5d_windows_create(m5d_t *a);
-
-
 
 
 /*

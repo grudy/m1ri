@@ -60,43 +60,22 @@ typedef struct {
     
     wi_t width; //< the number of vbg's needed to hold columns
     
-    
-    
     vbg * block;  //< block containing the data contiguous in memory
     
     vbg ** rows;  // < pointers to rows of the matrix
     
-    
-     vec  svbg;   //Identifies first vbg used in row
+    vec  svbg;   //Identifies first vbg used in row
    
     // wi_t rowstride;  //vbg's in block to traverse to  get to first
     
-    
-    
     u_int32_t  fblock; //  first block pointed to in a window
-    u_int32_t fcol;  //column offset of first block 
-    
-    
-    
-    u_int8_t flags;
-    
+    u_int32_t fcol;  //column offset of first block
+    u_int8_t flags;    //IsWindowed, NotWindowed    
     
     
     
     
 } m3d_t;
-
-
-/*
- Matrix Windows
- ______________
- 
- A = [A0 | A1]
-     [A2 | A3]
- 
- 
- 
- */
 
 
 /*
@@ -106,7 +85,7 @@ typedef struct {
  M = Matrix read from
  */
 
-vec m3d_rs_bits(m3d_t *, rci_t  , rci_t  , int  );
+vec m3d_rs_bits(m3d_t const *, rci_t  , rci_t  , int  );
 
 /*
  Read n bits from units
@@ -115,7 +94,7 @@ vec m3d_rs_bits(m3d_t *, rci_t  , rci_t  , int  );
  M = Matrix read from
  */
 
-vec m3d_ru_bits(m3d_t *, rci_t  , rci_t  , int  );
+vec m3d_ru_bits(m3d_t const  *, rci_t  , rci_t  , int  );
 
 
 
@@ -127,7 +106,7 @@ vec m3d_ru_bits(m3d_t *, rci_t  , rci_t  , int  );
  M = Matrix read from 
 */
 
-vbg m3d_read_elems(m3d_t *, rci_t  , rci_t  , int  );
+vbg m3d_read_elems(m3d_t const *, rci_t  , rci_t  , int  );
 
 
 
@@ -168,19 +147,16 @@ m3d_t m3d_rand(m3d_t * );
  Make an Identity Matrix
  a = Identity matrix 
  n = matrix size (row length and column width)
- 
+
  
 */
-m3d_t m3d_identitysixfour(m3d_t *, int, int);
-
 m3d_t    m3d_identity_set(m3d_t * );
-
 
 
 m3d_t   m3d_identity(m3d_t  *, rci_t );
 
 
-m3d_t  m3d_window(m3d_t *, rci_t , rci_t , rci_t , rci_t );
+m3d_t  m3d_window(m3d_t  *, rci_t , rci_t , rci_t , rci_t );
 
 
 /*
@@ -191,7 +167,7 @@ m3d_t  m3d_window(m3d_t *, rci_t , rci_t , rci_t , rci_t );
    [a] [b] ----->  [a b]   ===  C
 
 */
-m3d_t concat(m3d_t * , m3d_t * , m3d_t * );
+m3d_t m3d_concat(m3d_t * , m3d_t * , m3d_t * );
 
 
 /*
@@ -201,7 +177,7 @@ m3d_t concat(m3d_t * , m3d_t * , m3d_t * );
     [b]
  
 */
-m3d_t stack(m3d_t * ,  m3d_t * , m3d_t * );
+m3d_t m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
 
     
   
@@ -210,11 +186,12 @@ m3d_t stack(m3d_t * ,  m3d_t * , m3d_t * );
  Releases a m3d_t into the wilderness.
  */
 
-m3d_t m3d_transpose(m3d_t * );
 
 
 
-int m3d_equal(m3d_t *, m3d_t *);
+
+
+int m3d_equal(m3d_t const  *, m3d_t const  *);
 
 
 
@@ -222,12 +199,6 @@ int m3d_equal(m3d_t *, m3d_t *);
 
 void m3d_free( m3d_t *  );
 
-m3d_t *  m3d_create_pnt( m3d_t *, rci_t , rci_t );
-
-
-
-
-m3d_t *  m3d_create_p( m3d_t * , rci_t , rci_t );
 
 
 

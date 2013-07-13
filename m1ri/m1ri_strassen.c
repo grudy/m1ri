@@ -26,9 +26,67 @@ m1ri_strassen.c
 
 #include "m1ri_strassen.h"
 
-
-void  m3d_strassen_(m3d_t *C, m3d_t *A, m3d_t*B)
+void  m3d_strassen_(m3d_t *c, m3d_t *a, m3d_t*b)
 {
+   if(a->ncols == b->nrows)
+    {
+        m3d_create(c, a->nrows   , b->ncols);
+        
+        
+     if(((a->ncols%m1ri_word) && (b->nrows%m1ri_word)) == 0 )
+        {
+            
+            m3_smt  * a_part = malloc(sizeof(m3_smt *)) ;
+            m3d_64_cubes( a_part, a);
+           //square
+            
+            
+            
+            
+            
+            ///even width square 64 * 64
+            if(a->ncols == m1ri_word)
+            {
+                mul_64_m3d( c->block, a->block, b->block);
+                
+                
+                
+            }
+            
+        
+                
+                
+             ///even width smt
+          
+            }
+        
+        
+        }
+        
+     if((a->ncols%m1ri_word) && (b->nrows%m1ri_word))
+     {
+     
+     
+     
+     
+     
+     }
+      
+    
+        
+        
+        
+        
+        
+     else
+     {
+        //can't be multiplied
+    
+    
+    }
+    
+    
+    
     
     /*
     m3d_qrt cs =  m3d_qtrwindows(C);
@@ -38,4 +96,35 @@ void  m3d_strassen_(m3d_t *C, m3d_t *A, m3d_t*B)
    */
 
 }
+
+
+
+/*
+ Naive multiplication
+*/
+
+
+
+
+
+
+void  m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t*b)
+{
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
 

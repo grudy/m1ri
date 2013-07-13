@@ -42,9 +42,7 @@
 typedef struct {
     
     vec units;
-    
     vec middle;
-    
     vec sign;
     
     
@@ -108,26 +106,13 @@ typedef  struct{
 }m7d_windows;
 
 
-
-
-
-
-
-
 vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) ;
-
 
 vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
 
 vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
 
-
-
-
-
 vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n);
-
-
 
 void * m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
 
@@ -150,8 +135,6 @@ vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width);
 /*
  
  */
-
-
 
 
 vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows);
@@ -187,13 +170,7 @@ m7d_t   m7d_identity(m7d_t  *a, rci_t n);
  */
 
 
-
-
-
 m7d_windows m7d_windows_create(m7d_t *a);
-
-
-
 
 /*
  
@@ -205,8 +182,6 @@ m7d_windows m7d_windows_create(m7d_t *a);
 void m7d_free( m7d_t *  );
 
 void addgf7(vtri *, vtri * , vtri *);
-
-
 
 vtri addgf7r(vtri  *, vtri *);
 
@@ -226,20 +201,14 @@ vtri subgf7r(vtri , vtri );               //multiply vector x by by vector y.   
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
 void iaddgf7(vtri *,vtri *);
-
+/********************************************
+ matrix r = (difference matrix r - matrix x)                //Or x will the function be  r  = x- r???
+ ********************************************/
 void isubgf7(vtri *,vtri *);
-
-
 void  m7d_mul( vtri *, vtri *, vtri *);
-
 vtri m7d_mul_i(vtri , vtri );
-
-
 m7d_t m7d_transpose(m7d_t * a);
-
-
 void sub_64gf7(vtri *R, vtri *A, vtri *B);
-
 void add_64gf7(vtri *R, vtri *A, vtri *B);
 
 

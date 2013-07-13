@@ -27,6 +27,9 @@
 #include "m1ri_classical.h"
 
 
+
+
+
 m3d_t m3d_mul_naive_rowmjr(m3d_t *c, m3d_t *a, m3d_t *b)
 {
     
@@ -41,6 +44,9 @@ m3d_t m3d_mul_naive_rowmjr(m3d_t *c, m3d_t *a, m3d_t *b)
             {
                 for(k = 0; k < 64; i++ )
                 {
+                   
+                    
+                    
                     //c->rows[i][j].units = mul
                     // c->rows[i][j].sign = a->rows[i];
                 }

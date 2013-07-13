@@ -30,14 +30,9 @@ vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
     
     
     wi_t  block = (y  ) / 64;
-    
     int  spill = (y  % 64) + n - 64;
-    
     vec bits;
-    
     bits = (spill <= 0) ? M->rows[x][block].middle << -spill : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].middle >> spill);
-    
-    
     return bits;
     
     
@@ -51,14 +46,9 @@ vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
     
     
     wi_t  block = (y  ) / 64;
-    
     int  spill = (y  % 64) + n - 64;
-    
     vec bits;
-    
     bits = (spill <= 0) ? M->rows[x][block].sign << -spill : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].sign >> spill);
-    
-    
     return bits;
     
     
@@ -71,23 +61,11 @@ vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
  */
 
 vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
-    
-    
-    
-    
-    
+
     wi_t  block = (y  ) / 64;
-    
     int  spill = (y  % 64) + n - 64;
-    
     vec bits;
-    
     bits = (spill <= 0) ? M->rows[x][block].units << -spill : (M->rows[x][block + 1].units<< (64 - spill)) | (M->rows[x][block].units>> spill);
-    
-    
-    
-    
-    
     return bits;
     
     
@@ -105,26 +83,16 @@ vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
  */
 
 vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n) {
-    
-    
-    
+
     
     wi_t  block = (y  ) / 64;
-    
     int  spill = (y  % 64) + n - 64;
-    
     vtri elem;
-    
     elem.units = (spill <= 0) ? M->rows[x][block].units << -spill : ((M->rows[x][(block + 1)].units<< (64 - spill)) | (M->rows[x][block].units >> spill));
-    
     elem.sign = (spill <= 0) ?  (M->rows[x][block].sign << -spill) : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].sign>> spill);
-    
     elem.middle = (spill <= 0) ?  (M->rows[x][block].middle << -spill) : (M->rows[x][block + 1].middle << (64 - spill)) | (M->rows[x][block].middle>> spill);
-    
     elem.middle = (elem.middle >> (64 - n));
-    
     elem.units = (elem.units >> (64 - n));
-    
     elem.sign = (elem.sign >> (64 - n));
     
     
@@ -173,28 +141,13 @@ void * m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
 //unfinished
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
 {
-    
-    
     wi_t  block = (y  ) / 64;
-    
     int   spill =  (y  % 64) ;
-    
-    
-    
-    
-    
     M->rows[x][block].units  = (u == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
-    
     M->rows[x][block].middle  = (m == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].middle))  : ((leftbit  >> spill) | (M->rows[x][block].middle));
-
-    
     M->rows[x][block].sign  = (s == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].sign))  : ((leftbit  >> spill) | (M->rows[x][block].sign));
-       
-    
-
     return 0;
-    
-    
+
 }
 
 
@@ -207,15 +160,8 @@ void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
 vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width)
 {
     
-    
     block  = m1ri_malloc(nrows * width * sizeof(vtri) );
-    
-    
-    
     return block;
-    
-    
-    
 }
 
 /*
@@ -227,21 +173,13 @@ vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width)
 
 vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows)
 {
-    
-    
-    
-    
     rows = m1ri_malloc( nrows * width * sizeof(vtri *));
-    
-    
     for (int i = 0; i <  nrows;  i++ )
     {
         rows[i]  = (block + (i * width));
-        
-        
     };
-    
     return rows;
+    
 }
 
 /*
@@ -250,8 +188,6 @@ vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows)
 
 m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
 {
-    
-    
     a->ncols = ncols;
     a->nrows = nrows;
     a->width =  RU64(ncols);
@@ -293,15 +229,9 @@ m7d_t  m7d_rand(m7d_t * a)
     {
         
         a->block[i].sign = m1ri_rand();
-        
-        
         a->block[i].middle = m1ri_rand();
-        
         a->block[i].units = m1ri_rand();
-        
-        
-        
-        
+   
     }
     return *a;
 }
@@ -320,29 +250,14 @@ m7d_windows m7d_windows_create(m7d_t *c)
     b.a2.block =  m1ri_malloc(demi);
     b.a3.block =  m1ri_malloc(demi);
     {
-        
         b.a0.block = c->block;
         b.a1.block  = c->block + demi;
         b.a2.block = c->block + (2 * demi);
         b.a3.block = c->block + ( 3 * demi);
-        
-        
-        
-        
-        
-        
-        
-        
     }
-    
-    
     return b;
     
 }
-
-
-
-
 
 
 /*

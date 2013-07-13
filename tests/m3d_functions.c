@@ -18,7 +18,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
- m1ri_test.c
+ m1ri_functions
  */ 
 
 #include "m1ri_3dt.h"
@@ -86,6 +86,34 @@ int main(int argc, const char * argv[])
         printf("Equal test failed");
     if (equal_test == 1)
         printf("Equal test was successful");
+    
+    
+    
+    printf("Row Swap Test \n");
+    printf("-------------  \n");
+    m3d_t row_swap_test;
+    row_swap_test =  m3d_create(&row_swap_test,7     , 7);
+    m3d_identity_set(&row_swap_test);
+    printf("Before the swap \n");
+    printf("-------------  \n");    m3d_print(&row_swap_test);
+    
+    m3d_rowswap(&row_swap_test, 2, 4);
+    printf("After the swap");
+    printf("-------------  \n");    m3d_print(&row_swap_test);
+    printf("Col Swap Test \n");
+    printf("-------------  \n");
+    m3d_t col_swap_test;
+    col_swap_test =  m3d_create(&col_swap_test,6     , 6);
+    m3d_identity_set(&col_swap_test);
+    printf("Before the swap \n");
+    printf("-------------  \n");
+    m3d_print(&col_swap_test);
+    
+    m3d_rowswap(&col_swap_test, 2, 4);
+    
+    printf("After the swap");
+    printf("-------------  \n");
+    m3d_print(&col_swap_test);
     
     
     

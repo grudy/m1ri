@@ -45,4 +45,19 @@ typedef struct
 
 
 
+typedef struct
+{
+    rci_t nrows;
+    wi_t width;
+    
+    vbg * blocks;
+    vbg ** rows;
+    rci_t lastcol;
+}m3_slice;
+void * m3d_64_cubes(m3_smt *, m3d_t  * );
+
+void * m3d_64_cubes_take2(m3_slice *, m3d_t  * );
+m3d_t m3d_transpose(m3d_t  * );
+
+
 #endif

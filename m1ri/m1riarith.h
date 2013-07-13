@@ -31,19 +31,19 @@
 
 
 
-void addgf3(vbg * r, vbg * x, vbg * y);
+void add_m3d(vbg * r, vbg const * x, vbg const * y);
 
 
 
-vbg addgf3r(vbg  , vbg );
+vbg add_m3dr(vbg  , vbg );
 
 
-void subgf3( vbg *, vbg *, vbg *);               //multiply matrix x by by matrix y.   The product is matrix r.
+void sub_m3d( vbg *, vbg const *, vbg const * );               //multiply matrix x by by matrix y.   The product is matrix r.
 
 
 
 
-vbg subgf3r(vbg , vbg );               //multiply matrix x by by matrix y.   The product is matrix r.
+vbg sub_m3dr(vbg , vbg );               //multiply matrix x by by matrix y.   The product is matrix r.
 
 
 
@@ -57,13 +57,13 @@ vbg subgf3r(vbg , vbg );               //multiply matrix x by by matrix y.   The
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-void iaddgf3(vbg *,vbg *);
+void iadd_m3d(vbg *,vbg const *);
 
-void isubgf3(vbg *,vbg *);
+void isub_m3d(vbg *,vbg const *);
 
 
 
-void  vbg_mul( vbg *, vbg *, vbg *);             //multiply matrix x by y assinging the output to r
+void  vbg_mul( vbg *, vbg const *, vbg const *);             //multiply matrix x by y assinging the output to r
 
 
 
@@ -71,15 +71,15 @@ void  vbg_mul( vbg *, vbg *, vbg *);             //multiply matrix x by y assing
 //return the value of the matrix multiplied
 
 
-vbg vbg_mul_i(vbg , vbg );
+vbg vbg_mul_i(vbg const , vbg const);
 
 
 /*
     Hadamard multiplication
 */
-m3d_t m3d_hadamard(m3d_t *, m3d_t *);
+m3d_t m3d_hadamard(m3d_t const *, m3d_t const *);
 
-
+void m3d_hadamard_row_inline(vbg *, vbg const * , vbg const *);
 
 
 /* * * * * * * * * * * * * * * * * * * *
@@ -89,7 +89,7 @@ m3d_t m3d_hadamard(m3d_t *, m3d_t *);
 
 
 
-void sub_64gf3(vbg *, vbg *, vbg *);
+void sub_64_m3d(vbg *, vbg const *, vbg const *);
 
 
 /* * * * * * * * * * * * * * * * * * * * * *
@@ -97,7 +97,7 @@ void sub_64gf3(vbg *, vbg *, vbg *);
  1 kilobyte Matrix
  * * * * * * * * * * * * * * * * * * * * * * */
 
-void add_64gf3(vbg *, vbg *, vbg *);
+void add_64_m3d(vbg *, vbg const  *, vbg   const * );
 
 
 
