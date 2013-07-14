@@ -31,7 +31,7 @@
 
 
 
-void add_m3d(vbg * r, vbg const * x, vbg const * y);
+void add_vbg(vbg * r, vbg const * x, vbg const * y);
 
 
 
@@ -57,7 +57,7 @@ vbg sub_m3dr(vbg , vbg );               //multiply matrix x by by matrix y.   Th
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-void iadd_m3d(vbg *,vbg const *);
+void iadd_vbg(vbg *,vbg const *);
 
 void isub_m3d(vbg *,vbg const *);
 
@@ -100,7 +100,7 @@ void sub_64_m3d(vbg *, vbg const *, vbg const *);
 void add_64_m3d(vbg *, vbg const  *, vbg   const * );
 
 
-
+m3d_t m3d_add(m3d_t const *, m3d_t const *);
 
 
 

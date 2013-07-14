@@ -26,11 +26,11 @@
 #include "m1riarith.h"
 #include "m5d.h"
 #include "m7d.h"
-void add_m3d(vbg * r, vbg const * x, vbg const * y)
+void add_vbg(vbg * r, vbg const * x, vbg const * y)
 
 {
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
-    r->sign = (ST(x->units, y->sign, x->sign ) | ST(x->units, y->units, y->sign)); //// r1 ← s XOR t.
+    r->sign = (ST(x->units, y->sign, x->sign ) | ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
     
     
     
@@ -76,7 +76,7 @@ vbg sub_m3dr(vbg const x, vbg const y)
 
 
 
-void iadd_m3d(vbg *r,vbg const *x)
+void iadd_vbg(vbg *r,vbg const *x)
 {
     
     vec t;
@@ -196,3 +196,34 @@ void add_64_m3d(vbg *R, vbg const  *A, vbg const *B)
     
     
 }
+
+m3d_t m3d_add(m3d_t const *a, m3d_t const *b)
+{
+    
+    
+    m3d_t  c;
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+        c = m3d_create(&c, a->nrows , b->ncols);
+        int i, j;
+        
+        for( i = 0; i < a->nrows; i++)
+        {
+            for(j = 0; j < (a->width ); j++)
+            {
+              
+            add_vbg(&c.rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+            
+            }
+            
+            
+        }
+        
+    }
+    
+    return c;
+    
+    
+}
+
+

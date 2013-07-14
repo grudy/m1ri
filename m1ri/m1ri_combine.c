@@ -35,15 +35,15 @@ void *  combine3(vbg *table, vbg *input )
     table[2] = b;
     table[4] = c;
     
-    add_m3d(&t, &a, &b);
+    add_vbg(&t, &a, &b);
     table[3] = t;
-    iadd_m3d(&t, &c);
+    iadd_vbg(&t, &c);
     table[7] = t;
     isub_m3d(&t, &a);
     table[6] = t;
     
-    add_m3d((table + 5), &a , &b);
-
+    add_vbg((table + 5), &a , &b);
+    
     
     
     return 0;
@@ -66,31 +66,31 @@ void combine4(vbg *table, vbg *input )
     table[4] = c;
     table[8] = d;
     
-    add_m3d(&t, &c, &d);
+    add_vbg(&t, &c, &d);
     
     table[12] = t;
     
-    add_m3d(&t,&b,&c);
+    add_vbg(&t,&b,&c);
     table[6] = t;
-    iadd_m3d(&t,&d);
+    iadd_vbg(&t,&d);
     table[14] = t;
     isub_m3d(&t,&c);
     table[10] = t;
     
-    add_m3d(&t,&b,&c);
+    add_vbg(&t,&b,&c);
     table[3] = t;
-    iadd_m3d(&t, &d);
+    iadd_vbg(&t, &d);
     
     
     
     table[11] = t;
-    iadd_m3d(&t, &c);
+    iadd_vbg(&t, &c);
     table[15] = t;
     isub_m3d(&t, &d);
     table[7] = t;
     isub_m3d(&t, &b);
     table[5] = t;
-    iadd_m3d(&t, &d);
+    iadd_vbg(&t, &d);
     table[13] = t;
     isub_m3d(&t, &c);
     table[9] = t;
@@ -111,11 +111,11 @@ void combine5(vbg *table, vbg *input )
     table[16] = e;
     
     for (int i = 1; i < 16 ; i ++ ) {
-        add_m3d(t4 + i, table + i, &e);
+        add_vbg(t4 + i, table + i, &e);
     }
-
-
-
+    
+    
+    
 }
 
 
@@ -130,7 +130,7 @@ void combine6(vbg *table, vbg *input )
     table [32] = f;
     
     for (i = 1; i < 32; i++)
-        add_m3d((t5 + i), (table + i), &f);
+        add_vbg((t5 + i), (table + i), &f);
     
     
 }
@@ -148,7 +148,7 @@ void combine7(vbg *table, vbg *input )
     table[64] = g;
     
     for (i = 1; i < 64; i = i +1) {
-        add_m3d((t6 + i), (table + i), &g );
+        add_vbg((t6 + i), (table + i), &g );
     }
     
     
@@ -170,5 +170,5 @@ void combine8(vbg *table, vbg *input)
     table[128] = h;
     
     for (i = 1; i < 128; i++)
-        add_m3d((t7 + i), (table+i), &h);
+        add_vbg((t7 + i), (table+i), &h);
 }

@@ -117,6 +117,30 @@ int main(int argc, const char * argv[])
     
     
     
+    
+    m3d_t *a = m1ri_malloc(sizeof(m3d_t));
+    
+    m3d_t *b = m1ri_malloc(sizeof(m3d_t));
+    m3d_create(a, 64, 64);
+    m3d_create(b, 64, 64);
+    m3d_rand(a);
+    m3d_rand(b);
+    
+    
+    printf("Addition Test \n");
+    printf("Matrix a: \n");
+    m3d_print(a);
+    
+    
+    printf("Matrix b: \n");
+    m3d_print(b);
+    
+    
+    m3d_t c = m3d_add(a,b );
+    
+    m3d_print(&c);
+    
+    
     return 0;
 }
 

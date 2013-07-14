@@ -302,89 +302,7 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
 }
 
 
-/*
- 
- */
 
-
-
-/*
- Upper triangular
- */
-
-
-
-//Function is unfinished currently
-
-/*
- 
- 
- m3d_t m3d_re(m3d_t *a)
- 
- 
- {
- 
- 
- int i, j, x;
- vec temp;
- a->cero = m1ri_malloc(a->nrows * sizeof(vec * ) );
- a->pero = m1ri_malloc(a->nrows * a->ncols * sizeof(u_int32_t));
- a->cnt = m1ri_malloc(a->width * sizeof(u_int32_t));
- 
- 
- 
- 
- for (i = 0; i < a->nrows; i++)
- {
- //Records first  vbg without all zeroes
- //initial value is a placeholder
- a->pero[i] = a->width ;
- 
- 
- }
- 
- for (i = 0; i < a->nrows; i ++)
- {
- 
- 
- for (j = 0; j < a->width; j++)
- {
- temp = (a->rows[i][j].units ^ a->rows[i][j].sign);
- 
- 
- if (temp > 0)
- {
- 
- if ( a->pero[i]  > j  )
- {
- 
- a->cero[i] =  temp;
- a->pero[i] =  j;  //'width  to a  nonzero'
- a->cnt[j] ++;
- 
- }
- 
- }
- 
- }
- 
- }
- for ( i = 0; i < a->width; i++)
- {
- if ( a->cnt[i] > 0){
- x = 1;
- }
- }
- m1ri_free(a->cero);
- m1ri_free(a->pero);
- m1ri_free(a->cnt);
- return *a;
- u_int32_t  fblock; //  first block pointed to in a window
- u_int32_t fcol;  //column offset of first block
- }
- */
-
-//A pointer to a submatrix
 m3d_t   m3d_window(m3d_t  *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endcol)
 {
     
@@ -395,7 +313,6 @@ m3d_t   m3d_window(m3d_t  *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endc
     submatrix.width = DN(submatrix.ncols, m1ri_word);//
     if((stcol%m1ri_word) > (endcol%m1ri_word))
         submatrix.width = submatrix.width + 1;
-    submatrix.flags = iswindowed;
     submatrix.rows = m1ri_malloc(submatrix.width * submatrix.nrows * sizeof(vbg *));
     submatrix.fblock = (strow  * c->width) + (stcol/m1ri_word);
     submatrix.fcol   = stcol%m1ri_word;
@@ -416,21 +333,24 @@ m3d_t   m3d_window(m3d_t  *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endc
 
 
 /*
- windows in 64 rows * 64 column slices
+ windows in 64 rows * 64 column incriments
  stvbg = the vbg/width offset from the base matrix
  strow = row offset in increments of 64
+ sizecol  = cols * 64
+ sizerow  = rows * 64
  */
 
-m3d_t   m3d_window_sr(m3d_t *c, rci_t strow, rci_t stvbg)
+m3d_t   m3d_window_sr(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
     if ((stvbg > c->width) &&(c->nrows > DN(strow,m1ri_word))) {
         
     }
     m3d_t  submatrix;
-    submatrix.nrows = submatrix.ncols =  m1ri_word;
+    submatrix.nrows =   m1ri_word * sizecols; 
+    submatrix.ncols =  m1ri_word * sizecols;
     submatrix.flags = iswindowed;
+    
     submatrix.width = 1;
-    submatrix.flags = iswindowed;
     submatrix.rows = m1ri_malloc(m1ri_word * sizeof(vbg *));
     submatrix.fblock = strow;
     submatrix.fcol   = 0;

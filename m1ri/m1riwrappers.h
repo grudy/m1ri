@@ -30,7 +30,6 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define RU64(a) ((a/64) + ((1) && (a%64)))//division by 64 rounded up
 #define DN(a, n) ((a/n) + ((1) && (a%n)))//division by n rounded up
 
-
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -105,10 +104,15 @@ static u_int8_t const notwindowed = 0x2;
 
 
 
-static inline int  m1ri_rand()
+static inline u_int64_t  m1ri_rand()
 {
-     
-    int randomword = rand();
+    
+    
+    
+    
+    u_int64_t randomword = rand();
+     randomword = randomword * 2;
+    
     return randomword;
 }
 static u_int64_t  const lbit[64] = {0x8000000000000000 , 0x4000000000000000 , 0x2000000000000000 , 0x1000000000000000 , 0x800000000000000 , 0x400000000000000 , 0x200000000000000 ,
