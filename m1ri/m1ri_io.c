@@ -41,11 +41,20 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
     for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
-        if((out == 1) && (b & (leftbit  >> x)))
+        if((out == 0) && (b & (leftbit  >> x)))
         {
-               printf("[-%d ]", out);
+               printf("[-1 ]");
             
         }
+        
+        
+        
+        
+        
+        
+        
+        
+        
         else
         {
            printf("[ %d ]", out);

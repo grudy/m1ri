@@ -299,11 +299,11 @@ vtri addgf7r(vtri  *x, vtri *y)
 {
     vtri  r;
     r.sign = x->sign ^ y->sign;
-    r.middle = ~r.sign^ x->middle ^ y->middle;
-    r.units = ~r.middle^ x->units ^ y->units;
-    r.sign = ~r.units ^ x->sign ^ y->sign;
-    r.middle = ~r.sign^ x->middle ^ y->middle;
-    r.units = ~r.middle^ x->units ^ y->units;
+    r.middle = (~r.sign)^ x->middle ^ y->middle;
+    r.units =( ~r.middle)^ x->units ^ y->units;
+    r.sign =( ~r.units) ^ x->sign ^ y->sign;
+    r.middle = (~r.sign)^ x->middle ^ y->middle;
+    r.units = (~r.middle)^ x->units ^ y->units;
     
     return r;
 }

@@ -223,7 +223,7 @@ m3d_t  m3d_rand(m3d_t * a)
     for(int i = 0; i < (a->nrows * a->width); i++)
     {
         
-        a->block[i].sign = m1ri_rand();
+       
         a->block[i].units = m1ri_rand();
     }
     
