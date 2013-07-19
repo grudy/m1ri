@@ -33,7 +33,7 @@
 
 void add_vbg(vbg * r, vbg const * x, vbg const * y);
 
-
+void vbg_negation(vbg * );
 
 vbg add_m3dr(vbg  , vbg );
 

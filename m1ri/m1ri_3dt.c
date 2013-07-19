@@ -29,14 +29,14 @@
 
 void * m3d_rowswap (m3d_t * M, rci_t row_a, rci_t  row_b)
 {
-    
+    vbg  temp ;
     
     if((M->nrows >= (row_a ) && (M->nrows >= row_b)))
     {
-        vbg * temp =  m1ri_malloc(M->width * sizeof(vbg));
-        temp =  M->rows[row_a -1];
+        
+        temp =  *M->rows[row_a -1];
         M->rows[row_a -1] = M->rows[row_b -1];
-        M->rows[row_b -1] =  temp;
+        M->rows[row_b -1] =  &temp;
         
         
         
@@ -207,7 +207,7 @@ m3d_t m3d_create( m3d_t * a, rci_t nrows, rci_t ncols)
     a->block = m3d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m3d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = notwindowed;
-    a->fblock = 0;
+    a->lblock = ncols%64;
     a->fcol = 0;
     a->svbg = 0;
     return *a;
@@ -223,7 +223,7 @@ m3d_t  m3d_rand(m3d_t * a)
     for(int i = 0; i < (a->nrows * a->width); i++)
     {
         
-       
+       a->block[i].units = m1ri_rand();
         a->block[i].units = m1ri_rand();
     }
     
@@ -303,71 +303,94 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
 
 
 
-m3d_t   m3d_window(m3d_t  *c, rci_t strow, rci_t stcol, rci_t endrow, rci_t endcol)
-{
-    
-    m3d_t  submatrix;
-    submatrix.nrows = endrow - strow + 1;
-    submatrix.ncols = endcol - stcol + 1;
-    submatrix.flags = iswindowed;
-    submatrix.width = DN(submatrix.ncols, m1ri_word);//
-    if((stcol%m1ri_word) > (endcol%m1ri_word))
-        submatrix.width = submatrix.width + 1;
-    submatrix.rows = m1ri_malloc(submatrix.width * submatrix.nrows * sizeof(vbg *));
-    submatrix.fblock = (strow  * c->width) + (stcol/m1ri_word);
-    submatrix.fcol   = stcol%m1ri_word;
-    submatrix.svbg = stcol/m1ri_word;
-    
-    
-    int i;
-    
-    for(  i =   strow; i < endrow + 1; i++)
-    {
-        submatrix.rows[i - strow] = c->rows[i];
-        
-    }
-    
-    return submatrix;
-    
-}
-
 
 /*
  windows in 64 rows * 64 column incriments
- stvbg = the vbg/width offset from the base matrix
+ stvbg = the vbg or width offset from the base matrix
  strow = row offset in increments of 64
  sizecol  = cols * 64
  sizerow  = rows * 64
  */
 
-m3d_t   m3d_window_sr(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
+m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
-    if ((stvbg > c->width) &&(c->nrows > DN(strow,m1ri_word))) {
-        
-    }
+    
+   
     m3d_t  submatrix;
+    
+    if((strow + sizerows) > c->width)
+    {
+    
+    
+        return submatrix;
+    }
+    
+    
+    
+  
+    if((stvbg + sizecols) > c->width)
+    {
+        
+        
+        return submatrix;
+    }
+    
+        
+    
     submatrix.nrows =   m1ri_word * sizecols; 
     submatrix.ncols =  m1ri_word * sizecols;
     submatrix.flags = iswindowed;
-    
-    submatrix.width = 1;
-    submatrix.rows = m1ri_malloc(m1ri_word * sizeof(vbg *));
-    submatrix.fblock = strow;
+    submatrix.width =  sizecols;
+    submatrix.block = &c->block[(stvbg * stvbg)];
+    submatrix.rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vbg *));
+    submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix.fcol   = 0;
     submatrix.svbg = stvbg;
-    
+   
+
     
     int i;
     
-    for(  i =   strow; i < strow + m1ri_word; i++)
+    for(  i =   strow; i < (strow + (m1ri_word * sizerows)) ; i++)
     {
-        submatrix.rows[i - strow] = c->rows[i];
+     
+       submatrix.rows[i - strow] = c->rows[i];
         
     }
     
     return submatrix;
     
 }
+
+void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
+{
+  
+    
+    submatrix->nrows =   m1ri_word * sizecols;
+    submatrix->ncols =  m1ri_word * sizecols;
+    submatrix->flags = iswindowed;
+    submatrix->width = 1 * sizecols;
+    submatrix->block = &c->block[(stvbg * stvbg)];
+    submatrix->rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vbg *));
+    submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
+    submatrix->fcol   = 0;
+    submatrix->svbg = stvbg;
+    
+    
+    int i;
+    
+    for(  i =   strow; i < strow + (m1ri_word * sizerows) ; i++)
+    {
+        
+        submatrix->rows[i - strow] = c->rows[i];
+        
+    }
+    
+    
+    
+}
+
+
 /*
  Concat b on the end of a, the result is c
  

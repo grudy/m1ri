@@ -27,14 +27,15 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define M1RIPROJECT_M1RIWRAPPERS_H
 #define FN(a, b, c, d) ((a)^(b))&((c)^(d)) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
 #define ST(a, b , c) ((a)^(b)^(c)) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
-#define RU64(a) ((a/64) + ((1) && (a%64)))//division by 64 rounded up
-#define DN(a, n) ((a/n) + ((1) && (a%n)))//division by n rounded up
+#define RU64(a) (((a)/(64)) + ((1) && (a%64)))//division by 64 rounded up
+#define DN(a, n) ((a)/(n)) + ((1) && (a%n))//division by n rounded up
 
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <stdio.h>
 static   const u_int64_t leftbit = 0x8000000000000000;
 static  const u_int64_t rightbit = 0x1;
 typedef  u_int64_t vec ;
@@ -54,6 +55,11 @@ typedef unsigned int vbit;
 static inline void * m1ri_malloc(size_t size)
 {
     void * allocate = malloc(size);
+    if(allocate == NULL)
+    {
+        fprintf(stderr, "Out of memory, exiting\n");
+        exit(1);
+    }
     return  allocate;
     
 }
@@ -151,6 +157,69 @@ static inline void m1ri_swap_vec(vec *a, vec *b)
 
 }
 
+
+
+/********************************************
+ Creates  a union of 192 bits
+ ********************************************/
+
+typedef struct {
+    
+    vec units;
+    
+    vec middle;
+    
+    vec sign;
+    
+} vfd;
+
+
+
+
+static inline  vfd fold5( vec s3, vec s2, vec s1, vec s0)
+{
+    vfd r;
+    vec t = s2 | s1;
+    r.units = s0 ^ t;
+    r.middle = (r.units & s0) ^ (s3 ^ s1);
+    r.sign = (t ^ s2 ) | (r.middle & s3  );
+    return r;
+}
+
+
+/*
+ GF(5) Matrix structure
+ 
+ */
+
+typedef struct {
+    
+    rci_t nrows; //< number of rows
+    
+    rci_t ncols; //< number of columns
+    
+    wi_t width; //< the number vfd's needed to hold columns
+    
+    
+    vfd * block;  //< block containing the data contiguous in memory
+    
+    vfd ** rows;  // < pointers to rows of the matrix
+    u_int32_t  fblock; //  first block pointed to in a window
+    u_int32_t fcol;  //column offset of first block
+    
+    
+    u_int8_t flags;
+    
+    
+    
+    
+    
+    
+    
+} m5d_t;
+
+
+
 /*
  
  For when 4 vecs are needs for operations on a 3 vec structure 
@@ -167,7 +236,7 @@ typedef struct {
 
 
 
-static  u_int64_t const b_ate[8] = {(leftbit), (leftbit >> 8), (leftbit >> 16), (leftbit >> 24), (leftbit >> 32) , (leftbit >> 40), (leftbit >>48),
+static const u_int64_t  b_ate[8] = {(leftbit), (leftbit >> 8), (leftbit >> 16), (leftbit >> 24), (leftbit >> 32) , (leftbit >> 40), (leftbit >>48),
     (leftbit >> 56)
     
 };

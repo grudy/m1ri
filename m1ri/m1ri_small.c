@@ -34,7 +34,7 @@ void mul_64_m3d(vbg *R, vbg *A, vbg *B)
     vbg  tables6[9][64];
     vbg tables5[2][32];
     for (i = 0; i < 9; i ++)
-        combine6(tables6[i], (B  +  6*i));// Deleted a redundant + 0
+        combine6(tables6[i], (B  +  6*i));
     for (i = 0; i < 2; i ++)
         combine5(tables5[i], (B + 54 + 5*i));
     for (i = 0; i < 64; i ++  )//i from 0 <= i < 64

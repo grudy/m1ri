@@ -34,66 +34,6 @@
 
 
 
-/********************************************
- Creates  a union of 192 bits
- ********************************************/
-
- typedef struct {
-    
-    vec units;
-    
-    vec middle;
-    
-    vec sign;
-    
-} vfd;
-
-
-
-
-static inline  vfd fold5( vec s3, vec s2, vec s1, vec s0)
-{
-    vfd r;
-    vec t = s2 | s1;
-    r.units = s0 ^ t;
-    r.middle = (r.units & s0) ^ (s3 ^ s1);
-    r.sign = (t ^ s2 ) | (r.middle & s3  );
-    return r;
-}
-
-
-/*
- GF(5) Matrix structure
- 
- */
-
-typedef struct {
-    
-    rci_t nrows; //< number of rows
-    
-    rci_t ncols; //< number of columns
-    
-    wi_t width; //< the number vfd's needed to hold columns
-    
-    
-    vfd * block;  //< block containing the data contiguous in memory
-    
-    vfd ** rows;  // < pointers to rows of the matrix
-    u_int32_t  fblock; //  first block pointed to in a window
-    u_int32_t fcol;  //column offset of first block
-    
-    
-    u_int8_t flags;
-    
-    
-    
-    
-    
-    
-    
-} m5d_t;
-
-
 /*
  Matrix Windows
  ______________
@@ -194,6 +134,13 @@ void m5d_sub( vfd *, vfd *, vfd *);               //multiply vector x by by vect
 
 vfd m5d_sub_r(vfd , vfd );               //multiply vector x by by vector y.   The product is vector r.
 
+vfd m5d_mul2(vfd);
+
+
+vfd m5d_mul3(vfd);
+
+
+vfd m5d_mul4(vfd);
 
 
 

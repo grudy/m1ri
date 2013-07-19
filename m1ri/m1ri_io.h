@@ -20,8 +20,8 @@
  
  m1ri_io.h
 */
-#ifndef m1riproject_m1ro_io_h
-#define m1riproject_m1ro_io_h
+#ifndef M1RIPROJECT_M1RO_IO_H
+#define M1RIPROJECT_M1RO_IO_H
 #include "m1ri_3dt.h"
 #include "m7d.h"
 #include "m5d.h"
@@ -32,7 +32,7 @@ void m3d_print(m3d_t *);
 void print_m3d_block(vec , vec , u_int32_t , u_int32_t );
 void print_m7d_block(vec , vec , vec,  u_int32_t , u_int32_t );
 void print_m5d_block(vec , vec , vec,  u_int32_t , u_int32_t );
-void m5d_print(m5d_t *);
+ void m5d_print(m5d_t *);
 void m7d_print(m7d_t * );
 void m3d_specs(m3d_t *);
 void m3d_fullinfo(m3d_t *);

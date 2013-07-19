@@ -36,8 +36,8 @@ void  m3d_strassen_(m3d_t *c, m3d_t *a, m3d_t*b)
      if(((a->ncols%m1ri_word) && (b->nrows%m1ri_word)) == 0 )
         {
             
-            m3_smt  * a_part = malloc(sizeof(m3_smt *)) ;
-            m3d_64_cubes( a_part, a);
+           // m3_smt  * a_part = malloc(sizeof(m3_smt *)) ;
+            
            //square
             
             
@@ -47,9 +47,7 @@ void  m3d_strassen_(m3d_t *c, m3d_t *a, m3d_t*b)
             ///even width square 64 * 64
             if(a->ncols == m1ri_word)
             {
-                mul_64_m3d( c->block, a->block, b->block);
-                
-                
+                             
                 
             }
             
@@ -111,7 +109,20 @@ void  m3d_strassen_(m3d_t *c, m3d_t *a, m3d_t*b)
 void  m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t*b)
 {
 
-
+    if (a->ncols == b->nrows)
+    {
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    }
+        
+        
 
 
 

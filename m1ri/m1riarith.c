@@ -61,7 +61,13 @@ void sub_m3d( vbg *r, vbg const *x, vbg const *y)
     
 }
 
+void vbg_negation(vbg *r)
+{
 
+
+    r->units  = r->sign = r->sign ^ r->units;
+
+}
 
 vbg sub_m3dr(vbg const x, vbg const y)
 

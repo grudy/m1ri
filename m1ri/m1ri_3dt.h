@@ -68,7 +68,7 @@ typedef struct {
    
     // wi_t rowstride;  //vbg's in block to traverse to  get to first
     
-    u_int32_t  fblock; //  first block pointed to in a window
+    u_int32_t  lblock; //  first block pointed to in a window
     u_int32_t fcol;  //column offset of first block
     u_int8_t flags;    //IsWindowed, NotWindowed    
     
@@ -156,8 +156,21 @@ m3d_t    m3d_identity_set(m3d_t * );
 m3d_t   m3d_identity(m3d_t  *, rci_t );
 
 
+/*
+ windows in 64 rows * 64 column incriments
+ stvbg = the vbg/width offset from the base matrix
+ strow = row offset in increments of 64
+ sizecol  = cols * 64
+ sizerow  = rows * 64
+ */
 m3d_t  m3d_window(m3d_t  *, rci_t , rci_t , rci_t , rci_t );
 
+
+/*
+ Same as m3d_window but the second argument is made into the window
+ */
+
+void   m3d_window_create(m3d_t *, m3d_t * , rci_t strow, rci_t , rci_t , rci_t );
 
 /*
  Concat b on the end of a, the result is c

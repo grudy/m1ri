@@ -146,7 +146,7 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols);
 /*
  
  */
-
+void reduce_vtri( vtri * );
 m7d_t m7d_rand(m7d_t * a);
 /*
  Make an Identity Matrix
@@ -189,7 +189,16 @@ vtri addgf7r(vtri  *, vtri *);
 void subgf7( vtri *, vtri *, vtri *);               //multiply vector x by by vector y.   The product is vector r.
 
 
+vtri m7d_mul_2(vtri);
 
+
+vtri m7d_mul_3(vtri);
+
+vtri m7d_mul_4(vtri);
+
+vtri m7d_mul_5(vtri);
+
+vtri m7d_mul_6(vtri);
 
 
 vtri subgf7r(vtri , vtri );               //multiply vector x by by vector y.   The product is vector r.

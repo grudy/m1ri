@@ -311,11 +311,21 @@ vtri addgf7r(vtri  *x, vtri *y)
 void subgf7( vtri *r, vtri *x, vtri *y)               //multiply matrix x by by matrix y.   The product is matrix r.
 
 {
+   
     
+    
+   
     
     
 }
-
+void reduce_vtri( vtri * a)
+{
+    vtri b = *a ;
+    
+    a->units  = b.units ^ (b.units  | b.sign | b.middle) ;//  )
+    a->middle  = b.middle ^ (b.units  | b.sign | b.middle) ;
+    a->sign  = b.units ^ (b.units  | b.sign | b.middle) ;
+}
 
 
 vtri subgf7r(vtri x, vtri y)               //multiply matrix x by by matrix y.   The product is matrix r.
@@ -376,28 +386,61 @@ vtri m7d_mul_i(vtri x, vtri y)
 
 
 
-m7d_t m7d_transpose(m7d_t * a)
+vtri m7d_mul_2(vtri a)
 {
-    m7d_t b = m7d_create(a, a->ncols , a->nrows);
-    int i, j;
+    vec temp;
+    temp = a.units;
+    a.units = a.middle;
+    a.middle = a.sign;
+    a.sign = a.units;
+    return a;
     
-    for(i = 0; i < a->nrows; i++)
-        
-        
-        for(j = 0; j < a->ncols; j++)
-        {
-            a->rows[i][j] = b.rows[j][i];
-            
-            
-            
-        }
+}
+vtri m7d_mul_3(vtri a)
+{
+  
+    vec z = a.units | a.middle | a.sign;
+    vec temp = a.units;
+   a.units =  a.sign ^ z;
+    a.sign =   a.middle  ^ z;
+    a.middle = temp ^ z;
+   
+    return a;
     
+}
+vtri m7d_mul_4(vtri a)
+{
+    vec temp = a.units;
+    a.units = a.sign;
+    a.sign = a.middle;
+    a.middle = temp;
     
-    return b;
+    return a;
     
     
 }
+vtri m7d_mul_5(vtri a)
+{
+    vec z = a.units| a.middle | a.sign;
+    vec temp = a.units;
+    a.units = a.middle ^ z;
+    a.middle = a.sign ^ z;
+    a.sign = z ^ temp;
+    return a;
+    
+}
+vtri m7d_mul_6(vtri a)
+{
+    vec z = a.units | a.middle | a.sign;
 
+    a.units =  a.units ^ z;
+    a.sign =   a.sign  ^ z;
+    a.middle = a.middle ^ z;
+    
+    return a;
+    
+    
+}
 
 
 

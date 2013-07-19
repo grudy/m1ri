@@ -28,36 +28,31 @@
 
 #ifndef m1riproject_m1ri_cubes_h
 #define m1riproject_m1ri_cubes_h
-#include "m1riwrappers.h"
+
+
+
+
 #include "m1ri_3dt.h"
+#include "m5d.h"
 
 
 typedef struct
 {
+ 
+    
+    m3d_t * block;
+    m3d_t ** row;
+    wi_t slicesize;// (slicesize ^ 2) * 64
+    wi_t width;   ///width in slices horizaontally per row
     rci_t nrows;
-    wi_t width;
+    rci_t ncols;
     
-    m3d_t * blocks;
-    m3d_t ** rows;
-    
-}m3_smt;
-
-
-
-
-typedef struct
-{
-    rci_t nrows;
-    wi_t width;
-    
-    vbg * blocks;
-    vbg ** rows;
-    rci_t lastcol;
 }m3_slice;
-void * m3d_64_cubes(m3_smt *, m3d_t  * );
-
-void * m3d_64_cubes_take2(m3_slice *, m3d_t  * );
-m3d_t m3d_transpose(m3d_t  * );
 
 
+
+
+
+m3d_t  m3d_cubes(m3d_t *, m3d_t   * , rci_t );
+void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
 #endif

@@ -47,7 +47,10 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
             
         }
         
-        
+        else if((out == 1) && (b & (leftbit  >> x)))
+        {
+            printf("[ 0 ]");
+        }
         
         
         
@@ -115,66 +118,12 @@ void m3d_print(m3d_t *a)
         }
       
         }
-     printf("\n");   
+     printf("\n");
         }
-    }
     
-    if (a->flags == iswindowed) {
     
-                for( i  = 0; i < a->nrows ; i++)
-{
-    
-            if(a->width > 1)
-                {
-                        print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, 0);
-        
-                        m = 1;
-                        while(m < (a->width -1))
-                            {
-                                print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, 0);
-                                ++m;
-                            }
-        
-        
-        
-                    if(a->ncols%64 == 0)
-                    {
-                print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, a->fcol, 0 );
-            
-                    }
-        
-                    if(a->ncols%64 != 0)
-                    {
-                        print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, (63 - (a->ncols + a->fcol)%64) );
-                    }
-        
-        
-                }
-    
-        if(a->width  ==  1)
-        {
-        
-        if(a->ncols%64 != 0)
-        {
-            
-            print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, (64 - (a->ncols + a->fcol)%64) );
-            
-            
-        }
-        if(a->ncols%64 == 0)
-        {
-            print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, 0 );
-        }
-        
-     
-        
-      
-        }
 
-        printf("\n");
-    }
 
-        
        
 }
 
@@ -190,29 +139,30 @@ void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
     for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         
+        value = 0;
         
         
+        out[0] = ( a & (leftbit >>  x));
+        out[1] =  ( b & (leftbit >>  x));
+        out[2]  = ( c & (leftbit >>  x));
         
-        out[0] = (( a & (leftbit >>  x)));
-        out[1] =  (( b & (leftbit >>  x)));
-        out[2]  = (( c & (leftbit >>  x)));
-        
-        if (out[0]) {
+        if (out[0] > 0) {
             value = 1;
         }
         
         
-        if (out[1]) {
+        if (out[1] > 0) {
             value = value + 2;
         }
         
         
-        if(out[2])
+        if(out[2] > 0)
         {
             value = value + 4;
             
             
         }
+        value = value%5;
         printf("[%d]", value);
         
         
@@ -233,45 +183,70 @@ void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
 
 }
 
-void m5d_print(m5d_t * a)
+
+void m5d_print(m5d_t *a)
 {
     int i, m;
     
     printf("\n \n");
-    
-    for( i  = 0; i < a->nrows ; i++)
-    {
+  
         
-        if(a->width > 1)
-        {
-            print_m5d_block(a->rows[i][m].units, a->rows[i][m].middle,  a->rows[i][m].sign, a->fcol, 0);
-        }
-        m = 0;
-        while((m + 1)< (a->width -2))
-        {
-            print_m5d_block(a->rows[i][m].units, a->rows[i][m].middle,  a->rows[i][m].sign, 0, 0);
-            ++m;
-        }
-        if(m == 0)
-        {
-            print_m5d_block(a->rows[i][m].units, a->rows[i][m].middle,  a->rows[i][m].sign, a->fcol, (64 - a->ncols%64) );
-            
-            
-        }
         
-        if(m > 0)
+        for( i  = 0; i < a->nrows ; i++)
         {
             
-           print_m5d_block(a->rows[i][m].units, a->rows[i][m].middle,  a->rows[i][m].sign, 0, (64 - a->ncols%64) );
-        }
-        printf("\n");
+            if(a->width > 1)
+            {
+                print_m5d_block(a->rows[i][0].units, a->rows[i][0].middle,  a->rows[i][0].sign, a->fcol, 0);
+                
+                m = 1;
+                while(m < (a->width -1))
+                {
+                    print_m5d_block(a->rows[i][m].units,a->rows[i][m].middle, a->rows[i][m].sign, 0, 0);
+                    ++m;
+                }
+                
+                if(a->ncols%64 == 0)
+                {
+                    print_m5d_block(a->rows[i][m].units,a->rows[i][m].middle, a->rows[i][m].sign, 0, 0 );
+                    
+                }
+                
+                if(a->ncols%64 != 0)
+                {
+                    print_m5d_block(a->rows[i][m].units,a->rows[i][m].middle, a->rows[i][m].sign, 0, (64 - a->ncols%64) );
+                }
+            }
+            
+            if(a->width  ==  1)
+            {
+                
+                if(a->ncols%64 != 0)
+                {
+                    
+                    print_m5d_block(a->rows[i][0].units,a->rows[i][0].middle,  a->rows[i][0].sign, a->fcol, (64 - (a->ncols + a->fcol)%64) );
+                    
+                    
+                }
+                if(a->ncols%64 == 0)
+                {
+                    print_m5d_block(a->rows[i][0].units,a->rows[i][0].middle, a->rows[i][0].sign, a->fcol, 0 );
+                }
+                
+            }
+            printf("\n");
         
     }
+                
+       
+        
+    
+    
     printf("\n \n \n ");
-
+    
+    
 
 }
-
 
 void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
 {
@@ -387,11 +362,11 @@ void m3d_specs(m3d_t * a)
     
     
     if (a->flags == iswindowed) {
-        printf("Is windowed  %d \n", a->flags );
+        printf("Is Windowed   \n");
     }
     else if (a->flags == notwindowed)
     {
-        printf("Is not windowed  %d \n", a->flags );
+        printf("Is not windowed   \n");
     }
     printf("Number of columns: %d \n", a->ncols );
     printf("Number of rows   : %d \n", a->nrows );

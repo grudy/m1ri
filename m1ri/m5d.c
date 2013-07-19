@@ -265,8 +265,8 @@ m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
     a->width =  RU64(ncols);
     a->block = m5d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m5d_row_alloc(a->block, a->rows, a->width, a->nrows);
-    a->flags = iswindowed;
-    
+    a->flags = notwindowed;
+    a->fcol = 0;
     return *a;
     
 }
@@ -473,6 +473,59 @@ void iaddgf5(vfd *r,vfd *x)
     
 }
 
+/*
+ 
+ def v5mul2(a,b,c):
+ return c&b, c, c^a
+ 
+ def v5mul3(a,b,c):
+ x = c ^ b
+ return x, x|a, b
+ 
+ def v5mul4(a,b,c):
+ x = c ^ a
+ y = y & c
+ return y, x, y^b
+ 
+ 
+ 0 = 000
+ 1 = 001
+ 2 = 011
+ 3 = 101
+ 4 = 111
+*/
+vfd m5d_mul2(vfd a)
+{
+    vec temp = a.sign;
+    a.sign = a.sign ^ temp;
+    a.units = a.middle & temp;
+    a.middle = temp;
+    
+    
+    return a;
+
+}
+
+vfd m5d_mul3(vfd a)
+{
+    vec temp = a.middle ^ a.sign;
+    a.sign = a.middle;
+    a.middle = a.units | temp;
+    a.units = temp;
+    return a;
+}
+
+vfd m5d_mul4(vfd a)
+{
+    vec x = a.units ^ a.sign;
+    a.units = x & a.sign;
+    a.middle = x;
+    
+    return a;
+    
+}
+
+
 void isubgf5(vfd *r,vfd *x)  //matrix r = (matrix r - matrix x)
 {
     
@@ -513,25 +566,6 @@ vfd m5d_mul_i(vfd x, vfd y)
 
 
 
-m5d_t m5_transpose(m5d_t * a)
-{
-    m5d_t b = m5d_create(a, a->ncols , a->nrows);
-    int i, j;
-    
-    for(i = 0; i < a->nrows; i++)
-        
-        
-        for(j = 0; j < a->ncols; j++)
-        {
-            a->rows[i][j] = b.rows[j][i];
-    
-        }
-    
-    
-    return b;
-    
-    
-}
 
 
 
