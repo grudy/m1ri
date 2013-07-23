@@ -22,15 +22,11 @@
  */
 
 
-#include "m1riwrappers.h"
-#include "m1ri_3dt.h"
-#include "m1riarith.h"
-#include "m1ri_cubes.h"
-#include "m1ri_small.h"
-#include "m1ri_strassen.h"
-#include "m1ri_combine.h"
-#include "m1ri_classical.h"
-#include "m1ri_io.h"
+#include "m1ri/m1riwrappers.h"
+#include "m1ri/m1ri/m1ri_3dt.h"
+#include "m1ri/m1riarith.h"
+
+#include "m1ri/m1ri_io.h"
 #include "time.h"
 int main(int argc, const char * argv[])
 {

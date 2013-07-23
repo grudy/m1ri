@@ -79,7 +79,6 @@ vbg vbg_mul_i(vbg const , vbg const);
 */
 m3d_t m3d_hadamard(m3d_t const *, m3d_t const *);
 
-void m3d_hadamard_row_inline(vbg *, vbg const * , vbg const *);
 
 
 /* * * * * * * * * * * * * * * * * * * *

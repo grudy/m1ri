@@ -2,7 +2,7 @@
 /*
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
- RUSSIANS OVER LARGER FINITE FIELDS"
+ RUSSIANS OVER L/Users/grudy/Documents/c folders/m1rigf3/m1rigf3/m3d_tests.cARGER FINITE FIELDS"
  
  Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  
@@ -35,12 +35,24 @@ void  m3d_strassen_(m3d_t *c, m3d_t *a, m3d_t*b)
         
      if(((a->ncols%m1ri_word) && (b->nrows%m1ri_word)) == 0 )
         {
+          /*  m3_slice * a_slices = malloc(sizeof(m3_slice));
+            m3_slice * b_slices = malloc(sizeof(m3_slice));
+            int strop, brush, cutoff;
             
-           // m3_smt  * a_part = malloc(sizeof(m3_smt *)) ;
+             strop =   a->width;
+             brush =   DN(a->nrows, 64);
+             cutoff = 2;  //When to stop slicing
             
-           //square
+            
+            m3d_slices(a_slices , a, 2);
+            m3d_slices(b_slices, b, 2);
+            
+            */
+            
+            //a->nrows;
             
             
+            //m3_slice a = m3d_slices(&b, <#m3d_t *#>, <#wi_t#>)
             
             
             
@@ -105,14 +117,47 @@ void  m3d_strassen_(m3d_t *c, m3d_t *a, m3d_t*b)
 
 
 
-
+/*
 void  m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t*b)
 {
 
     if (a->ncols == b->nrows)
     {
-    
-    
+        int i, x,y,  lastvecs;
+        m3d_create(c, a->nrows, b->ncols);
+        lastvecs = c->ncols%m1ri_word;
+        for(i = 0; i < c->nrows; i++)
+        {
+            
+            for(x = 0;x  < a->width; x++)
+            {
+                    
+                for(y = 0; y < 64; y++)
+                {
+                    
+                
+                   c->rows[i][x] =  a->rows[i][  b->rows[x + y][i];
+                    
+                    
+                    
+                    
+                    
+                    
+                }
+            
+            
+            
+            
+            
+            }
+            
+            
+            
+            
+        
+        
+        
+        }
     
     
     
@@ -130,7 +175,7 @@ void  m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t*b)
 
 }
 
-
+*/
 
 
 

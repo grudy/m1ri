@@ -28,7 +28,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define FN(a, b, c, d) ((a)^(b))&((c)^(d)) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
 #define ST(a, b , c) ((a)^(b)^(c)) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
 #define RU64(a) (((a)/(64)) + ((1) && (a%64)))//division by 64 rounded up
-#define DN(a, n) ((a)/(n)) + ((1) && (a%n))//division by n rounded up
+#define  DN(a, n) ((a)/(n)) + ((1) && (a%n))//division by n rounded up
 
 #include <stdint.h>
 #include <string.h>
@@ -36,6 +36,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #include <time.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <mm_malloc.h>
 static   const u_int64_t leftbit = 0x8000000000000000;
 static  const u_int64_t rightbit = 0x1;
 typedef  u_int64_t vec ;
@@ -115,20 +116,25 @@ static inline u_int64_t  m1ri_rand()
     
     
     
+  // u_int64_t randomword1 = random();
+   // u_int64_t randomword2 = random();
+   u_int64_t randomword1 = arc4random();
+  u_int64_t randomword2 = arc4random();
+   // randomword1 = randomword1  * 2;
+   // randomword2 = randomword2  * 2;
     
-    u_int64_t randomword = rand();
-     randomword = randomword * 2;
+    randomword1 = randomword1  + (randomword2<< 32) ;
     
-    return randomword;
+    return randomword1;
 }
+
 static u_int64_t  const lbit[64] = {0x8000000000000000 , 0x4000000000000000 , 0x2000000000000000 , 0x1000000000000000 , 0x800000000000000 , 0x400000000000000 , 0x200000000000000 ,
     0x100000000000000 , 0x80000000000000 , 0x40000000000000 , 0x20000000000000 , 0x10000000000000 , 0x8000000000000 , 0x4000000000000 , 0x2000000000000 , 0x1000000000000 ,
     0x800000000000 , 0x400000000000 , 0x200000000000 , 0x100000000000 , 0x80000000000 , 0x40000000000 , 0x20000000000 , 0x10000000000 , 0x8000000000 , 0x4000000000 , 0x2000000000 ,
     0x1000000000 , 0x800000000 , 0x400000000 , 0x200000000 , 0x100000000 , 0x80000000 , 0x40000000 , 0x20000000 , 0x10000000 , 0x8000000 , 0x4000000 , 0x2000000 , 0x1000000 ,
     0x800000 , 0x400000 , 0x200000 , 0x100000 , 0x80000 , 0x40000 , 0x20000 , 0x10000 , 0x8000 , 0x4000 , 0x2000 , 0x1000 , 0x800 , 0x400 ,
     0x200 , 0x100 , 0x80 , 0x40 , 0x20 , 0x10 , 0x8 , 0x4 , 0x2 , 0x1 , };
-
-static u_int64_t  const bc_l[64] =  { 0x8000000000000000,    0xc000000000000000,  0xe000000000000000,    0xf000000000000000,  0xf800000000000000,
+/*static u_int64_t  const bc_l[64] =  { 0x8000000000000000,    0xc000000000000000,  0xe000000000000000,    0xf000000000000000,  0xf800000000000000,
     0xfc00000000000000,  0xfe00000000000000,    0xff00000000000000,  0xff80000000000000,    0xffc0000000000000,  0xffe0000000000000,    0xfff0000000000000,
     0xfff8000000000000,    0xfffc000000000000,  0xfffe000000000000,    0xffff000000000000,  0xffff800000000000,    0xffffc00000000000,  0xffffe00000000000,
     0xfffff00000000000,  0xfffff80000000000,    0xfffffc0000000000,  0xfffffe0000000000,    0xffffff0000000000,  0xffffff8000000000,    0xffffffc000000000,
@@ -147,7 +153,7 @@ static u_int64_t  const bc_l[64] =  { 0x8000000000000000,    0xc000000000000000,
     0x3fffffffffffff,  0x7fffffffffffff,    0xffffffffffffff,  0x1ffffffffffffff,    0x3ffffffffffffff,  0x7ffffffffffffff,    0xfffffffffffffff,
     0x1fffffffffffffff,    0x3fffffffffffffff,  0x7fffffffffffffff,    0xffffffffffffffff};
 
-
+*/
 static inline void m1ri_swap_vec(vec *a, vec *b)
 {
     vec temp;
@@ -211,8 +217,11 @@ typedef struct {
     u_int8_t flags;
     
     
+    vec  svfd;   //Identifies first vbg used in row
     
+
     
+    u_int32_t  lblock; //  first block pointed to in a window
     
     
     
@@ -236,10 +245,10 @@ typedef struct {
 
 
 
-static const u_int64_t  b_ate[8] = {(leftbit), (leftbit >> 8), (leftbit >> 16), (leftbit >> 24), (leftbit >> 32) , (leftbit >> 40), (leftbit >>48),
-    (leftbit >> 56)
+//static const u_int64_t  b_ate[8] = {(leftbit), (leftbit >> 8), (leftbit >> 16), (leftbit >> 24), (leftbit >> 32) , (leftbit >> 40), (leftbit >>48),
+//    (leftbit >> 56)
     
-};
+//};
 
 
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))

@@ -109,27 +109,27 @@ vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n) {
 /*
  Swap rows in a matrix;
  */
-void * m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
+void m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
 {
     
     
     if((M->nrows >= (row_a ) && (M->nrows >= row_b)))
     {
-        vtri * temp =  m1ri_malloc(M->width * sizeof(vtri));
-        temp =  M->rows[row_a -1];
+        vtri  temp ;
+        temp =  *M->rows[row_a -1];
         M->rows[row_a -1] = M->rows[row_b -1];
-        M->rows[row_b -1] =  temp;
+        M->rows[row_b -1] =  &temp;
         
-        
+      
         
     }
     
-    
+    else
     {
         
-        
+        return;
     }
-    return 0;
+    
 }
 
 
@@ -199,6 +199,85 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
     
 }
 
+
+m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t sizecols)
+{
+    
+    
+    m7d_t  submatrix;
+    
+    if((strow + sizerows) > c->width)
+    {
+        
+        
+        return submatrix;
+    }
+    
+    
+    
+    
+    if((stvtri + sizecols) > c->width)
+    {
+        
+        
+        return submatrix;
+    }
+    
+    
+    
+    submatrix.nrows =   m1ri_word * sizecols;
+    submatrix.ncols =  m1ri_word * sizecols;
+    submatrix.flags = iswindowed;
+    submatrix.width =  sizecols;
+    submatrix.block = &c->block[(stvtri * stvtri)];
+    submatrix.rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vtri *));
+    submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
+    submatrix.fcol   = 0;
+    submatrix.svtri = stvtri;
+    
+    
+    
+    int i;
+    
+    for(  i =   strow; i < (strow + (m1ri_word * sizerows)) ; i++)
+    {
+        
+        submatrix.rows[i - strow] = c->rows[i];
+        
+    }
+    
+    return submatrix;
+    
+}
+
+void   m7d_window_create(m7d_t *c, m7d_t * submatrix, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t sizecols)
+{
+    
+    
+    submatrix->nrows =   m1ri_word * sizecols;
+    submatrix->ncols =  m1ri_word * sizecols;
+    submatrix->flags = iswindowed;
+    submatrix->width = 1 * sizecols;
+    submatrix->block = &c->block[(stvtri * stvtri)];
+    submatrix->rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vtri *));
+    submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
+    submatrix->fcol   = 0;
+    submatrix->svtri = stvtri;
+    
+    
+    int i;
+    
+    for(  i =   strow; i < strow + (m1ri_word * sizerows) ; i++)
+    {
+        
+        submatrix->rows[i - strow] = c->rows[i];
+        
+    }
+    
+    
+    
+}
+
 /*
  
  */
@@ -229,7 +308,7 @@ m7d_t  m7d_rand(m7d_t * a)
     {
         
         a->block[i].sign = m1ri_rand();
-        a->block[i].middle = m1ri_rand();
+        a->block[i].middle = m1ri_rand() ;
         a->block[i].units = m1ri_rand();
    
     }
@@ -240,24 +319,7 @@ m7d_t  m7d_rand(m7d_t * a)
 
 
 
-m7d_windows m7d_windows_create(m7d_t *c)
-{
-    m7d_windows b;
-    int demi= DN((c->width * c->nrows * c->ncols), 4 );
-    
-    b.a0.block =  m1ri_malloc(demi);
-    b.a1.block =  m1ri_malloc(demi);
-    b.a2.block =  m1ri_malloc(demi);
-    b.a3.block =  m1ri_malloc(demi);
-    {
-        b.a0.block = c->block;
-        b.a1.block  = c->block + demi;
-        b.a2.block = c->block + (2 * demi);
-        b.a3.block = c->block + ( 3 * demi);
-    }
-    return b;
-    
-}
+
 
 
 /*
@@ -392,7 +454,7 @@ vtri m7d_mul_2(vtri a)
     temp = a.units;
     a.units = a.middle;
     a.middle = a.sign;
-    a.sign = a.units;
+    a.sign = temp;
     return a;
     
 }
@@ -443,6 +505,28 @@ vtri m7d_mul_6(vtri a)
 }
 
 
+int m7d_equal(m7d_t const *a, m7d_t const *b)
+{
+    //  for a->nrows
+    if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
+    {
+        return 0;
+    }
+    int i, j;
+    for( i = 0; i < a->nrows; i++)
+    {
+        
+        for(j = 0; j < b->width; j++)
+        {
+            if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].units != b->rows[i][j].units ) || (a->rows[i][j].middle != b->rows[i][j].middle ))
+            {
+                return 0;
+            }
+            
+        }
+    }
+    return 1;
+}
 
 void sub_64gf7(vtri *R, vtri *A, vtri *B)
 {

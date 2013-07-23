@@ -65,7 +65,7 @@ typedef struct {
     vbg ** rows;  // < pointers to rows of the matrix
     
     vec  svbg;   //Identifies first vbg used in row
-   
+    u_int64_t a;
     // wi_t rowstride;  //vbg's in block to traverse to  get to first
     
     u_int32_t  lblock; //  first block pointed to in a window
@@ -84,7 +84,7 @@ typedef struct {
  y = columns
  M = Matrix read from
  */
-
+m3d_t transpose(m3d_t  const *);
 vec m3d_rs_bits(m3d_t const *, rci_t  , rci_t  , int  );
 
 /*
@@ -107,7 +107,7 @@ vec m3d_ru_bits(m3d_t const  *, rci_t  , rci_t  , int  );
 */
 
 vbg m3d_read_elems(m3d_t const *, rci_t  , rci_t  , int  );
-
+m3d_t m3d_transposewin(m3d_t  const * );
 
 
 /*
@@ -131,14 +131,31 @@ void * m3d_colswap(m3d_t *, rci_t , rci_t );
 
  void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
 
-vbg  * m3d_block_allocate(vbg * , rci_t  ,  wi_t  );
+static inline void  * m3d_block_allocate(vbg * block, rci_t  nrows,  wi_t  width)
+{
+    block  = m1ri_calloc(nrows * width ,  sizeof(vbg) );
+    return block;
+}
 
-
-
-vbg ** m3d_row_alloc(vbg * , vbg ** , wi_t , rci_t );
-
-m3d_t m3d_create( m3d_t * , rci_t nrows, rci_t );
+/*
  
+ */
+
+
+static inline vbg ** m3d_row_alloc(vbg * block, vbg ** rows, wi_t width, rci_t nrows)
+{
+    rows = m1ri_malloc( nrows * width * sizeof(vbg *));
+    for (int i = 0; i <  nrows;  i++ )
+    {
+        rows[i]  = block + i * width;
+    };
+    return rows;
+}
+
+
+m3d_t m3d_create( m3d_t *  , rci_t nrows, rci_t );
+
+
 
 m3d_t m3d_rand(m3d_t * );
 
@@ -170,7 +187,7 @@ m3d_t  m3d_window(m3d_t  *, rci_t , rci_t , rci_t , rci_t );
  Same as m3d_window but the second argument is made into the window
  */
 
-void   m3d_window_create(m3d_t *, m3d_t * , rci_t strow, rci_t , rci_t , rci_t );
+ void   m3d_window_create(m3d_t *, m3d_t * , rci_t , rci_t , rci_t , rci_t );
 
 /*
  Concat b on the end of a, the result is c

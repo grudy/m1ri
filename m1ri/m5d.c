@@ -156,10 +156,10 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
     
     if((M->nrows >= (row_a ) && (M->nrows >= row_b)))
     {
-        vfd * temp =  m1ri_malloc(M->width * sizeof(vfd));
-        temp =  M->rows[row_a -1];
-        M->rows[row_a -1] = M->rows[row_b -1];
-        M->rows[row_b -1] =  temp;
+        vfd temp;
+        temp =  *M->rows[row_a -1];
+        *M->rows[row_a -1] = *M->rows[row_b -1];
+        *M->rows[row_b -1] =  temp;
         
         
         
@@ -275,6 +275,94 @@ m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
  
  */
 
+/*
+ windows in 64 rows * 64 column incriments
+ stvfd = the vfd or width offset from the base matrix
+ strow = row offset in increments of 64
+ sizecol  = cols * 64
+ sizerow  = rows * 64
+ */
+
+m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t sizecols)
+{
+    
+    
+    m5d_t  submatrix;
+    
+    if((strow + sizerows) > c->width)
+    {
+        
+        
+        return submatrix;
+    }
+    
+    
+    
+    
+    if((stvfd + sizecols) > c->width)
+    {
+        
+        
+        return submatrix;
+    }
+    
+    
+    
+    submatrix.nrows =   m1ri_word * sizecols;
+    submatrix.ncols =  m1ri_word * sizecols;
+    submatrix.flags = iswindowed;
+    submatrix.width =  sizecols;
+    submatrix.block = &c->block[(stvfd * stvfd)];
+    submatrix.rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vfd *));
+    submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
+    submatrix.fcol   = 0;
+    submatrix.svfd = stvfd;
+    
+    
+    
+    int i;
+    
+    for(  i =   strow; i < (strow + (m1ri_word * sizerows)) ; i++)
+    {
+        
+        submatrix.rows[i - strow] = c->rows[i];
+        
+    }
+    
+    return submatrix;
+    
+}
+
+void   m5d_window_create(m5d_t *c, m5d_t * submatrix, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t sizecols)
+{
+    
+    
+    submatrix->nrows =   m1ri_word * sizecols;
+    submatrix->ncols =  m1ri_word * sizecols;
+    submatrix->flags = iswindowed;
+    submatrix->width = 1 * sizecols;
+    submatrix->block = &c->block[(stvfd * stvfd)];
+    submatrix->rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vfd *));
+    submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
+    submatrix->fcol   = 0;
+    submatrix->svfd = stvfd;
+    
+    
+    int i;
+    
+    for(  i =   strow; i < strow + (m1ri_word * sizerows) ; i++)
+    {
+        
+        submatrix->rows[i - strow] = c->rows[i];
+        
+    }
+    
+    
+    
+}
+
+
+
 vfd * m5d_rand(m5d_t * a)
 {
     
@@ -284,9 +372,9 @@ vfd * m5d_rand(m5d_t * a)
         a->block[i].sign = m1ri_rand();
         
         
-        a->block[i].middle = m1ri_rand();
+        a->block[i].middle = m1ri_rand() &  a->block[i].sign;
         
-        a->block[i].units = m1ri_rand();
+        a->block[i].units = m1ri_rand() &  a->block[i].sign;;
         
         
         

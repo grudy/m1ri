@@ -172,38 +172,20 @@ void  m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
 
 
 
-vbg  * m3d_block_allocate(vbg * block, rci_t  nrows,  wi_t  width)
-{
-    block  = m1ri_calloc(nrows * width ,  sizeof(vbg) );
-    return block;
-}
 
 /*
  
  */
 
-
-vbg ** m3d_row_alloc(vbg * block, vbg ** rows, wi_t width, rci_t nrows)
-{
-    rows = m1ri_malloc( nrows * width * sizeof(vbg *));
-    for (int i = 0; i <  nrows;  i++ )
-    {
-        rows[i]  = block + i * width;
-    };
-    return rows;
-}
-
-/*
- 
- */
-
-m3d_t m3d_create( m3d_t * a, rci_t nrows, rci_t ncols)
+m3d_t m3d_create( m3d_t *  a, rci_t nrows, rci_t ncols)
 {
     
     
     a->ncols = ncols;
     a->nrows = nrows;
     a->width =  RU64(ncols);
+    a->block =  NULL;
+    a->rows =  NULL;
     a->block = m3d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m3d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = notwindowed;
@@ -213,10 +195,6 @@ m3d_t m3d_create( m3d_t * a, rci_t nrows, rci_t ncols)
     return *a;
     
 }
-
- 
-
-
 m3d_t  m3d_rand(m3d_t * a)
 {
     
@@ -224,7 +202,7 @@ m3d_t  m3d_rand(m3d_t * a)
     {
         
        a->block[i].units = m1ri_rand();
-        a->block[i].units = m1ri_rand();
+        a->block[i].sign = m1ri_rand();
     }
     
     return *a;
@@ -238,7 +216,37 @@ m3d_t  m3d_rand(m3d_t * a)
  n = matrix size (row length and column width)
  
  */
+m3d_t m3d_transposewin(m3d_t const *a )
+{
+    m3d_t *b = m1ri_malloc(sizeof(m3d_t));
+    m3d_create(b, a->nrows, a->ncols);
+int i, x;
+vbg temp;
+for(i = 0; i < a->nrows; i ++)
+{
+	for(x = 0; x < a->ncols; x ++)
+	{
+	
+		temp.units =  (a->rows[x][0].units & (leftbit >> i) );
+		temp.sign =  (a->rows[x][0].sign & (leftbit >> i) );
+		
+        b->rows[i][0].units = (temp.units) ?  b->rows[i][0].units | (leftbit >> x) : b->rows[i][0].units ;
+        b->rows[i][0].sign = (temp.sign) ? b->rows[i][0].sign | (leftbit >> x) : b->rows[i][0].sign  ;
+       // b->rows[i][0].units = (temp.units) ? : ;
+     
+        
+        
+        
+	}
+	
 
+    }
+                                                
+        return *b;
+                                                
+}
+
+                                                                                        
 
 m3d_t    m3d_identity_set(m3d_t * a)
 
@@ -254,6 +262,7 @@ m3d_t    m3d_identity_set(m3d_t * a)
             {
                 
                 a->rows[l][j].units = lbit[k];
+                
                 l++;
                 
             }
@@ -315,19 +324,19 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
 m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
     
-   
+    
     m3d_t  submatrix;
     
     if((strow + sizerows) > c->width)
     {
-    
-    
+        
+        
         return submatrix;
     }
     
     
     
-  
+    
     if((stvbg + sizecols) > c->width)
     {
         
@@ -335,9 +344,9 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
         return submatrix;
     }
     
-        
     
-    submatrix.nrows =   m1ri_word * sizecols; 
+    
+    submatrix.nrows =   m1ri_word * sizerows;
     submatrix.ncols =  m1ri_word * sizecols;
     submatrix.flags = iswindowed;
     submatrix.width =  sizecols;
@@ -346,30 +355,50 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix.fcol   = 0;
     submatrix.svbg = stvbg;
-   
-
     
+    
+    int f = strow * m1ri_word;
     int i;
     
-    for(  i =   strow; i < (strow + (m1ri_word * sizerows)) ; i++)
+    for(  i =   f; i < (f + (m1ri_word * sizerows)) ; i++)
     {
-     
-       submatrix.rows[i - strow] = c->rows[i];
+       
+        
+        submatrix.rows[i - f] = c->rows[i] + stvbg;
         
     }
     
     return submatrix;
     
 }
-
-void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
+ void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
   
     
-    submatrix->nrows =   m1ri_word * sizecols;
+    if((strow + sizerows) > c->width)
+    {
+        
+        
+        return;
+    
+    }
+    
+    
+    
+    
+    if((stvbg + sizecols) > c->width)
+    {
+        return;
+        
+        
+    }
+    
+    
+    
+    submatrix->nrows =   m1ri_word * sizerows;
     submatrix->ncols =  m1ri_word * sizecols;
     submatrix->flags = iswindowed;
-    submatrix->width = 1 * sizecols;
+    submatrix->width =  sizecols;
     submatrix->block = &c->block[(stvbg * stvbg)];
     submatrix->rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vbg *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
@@ -377,15 +406,16 @@ void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, 
     submatrix->svbg = stvbg;
     
     
+    int f = strow * m1ri_word;
     int i;
     
-    for(  i =   strow; i < strow + (m1ri_word * sizerows) ; i++)
+    for(  i =   f; i < (f + (m1ri_word * sizerows)) ; i++)
     {
         
-        submatrix->rows[i - strow] = c->rows[i];
+        
+        submatrix->rows[i - f] = c->rows[i] + stvbg;
         
     }
-    
     
     
 }
@@ -488,7 +518,6 @@ m3d_t m3d_stack(m3d_t * c,  m3d_t * a, m3d_t * b)
 
 
 
-
 int m3d_equal(m3d_t const *a, m3d_t const *b)
 {
     //  for a->nrows
@@ -502,7 +531,7 @@ int m3d_equal(m3d_t const *a, m3d_t const *b)
         
         for(j = 0; j < b->width; j++)
         {
-            if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].sign != b->rows[i][j].sign))
+            if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].units != b->rows[i][j].units))
             {
                 return 0;
             }

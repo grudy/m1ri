@@ -141,10 +141,6 @@ vbg vbg_mul_i(vbg const x, vbg const y)
 }
 
 
-void m3d_hadamard_row_inline(vbg  *c, vbg const *a, vbg const *b)
-{
-    
-}
 
 m3d_t m3d_hadamard(m3d_t const *a, m3d_t const *b)
 {

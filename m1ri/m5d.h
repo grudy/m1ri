@@ -156,9 +156,12 @@ void  m5d_mul( vfd *, vfd *, vfd *);
 
 vfd m5d_mul_i(vfd , vfd );
 
+int m5d_equal(m5d_t const *a, m5d_t const *b);
 
 m5d_t m5d_transpose(m5d_t * );
 
+m5d_t   m5d_window(m5d_t *, rci_t , rci_t , rci_t , rci_t );
+void   m5d_window_create(m5d_t *, m5d_t * , rci_t , rci_t , rci_t , rci_t );
 
 void sub_64gf5(vfd *, vfd *, vfd *);
 

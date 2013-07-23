@@ -63,17 +63,19 @@ typedef struct {
     
     rci_t ncols; //< number of columns
     
-    wi_t width; //< the number of vtri's needed to hold columns
-    
+    wi_t width; //< the number of vbg's needed to hold columns
     
     vtri * block;  //< block containing the data contiguous in memory
     
     vtri ** rows;  // < pointers to rows of the matrix
     
-    u_int32_t  fblock; //  first block pointed to in a window
-    u_int32_t fcol;  //column offset of first block
+    vec  svtri;   //Identifies first vbg used in row
     
-    u_int8_t flags;
+    // wi_t rowstride;  //vbg's in block to traverse to  get to first
+    
+    u_int32_t  lblock; //  first block pointed to in a window
+    u_int32_t fcol;  //column offset of first block
+    u_int8_t flags;    //IsWindowed, NotWindowed
     
     
     
@@ -96,14 +98,6 @@ typedef struct {
  
  
  */
-typedef  struct{
-    m7d_t  a0;
-    m7d_t  a1;
-    m7d_t  a2;
-    m7d_t a3;
-    
-    
-}m7d_windows;
 
 
 vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) ;
@@ -114,7 +108,7 @@ vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
 
 vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n);
 
-void * m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
+void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
 
 /*
  
@@ -170,7 +164,6 @@ m7d_t   m7d_identity(m7d_t  *a, rci_t n);
  */
 
 
-m7d_windows m7d_windows_create(m7d_t *a);
 
 /*
  
@@ -179,6 +172,7 @@ m7d_windows m7d_windows_create(m7d_t *a);
 
 
 
+int m7d_equal(m7d_t const *, m7d_t const *);
 void m7d_free( m7d_t *  );
 
 void addgf7(vtri *, vtri * , vtri *);
@@ -220,7 +214,8 @@ m7d_t m7d_transpose(m7d_t * a);
 void sub_64gf7(vtri *R, vtri *A, vtri *B);
 void add_64gf7(vtri *R, vtri *A, vtri *B);
 
-
+m7d_t   m7d_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
+void   m7d_window_create(m7d_t *, m7d_t * , rci_t , rci_t , rci_t , rci_t);
 
 
 

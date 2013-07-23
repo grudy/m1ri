@@ -73,7 +73,7 @@ void m3d_print(m3d_t *a)
     int i, m;
    
         printf("\n \n");
-    if (a->flags == notwindowed) {
+    //if (a->flags == notwindowed) {
     
     
     for( i  = 0; i < a->nrows ; i++)
@@ -125,7 +125,7 @@ void m3d_print(m3d_t *a)
 
 
        
-}
+//}
 
     printf("\n \n \n ");
     
@@ -304,7 +304,7 @@ void m7d_print(m7d_t *a)
         
         if(a->width > 1)
         {
-            print_m7d_block(a->rows[i][0].units, a->rows[i][m].middle, a->rows[i][0].sign, a->fcol, 0);
+            print_m7d_block(a->rows[i][0].units, a->rows[i][0].middle, a->rows[i][0].sign, a->fcol, 0);
             
             m = 1;
             while(m < (a->width -1))
@@ -371,7 +371,6 @@ void m3d_specs(m3d_t * a)
     printf("Number of columns: %d \n", a->ncols );
     printf("Number of rows   : %d \n", a->nrows );
     printf("Width------------: %d \n", a->width );
-    
     
     
 }
