@@ -65,6 +65,7 @@ typedef struct
 }m5_slice;
 
 
+ void m3d_swap(m3d_t *  , m3d_t * );
 
 
 
@@ -74,7 +75,7 @@ typedef struct
 
 m3d_t  m3d_cubes(m3d_t *, m3d_t   * , rci_t );
 void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
-   m3d_t  m3d_transpose(m3d_t * , m3d_t * );
+   void  m3d_transpose(m3d_t * restrict, m3d_t * restrict);
 m5d_t  * m5_blockslice_allocate(m5d_t * , rci_t  ,  wi_t  );
 
 m5d_t ** m5_rowslice_allocate(m5d_t * , m5d_t ** , wi_t , rci_t );

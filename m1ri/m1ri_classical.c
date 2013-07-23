@@ -30,28 +30,67 @@
 
 
 
-m3d_t m3d_mul_naive_rowmjr(m3d_t *c, m3d_t *a, m3d_t *b)
+m3d_t m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t *b)
 {
-    
+   
+      vbg table[64];
+    m3d_t * tb = m1ri_malloc(sizeof(m3d_t));
+    m3d_transpose(b, tb);
     *c = m3d_create(c, a->nrows, b->ncols);
     if (a->ncols == b->nrows)
+       // temp;
     {
-        int j, k;
+        int j, k, u;
+        u = 0;
+        
+        
         for (int i = 0 ;  i  < c->nrows; i ++) {
             
-            
-            for (j = 0; j < c->width - 1; i++)
+            k = i * c->width;
+            for (j = 0; j < c->width ; j++)
             {
-                for(k = 0; k < 64; i++ )
+                for(u = 0; u < 64;u++ )
                 {
-                   
+                    vbg_mul(&table[0] , &a->rows[i][j], &tb->rows[i][j]); vbg_mul(&table[1] , &a->rows[i][j+1], &tb->rows[i][j+1]);
+                    vbg_mul(&table[2] , &a->rows[i][j+2], &tb->rows[i][j+2]); vbg_mul(&table[3] , &a->rows[i][j+3], &tb->rows[i][j+3]);
+                    vbg_mul(&table[4] , &a->rows[i][j+4], &tb->rows[i][j+4]); vbg_mul(&table[5] , &a->rows[i][j+5], &tb->rows[i][j+5]);
+                    vbg_mul(&table[6] , &a->rows[i][j+6], &tb->rows[i][j+6]); vbg_mul(&table[7] , &a->rows[i][j+7], &tb->rows[i][j+7]);
+                    vbg_mul(&table[8] , &a->rows[i][j+8], &tb->rows[i][j+8]); vbg_mul(&table[9] , &a->rows[i][j+9], &tb->rows[i][j+9]);
+                    vbg_mul(&table[10] , &a->rows[i][j+10], &tb->rows[i][j+10]); vbg_mul(&table[11] , &a->rows[i][j+11], &tb->rows[i][j+11]);
+                    vbg_mul(&table[12] , &a->rows[i][j+12], &tb->rows[i][j+12]); vbg_mul(&table[13] , &a->rows[i][j+13], &tb->rows[i][j+13]);
+                    vbg_mul(&table[14] , &a->rows[i][j+14], &tb->rows[i][j+14]); vbg_mul(&table[15] , &a->rows[i][j+15], &tb->rows[i][j+15]);
+                    vbg_mul(&table[16] , &a->rows[i][j+16], &tb->rows[i][j+16]); vbg_mul(&table[17] , &a->rows[i][j+17], &tb->rows[i][j+17]);
+                    vbg_mul(&table[18] , &a->rows[i][j+18], &tb->rows[i][j+18]); vbg_mul(&table[19] , &a->rows[i][j+19], &tb->rows[i][j+19]);
+                    vbg_mul(&table[20] , &a->rows[i][j+20], &tb->rows[i][j+20]); vbg_mul(&table[21] , &a->rows[i][j+21], &tb->rows[i][j+21]);
+                    vbg_mul(&table[22] , &a->rows[i][j+22], &tb->rows[i][j+22]); vbg_mul(&table[23] , &a->rows[i][j+23], &tb->rows[i][j+23]);
+                    vbg_mul(&table[24] , &a->rows[i][j+24], &tb->rows[i][j+24]); vbg_mul(&table[25] , &a->rows[i][j+25], &tb->rows[i][j+25]);
+                    vbg_mul(&table[26] , &a->rows[i][j+26], &tb->rows[i][j+26]); vbg_mul(&table[27] , &a->rows[i][j+27], &tb->rows[i][j+27]);
+                    vbg_mul(&table[28] , &a->rows[i][j+28], &tb->rows[i][j+28]); vbg_mul(&table[29] , &a->rows[i][j+29], &tb->rows[i][j+29]);
+                    vbg_mul(&table[30] , &a->rows[i][j+30], &tb->rows[i][j+30]); vbg_mul(&table[31] , &a->rows[i][j+31], &tb->rows[i][j+31]);
+                    vbg_mul(&table[32] , &a->rows[i][j+32], &tb->rows[i][j+32]); vbg_mul(&table[33] , &a->rows[i][j+33], &tb->rows[i][j+33]);
+                    vbg_mul(&table[34] , &a->rows[i][j+34], &tb->rows[i][j+34]); vbg_mul(&table[35] , &a->rows[i][j+35], &tb->rows[i][j+35]);
+                    vbg_mul(&table[36] , &a->rows[i][j+36], &tb->rows[i][j+36]); vbg_mul(&table[37] , &a->rows[i][j+37], &tb->rows[i][j+37]);
+                    vbg_mul(&table[38] , &a->rows[i][j+38], &tb->rows[i][j+38]); vbg_mul(&table[39] , &a->rows[i][j+39], &tb->rows[i][j+39]);
+                    vbg_mul(&table[40] , &a->rows[i][j+40], &tb->rows[i][j+40]); vbg_mul(&table[41] , &a->rows[i][j+41], &tb->rows[i][j+41]);
+                    vbg_mul(&table[42] , &a->rows[i][j+42], &tb->rows[i][j+42]); vbg_mul(&table[43] , &a->rows[i][j+43], &tb->rows[i][j+43]);
+                    vbg_mul(&table[44] , &a->rows[i][j+44], &tb->rows[i][j+44]); vbg_mul(&table[45] , &a->rows[i][j+45], &tb->rows[i][j+45]);
+                    vbg_mul(&table[46] , &a->rows[i][j+46], &tb->rows[i][j+46]); vbg_mul(&table[47] , &a->rows[i][j+47], &tb->rows[i][j+47]);
+                    vbg_mul(&table[48] , &a->rows[i][j+48], &tb->rows[i][j+48]); vbg_mul(&table[49] , &a->rows[i][j+49], &tb->rows[i][j+49]);
+                    vbg_mul(&table[50] , &a->rows[i][j+50], &tb->rows[i][j+50]); vbg_mul(&table[51] , &a->rows[i][j+51], &tb->rows[i][j+51]);
+                    vbg_mul(&table[52] , &a->rows[i][j+52], &tb->rows[i][j+52]); vbg_mul(&table[53] , &a->rows[i][j+53], &tb->rows[i][j+53]);
+                    vbg_mul(&table[54] , &a->rows[i][j+54], &tb->rows[i][j+54]); vbg_mul(&table[55] , &a->rows[i][j+55], &tb->rows[i][j+55]);
+                    vbg_mul(&table[56] , &a->rows[i][j+56], &tb->rows[i][j+56]); vbg_mul(&table[57] , &a->rows[i][j+57], &tb->rows[i][j+57]);
+                    vbg_mul(&table[58] , &a->rows[i][j+58], &tb->rows[i][j+58]); vbg_mul(&table[59] , &a->rows[i][j+59], &tb->rows[i][j+59]);
+                    vbg_mul(&table[60] , &a->rows[i][j+60], &tb->rows[i][j+60]); vbg_mul(&table[61] , &a->rows[i][j+61], &tb->rows[i][j+61]);
+                    vbg_mul(&table[62] , &a->rows[i][j+62], &tb->rows[i][j+62]); vbg_mul(&table[63] , &a->rows[i][j+63], &tb->rows[i][j+63]);
                     
                     
-                    //c->rows[i][j].units = mul
-                    // c->rows[i][j].sign = a->rows[i];
+                    
+                    
+                //table[64]add_m3dr(&a);
+                
                 }
-                // r.units = x.units & y.units;
-                //   r.sign  = (y.sign ^ x.sign) & (r.units);
+             
             }
             
         }

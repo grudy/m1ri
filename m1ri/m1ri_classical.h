@@ -28,14 +28,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "m1ri_3dt.h"
 #include "m1riwrappers.h"
 #include "m1riarith.h"
-
-
+#include "m1ri_cubes.h"
+#include "m1ri_small.h"
 /*
  
  
  
 */
-m3d_t m3d_mul_naive_rowmjr(m3d_t *, m3d_t *, m3d_t *);
+m3d_t m3d_mul_naive_row(m3d_t *, m3d_t *, m3d_t *);
 
 /*
 Tom Boothys method
