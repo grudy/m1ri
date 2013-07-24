@@ -142,14 +142,15 @@ vbg vbg_mul_i(vbg const x, vbg const y)
 
 
 
-m3d_t m3d_hadamard(m3d_t const *a, m3d_t const *b)
+m3d_t * m3d_hadamard(m3d_t const *a, m3d_t const *b)
 {
     
     
-    m3d_t c;
+    m3d_t  * c = malloc(sizeof(m3d_t));
+    
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-        c = m3d_create(&c, a->nrows , b->ncols);
+        *c = m3d_create(c, a->nrows , b->ncols);
         int i, j;
         
         for( i = 0; i < a->nrows; i++)
@@ -157,7 +158,7 @@ m3d_t m3d_hadamard(m3d_t const *a, m3d_t const *b)
             for(j = 0; j < (a->width ); j++)
             {
                 
-                c.rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
+                c->rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
             }
             
             
@@ -165,6 +166,8 @@ m3d_t m3d_hadamard(m3d_t const *a, m3d_t const *b)
         
     }
     
+    
+
     return c;
     
     

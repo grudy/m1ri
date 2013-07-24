@@ -43,6 +43,7 @@ m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
         c->block = m3d_block_allocate(a->block,  a->nrows,   a->width);
     z = 0;
     r = 0 ;
+    
       c->rows = m1ri_malloc( a->nrows * a->width * sizeof(vbg *));
         for ( i = 0; i <  l;  i = i + (slicesize* m1ri_word))
         {
@@ -334,7 +335,7 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
     
 }
 
-
+// 
   void m3d_transpose(m3d_t  * restrict a, m3d_t *  restrict b)
 {
    
@@ -378,6 +379,57 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
    // return *b;
   //  m1ri_free(b);
 
+}
+vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
+{
+    //m3d_t *b = m1ri_malloc(sizeof(m3d_t));
+    
+    //m3d_create(b, 64, 64);
+    int i, x;
+    vbg temp;
+    for(i = 0; i <64; i ++)
+    {
+        for(x = 0; x < 64; x ++)
+        {
+            
+            temp.units =  (a[x][0].units & (leftbit >> i) );
+            temp.sign =  (a[x][0].sign & (leftbit >> i) );
+            
+            b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
+            b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
+            // b->rows[i][0].units = (temp.units) ? : ;
+            
+            
+            
+            
+        }
+        
+        
+    }
+    
+    return *b;
+    
+}
+
+m3d_t m3d_transpose_sliced(m3d_t * a)
+{
+    int x, y;
+    m3d_t c;
+    c = m3d_create(&c, a->ncols, a->nrows);
+    m3_slice * b, *d;
+    d = malloc(sizeof(m3_slice));
+    b = malloc(sizeof(m3_slice));
+    m3d_slices(b, a, 1);
+    m3d_slices(d, &c, 1);
+    for (x = 0; x < b->nrows; x++) {
+        for (y = 0; y < b->ncols; y ++) {
+         m3d_transpose_vbg(b->row[x][y].rows, d->row[y][x].rows);
+            
+        }
+    }
+
+    return c;
+    //m1ri_free(temp);
 }
 
 m5d_t  * m5_blockslice_allocate(m5d_t * block, rci_t  nrows,  wi_t  width)

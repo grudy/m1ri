@@ -166,7 +166,7 @@ static inline void m1ri_swap_vec(vec *a, vec *b)
 
 
 /********************************************
- Creates  a union of 192 bits
+ Creates  a structure of 192 bits
  ********************************************/
 
 typedef struct {

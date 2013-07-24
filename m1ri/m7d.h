@@ -36,7 +36,7 @@
 
 
 /********************************************
- Creates  a union of 192 bits
+ Creates  a structure of 192 bits
  ********************************************/
 
 typedef struct {
@@ -99,13 +99,15 @@ typedef struct {
  
  */
 
-
+//Read 'middle' bits
 vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) ;
 
+
+// Read n 'sign' bits
 vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-
+// Read  n 'unit' bits
 vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-
+// Read   n elements
 vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n);
 
 void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
@@ -182,17 +184,15 @@ vtri addgf7r(vtri  *, vtri *);
 
 void subgf7( vtri *, vtri *, vtri *);               //multiply vector x by by vector y.   The product is vector r.
 
-
+//Scalar  multiplication
 vtri m7d_mul_2(vtri);
-
-
 vtri m7d_mul_3(vtri);
-
 vtri m7d_mul_4(vtri);
-
 vtri m7d_mul_5(vtri);
-
 vtri m7d_mul_6(vtri);
+
+
+
 
 
 vtri subgf7r(vtri , vtri );               //multiply vector x by by vector y.   The product is vector r.

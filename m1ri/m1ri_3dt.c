@@ -198,11 +198,14 @@ m3d_t m3d_create( m3d_t *  a, rci_t nrows, rci_t ncols)
 m3d_t  m3d_rand(m3d_t * a)
 {
     
-    for(int i = 0; i < (a->nrows * a->width); i++)
+    for(int i = 0; i < (a->nrows); i++)
     {
+        for(int z = 0; z  < (a->width); z++)
+            {
         
-       a->block[i].units = m1ri_rand();
-        a->block[i].sign = m1ri_rand();
+       a->rows[i][z].units = m1ri_rand();
+        a->rows[i][z].sign = m1ri_rand();
+            }
     }
     
     return *a;
@@ -350,7 +353,7 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     submatrix.ncols =  m1ri_word * sizecols;
     submatrix.flags = iswindowed;
     submatrix.width =  sizecols;
-    submatrix.block = &c->block[(stvbg * stvbg)];
+    //submatrix.block = &c->block[(stvbg * stvbg)];
     submatrix.rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vbg *));
     submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix.fcol   = 0;
@@ -383,9 +386,6 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     
     }
     
-    
-    
-    
     if((stvbg + sizecols) > c->width)
     {
         return;
@@ -393,19 +393,15 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
         
     }
     
-    
-    
     submatrix->nrows =   m1ri_word * sizerows;
     submatrix->ncols =  m1ri_word * sizecols;
     submatrix->flags = iswindowed;
     submatrix->width =  sizecols;
-    submatrix->block = &c->block[(stvbg * stvbg)];
+    submatrix->block = &c->block[(strow * stvbg)];
     submatrix->rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vbg *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svbg = stvbg;
-    
-    
     int f = strow * m1ri_word;
     int i;
     

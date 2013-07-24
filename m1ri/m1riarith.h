@@ -77,7 +77,7 @@ vbg vbg_mul_i(vbg const , vbg const);
 /*
     Hadamard multiplication
 */
-m3d_t m3d_hadamard(m3d_t const *, m3d_t const *);
+m3d_t * m3d_hadamard(m3d_t const *, m3d_t const *);
 
 
 

@@ -47,8 +47,7 @@ int main(int argc, const char * argv[])
         oodles[x]  = m3d_create(&oodles[x], 16384, 16384);
         plenitude[x]  = m3d_rand(&plenitude[x]);
         bunches[x]  = m3d_rand(&bunches[x]);
-        plenitude[x]  = m3d_rand(&plenitude[x]);
-        plenitude[x] =  m3d_hadamard(&plenitude[x], &plenitude[x]);
+       plenitude[x] =  m3d_hadamard(&plenitude[x], &plenitude[x]);
         
         
     }

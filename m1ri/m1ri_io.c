@@ -67,7 +67,7 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
   
     
 }
-
+//  The function used to print m3d
 void m3d_print(m3d_t *a)
 {
     int i, m;

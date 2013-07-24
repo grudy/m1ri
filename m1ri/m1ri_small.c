@@ -195,3 +195,6 @@ void mul_4_m3d(vbg *R, vbg *A, vbg *B)
     
 }
 
+
+
+

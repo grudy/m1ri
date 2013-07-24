@@ -68,14 +68,16 @@ typedef struct
  void m3d_swap(m3d_t *  , m3d_t * );
 
 
-
+vbg * m3d_transpose_vbg(vbg  **a , vbg **b);
  m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width);
 
  m3d_t ** m3_rowslice_allocate(m3d_t * block, m3d_t ** rows, wi_t width, rci_t nrows);
 
 m3d_t  m3d_cubes(m3d_t *, m3d_t   * , rci_t );
 void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
-   void  m3d_transpose(m3d_t * restrict, m3d_t * restrict);
+//A direct transpose, using no windows
+void  m3d_transpose(m3d_t * restrict, m3d_t * restrict);
+m3d_t m3d_transpose_sliced(m3d_t * );
 m5d_t  * m5_blockslice_allocate(m5d_t * , rci_t  ,  wi_t  );
 
 m5d_t ** m5_rowslice_allocate(m5d_t * , m5d_t ** , wi_t , rci_t );
