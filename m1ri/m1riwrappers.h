@@ -29,7 +29,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define ST(a, b , c) ((a)^(b)^(c)) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
 #define RU64(a) (((a)/(64)) + ((1) && (a%64)))//division by 64 rounded up
 #define  DN(a, n) ((a)/(n)) + ((1) && (a%n))//division by n rounded up
-
+#define MAX(a,b)  ((a > b)? a: b)
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -245,10 +245,12 @@ typedef struct {
 
 
 
-//static const u_int64_t  b_ate[8] = {(leftbit), (leftbit >> 8), (leftbit >> 16), (leftbit >> 24), (leftbit >> 32) , (leftbit >> 40), (leftbit >>48),
-//    (leftbit >> 56)
-    
-//};
+
+
+
+
+//When to switch  from Strassen
+static int const cutoff = m1ri_word;
 
 
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))

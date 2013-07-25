@@ -81,8 +81,7 @@ vbg sub_m3dr(vbg const x, vbg const y)
 }
 
 
-
-void iadd_vbg(vbg *r,vbg const *x)
+ void iadd_vbg(vbg *r,vbg  *x)
 {
     
     vec t;
@@ -100,7 +99,7 @@ void iadd_vbg(vbg *r,vbg const *x)
     
 }
 
-void isub_m3d(vbg  *r,vbg const *x)
+void isub_m3d(vbg  *r,vbg  *x)
 {
     vec t;
     
@@ -118,7 +117,7 @@ void isub_m3d(vbg  *r,vbg const *x)
 
 
 
-void  vbg_mul( vbg *r, vbg const *x, vbg const *y)            {
+void  vbg_mul( vbg *r, vbg  *x, vbg  *y)            {
     r->units = y->units ^ x->units ;
     r->sign = (y->sign ^ x->sign) & (r->units);
     
@@ -176,33 +175,44 @@ m3d_t * m3d_hadamard(m3d_t const *a, m3d_t const *b)
 
 
 
-void sub_64_m3d(vbg *R, vbg const *A, vbg const *B)
+void sub_64_m3d(vbg **R, vbg  **A, vbg  **B)
 {
     int i;
-    for (i
-         
-         = 0; i < (sizeof(vec)); i++ )
+    for (i= 0; i < m1ri_word; i++ )
     {
-        R[i] = sub_m3dr(A[i], B[i]);
+        R[i][0] = sub_m3dr(A[i][0], B[i][0]);
     }
 }
 
 
 
-void add_64_m3d(vbg *R, vbg const  *A, vbg const *B)
+void add_64_m3d(vbg **R, vbg   **A, vbg  **B)
 {
     int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
+    for (i = 0; i < m1ri_word; i++ )
     {
-        R[i] = add_m3dr(A[i], B[i]);
+        R[i][0] = add_m3dr(A[i][0], B[i][0]);
     }
     
     
     
     
 }
+void m3d_sub( m3d_t *r, m3d_t const *x, m3d_t const *y)
+{
+    int n , i;
+    for(i = 0; i < x->nrows; i++)
+    {
+        for(n = 0; n < x->width; n++)
+        {
+    sub_m3d(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
+        }
 
-m3d_t m3d_add(m3d_t const *a, m3d_t const *b)
+    }
+
+}
+
+m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
 {
     
     

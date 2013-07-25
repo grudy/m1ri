@@ -397,6 +397,7 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     submatrix->ncols =  m1ri_word * sizecols;
     submatrix->flags = iswindowed;
     submatrix->width =  sizecols;
+    submatrix->block =      m1ri_calloc(sizecols * sizerows, sizeof(m3d_t));
     submatrix->block = &c->block[(strow * stvbg)];
     submatrix->rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vbg *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;

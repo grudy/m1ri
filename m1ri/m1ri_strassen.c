@@ -25,161 +25,132 @@ m1ri_strassen.c
 
 
 #include "m1ri_strassen.h"
+#import <math.h>
 
-void  m3d_strassen_(m3d_t *c, m3d_t *a, m3d_t*b)
+  void m3d_strassen_total16(m3_slice *c, m3_slice const *a, m3_slice const *b)
+{
+    m3d_t * x1 = m1ri_calloc(64, sizeof(m3d_t));
+    m3d_t * x2 = m1ri_calloc(64, sizeof(m3d_t));
+    m3d_create(x2, 64, 64);
+    m3d_create(x1,64,  64);
+    m3d_sub(x1, &a->row[0][0], &a->row[1][0]);
+     m3d_sub(x2,&b->row[1][1],&b->row[0][1]);
+    mul_64_m3d(c->row[1][0].rows ,x1->rows,x2->rows);
+    
+    
+    
+    
+    add_64_m3d(x1->rows,a->row[1][0].rows,a->row[1][1].rows);
+    m3d_sub(x2,&b->row[0][1],&b->row[0][0]);
+    mul_64_m3d(c->row[1][1].rows,x1->rows,x2->rows);
+    
+    m3d_sub(x1,x1,&a->row[0][0]);
+   m3d_sub(x2,&b->row[1][1],x2);
+    mul_64_m3d(c->row[0][1].rows,x1->rows,x2->rows);
+    
+    
+    
+    
+    m3d_sub(x1,&a->row[0][1],x1);
+    mul_64_m3d(c->row[0][0].rows,x1->rows,b->row[1][1].rows);
+    mul_64_m3d(x1->rows,a->row[0][0].rows,b->row[0][0].rows);
+    
+    add_64_m3d(c->row[0][1].rows,x1->rows,c->row[0][1].rows);
+    add_64_m3d(c->row[1][0].rows,c->row[0][1].rows,c->row[1][0].rows);
+     add_64_m3d(c->row[0][1].rows,c->row[0][1].rows,c->row[1][1].rows);
+    add_64_m3d(c->row[1][1].rows,c->row[1][0].rows,c->row[1][1].rows);
+    add_64_m3d(c->row[0][1].rows,c->row[0][1].rows,c->row[0][0].rows);
+    
+    m3d_sub(x2,x2,&b->row[1][0]);
+    mul_64_m3d(c->row[0][0].rows,a->row[1][1].rows,x2->rows);
+    
+    m3d_sub(&c->row[1][0],&c->row[1][0],&c->row[0][0]);
+    mul_64_m3d(c->row[0][0].rows,a->row[0][1].rows,b->row[1][0].rows);
+    add_64_m3d(c->row[0][0].rows,x1->rows,c->row[0][0].rows);
+   
+    //
+    m1ri_free(x1);
+    m1ri_free(x2);
+
+
+    
+}
+
+void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 {
    if(a->ncols == b->nrows)
     {
         m3d_create(c, a->nrows   , b->ncols);
-        
+     
         
      if(((a->ncols%m1ri_word) && (b->nrows%m1ri_word)) == 0 )
         {
-          /*  m3_slice * a_slices = malloc(sizeof(m3_slice));
-            m3_slice * b_slices = malloc(sizeof(m3_slice));
-            int strop, brush, cutoff;
-            
-             strop =   a->width;
-             brush =   DN(a->nrows, 64);
-             cutoff = 2;  //When to stop slicing
-            
-            
-            m3d_slices(a_slices , a, 2);
-            m3d_slices(b_slices, b, 2);
-            
-            */
-            
-            //a->nrows;
-            
-            
-            //m3_slice a = m3d_slices(&b, <#m3d_t *#>, <#wi_t#>)
-            
-            
-            
-            ///even width square 64 * 64
-            if(a->ncols == m1ri_word)
-            {
-                             
-                
-            }
-            
-        
-                
-                
-             ///even width smt
           
-            }
-        
-        
-        }
-        
-     if((a->ncols%m1ri_word) && (b->nrows%m1ri_word))
-     {
-     
-     
-     
-     
-     
-     }
-      
-    
-        
-        
-        
-        
-        
-     else
-     {
-        //can't be multiplied
-    
-    
-    }
-    
-    
-    
-    
-    /*
-    m3d_qrt cs =  m3d_qtrwindows(C);
-    m3d_qrt bs =  m3d_qtrwindows(B);
-    m3d_qrt as =  m3d_qtrwindows(A);
-    
-   */
-
-}
-
-
-
-/*
- Naive multiplication
-*/
-
-
-
-
-
-/*
-void  m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t*b)
-{
-
-    if (a->ncols == b->nrows)
-    {
-        int i, x,y,  lastvecs;
-        m3d_create(c, a->nrows, b->ncols);
-        lastvecs = c->ncols%m1ri_word;
-        for(i = 0; i < c->nrows; i++)
-        {
+            int t, x,recursions,  slrow, slwidth, rowdiv, coldiv, themax ;
+           slrow =   DN(a->nrows, cutoff);
+            slwidth = b->width;
             
-            for(x = 0;x  < a->width; x++)
-            {
-                    
-                for(y = 0; y < 64; y++)
-                {
-                    
+            t = 64;
+            rowdiv = 1;
+            
+            while (t < slrow) {
+            t = t * 2;
+            rowdiv++;
                 
-                   c->rows[i][x] =  a->rows[i][  b->rows[x + y][i];
-                    
-                    
-                    
-                    
-                    
-                    
-                }
-            
-            
-            
-            
-            
             }
             
+            t = 64;
+            coldiv = 1;
+            while (t < slwidth) {
+                
+                
+                t = t * 2;
+                rowdiv++;
+                
+            }
+            themax = MAX(rowdiv, coldiv);
+            m3_slice a_sliced[themax], b_sliced[themax], c_sliced[themax];
             
+            if(themax > 1)
+            {
+                recursions = 1;
+            for(x = themax; x > 1 ; x =  DN(x, 2))
+            {
+                
+                m3d_slices(&a_sliced[recursions], &a_sliced[recursions -1].row[0][1], x);
+                m3d_slices(&b_sliced[recursions], &b_sliced[recursions -1].row[0][1], x);
+                m3d_slices(&c_sliced[recursions], &c_sliced[recursions -1].row[0][1], x);
+                
+                m3d_slices(&a_sliced[recursions], &a_sliced[recursions -1].row[0][1], x);
+                m3d_slices(&b_sliced[recursions], &b_sliced[recursions -1].row[0][1], x);
+                m3d_slices(&c_sliced[recursions], &c_sliced[recursions -1].row[0][1], x);
+                
+                m3d_slices(&a_sliced[recursions], &a_sliced[recursions -1].row[0][1], x);
+                m3d_slices(&b_sliced[recursions], &b_sliced[recursions -1].row[0][1], x);
+                m3d_slices(&c_sliced[recursions], &c_sliced[recursions -1].row[0][1], x);
+                
+                m3d_slices(&a_sliced[recursions], &a_sliced[recursions -1].row[0][1], x);
+                m3d_slices(&b_sliced[recursions], &b_sliced[recursions -1].row[0][1], x);
+                m3d_slices(&c_sliced[recursions], &c_sliced[recursions -1].row[0][1], x);
+                recursions ++;
+            }
+    
+                
+                
+             
+            }
             
-            
-        
         
         
         }
-    
-    
-    
-    
-    
-    
-    
-    }
-        
         
 
-
-
-
-
+    
+  }
+    
+    
 }
-
-*/
-
-
-
-
+    
 
 
 

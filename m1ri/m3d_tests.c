@@ -1,6 +1,4 @@
-
-/*
- Matrix Represenations and basic operations
+/* M1RI
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -17,25 +15,45 @@
  GNU General Public License for more details.
  
  You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
+/ along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
-m1ri_strassen.h
+ m1ri_hadamard.c
  */
 
 
-#ifndef M1RIGF3_STRASSEN_H
-#define M1RIGF3_STRASSEN_H
+#include "m1riwrappers.h"
 #include "m1ri_3dt.h"
 #include "m1riarith.h"
-#include "m1ri_small.h"
 #include "m1ri_cubes.h"
- void m3d_strassen_total16(m3_slice * , m3_slice const * , m3_slice const * );
-void  m3d_strassen(m3d_t *, m3d_t *, m3d_t*);
-void mul_128(vbg *, vbg *, vbg *);
-void  m3d_mul_naive(m3d_t *, m3d_t *, m3d_t*);
-
-
-
-#endif
-
+#include "m1ri_io.h"
+#include "time.h"
+int main(int argc, const char * argv[])
+{
+    
+    m3d_t * a = m1ri_malloc(sizeof(m3d_t));
+    m3d_create(a, 128, 64);
+    m3d_rand(a);
+    m3d_print(a);
+    m3d_t b;
+    
+    //m3d_t * b1 = m1ri_malloc(sizeof(m3d_t));
+   // m3d_t *b2 = m1ri_malloc(sizeof(m3d_t));
+    //m3d_t *b3 = m1ri_malloc(sizeof(m3d_t));
+    //m3d_t *b4 = m1ri_malloc(sizeof(m3d_t));
+  //  m3d_window_create(a, b1, 0, 0, 1, 1);
+   // m3d_window_create(a, b2, 0, 1, 1, 1);
+    //m3d_window_create(a, b3, 1, 0, 1, 1);
+    //m3d_window_create(a, b4, 1, 1, 1, 1);
+    
+   m3d_transpose(a, &b);
+   // m3d_identity_set(b2);
+   // m3d_transposewin(b2);
+    //m3d_transposewin(b3);
+    m3d_print(&b);
+   // int f[x];
+    
+    free(a);
+    
+    return 0;
+}

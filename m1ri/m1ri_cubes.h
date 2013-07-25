@@ -65,9 +65,6 @@ typedef struct
 }m5_slice;
 
 
- void m3d_swap(m3d_t *  , m3d_t * );
-
-
 vbg * m3d_transpose_vbg(vbg  **a , vbg **b);
  m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width);
 

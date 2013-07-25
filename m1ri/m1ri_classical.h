@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
  
 */
-m3d_t m3d_mul_naive_row(m3d_t *, m3d_t *, m3d_t *);
+m3d_t m3d_mul_transposed(m3d_t *, m3d_t *, m3d_t *);
 
 /*
 Tom Boothys method

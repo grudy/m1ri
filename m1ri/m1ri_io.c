@@ -60,6 +60,7 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
         
         else
         {
+            
            printf("[ %d ]", out);
         }
      

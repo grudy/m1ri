@@ -32,15 +32,15 @@ m1ri_classical.h\
 m1ri_io.h
 
 
-check_PROGRAMS =  hadamard m3d_arith m3d_functions m5d_tests m7d_tests 
+check_PROGRAMS =  hadamard m3d_create_test m3d_functions m5d_tests m7d_tests 
 
 hadamard_SOURCES=tests/hadamard.c 
 hadamard_LDFLAGS=-lm1ri -lm
 hadamard__CFLAGS=$(AM_CFLAGS)
 
-m3d_arith_SOURCES=tests/m3d_arith.c 
-m3d_arith_LDFLAGS=-lm1ri -lm
-m3d_arith__CFLAGS=$(AM_CFLAGS)
+m3d_create_test_SOURCES=tests/m3d_create_test.c 
+m3d_create_test_LDFLAGS=-lm1ri -lm
+m3d_create_test__CFLAGS=$(AM_CFLAGS)
 
 m3d_functions_SOURCES=tests/m3d_functions.c 
 m3d_functions_LDFLAGS=-lm1ri -lm
@@ -54,6 +54,6 @@ m7d_tests_SOURCES=tests/m7d_tests.c
 m7d_tests_LDFLAGS=-lm1ri -lm
 m7d_tests__CFLAGS=$(AM_CFLAGS)
 
-TESTS =  hadamard m3d_arith m3d_functions m5d_tests m7d_tests 
+TESTS =  hadamard m3d_create_test m3d_functions m5d_tests m7d_tests 
 
 

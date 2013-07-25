@@ -57,22 +57,21 @@ vbg sub_m3dr(vbg , vbg );               //multiply matrix x by by matrix y.   Th
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-void iadd_vbg(vbg *,vbg const *);
+inline void iadd_vbg(vbg *,vbg  *);
 
-void isub_m3d(vbg *,vbg const *);
-
-
-
-void  vbg_mul( vbg *, vbg const *, vbg const *);             //multiply matrix x by y assinging the output to r
+void isub_m3d(vbg *,vbg  *);
 
 
 
+void  vbg_mul( vbg *, vbg  *, vbg  *);             //multiply matrix x by y assinging the output to r
+
+
+void m3d_sub( m3d_t *, m3d_t const *, m3d_t const *);
 
 //return the value of the matrix multiplied
 
 
 vbg vbg_mul_i(vbg const , vbg const);
-
 
 /*
     Hadamard multiplication
@@ -88,7 +87,7 @@ m3d_t * m3d_hadamard(m3d_t const *, m3d_t const *);
 
 
 
-void sub_64_m3d(vbg *, vbg const *, vbg const *);
+void sub_64_m3d(vbg **, vbg  **, vbg  **);
 
 
 /* * * * * * * * * * * * * * * * * * * * * *
@@ -96,10 +95,10 @@ void sub_64_m3d(vbg *, vbg const *, vbg const *);
  1 kilobyte Matrix
  * * * * * * * * * * * * * * * * * * * * * * */
 
-void add_64_m3d(vbg *, vbg const  *, vbg   const * );
+void add_64_m3d(vbg **, vbg   **, vbg    ** );
 
 
-m3d_t m3d_add(m3d_t const *, m3d_t const *);
+m3d_t m3d_add(m3d_t  *, m3d_t  *);
 
 
 

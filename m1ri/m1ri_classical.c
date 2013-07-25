@@ -29,8 +29,44 @@
 
 
 
-
 m3d_t m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t *b)
+{
+    
+    //vbg table[64];
+    
+    m3d_t * tb = m1ri_malloc(sizeof(m3d_t));
+    m3d_transpose(b, tb);
+    *c = m3d_create(c, a->nrows, b->ncols);
+    if (a->ncols == b->nrows)
+        // temp;
+    {
+        int j, k, u, remainder;
+        u = 0;
+        remainder = c->nrows%8;
+        
+        for (int i = 0 ;  i  < c->nrows - remainder ; i++) {
+            
+            k = i * c->width;
+            for (j = 0; j < c->width ; j++)
+            {
+                for(u = 0; u < 64;u ++)
+                {
+                    
+                    
+                    
+                }
+         
+            }
+            
+        }
+        
+    }
+    
+    return *c;
+    
+}
+
+m3d_t m3d_mul_transposed(m3d_t *c, m3d_t *a, m3d_t *b)
 {
    
       vbg table[64];
@@ -107,6 +143,9 @@ m3d_t m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t *b)
     
     return  *c;
 }
+
+
+
 
 /*
  Tom Boothys method
