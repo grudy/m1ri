@@ -37,8 +37,9 @@
  */
 void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
 {
+	int x;
     bool out;
-    for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
+    for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
         if((out == 0) && (b & (leftbit  >> x)))
@@ -136,8 +137,8 @@ void m3d_print(m3d_t *a)
 void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
 {
     bool out[3];
-    short value ;
-    for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
+    short value, x ;
+    for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         
         value = 0;
@@ -252,8 +253,8 @@ void m5d_print(m5d_t *a)
 void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
 {
     u_int64_t out[3];
-    short value ;
-    for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
+    short value, x ;
+    for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         
         

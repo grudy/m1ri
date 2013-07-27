@@ -1,6 +1,6 @@
-
-/*
- Matrix Represenations and basic operations
+/*  Cube Form
+ //
+ //  m1riproject
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -20,22 +20,76 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
-m1ri_strassen.h
+ //  Copyright (c) 2013 William Alumbaugh. All rights reserved.
+ 
+ m1ri_cubes.h
  */
 
 
-#ifndef M1RIGF3_STRASSEN_H
-#define M1RIGF3_STRASSEN_H
+#ifndef m1riproject_m1ri_cubes_h
+#define m1riproject_m1ri_cubes_h
+
+
+
+
 #include "m1ri_3dt.h"
-#include "m1riarith.h"
-#include "m1ri_small.h"
-#include "m1ri_cubes.h"
- void m3d_strassen_total16(m3_slice * , m3_slice const * , m3_slice const * );
-void  m3d_strassen(m3d_t *, m3d_t *, m3d_t*);
-void mul_128(vbg *, vbg *, vbg *);
-void  m3d_mul_naive(m3d_t *, m3d_t *, m3d_t*);
+#include "m5d.h"
+
+/*
+ A 2d array of m3d_t's , for storing windows
+ 
+ */
+typedef struct
+{
+    
+    
+    m3d_t * block;//where the m3d_t windows are stored
+    m3d_t ** row;   //'rows' of m3d_t windows are pointed to
+    wi_t slicesize;// (slicesize ^ 2) * 64
+    wi_t width;   ///width in slices horizaontally per row
+    rci_t nrows;
+    rci_t ncols;
+    
+    
+}m3_slice;
+
+typedef struct
+{
+    
+    m3d_t * block;//where the m3d_t windows are stored
+    m3d_t ** row;   //'rows' of m3d_t windows are pointed to
+    wi_t width;   ///width in slices horizaontally per row
+    rci_t extracols;
+    rci_t extrarow;
+}m3d_quarter;
+
+typedef struct
+{
+    
+    
+    m5d_t * block;
+    m5d_t ** row;
+    wi_t slicesize;// (slicesize ^ 2) * 64
+    wi_t width;   ///width in slices horizaontally per row
+    rci_t nrows;
+    rci_t ncols;
+    
+}m5_slice;
 
 
+vbg * m3d_transpose_vbg(vbg  **a , vbg **b);
+m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width);
+
+m3d_t ** m3_rowslice_allocate(m3d_t * block, m3d_t ** rows, wi_t width, rci_t nrows);
+
+m3d_t  m3d_cubes(m3d_t *, m3d_t   * , rci_t );
+void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
+//A direct transpose, using no windows
+void  m3d_transpose(m3d_t * , m3d_t * );
+void m3d_mul_slicerow(m3_slice *  , m3_slice  * , m3_slice *   , rci_t *   );
+m3d_t m3d_transpose_sliced(m3d_t * );
+m5d_t  * m5_blockslice_allocate(m5d_t * , rci_t  ,  wi_t  );
+
+m5d_t ** m5_rowslice_allocate(m5d_t * , m5d_t ** , wi_t , rci_t );
 
 #endif
-

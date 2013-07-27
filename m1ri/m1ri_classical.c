@@ -40,11 +40,11 @@ m3d_t m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t *b)
     if (a->ncols == b->nrows)
         // temp;
     {
-        int j, k, u, remainder;
+        int j, k, u, i,  remainder;
         u = 0;
         remainder = c->nrows%8;
         
-        for (int i = 0 ;  i  < c->nrows - remainder ; i++) {
+        for ( i = 0 ;  i  < c->nrows - remainder ; i++) {
             
             k = i * c->width;
             for (j = 0; j < c->width ; j++)
@@ -77,11 +77,11 @@ m3d_t m3d_mul_transposed(m3d_t *c, m3d_t *a, m3d_t *b)
     if (a->ncols == b->nrows)
        // temp;
     {
-        int j, k, u, remainder;
+        int j, k, u, i, remainder;
         u = 0;
         remainder = c->nrows%8;
         
-        for (int i = 0 ;  i  < c->nrows - remainder ; i = i + 8) {
+        for ( i = 0 ;  i  < c->nrows - remainder ; i = i + 8) {
             
             k = i * c->width;
             for (j = 0; j < c->width ; j++)

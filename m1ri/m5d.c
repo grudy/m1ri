@@ -238,11 +238,11 @@ vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows)
     
     
     
-    
+    int i;
     rows = m1ri_malloc( nrows * width * sizeof(vfd *));
     
     
-    for (int i = 0; i <  nrows;  i++ )
+    for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = (block + (i * width));
         
@@ -365,8 +365,8 @@ void   m5d_window_create(m5d_t *c, m5d_t * submatrix, rci_t strow, rci_t stvfd, 
 
 vfd * m5d_rand(m5d_t * a)
 {
-    
-    for(int i = 0; i < (a->nrows * a->width); i++)
+    int i;
+    for( i = 0; i < (a->nrows * a->width); i++)
     {
         
         a->block[i].sign = m1ri_rand();

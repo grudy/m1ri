@@ -173,8 +173,9 @@ vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width)
 
 vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows)
 {
+	int i;
     rows = m1ri_malloc( nrows * width * sizeof(vtri *));
-    for (int i = 0; i <  nrows;  i++ )
+    for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = (block + (i * width));
     };
@@ -283,8 +284,8 @@ void   m7d_window_create(m7d_t *c, m7d_t * submatrix, rci_t strow, rci_t stvtri,
  */
 vtri * m7d_allone(m7d_t * a)
 {
-    
-    for(int i = 0; i < (a->nrows * a->width); i++)
+    int i;
+    for( i = 0; i < (a->nrows * a->width); i++)
     {
         
         a->block[i].sign = 0xffffffffffffffff;
@@ -303,8 +304,8 @@ vtri * m7d_allone(m7d_t * a)
 
 m7d_t  m7d_rand(m7d_t * a)
 {
-    
-    for(int i = 0; i < (a->nrows * a->width); i++)
+    int i;
+    for( i = 0; i < (a->nrows * a->width); i++)
     {
         
         a->block[i].sign = m1ri_rand();

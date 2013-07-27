@@ -29,8 +29,8 @@
 m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
 {
 
-          u_int64_t l, i, f, x, y, z, lf, r, extracols, extrarows, colroundeddown;
-       // int l, i, f, x, y, z, lf, r, extracols, extrarows, colroundeddown;
+    
+        int l, i, f, x, y, z, lf, r, extracols, extrarows, colroundeddown;
         extracols = a->width%slicesize;
         colroundeddown = a->width/slicesize;
         c->ncols = DN(a->width, slicesize);
@@ -139,8 +139,9 @@ m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
 
  m3d_t ** m3_rowslice_allocate(m3d_t * block, m3d_t ** rows, wi_t width, rci_t nrows)
 {
+	int i;
     rows = m1ri_calloc( nrows , width  * sizeof(m3d_t *));
-    for (int i = 0; i <  nrows;  i++ )
+    for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = block + (i * width);
     };
@@ -232,7 +233,7 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
 }
 
 // 
-  void m3d_transpose(m3d_t  * restrict a, m3d_t *  restrict b)
+  void m3d_transpose(m3d_t  *  a, m3d_t *   b)
 {
    
     *b = m3d_create(b, a->ncols, a->nrows);
@@ -336,8 +337,9 @@ m5d_t  * m5_blockslice_allocate(m5d_t * block, rci_t  nrows,  wi_t  width)
 
 m5d_t ** m5_rowslice_allocate(m5d_t * block, m5d_t ** rows, wi_t width, rci_t nrows)
 {
+	int i;
     rows = m1ri_malloc( nrows * width * sizeof(m5d_t *));
-    for (int i = 0; i <  nrows;  i++ )
+    for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = block + i * width;
     };

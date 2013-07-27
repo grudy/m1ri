@@ -101,6 +101,7 @@ void combine4(vbg *table, vbg *input )
 
 void combine5(vbg *table, vbg *input )
 {
+	int i;
     vbg e, *t4;
     
     
@@ -110,7 +111,7 @@ void combine5(vbg *table, vbg *input )
     t4 = table + 16;
     table[16] = e;
     
-    for (int i = 1; i < 16 ; i ++ ) {
+    for ( i = 1; i < 16 ; i ++ ) {
         add_vbg(t4 + i, table + i, &e);
     }
     

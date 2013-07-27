@@ -2,27 +2,27 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([libm1ri], [0.01])
-AC_CANONICAL_SYSTEM
-AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE
-AC_PROG_LIBTOOL
-LT_INIT
-AC_PROG_INSTALL
-AC_PROG_CC_C99()
-AC_CONFIG_SRCDIR([m1ri/m1ri.c])
-
+AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
+AC_CONFIG_SRCDIR([m1ri/m1ri_3dt.c])
 AC_CONFIG_HEADERS([config.h])
+AM_INIT_AUTOMAKE
 # Checks for programs.
-
+AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_CC
+LT_INIT
 # Checks for libraries.
-
+# FIXME: Replace `main' with a function in `-lm':
+AC_CHECK_LIB([m], [main])
+# FIXME: Replace `main' with a function in `-lm1ri':
+AC_CHECK_LIB([m1ri], [main])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdint.h stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
+AC_C_RESTRICT
 AC_TYPE_SIZE_T
 
 # Checks for library functions.

@@ -126,18 +126,19 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
 {
     if((M->ncols >= (col_a ) && (M->nrows >= col_b)))
     {
+        int i;
+        vec block_a, block_b, dif_a, dif_b, a_place, b_place; 
+        vbg tempa, tempb;
+         block_a = col_a/m1ri_word;
+         block_b = col_b/m1ri_word;
+         dif_a = col_a%m1ri_word;
+         dif_b = col_b%m1ri_word;
+         a_place =  leftbit >>  dif_a ;
+         b_place =  leftbit >> dif_b ;
+       
         
-        vec block_a = col_a/m1ri_word;
-        vec block_b = col_b/m1ri_word;
-        vec dif_a = col_a%m1ri_word;
-        vec dif_b = col_b%m1ri_word;
-        vec a_place =  leftbit >>  dif_a ;
-        vec b_place =  leftbit >> dif_b ;
-        vbg tempa;
-        vbg tempb;
         
-        
-        for(int i = 0; i > M->nrows; i++)
+        for( i = 0; i > M->nrows; i++)
         {
             
             
@@ -197,10 +198,10 @@ m3d_t m3d_create( m3d_t *  a, rci_t nrows, rci_t ncols)
 }
 m3d_t  m3d_rand(m3d_t * a)
 {
-    
-    for(int i = 0; i < (a->nrows); i++)
+    int i,  z;
+    for(i = 0; i < (a->nrows); i++)
     {
-        for(int z = 0; z  < (a->width); z++)
+        for( z = 0; z  < (a->width); z++)
             {
         
        a->rows[i][z].units = m1ri_rand();

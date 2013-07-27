@@ -144,8 +144,9 @@ static inline void  * m3d_block_allocate(vbg * block, rci_t  nrows,  wi_t  width
 
 static inline vbg ** m3d_row_alloc(vbg * block, vbg ** rows, wi_t width, rci_t nrows)
 {
+	int i;
     rows = m1ri_malloc( nrows * width * sizeof(vbg *));
-    for (int i = 0; i <  nrows;  i++ )
+    for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = block + i * width;
     };

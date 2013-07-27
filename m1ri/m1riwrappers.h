@@ -116,12 +116,9 @@ static inline u_int64_t  m1ri_rand()
     
     
     
-  // u_int64_t randomword1 = random();
-   // u_int64_t randomword2 = random();
-   u_int64_t randomword1 = arc4random();
-  u_int64_t randomword2 = arc4random();
-   // randomword1 = randomword1  * 2;
-   // randomword2 = randomword2  * 2;
+   u_int64_t randomword1 = random();
+    u_int64_t randomword2 = random();
+  
     
     randomword1 = randomword1  + (randomword2<< 32) ;
     
@@ -250,7 +247,7 @@ typedef struct {
 
 
 //When to switch  from Strassen
-static int const cutoff = m1ri_word;
+static  const int cutoff = 64;
 
 
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
