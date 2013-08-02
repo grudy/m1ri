@@ -34,8 +34,8 @@ m3d_t m3d_mul_naive(m3d_t *c, m3d_t *a, m3d_t *b)
     
     //vbg table[64];
     
-    m3d_t * tb = m1ri_malloc(sizeof(m3d_t));
-    m3d_transpose(b, tb);
+   // m3d_t * tb = m1ri_malloc(sizeof(m3d_t));
+   
     *c = m3d_create(c, a->nrows, b->ncols);
     if (a->ncols == b->nrows)
         // temp;
@@ -72,7 +72,7 @@ m3d_t m3d_mul_transposed(m3d_t *c, m3d_t *a, m3d_t *b)
       vbg table[64];
      
     m3d_t * tb = m1ri_malloc(sizeof(m3d_t));
-    m3d_transpose(b, tb);
+   // m3d_transpose(b, tb);
     *c = m3d_create(c, a->nrows, b->ncols);
     if (a->ncols == b->nrows)
        // temp;
@@ -149,10 +149,7 @@ m3d_t m3d_mul_transposed(m3d_t *c, m3d_t *a, m3d_t *b)
 
 /*
  Tom Boothys method
- 
- 
- 
- 
+
  vbg mul_128_inner(vbg a, vbg r1, vbg tables6[9][64], vbg tables5[9][32]){
  vec v1, v2;
  vbg t1, t2, r2;
@@ -183,7 +180,6 @@ m3d_t m3d_mul_transposed(m3d_t *c, m3d_t *a, m3d_t *b)
  isubgf3(&r1, &r2);
  return r1;
  }
- 
  
  
  inline void mul_128(vbg *RR, vbg *AA, vbg *BB)

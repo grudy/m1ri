@@ -39,15 +39,15 @@ m3d_t m3d_mul_transposed(m3d_t *, m3d_t *, m3d_t *);
 
 /*
 Tom Boothys method
-*/
- 
+
+
 
 
 vbg mul_128_inner(vbg , vbg , vbg , vbg );
 
 
 inline void mul_128(vbg *, vbg *, vbg *);
-
+*/
 
 
 

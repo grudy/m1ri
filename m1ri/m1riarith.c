@@ -240,5 +240,32 @@ m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
     
     
 }
-
+void m3d_add_r(m3d_t * c, m3d_t  *a, m3d_t  *b)
+{
+    
+    
+   
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+      m3d_create(c, a->nrows , b->ncols);
+        int i, j;
+        
+        for( i = 0; i < a->nrows; i++)
+        {
+            for(j = 0; j < (a->width ); j++)
+            {
+                
+                add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+                
+            }
+            
+            
+        }
+        
+    }
+    
+  
+    
+    
+}
 

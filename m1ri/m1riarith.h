@@ -26,7 +26,7 @@
 #ifndef M1RIPROJECT_M1RIELARITH_H
 #define M1RIPROJECT_M1RIELARITH_H
 
-#include "m1ri_3dt.h"
+#include <m1ri/m1ri_3dt.h>
 
 
 
@@ -48,16 +48,10 @@ vbg sub_m3dr(vbg , vbg );               //multiply matrix x by by matrix y.   Th
 
 
 
-
-
-
-
-
-
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-inline void iadd_vbg(vbg *,vbg  *);
+void iadd_vbg(vbg *,vbg  *);
 
 void isub_m3d(vbg *,vbg  *);
 
@@ -72,7 +66,7 @@ void m3d_sub( m3d_t *, m3d_t const *, m3d_t const *);
 
 
 vbg vbg_mul_i(vbg const , vbg const);
-
+void m3d_add_r(m3d_t * , m3d_t  *, m3d_t  *);
 /*
     Hadamard multiplication
 */

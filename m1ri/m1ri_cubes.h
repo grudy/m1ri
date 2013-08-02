@@ -32,8 +32,8 @@
 
 
 
-#include "m1ri_3dt.h"
-#include "m5d.h"
+#include <m1ri/m1ri_3dt.h>
+#include <m1ri/m5d.h>
 
 
 typedef struct
@@ -48,6 +48,7 @@ typedef struct
     rci_t ncols;
     
 }m3_slice;
+
 
 
 
@@ -73,6 +74,7 @@ vbg * m3d_transpose_vbg(vbg  **a , vbg **b);
 m3d_t  m3d_cubes(m3d_t *, m3d_t   * , rci_t );
 void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
 //A direct transpose, using no windows
+void  m3d_quarter(m3_slice *  , m3d_t * );
 void  m3d_transpose(m3d_t * , m3d_t  *);
 m3d_t m3d_transpose_sliced(m3d_t * );
 m5d_t  * m5_blockslice_allocate(m5d_t * , rci_t  ,  wi_t  );

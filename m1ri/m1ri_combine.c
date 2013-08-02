@@ -19,7 +19,7 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "m1ri_combine.h"
+#include <m1ri/m1ri_combine.h>
 
 
 void *  combine3(vbg *table, vbg *input )

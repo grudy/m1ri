@@ -76,85 +76,8 @@ void m3d_strassen_total16(m3_slice *c, m3_slice const *a, m3_slice const *b)
     
 }
 
-void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
-{
-    if(a->ncols == b->nrows)
-    {
-        m3d_create(c, a->nrows   , b->ncols);
-        
-        
-        if(((a->ncols%m1ri_word) && (b->nrows%m1ri_word)) == 0 )
-        {
-            
-            int t, x,recursions,  slrow, slwidth, rowdiv, coldiv, themax ;
-            slrow =   DN(a->nrows, cutoff);
-            slwidth = b->width;
-            
-            t = 64;
-            rowdiv = 1;
-            
-            while (t < slrow) {
-                t = t * 2;
-                rowdiv++;
-                
-            }
-            
-            t = 64;
-            coldiv = 1;
-            while (t < slwidth) {
-                
-                
-                t = t * 2;
-                rowdiv++;
-                
-            }
-            themax = MAX(rowdiv, coldiv);
-            m3_slice a_sliced[themax], b_sliced[themax], c_sliced[themax];
-            
-            if(themax > 1)
-            {
-                recursions = 1;
-                for(x = themax; x > 1 ; x =  DN(x, 2))
-                {
-                    
-                    m3d_slices(&a_sliced[recursions], &a_sliced[recursions -1].row[0][1], x);
-                    m3d_slices(&b_sliced[recursions], &b_sliced[recursions -1].row[0][1], x);
-                    m3d_slices(&c_sliced[recursions], &c_sliced[recursions -1].row[0][1], x);
-                    
-                    m3d_slices(&a_sliced[recursions], &a_sliced[recursions -1].row[1][1], x);
-                    m3d_slices(&b_sliced[recursions], &b_sliced[recursions -1].row[1][1], x);
-                    m3d_slices(&c_sliced[recursions], &c_sliced[recursions -1].row[1][1], x);
-                    
-                    m3d_slices(&a_sliced[recursions], &a_sliced[recursions -1].row[0][1], x);
-                    m3d_slices(&b_sliced[recursions], &b_sliced[recursions -1].row[0][1], x);
-                    m3d_slices(&c_sliced[recursions], &c_sliced[recursions -1].row[0][1], x);
-                    
-                    m3d_slices(&a_sliced[recursions], &a_sliced[recursions -1].row[0][1], x);
-                    m3d_slices(&b_sliced[recursions], &b_sliced[recursions -1].row[0][1], x);
-                    m3d_slices(&c_sliced[recursions], &c_sliced[recursions -1].row[0][1], x);
-                    recursions ++;
-                }
-                
-                if(themax == 1)
-                {
-                    mul_64_m3d(c->rows, a->rows, b->rows);
-                    
-                }
-                
-                
-            }
-            
-            
-            
-        }
-        
-        
-        
-    }
-    
-    
-}
 
+//Strassen winograd arithmatic on slices of size row
 void m3d_mul_slicerow(m3_slice *  c, m3_slice  *  a, m3_slice *   b, rci_t * rownum )
 {
     int colnum;
@@ -205,12 +128,76 @@ void m3d_mul_slicerow(m3_slice *  c, m3_slice  *  a, m3_slice *   b, rci_t * row
     
 }
 
+
+void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
+{
+    m3d_t * x1, *x2;
+    x1 = x2 = m1ri_malloc(sizeof(m3d_t));
+    m3_slice  a_slice, b_slice, c_slice;
+    m3d_create(x1, c->nrows, c->ncols);
+    m3d_create(x2, c->nrows, c->ncols);
+    m3d_quarter(&a_slice, a);
+    m3d_quarter(&b_slice, b);
+    m3d_quarter(&c_slice, c);
+    
+    if((c_slice.row[0][0].ncols) > cutoff)
+    {
+       
+        
+        m3d_qrt_mul(&c_slice.row[0][0], &b_slice.row[0][0], &a_slice.row[0][0]);
+        m3d_qrt_mul(&c_slice.row[0][1], &b_slice.row[0][1], &a_slice.row[0][1]);
+        m3d_qrt_mul(&c_slice.row[1][0], &b_slice.row[1][0], &a_slice.row[1][0]);
+        m3d_qrt_mul(&c_slice.row[1][1], &b_slice.row[1][1], &a_slice.row[1][1]);
+        
+        
+        
+    
+    }
+    
+    else if((c_slice.row[0][0].ncols ) <= cutoff)
+    {
+        
+        m3d_strassen_total16(&c_slice, &a_slice, &c_slice);
+        /*
+        m3d_sub(x1, &a_slice.row[0][0], &a_slice.row[1][0]);
+        m3d_sub(x2,&b_slice.row[1][1],&b_slice.row[0][1]);
+        m3d_qrt_mul(&c_slice.row[1][0], x1, x2);
+        m3d_add_r(x1,&a_slice.row[1][0],&a_slice.row[1][1]);
+        m3d_sub(x2,&b_slice.row[0][1],&b_slice.row[0][0]);  //5
+        m3d_qrt_mul(&c_slice.row[1][0], x1, x2);    //6
+        m3d_sub(x1,x1,&a_slice.row[0][0]);//7
+        m3d_sub(x2,&b_slice.row[1][1],x2);  //8
+        m3d_qrt_mul(&c_slice.row[0][1],x1,x2); //9
+        m3d_sub(x1,&a_slice.row[0][1],x1);    //10
+        m3d_qrt_mul(&c_slice.row[0][0],x1,&b_slice.row[1][1]);   //11
+        m3d_qrt_mul(x1, &a_slice.row[1][1], &b_slice.row[1][1]);  //12
+        m3d_add_r(&c_slice.row[0][1],x1 , &c_slice.row[0][1]);   //13
+        m3d_add_r(&c_slice.row[1][0],&c_slice.row[0][1] , &c_slice.row[1][0]);   //14
+        m3d_add_r(&c_slice.row[0][1],&c_slice.row[0][1] , &c_slice.row[1][1]);   //15
+        m3d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);    //16
+        m3d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);  //17
+        m3d_sub(x2, x2, &b_slice.row[1][0]);            //18
+        m3d_qrt_mul(&c_slice.row[1][0], &a_slice.row[1][1], x2);            //19
+        m3d_sub(&c_slice.row[0][0], &c_slice.row[1][0], &c_slice.row[0][0]);  //20
+        m3d_qrt_mul(&c_slice.row[0][0], &a_slice.row[0][1], &b_slice.row[1][0]);
+        m3d_add_r(&c_slice.row[0][0], x1,&c_slice.row[0][0] );
+        */
+     
+    }
+    
+    
+    
+    
+}
+
+
+
 void  m3d_strassen_window_directly(m3d_t *c, m3d_t  *a, m3d_t   *b)
 {
     if(a->ncols == b->nrows)
     {
         int i;
-        bool rowsextra, colsextra;
+        int rowsextra, colsextra;
         m3_slice  * a_slices ,  *  b_slices  ,  * c_slices ;
         a_slices = m1ri_malloc(sizeof(m3_slice));
         b_slices = m1ri_malloc(sizeof(m3_slice));
@@ -225,7 +212,13 @@ void  m3d_strassen_window_directly(m3d_t *c, m3d_t  *a, m3d_t   *b)
         for( i = 0;i < c_slices->nrows -rowsextra; i = i + 2)
         {
             m3d_mul_slicerow( c_slices, b_slices, a_slices, &i);
+         
+            
+            
+            
         }
+        
+     
         if(rowsextra)
         {
             
@@ -234,13 +227,44 @@ void  m3d_strassen_window_directly(m3d_t *c, m3d_t  *a, m3d_t   *b)
         }
         
         
+    }
+    
+    
+    
+    
+}
+
+
+void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
+{
+    if(a->ncols == b->nrows)
+    {
+       // int maxdiv, divfac, ln_cut, slicecount;
+ 
+        m3d_create(c, a->nrows   , b->ncols);
+       /* if((c->nrows  >= 128)&& (c->width  >= 2))
+        {
+            int ecol, erow;
+            erow = a->nrows%
+            
+            while()
+            m3d_t * a_fwindow, * b_fwindow, * c_fwindow;
+            m3d_window_create(a, a_fwindow, 0, 0, a->nrows - , <#rci_t#>)
+            
+        
+        
+        }*/
+    
+        
+        
+        
+        
         
     }
     
     
     
 }
-
 
 
 

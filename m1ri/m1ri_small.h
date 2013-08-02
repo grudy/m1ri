@@ -21,10 +21,10 @@
  */
 #ifndef M1RIGF3_SMALLGF3_H
 #define M1RIGF3_SMALLGF3_H
-#include"m1ri_3dt.h"
-#include "m1ri_combine.h"
-#include "m1riarith.h"
-#include "m1riwrappers.h"
+#include"m1ri/m1ri_3dt.h"
+#include "m1ri/m1ri_combine.h"
+#include "m1ri/m1riarith.h"
+#include "m1ri/m1riwrappers.h"
 
 
 

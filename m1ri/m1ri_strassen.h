@@ -26,16 +26,15 @@
 
 #ifndef M1RIGF3_STRASSEN_H
 #define M1RIGF3_STRASSEN_H
-#include "m1ri_3dt.h"
-#include "m1riarith.h"
-#include "m1ri_small.h"
-#include "m1ri_cubes.h"
+#include <m1ri/m1ri_3dt.h>
+#include <m1ri/m1riarith.h>
+#include <m1ri/m1ri_small.h>
+#include <m1ri/m1ri_cubes.h>
 void m3d_strassen_total16(m3_slice * , m3_slice const * , m3_slice const * );
 void  m3d_strassen(m3d_t *, m3d_t *, m3d_t*);
-void mul_128(vbg *, vbg *, vbg *);
-void  m3d_mul_naive(m3d_t *, m3d_t *, m3d_t*);
-
-
+void m3d_mul_slicerow(m3_slice * , m3_slice *  , m3_slice * , rci_t *);
+void  m3d_strassen_window_directly(m3d_t *, m3d_t * , m3d_t   *);
+void m3d_qrt_mul(m3d_t * ,m3d_t *, m3d_t *  );
 
 #endif
 

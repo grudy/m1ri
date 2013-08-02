@@ -22,46 +22,58 @@
  */
 
 
-#include "m1ri/m1riwrappers.h"
-#include "m1ri/m1ri/m1ri_3dt.h"
-#include "m1ri/m1riarith.h"
-#include "m1ri/m1ri_cubes.h"
-#include "m1ri/m1ri_small.h"
-#include "m1ri/m1ri_strassen.h"
-#include "m1ri/m1ri_combine.h"
-#include "m1ri/m1ri_classical.h"
-#include "m1ri/m1ri_io.h"
-#include "time.h"
+#include <m1ri/m1ri.h>
+#include <time.h>
 int main(int argc, const char * argv[])
 {
-    time_t before;
-    time(&before);
+    int isequal;
+    m5d_t * a, * b,  *d, *e;
+    a = b  = d = e =   m1ri_malloc(sizeof(m5d_t));
+    m5d_rand(a);
     
-    
-    m3d_t bunches[30];
-    m3d_t plenitude[30];
-    m3d_t  oodles[30];
-    for (int x = 0; x < 30; x ++)
+    m5d_rand(b);
+    isequal = m5d_equal(a, b);
+    if(isequal)
     {
-        
-        
-        
-        plenitude[x] = m3d_create(&bunches[x], 16384, 16384);
-        bunches[x]  = m3d_create(&plenitude[x],  16384, 16384);
-        oodles[x]  = m3d_create(&oodles[x], 16384, 16384);
-        plenitude[x]  = m3d_rand(&plenitude[x]);
-        bunches[x]  = m3d_rand(&bunches[x]);
-        plenitude[x]  = m3d_rand(&plenitude[x]);
-        plenitude[x] =  m3d_hadamard(&plenitude[x], &plenitude[x]);
-        
+        printf("Equaltest: passed ");
         
     }
     
-    time_t after;
-    time(&after);
-    double time_test_m1ri = difftime( after, before);
+    if(!isequal)
+    {
+        printf("Equaltest: failed ");
+        return 1;
+        
+    }
     
-    printf("%9f", time_test_m1ri );
+    m5d_t test_m5d_output  = m5d_create( &test_m5d_output, 3   ,3);
+    
+    m5d_rand(&test_m5d_output);
+    
+    m5d_print(&test_m5d_output);
+    
+    m5d_write_elem(&test_m5d_output, 1, 1, 1, 1, 1);
+    
+    
+    m5d_identity(d,64);
+    m5d_identity(e,64);
+    isequal = m5d_equal(d, e);
+    
+    if(isequal)
+    {
+        printf("Equaltest: passed ");
+        
+    }
+    
+    if(!isequal)
+    {
+        printf("Equaltest: failed ");
+        return 1;
+        
+    }
+    m5d_print(&test_m5d_output);
+    
+    
     
     return 0;
 }

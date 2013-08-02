@@ -34,9 +34,7 @@
 
 vec m5d_rm_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
     
-    
-    
-    
+
     
     wi_t  block = (y  ) / 64;
     
@@ -54,8 +52,6 @@ vec m5d_rm_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 
 
 vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
-    
-    
     
     
     
@@ -82,9 +78,6 @@ vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
     
     
-    
-    
-    
     wi_t  block = (y  ) / 64;
     
     int  spill = (y  % 64) + n - 64;
@@ -92,11 +85,7 @@ vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
     vec bits;
     
     bits = (spill <= 0) ? M->rows[x][block].units << -spill : (M->rows[x][block + 1].units<< (64 - spill)) | (M->rows[x][block].units>> spill);
-    
-    
-    
-    
-    
+  
     return bits;
     
     
@@ -160,8 +149,7 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
         temp =  *M->rows[row_a -1];
         *M->rows[row_a -1] = *M->rows[row_b -1];
         *M->rows[row_b -1] =  temp;
-        
-        
+      
         
     }
     
@@ -180,7 +168,7 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
 
 
 //unfinished
-void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u )
+void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u , vec m)
 {
     
     
@@ -198,7 +186,7 @@ void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u )
     M->rows[x][block].units  = (u == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
     
     M->rows[x][block].sign  = (s == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
-    M->rows[x][block].middle  = (s == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
+    M->rows[x][block].middle  = (m == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (64 - spill)) | (M->rows[x][block].units));
     
     return 0;
     
@@ -494,48 +482,123 @@ void m5d_free( m5d_t *  tofree)
 }
 
 
-void addgf5(vfd * r, vfd * x, vfd * y)
+void addgf5(vfd * r, vfd * a, vfd * b)
 
 {
-    S A;
-    A.s0 =  x->sign ^ y->sign;
-    A.s1 =  (x->middle ^ y->middle) ^ A.s0;
-    A.s2 = (x->units ^ y->units)  ^ A.s1;
-    A.s3 = (x->units & y->units);
-   
-    *r = fold5(A.s3, A.s2, A.s1, A.s0);
+    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    c = b->units ^ a->units;
+    d = b->middle ^ a->middle;
+    e = b->sign ^ a->sign;
+    f = d & c;
+    g = f | b->middle;
+    h = f ^ a->sign;
+    i = h | e;
+/**/r->sign = i;
+    j = i ^ b->units;
+    k = j ^ a->middle;
+    l = k | c;
+    m = l ^ e;
+    n = m ^ g;
+/**/r->middle = n;
+    o = m | d;
+    p = o ^ c;
+    q = p^n;
+    /**/r->sign = q;
+
     
-    
+   /* def add(a,b):
+    c = b[0] ^ a[0]
+    d = b[1] ^ a[1]
+    e = b[2] ^ a[2]
+    f = d & c
+    g = f | b[1]
+    h = f ^ a[2]
+    i = h | e
+    j = i ^ b[0]
+    k = j ^ a[1]
+    l = k | c
+    m = l ^ e
+    n = m ^ g
+    o = m | d
+    p = o ^ c
+    q = p ^ n
+    return q,n,i
+    */
     
 }
 
-vfd m5d_add_r(vfd  *x, vfd *y)
+void m5d_add2(vfd * r, vfd * a, vfd * b)
 {
-   S A;
-    A.s0 =  x->sign ^ y->sign;
-    A.s1 =  (x->middle ^ y->middle) ^ A.s0;
-    A.s2 = (x->units ^ y->units)  ^ A.s1;
-    A.s3 = (x->units & y->units);
     
-    vfd r = fold5(A.s3, A.s2, A.s1, A.s0);
-    return r;
+    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    c = b->units ^ a->middle;
+    d = b->middle ^ a->units;
+    e = c & a->middle;
+    f = d ^ b->sign;
+    g = d ^ a->sign;
+    h = g | f;
+    i = h | c;
+/**/r->units = 
+    j = h | e;
+    k = h ^ a->sign;
+    l = k | b->middle;
+    m = l & j;
+    n = m ^ c;
+    o = n | c;
+    p = o ^ f;
+    q = p ^ e;
+
+    
+
+
+
+
+}
+
+
+void m5d_sub( vfd *r, vfd *a, vfd *b)
+
+{
+    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    c = b->units ^ a->units;
+    d = b->middle ^ a->middle;
+    e = c ^ b->sign;
+    f = e ^ b->middle;
+    g = f ^ a->sign;
+    h = g | d;
+    i = h | c;
+    j = i ^ c;
+    k = j & a->sign;
+    l = k | b->middle;
+    m = l ^ g;
+    n = m ^ a->middle;
+    o = m | d;
+    p = o ^ c;
+    q = p ^ a->middle;
+    q = r->units;
+    
+    /*
+    def sub(a,b):
+    c = b[0] ^ a[0]
+    d = b[1] ^ a[1]
+    e = c ^ b[2]
+    f = e | b[0]
+    g = f ^ a[2]
+    h = g | d
+    i = h | c
+    j = i ^ c
+    k = j & a[2]
+    l = k | b[1]
+    m = l ^ g
+    n = m ^ a[1]
+    o = m | d
+    p = o ^ c
+    q = p ^ a[1]
+    return q,n,i
+    */
     
 }
 
-void m5d_sub( vfd *r, vfd *x, vfd *y)    
-
-{
-    
-    
-    
-}
-
-vfd m5d_sub_r(vfd x, vfd y)
-
-{
-    vfd r;
-    return r;
-}
 
 
 
@@ -545,43 +608,15 @@ vfd m5d_sub_r(vfd x, vfd y)
  ********************************************/
 void iaddgf5(vfd *r,vfd *x)
 {
-    
-    S A;
-    A.s0 =  x->sign ^ r->sign;
-    A.s1 =  (x->middle ^ r->middle) ^ A.s0;
-    A.s2 = (x->units ^ r->units)  ^ A.s1;
-    A.s3 = (x->units & r->units);
-    
-     *r = fold5(A.s3, A.s2, A.s1, A.s0);
-    
-    
+  
+   
     
     
     
     
 }
 
-/*
- 
- def v5mul2(a,b,c):
- return c&b, c, c^a
- 
- def v5mul3(a,b,c):
- x = c ^ b
- return x, x|a, b
- 
- def v5mul4(a,b,c):
- x = c ^ a
- y = y & c
- return y, x, y^b
- 
- 
- 0 = 000
- 1 = 001
- 2 = 011
- 3 = 101
- 4 = 111
-*/
+
 vfd m5d_mul2(vfd a)
 {
     vec temp = a.sign;
@@ -622,58 +657,35 @@ void isubgf5(vfd *r,vfd *x)  //matrix r = (matrix r - matrix x)
 }
 
 
-
-void  m5d_mul( vfd *r, vfd *x, vfd *y)             //multiply matrix x by y assinging the output to r
+int m5d_equal(m5d_t const *a, m5d_t const *b)
 {
     
-}
-
-
-
-
-//return the value of the matrix multiplied
-
-
-m5d_t m5d_hadamard(m5d_t * a, m5d_t * b)
-{
-    m5d_t h_5;
-    return h_5;
-}
-
-
-
-vfd m5d_mul_i(vfd x, vfd y)
-{
-    vfd r;
-    r.units = x.units & y.units;
-    r.sign  = (y.sign ^ x.sign) & (r.units);
-    
-    return r;
-    
-}
-
-
-
-
-
-
-
-void sub_64gf5(vfd *R, vfd *A, vfd *B)
-{
-    int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
+    if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
     {
-        R[i] = m5d_sub_r(A[i], B[i]);
+        return 0;
     }
+    int i, j;
+    for( i = 0; i < a->nrows; i++)
+    {
+        
+        for(j = 0; j < b->width; j++)
+        {
+            if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].units != b->rows[i][j].units ) || (a->rows[i][j].middle != b->rows[i][j].middle ))
+            {
+                return 0;
+            }
+            
+        }
+    }
+    return 1;
 }
-
 
 void add_64gf5(vfd *R, vfd *A, vfd *B)
 {
     int i;
     for (i = 0; i < (sizeof(vec)); i++ )
     {
-        R[i] = m5d_add_r(&A[i], &B[i]);
+       addgf5(  &R[i], &A[i], &B[i]);
     }
     
 }

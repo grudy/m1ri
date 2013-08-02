@@ -27,7 +27,7 @@
 #ifndef M1RIPROJECT_M7D_H
 #define M1RIPROJECT_M7D_H
 #include <stdlib.h>
-#include "m1riwrappers.h"
+#include <m1ri/m1riwrappers.h>
 
 
 
@@ -76,11 +76,7 @@ typedef struct {
     u_int32_t  lblock; //  first block pointed to in a window
     u_int32_t fcol;  //column offset of first block
     u_int8_t flags;    //IsWindowed, NotWindowed
-    
-    
-    
-    
-    
+
     
     
 } m7d_t;
@@ -182,21 +178,12 @@ void addgf7(vtri *, vtri * , vtri *);
 vtri addgf7r(vtri  *, vtri *);
 
 
-void subgf7( vtri *, vtri *, vtri *);               //multiply vector x by by vector y.   The product is vector r.
-
 //Scalar  multiplication
 vtri m7d_mul_2(vtri);
 vtri m7d_mul_3(vtri);
 vtri m7d_mul_4(vtri);
 vtri m7d_mul_5(vtri);
 vtri m7d_mul_6(vtri);
-
-
-
-
-
-vtri subgf7r(vtri , vtri );               //multiply vector x by by vector y.   The product is vector r.
-
 
 
 
@@ -207,11 +194,9 @@ void iaddgf7(vtri *,vtri *);
 /********************************************
  matrix r = (difference matrix r - matrix x)                //Or x will the function be  r  = x- r???
  ********************************************/
-void isubgf7(vtri *,vtri *);
-void  m7d_mul( vtri *, vtri *, vtri *);
-vtri m7d_mul_i(vtri , vtri );
+
 m7d_t m7d_transpose(m7d_t * a);
-void sub_64gf7(vtri *R, vtri *A, vtri *B);
+
 void add_64gf7(vtri *R, vtri *A, vtri *B);
 
 m7d_t   m7d_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );

@@ -137,6 +137,69 @@ void m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
  
  */
 
+m7d_t    m7d_identity_set(m7d_t * a)
+
+{
+    if(a->ncols == a->nrows)
+    {
+        int k,i,  j,l;
+        for( i  = 1; i < (a->width  ) ; ++i)
+        {
+            l =  ((i - 1) * m1ri_word);
+            j = i - 1;
+            for ( k = 0 ; k < m1ri_word; k++)
+            {
+                
+                a->rows[l][j].units = lbit[k];
+                
+                l++;
+                
+            }
+            
+        }
+        
+        if((a->ncols%m1ri_word) != 0)
+        {
+            l = a->ncols %m1ri_word;
+            k = ((a->width -1) * m1ri_word);
+            l = m1ri_word - l;
+            for(i = 0; i < (m1ri_word - l); i++)
+            {
+                
+                a->rows[k + i][a->width-1].units = lbit[i];
+            }
+            
+        }
+        if ((a->ncols%64) == 0)
+        {
+            
+            l = (a->width - 1) * 64;
+            for(i  = 0; i < 64; i++)
+                
+            {
+                a->rows[l][a->width -1].units = lbit[i];
+                l++;
+                
+            }
+            
+        }
+        
+        
+    }
+    return *a;
+}
+
+
+
+
+m7d_t   m7d_identity(m7d_t  *a, rci_t n)
+{
+    *a = m7d_create(a, n, n);
+    *a = m7d_identity_set(a);
+    return *a;
+}
+
+
 
 //unfinished
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
@@ -290,13 +353,11 @@ vtri * m7d_allone(m7d_t * a)
         
         a->block[i].sign = 0xffffffffffffffff;
         
-        
         a->block[i].middle = 0xffffffffffffffff;
         
         a->block[i].units = 0xffffffffffffffff;
         
-        
-        
+    
         
     }
     return a->block;
@@ -315,11 +376,6 @@ m7d_t  m7d_rand(m7d_t * a)
     }
     return *a;
 }
-
-
-
-
-
 
 
 
@@ -345,15 +401,24 @@ void addgf7(vtri * r, vtri * x, vtri * y)
 {
     
     vec s;
-    r->sign = x->sign ^ y->sign;
-    r->middle = ~r->sign^ x->middle ^ y->middle;
-    r->units = ~r->middle^ x->units ^ y->units;
-    s = ~r->units;
-    r->sign = s ^ x->sign ^ y->sign;
-    r->middle = ~r->sign^ x->middle ^ y->middle;
-    r->units = ~r->middle^ x->units ^ y->units;
+    vec t;
     
+    r->sign = x->units ^ y->units;
+
+    s = (x->units & y->units);
+    r->middle = s^ x->middle ^ y->middle;
+    t = (((s) & (x->middle | y->middle)) | (x->middle & y->middle) );
+    r->sign = x->sign ^ y->sign ^ t;
+    s = x->sign | y->sign | t;
     
+    t = (r->units & s );
+    r->units = s ^ r->units;
+    
+   r->middle = r->middle ^ t ;
+    
+   r->sign = r->sign ^ ( t & r->middle);
+    
+
 }
 
 
@@ -361,26 +426,28 @@ void addgf7(vtri * r, vtri * x, vtri * y)
 vtri addgf7r(vtri  *x, vtri *y)
 {
     vtri  r;
-    r.sign = x->sign ^ y->sign;
-    r.middle = (~r.sign)^ x->middle ^ y->middle;
-    r.units =( ~r.middle)^ x->units ^ y->units;
-    r.sign =( ~r.units) ^ x->sign ^ y->sign;
-    r.middle = (~r.sign)^ x->middle ^ y->middle;
-    r.units = (~r.middle)^ x->units ^ y->units;
+    vec s;
+    vec t;
+
+    r.sign = x->units ^ y->units;
+    
+    
+    s = (x->units & y->units);
+    r.middle = s^ x->middle ^ y->middle;
+    t = (((s) & (x->middle | y->middle)) | (x->middle & y->middle) );
+    r.sign = x->sign ^ y->sign ^ t;
+    s = x->sign | y->sign | t;
+    
+    t = (r.units & s );
+    r.units = s ^ r.units;
+    r.middle = r.middle ^ t ;
+    
+    r.sign = r.sign ^ (  t & r.middle);
     
     return r;
 }
 
-void subgf7( vtri *r, vtri *x, vtri *y)               //multiply matrix x by by matrix y.   The product is matrix r.
 
-{
-   
-    
-    
-   
-    
-    
-}
 void reduce_vtri( vtri * a)
 {
     vtri b = *a ;
@@ -390,61 +457,6 @@ void reduce_vtri( vtri * a)
     a->sign  = b.units ^ (b.units  | b.sign | b.middle) ;
 }
 
-
-vtri subgf7r(vtri x, vtri y)               //multiply matrix x by by matrix y.   The product is matrix r.
-
-{
-    vtri r;
-    return r;
-}
-
-
-
-
-/********************************************
- matrix r = (direct sum matrix r + matrix x)
- ********************************************/
-void iaddgf7(vtri *r,vtri *x)
-{
-    
-    
-    
-    
-    
-    
-    
-}
-
-void isubgf7(vtri *r,vtri *x)  //vector  r = (vector r - vector x)
-{
-    
-    
-    
-}
-
-
-
-void  m7d_mul( vtri *r, vtri *x, vtri *y)             //multiply vector x by y assinging the output to r
-{
-    
-}
-
-
-
-
-//return the value of the vector multiplied
-
-
-vtri m7d_mul_i(vtri x, vtri y)
-{
-    
-    vtri r;
-    r.units = x.units & y.units;
-    r.sign  = (y.sign ^ x.sign) & (r.units);
-    
-    return r;
-    
-}
 
 
 
@@ -508,8 +520,7 @@ vtri m7d_mul_6(vtri a)
 
 int m7d_equal(m7d_t const *a, m7d_t const *b)
 {
-    //  for a->nrows
-    if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
+      if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
     {
         return 0;
     }
@@ -529,14 +540,6 @@ int m7d_equal(m7d_t const *a, m7d_t const *b)
     return 1;
 }
 
-void sub_64gf7(vtri *R, vtri *A, vtri *B)
-{
-    int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
-    {
-        R[i] = subgf7r(A[i], B[i]);
-    }
-}
 
 
 void add_64gf7(vtri *R, vtri *A, vtri *B)

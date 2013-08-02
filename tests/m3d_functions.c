@@ -21,15 +21,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  m1ri_functions
  */ 
 
-#include "m1ri/m1riwrappers.h"
-#include "m1ri/m1ri/m1ri_3dt.h"
-#include "m1ri/m1riarith.h"
-#include "m1ri/m1ri_cubes.h"
-#include "m1ri/m1ri_small.h"
-#include "m1ri/m1ri_strassen.h"
-#include "m1ri/m1ri_combine.h"
-#include "m1ri/m1ri_classical.h"
-#include "m1ri/m1ri_io.h"
+#include <m1ri/m1ri.h>
 #include "time.h"
 int main(int argc, const char * argv[])
 {
@@ -141,14 +133,7 @@ int main(int argc, const char * argv[])
     m3d_print(&c);
     
     
-    
-    m3d_t *  a  = malloc(sizeof(m3d_t));
-    m3d_create(a, 1026, 1025);
-    m3_slice * b  = malloc(sizeof(m3_slice));
-    
-    
-    m3d_slices(b, a, 3);
-    m3d_specs(&b->block[5]);
+
     
     
     return 0;

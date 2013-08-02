@@ -1,8 +1,8 @@
 /* M1RI
-TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
-RUSSIANS OVER LARGER FINITE FIELDS"
-
-Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
+ TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
+ RUSSIANS OVER LARGER FINITE FIELDS"
+ 
+ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -17,27 +17,24 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-
+ 
  m7d_tests.c
- */ 
+ */
 
-#include "m1ri/m1riwrappers.h"
-#include "m1ri/m1ri/m1ri_3dt.h"
-#include "m1ri/m1riarith.h"
-#include "m1ri/m1ri_cubes.h"
-#include "m1ri/m1ri_small.h"
-#include "m1ri/m1ri_strassen.h"
-#include "m1ri/m1ri_combine.h"
-#include "m1ri/m1ri_classical.h"
-#include "m1ri/m1ri_io.h"
+#include <m1ri/m1ri.h>
 #include "time.h"
 int main(int argc, const char * argv[])
 {
- 
-  
+    
+    
+    m7d_t * a, * b, *c,  *d, *e;
+    a = b =c = d = e =   m1ri_malloc(sizeof(m7d_t));
+    m7d_rand(a);
+    m7d_rand(b);
+    m7d_rand(c);
     
     m7d_t test_m7d_output  = m7d_create( &test_m7d_output, 3   ,3);
-  
+    
     m7d_rand(&test_m7d_output);
     
     m7d_print(&test_m7d_output);
@@ -45,9 +42,24 @@ int main(int argc, const char * argv[])
     m7d_write_elem(&test_m7d_output, 1, 1, 1, 0, 1);
     
     
-   
+    m7d_identity(d,64);
+    m7d_identity(e,64);
+    int isequal = m7d_equal(d, e);
     
+    if(isequal)
+    {
+        printf("Equaltest: passed ");
+        
+    }
+    
+    if(!isequal)
+    {
+        printf("Equaltest: failed ");
+        return 1;
+        
+    }
     m7d_print(&test_m7d_output);
+    
     
     
     

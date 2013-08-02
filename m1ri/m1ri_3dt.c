@@ -354,7 +354,6 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     submatrix.ncols =  m1ri_word * sizecols;
     submatrix.flags = iswindowed;
     submatrix.width =  sizecols;
-    //submatrix.block = &c->block[(stvbg * stvbg)];
     submatrix.rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vbg *));
     submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix.fcol   = 0;
@@ -538,6 +537,10 @@ int m3d_equal(m3d_t const *a, m3d_t const *b)
     }
     return 1;
 }
+
+
+
+
 
 void m3d_free( m3d_t *  tofree)
 {

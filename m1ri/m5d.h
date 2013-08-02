@@ -26,7 +26,7 @@
 #define M1RIPROJECT_M5D_H
 
 #include <stdlib.h>
-#include "m1riwrappers.h"
+#include <m1ri/m1riwrappers.h>
 
 
 
@@ -57,7 +57,7 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b);
  
 */
 //unfinished
-void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u );
+void *  m5d_write_elem( m5d_t * ,rci_t , rci_t , vec , vec , vec);
 
 
 /*
@@ -107,9 +107,6 @@ m5d_t   m5d_identity(m5d_t  *a, rci_t n);
  */
 
 
-m5d_t m5d_hadamard(m5d_t * , m5d_t * );
-
-
 /*
  
  Releases a m5d_t into the wilderness.
@@ -126,13 +123,13 @@ void addgf5(vfd *, vfd * , vfd *);
 vfd m5d_add_r(vfd  *, vfd *);
 
 
-void m5d_sub( vfd *, vfd *, vfd *);               //multiply vector x by by vector y.   The product is vector r.
+void m5d_sub( vfd *, vfd *, vfd *);               //subtract vector x by by vector y.   The product is vector r.
 
 
 
 
 
-vfd m5d_sub_r(vfd , vfd );               //multiply vector x by by vector y.   The product is vector r.
+vfd m5d_sub_r(vfd , vfd );          
 
 vfd m5d_mul2(vfd);
 
@@ -152,11 +149,9 @@ void iaddgf5(vfd *,vfd *);
 void isubgf5(vfd *,vfd *);
 
 
-void  m5d_mul( vfd *, vfd *, vfd *);
 
-vfd m5d_mul_i(vfd , vfd );
 
-int m5d_equal(m5d_t const *a, m5d_t const *b);
+int m5d_equal(m5d_t const *, m5d_t const *);
 
 m5d_t m5d_transpose(m5d_t * );
 

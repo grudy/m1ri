@@ -25,9 +25,9 @@
 #ifndef M1RIPROJECT_COMBINE_H
 #define M1RIPROJECT_COMBINE_H
 
-#include "m1riwrappers.h"
-#include "m1ri_3dt.h"
-#include "m1riarith.h"
+#include <m1ri/m1riwrappers.h>
+#include <m1ri/m1ri_3dt.h>
+#include <m1ri/m1riarith.h>
 
 void *  combine3(vbg *, vbg * );
 

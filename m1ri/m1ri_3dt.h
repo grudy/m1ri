@@ -27,7 +27,7 @@
 #define M1RIGF3_M1RIGF3_H
 
 #include <stdlib.h>
-#include "m1riwrappers.h"
+#include <m1ri/m1riwrappers.h>
 
 
 

@@ -22,41 +22,54 @@
  */
 
 
-#include "m1ri/m1riwrappers.h"
-#include "m1ri/m1ri/m1ri_3dt.h"
-#include "m1ri/m1riarith.h"
+#include <m1ri/m1ri.h>
 
-#include "m1ri/m1ri_io.h"
 #include "time.h"
 int main(int argc, const char * argv[])
 {
     time_t before;
     time(&before);
+    int isequal;
+    
+    m3d_t bunches;
+    m3d_t plenitude;
+    m3d_t  oodles;
     
     
-    m3d_t bunches[30];
-    m3d_t plenitude[30];
-    m3d_t  oodles[30];
-    for (int x = 0; x < 30; x ++)
-    {
-        
-        
-        
-        plenitude[x] = m3d_create(&bunches[x], 16384, 16384);
-        bunches[x]  = m3d_create(&plenitude[x],  16384, 16384);
-        oodles[x]  = m3d_create(&oodles[x], 16384, 16384);
-        plenitude[x]  = m3d_rand(&plenitude[x]);
-        bunches[x]  = m3d_rand(&bunches[x]);
-       plenitude[x] =  m3d_hadamard(&plenitude[x], &plenitude[x]);
-        
-        
-    }
+    
+    
+    plenitude = m3d_create(&bunches, 16384, 16384);
+    bunches  = m3d_create(&plenitude,  16384, 16384);
+    oodles  = m3d_create(&oodles, 16384, 16384);
+    plenitude  = m3d_rand(&plenitude);
+    bunches  = m3d_rand(&bunches);
+  //  oodles =  *m3d_hadamard(&plenitude, &bunches);
+    
+    
+    
     
     time_t after;
     time(&after);
     double time_test_m1ri = difftime( after, before);
     
-    printf("%9f", time_test_m1ri );
+    printf("Time: %9f seconds \n", time_test_m1ri );
+    
+    isequal = m3d_equal(&oodles, &plenitude);
+    
+    if(!isequal)
+    {
+        printf("Hadamard: passed ");
+        
+    }
+    
+    if(isequal)
+    {
+        printf("Hadamard: failed ");
+        return 1;
+        
+    }
     
     return 0;
 }
+
+

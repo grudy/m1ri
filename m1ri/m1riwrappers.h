@@ -117,10 +117,11 @@ static inline u_int64_t  m1ri_rand()
     
     
    u_int64_t randomword1 = random();
+    
     u_int64_t randomword2 = random();
   
     
-    randomword1 = randomword1  + (randomword2<< 32) ;
+    randomword1 = randomword1  + (randomword2<< 33) ;
     
     return randomword1;
 }

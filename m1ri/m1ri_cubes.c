@@ -113,7 +113,6 @@ m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
         
     }
     
-       /// r->rows  = m3d_row_alloc(a->block, a->rows, a->width, a->nrows);
         c->flags = notwindowed;
         c->lblock = a->ncols%64;
         c->fcol = 0;
@@ -126,6 +125,7 @@ m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
     
     
 }
+
 
 
 
@@ -160,12 +160,8 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
     extrarows = a->nrows%(  slicesize);
     c->nrows = DN(a->nrows, (m1ri_word * slicesize));
     c->ncols = DN(a->width, slicesize);
-    //printf("extracols: %d    extrarows %d", extracols, extrarows);
-    
     l = a->nrows / (m1ri_word * slicesize);
     l = l * slicesize;
-    //printf("%d",  l);
-    //colpassed = (slicesize * m1ri_word) - 1;
     c->slicesize = slicesize;
  
     c->block = m3_blockslice_allocate(c->block,  c->nrows,   c->width);
@@ -189,8 +185,7 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
         if(extracols > 0)
         {
              m3d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, extracols);
-         //c->row[ r][f]    = m3d_window(a, i , (f * slicesize), slicesize, extracols);
-            
+
      
         }
             
@@ -206,8 +201,7 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
    for( f = 0; f <colroundeddown ; f++)
         {
            m3d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, slicesize);
-       //c->row[r][f] =  m3d_window(a, i , (f * slicesize),extrarows, slicesize);
-   
+
         }
         
         
@@ -217,8 +211,7 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
     {
    
            m3d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, extracols);
-        //c->row[r][f] =  m3d_window(a,i  , (f * slicesize),extrarows, extracols);
-  
+
     }
     
     
@@ -232,56 +225,30 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
     
 }
 
-// 
-  void m3d_transpose(m3d_t  *  a, m3d_t *   b)
+void  m3d_quarter(m3_slice *  c, m3d_t * a)
 {
-   
-    *b = m3d_create(b, a->ncols, a->nrows);
-   
-    //int  nrows;
-    int x,  z, i, l, mod;
+    int  width, row, lastwidth, lastrows;
+    c->width = a->width;
 
-    //nrows = DN(a->nrows, (m1ri_word ));
+    c->nrows = 2;
+    c->ncols = 2;
    
+    width = DN(c->width, 2);
     
-    vbg temp;
-    for(i = 0; i < a->nrows; i++)
-    {
-        l = i/64;
-        mod  = i%64;
-       
-            for(z = 0; z < a->width; z ++)
-            {
-                for(x = 0; x < m1ri_word; x ++)
-                {
-                  
-                    temp.units =  (a->rows[i][z].units & (leftbit >> x) );
-                    temp.sign =  (a->rows[i][z].sign & (leftbit >> x) );
-                    
-                    b->rows[(z * 64) + x][l].units = (temp.units) ?   b->rows[(z * 64) + x][l].units| (leftbit >> mod) :  b->rows[(z * 64) + x][l].units;
-                    b->rows[(z * 64) + x][l].sign = (temp.sign) ?b->rows[(z * 64) + x][l].sign | (leftbit >> mod) : b->rows[(z * 64) + x][l].sign  ;
-                                      
-                    
-                    
-                }
-                
-                
-            }
-            
-            
-            
-        }
-    
+    row = DN(a->nrows, 128);
+    lastrows = a->nrows/128;
+    lastwidth = a->width/2;
+    c->block = m3_blockslice_allocate(c->block,  2,   2);
+    c->row = m3_rowslice_allocate(c->block,  c->row,   2, 2);
+     m3d_window_create(a, &c->row[0][0],0 , 0,  row, width);
+     m3d_window_create(a, &c->row[0][1],0 ,width, row, lastwidth);
+     m3d_window_create(a, &c->row[1][0],row , 0, lastrows, width);
+     m3d_window_create(a, &c->row[1][1],row, width, lastrows, lastwidth);
  
-   // return *b;
-  //  m1ri_free(b);
-
+    
 }
 vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
 {
-    //m3d_t *b = m1ri_malloc(sizeof(m3d_t));
-    
-    //m3d_create(b, 64, 64);
     int i, x;
     vbg temp;
     for(i = 0; i <64; i ++)
@@ -294,11 +261,7 @@ vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
             
             b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
             b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
-            // b->rows[i][0].units = (temp.units) ? : ;
-            
-            
-            
-            
+    
         }
         
         
@@ -326,8 +289,10 @@ m3d_t m3d_transpose_sliced(m3d_t * a)
     }
 
     return c;
-    //m1ri_free(temp);
+  
 }
+
+
 
 m5d_t  * m5_blockslice_allocate(m5d_t * block, rci_t  nrows,  wi_t  width)
 {
@@ -359,7 +324,6 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
     c->ncols = DN(a->width, slicesize);
     l = a->nrows / (m1ri_word * slicesize);
     l = l * slicesize;
-    //colpassed = (slicesize * m1ri_word) - 1;
     c->slicesize = slicesize;
     c->block = m5_blockslice_allocate(c->block,  c->nrows,   c->width);
     c->row = m5_rowslice_allocate(c->block,  c->row,   c->width, c->nrows);
@@ -374,7 +338,6 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
         {
             
             c->block[z] =  m5d_window(a, ( i ) , (f * slicesize), slicesize, slicesize);
-            // c->block[z] = a->rows[i+ x][lf  + y];
             z++;
             
             
@@ -386,7 +349,6 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
         
 
         c->row[r] =  c->block + (c->ncols * i );
-        //   c->rows[r]  = c->block + (i * slicesize );
         r++;
         
     }
@@ -396,7 +358,6 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
     for( f = 0; f <colroundeddown ; f++)
     {
         c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),extrarows, slicesize);
-        //  c->block[z] = a->rows[i+ x][(f * slicesize) + y];
         z++;
         
     }
@@ -407,7 +368,6 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
   
     
     c->row[r] =   c->block + (c->ncols * i );
-    //   c->rows[r]  = c->block + (i * slicesize );
     
 
     
@@ -431,7 +391,6 @@ m5d_t  m5d_cubes(m5d_t * c, m5d_t  *a, rci_t slicesize )
     l  = l  * m1ri_word * slicesize;
     
     c->block = m5d_block_allocate(a->block,  a->nrows,   a->width);
-    //c->rows  = m5d_row_alloc(c->block, <#vfd **rows#>, <#wi_t width#>, <#rci_t nrows#>)
     z = 0;
     r = 0 ;
     f = 0;
@@ -495,7 +454,6 @@ m5d_t  m5d_cubes(m5d_t * c, m5d_t  *a, rci_t slicesize )
     
     
     
-    /// r->rows  = m5d_row_alloc(a->block, a->rows, a->width, a->nrows);
     c->flags = notwindowed;
 
     c->fcol = 0;

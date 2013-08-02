@@ -1,8 +1,6 @@
-AC_PROG_CC_C99
 AUTOMAKE_OPTIONS = gnu
 ACLOCAL_AMFLAGS = -I m4
 AM_CFLAGS=${SIMD_CFLAGS} ${OPENMP_CFLAGS} ${DEBUG_FLAGS}
-AC_C_RESTRICT
 lib_LTLIBRARIES = libm1ri.la
 
 libm1ri_la_SOURCES = m1ri/m1ri_3dt.c\
@@ -15,8 +13,6 @@ libm1ri_la_SOURCES = m1ri/m1ri_3dt.c\
 	m1ri/m7d.c\
 	m1ri/m5d.c\
 	m1ri/m1ri_io.c
-
-
 
 pkgincludesubdir = $(includedir)/m1ri
 pkgincludesub_HEADERS = m1ri/m5d.h\
@@ -31,9 +27,16 @@ pkgincludesub_HEADERS = m1ri/m5d.h\
 	m1ri/m1ri_classical.h\
 	m1ri/m1ri_io.h
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = m1ri.pc
+
+libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
+libm1ri_la_LIBADD = $(LIBPNG_LIBADD)
+
+
+
 
 check_PROGRAMS =  hadamard m3d_create_test m3d_functions m5d_tests m7d_tests 
-
 hadamard_SOURCES=tests/hadamard.c 
 hadamard_LDFLAGS=-lm1ri -lm
 hadamard__CFLAGS=$(AM_CFLAGS)
