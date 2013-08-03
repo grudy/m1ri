@@ -32,9 +32,7 @@ void add_vbg(vbg * r, vbg const * x, vbg const * y)
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
     r->sign = (ST(x->units, y->sign, x->sign ) | ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
     
-    
-    
-    
+  
 }
 
 

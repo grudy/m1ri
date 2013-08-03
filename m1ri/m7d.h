@@ -85,14 +85,11 @@ typedef struct {
 /*
  Matrix Windows
  ______________
- 
- 
+  
  | [A0 | A1]
  A = | --------
  | |A2 | A3]
- 
- 
- 
+
  */
 
 //Read 'middle' bits
@@ -116,18 +113,15 @@ void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
 //unfinished
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s,  vec m , vec u );
 
-
 /*
  
  */
-
 
 
 vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width);
 /*
  
  */
-
 
 vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows);
 /*
@@ -164,7 +158,6 @@ m7d_t   m7d_identity(m7d_t  *a, rci_t n);
 
 
 /*
- 
  Releases a m7d_t into the wilderness.
  */
 
@@ -195,9 +188,8 @@ void iaddgf7(vtri *,vtri *);
  matrix r = (difference matrix r - matrix x)                //Or x will the function be  r  = x- r???
  ********************************************/
 
-m7d_t m7d_transpose(m7d_t * a);
 
-void add_64gf7(vtri *R, vtri *A, vtri *B);
+void add_m1riw_gff7(vtri *R, vtri *A, vtri *B);
 
 m7d_t   m7d_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
 void   m7d_window_create(m7d_t *, m7d_t * , rci_t , rci_t , rci_t , rci_t);

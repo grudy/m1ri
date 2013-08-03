@@ -27,9 +27,8 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define M1RIPROJECT_M1RIWRAPPERS_H
 #define FN(a, b, c, d) ((a)^(b))&((c)^(d)) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
 #define ST(a, b , c) ((a)^(b)^(c)) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
-#define RU64(a) (((a)/(64)) + ((1) && (a%64)))//division by 64 rounded up
 #define  DN(a, n) ((a)/(n)) + ((1) && (a%n))//division by n rounded up
-#define MAX(a,b)  ((a > b)? a: b)
+#define  MAX(a,b)  ((a > b)? a: b)
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -164,7 +163,7 @@ static inline void m1ri_swap_vec(vec *a, vec *b)
 
 
 /********************************************
- Creates  a structure of 192 bits
+ Creates  a structure for GF(5) Matrices
  ********************************************/
 
 typedef struct {

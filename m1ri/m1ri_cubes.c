@@ -25,7 +25,7 @@
 
 #include "m1ri_cubes.h"
 
-//This copies a matrix as a contingous matrix of in (slicesize ^2) * 64 slices 
+//This copies a matrix as a contingous matrix of in (slicesize ^2) * m1ri_word slices 
 m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
 {
 
@@ -225,28 +225,7 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
     
 }
 
-void  m3d_quarter(m3_slice *  c, m3d_t * a)
-{
-    int  width, row, lastwidth, lastrows;
-    c->width = a->width;
 
-    c->nrows = 2;
-    c->ncols = 2;
-   
-    width = DN(c->width, 2);
-    
-    row = DN(a->nrows, 128);
-    lastrows = a->nrows/128;
-    lastwidth = a->width/2;
-    c->block = m3_blockslice_allocate(c->block,  2,   2);
-    c->row = m3_rowslice_allocate(c->block,  c->row,   2, 2);
-     m3d_window_create(a, &c->row[0][0],0 , 0,  row, width);
-     m3d_window_create(a, &c->row[0][1],0 ,width, row, lastwidth);
-     m3d_window_create(a, &c->row[1][0],row , 0, lastrows, width);
-     m3d_window_create(a, &c->row[1][1],row, width, lastrows, lastwidth);
- 
-    
-}
 vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
 {
     int i, x;
@@ -291,7 +270,6 @@ m3d_t m3d_transpose_sliced(m3d_t * a)
     return c;
   
 }
-
 
 
 m5d_t  * m5_blockslice_allocate(m5d_t * block, rci_t  nrows,  wi_t  width)
@@ -394,7 +372,7 @@ m5d_t  m5d_cubes(m5d_t * c, m5d_t  *a, rci_t slicesize )
     z = 0;
     r = 0 ;
     f = 0;
-    c->rows = m1ri_malloc( a->nrows * a->width * sizeof(vbg *));
+    c->rows = m1ri_malloc( a->nrows * a->width * sizeof(vfd *));
     for ( i = 0; i <  l;  i = i + (slicesize* m1ri_word))
     {
         for( f = 0; f <colroundeddown ; f++)
@@ -449,24 +427,276 @@ m5d_t  m5d_cubes(m5d_t * c, m5d_t  *a, rci_t slicesize )
     }
     
     
-    
-    
-    
-    
-    
+  
     c->flags = notwindowed;
 
     c->fcol = 0;
    
     return *c;
     
+ 
+    
+}
+
+vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
+{
+    int i, x;
+    vfd temp;
+    for(i = 0; i <64; i ++)
+    {
+        for(x = 0; x < 64; x ++)
+        {
+            
+            temp.units =  (a[x][0].units & (leftbit >> i) );
+            temp.sign =  (a[x][0].sign & (leftbit >> i) );
+            temp.middle =  (a[x][0].middle & (leftbit >> i) );
+            
+            b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
+            b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
+            b[i][0].middle = (temp.middle) ? b[i][0].middle | (leftbit >> x) : b[i][0].middle  ;
+    
+        }
+        
+        
+    }
+    
+    return *b;
+    
+}
+
+m5d_t m5d_transpose_sliced(m5d_t * a)
+{
+    int x, y;
+    m5d_t c;
+    c = m5d_create(&c, a->ncols, a->nrows);
+    m5_slice * b, *d;
+    d = malloc(sizeof(m5_slice));
+    b = malloc(sizeof(m5_slice));
+    m5d_slices(b, a, 1);
+    m5d_slices(d, &c, 1);
+    for (x = 0; x < b->nrows; x++) {
+        for (y = 0; y < b->ncols; y ++) {
+         m5d_transpose_vfd(b->row[x][y].rows, d->row[y][x].rows);
+            
+        }
+    }
+
+    return c;
+  
+}
+
+
+m7d_t  * m7_blockslice_allocate(m7d_t * block, rci_t  nrows,  wi_t  width)
+{
+    block  = m1ri_calloc(nrows * width ,  sizeof(m7d_t  ) );
+    return block;
+}
+
+m7d_t ** m7_rowslice_allocate(m7d_t * block, m7d_t ** rows, wi_t width, rci_t nrows)
+{
+	int i;
+    rows = m1ri_malloc( nrows * width * sizeof(m7d_t *));
+    for ( i = 0; i <  nrows;  i++ )
+    {
+        rows[i]  = block + i * width;
+    };
+    return rows;
+}
+
+
+m7d_t  m7d_cubes(m7d_t * c, m7d_t  *a, rci_t slicesize )
+{
+    
+    int l, i, f, x, y, z, lf, r, extracols, extrarows, colroundeddown;
+    extracols = a->width%slicesize;
+    colroundeddown = a->width/slicesize;
+    c->ncols = DN(a->width, slicesize);
+    extrarows = a->nrows%(m1ri_word * slicesize);
+    c->nrows = DN(a->nrows, (m1ri_word * slicesize));
+    c->width =  a->width;
+    l = a->nrows / (m1ri_word * slicesize);
+    l  = l  * m1ri_word * slicesize;
+    
+    c->block = m7d_block_allocate(a->block,  a->nrows,   a->width);
+    z = 0;
+    r = 0 ;
+    f = 0;
+    c->rows = m1ri_malloc( a->nrows * a->width * sizeof(vtri *));
+    for ( i = 0; i <  l;  i = i + (slicesize* m1ri_word))
+    {
+        for( f = 0; f <colroundeddown ; f++)
+        {
+            
+            for( x = 0; x <(slicesize  * m1ri_word ) ; x++)
+            {
+                for (y = 0 ; y < slicesize; y++) {
+                    lf = f * slicesize;
+                    c->block[z] = a->rows[i+ x][lf  + y];
+                    z++;
+                    
+                }
+                
+            }
+            
+            
+        }
+        
+        for( x = 0; x <(slicesize  * m1ri_word ) ; x++)
+        {
+            for (y = 0 ; y < extracols; y++) {
+                
+                c->block[z] = a->rows[i+ x][(f * slicesize) + y];
+                z++;
+                
+            }
+            
+            
+        }
+        
+        
+        c->rows[r]  = c->block + (i * slicesize );
+        r++;
+        
+    }
     
     
     
     
+    for( x = 0; x <(extrarows   ) ; x++)
+    {
+        for (y = 0 ; y <  slicesize; y++) {
+            
+            c->block[z] = a->rows[i+ x][(f * slicesize) + y];
+            z++;
+            
+        }
+        
+        
+        
+    }
+    
+      
+    c->flags = notwindowed;
+
+    c->fcol = 0;
+   
+    return *c;
+    
+
     
 }
 
 
+vtri *  m7d_transpose_vtri(vtri  **a, vtri  **b  )
+{
+    int i, x;
+    vtri temp;
+    for(i = 0; i <64; i ++)
+    {
+        for(x = 0; x < 64; x ++)
+        {
+            
+            temp.units =  (a[x][0].units & (leftbit >> i) );
+            temp.sign =  (a[x][0].sign & (leftbit >> i) );
+            temp.middle =  (a[x][0].middle & (leftbit >> i) );
+            
+            b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
+            b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
+            b[i][0].middle = (temp.middle) ? b[i][0].middle | (leftbit >> x) : b[i][0].middle  ;
+    
+        }
+        
+        
+    }
+    
+    return *b;
+    
+}
+
+void  m7d_slices(m7_slice *  c, m7d_t * a, wi_t slicesize)
+{
+    wi_t l, z, r,  colroundeddown;
+    int  i,  f,extrarows ,  extracols;
+    extracols = a->width%slicesize;
+    colroundeddown = a->width/slicesize;
+    c->width = DN(a->width, slicesize);
+    extrarows = a->nrows%(m1ri_word * slicesize);
+    c->nrows = DN(a->nrows, (m1ri_word * slicesize));
+    c->ncols = DN(a->width, slicesize);
+    l = a->nrows / (m1ri_word * slicesize);
+    l = l * slicesize;
+    c->slicesize = slicesize;
+    c->block = m7_blockslice_allocate(c->block,  c->nrows,   c->width);
+    c->row = m7_rowslice_allocate(c->block,  c->row,   c->width, c->nrows);
+    z = 0;
+    r = 0 ;
+    
+    
+    for ( i = 0; i <  l;  i = i + slicesize)
+    {
+   
+        for( f = 0; f <colroundeddown ; f++)
+        {
+            
+            c->block[z] =  m7d_window(a, ( i ) , (f * slicesize), slicesize, slicesize);
+            z++;
+            
+            
+        }
+        
+        
+        c->block[z] =  m7d_window(a, ( i ) , (f * slicesize),slicesize, extracols);
+        z++;
+        
+
+        c->row[r] =  c->block + (c->ncols * i );
+        r++;
+        
+    }
+    
+
+    
+    for( f = 0; f <colroundeddown ; f++)
+    {
+        c->block[z] =  m7d_window(a, ( i ) , (f * slicesize),extrarows, slicesize);
+        z++;
+        
+    }
+    
+    
+    c->block[z] =  m7d_window(a, ( i ) , (f * slicesize),extrarows, extracols);
+    
+  
+    
+    c->row[r] =   c->block + (c->ncols * i );
+    
+
+    
+}
+
+
+
+m7d_t m7d_transpose_sliced(m7d_t * a)
+{
+    int x, y;
+    m7d_t c;
+    c = m7d_create(&c, a->ncols, a->nrows);
+    m7_slice * b, *d;
+    d = malloc(sizeof(m7_slice));
+    b = malloc(sizeof(m7_slice));
+    m7d_slices(b, a, 1);
+    m7d_slices(d, &c, 1);
+    for (x = 0; x < b->nrows; x++) {
+    
+        for (y = 0; y < b->ncols; y ++) {
+        
+         m7d_transpose_vtri(b->row[x][y].rows, d->row[y][x].rows);
+            
+        }
+    }
+
+    return c;
+  
+}
 
 

@@ -153,14 +153,14 @@ void isubgf5(vfd *,vfd *);
 
 int m5d_equal(m5d_t const *, m5d_t const *);
 
-m5d_t m5d_transpose(m5d_t * );
+
 
 m5d_t   m5d_window(m5d_t *, rci_t , rci_t , rci_t , rci_t );
 void   m5d_window_create(m5d_t *, m5d_t * , rci_t , rci_t , rci_t , rci_t );
 
 void sub_64gf5(vfd *, vfd *, vfd *);
 
-void add_64gf5(vfd *, vfd *, vfd *);
+void add_m1riw_gff5(vfd *, vfd *, vfd *);
 
 
 

@@ -184,7 +184,7 @@ m3d_t m3d_create( m3d_t *  a, rci_t nrows, rci_t ncols)
     
     a->ncols = ncols;
     a->nrows = nrows;
-    a->width =  RU64(ncols);
+    a->width =  DN(ncols, m1ri_word);
     a->block =  NULL;
     a->rows =  NULL;
     a->block = m3d_block_allocate(a->block,  a->nrows,    a->width);
@@ -318,7 +318,7 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
 
 
 /*
- windows in 64 rows * 64 column incriments
+ windows in m1ri_word rows * m1ri_word column incriments
  stvbg = the vbg or width offset from the base matrix
  strow = row offset in increments of 64
  sizecol  = cols * 64

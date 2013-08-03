@@ -175,7 +175,7 @@ m3d_t   m3d_identity(m3d_t  *, rci_t );
 
 
 /*
- windows in 64 rows * 64 column incriments
+ windows in m1ri_word rows * m1ri_word column incriments
  stvbg = the vbg/width offset from the base matrix
  strow = row offset in increments of 64
  sizecol  = cols * 64

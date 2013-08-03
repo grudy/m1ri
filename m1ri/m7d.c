@@ -254,7 +254,7 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
 {
     a->ncols = ncols;
     a->nrows = nrows;
-    a->width =  RU64(ncols);
+    a->width =  DN(ncols, m1ri_word);
     a->block = m7d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m7d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = iswindowed;
@@ -542,7 +542,7 @@ int m7d_equal(m7d_t const *a, m7d_t const *b)
 
 
 
-void add_64gf7(vtri *R, vtri *A, vtri *B)
+void add_m1riw_gff7(vtri *R, vtri *A, vtri *B)
 {
     int i;
     for (i = 0; i < (sizeof(vec)); i++ )

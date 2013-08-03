@@ -250,7 +250,7 @@ m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
     
     a->ncols = ncols;
     a->nrows = nrows;
-    a->width =  RU64(ncols);
+    a->width =  DN(ncols, m1ri_word);
     a->block = m5d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m5d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = notwindowed;
@@ -264,7 +264,7 @@ m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
  */
 
 /*
- windows in 64 rows * 64 column incriments
+ windows in m1ri_word rows * m1ri_word column incriments
  stvfd = the vfd or width offset from the base matrix
  strow = row offset in increments of 64
  sizecol  = cols * 64
@@ -413,7 +413,7 @@ m5d_t  m5d_identity_set(m5d_t * a)
         {
             l = a->ncols %64;
             k = ((a->width -1) * 64);
-            l = 64 - l;
+            l = m1ri_word - l;
             for(i = 0; i < (64 - l); i++)
             {
                 
@@ -616,7 +616,9 @@ void iaddgf5(vfd *r,vfd *x)
     
 }
 
-
+/*
+	Scalar Multiplication
+*/
 vfd m5d_mul2(vfd a)
 {
     vec temp = a.sign;
@@ -628,7 +630,9 @@ vfd m5d_mul2(vfd a)
     return a;
 
 }
-
+/*
+	Scalar Multiplication
+*/
 vfd m5d_mul3(vfd a)
 {
     vec temp = a.middle ^ a.sign;
@@ -637,7 +641,9 @@ vfd m5d_mul3(vfd a)
     a.units = temp;
     return a;
 }
-
+/*
+	Scalar Multiplication
+*/
 vfd m5d_mul4(vfd a)
 {
     vec x = a.units ^ a.sign;
@@ -648,8 +654,8 @@ vfd m5d_mul4(vfd a)
     
 }
 
-
-void isubgf5(vfd *r,vfd *x)  //matrix r = (matrix r - matrix x)
+ //matrix r = (matrix r - matrix x)
+void isubgf5(vfd *r,vfd *x) 
 {
     
     
@@ -680,7 +686,7 @@ int m5d_equal(m5d_t const *a, m5d_t const *b)
     return 1;
 }
 
-void add_64gf5(vfd *R, vfd *A, vfd *B)
+void add_m1riw_gff5(vfd *R, vfd *A, vfd *B)
 {
     int i;
     for (i = 0; i < (sizeof(vec)); i++ )

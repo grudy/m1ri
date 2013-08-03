@@ -148,7 +148,7 @@ void mul_16_m3d(vbg *R, vbg *A, vbg *B)
     }
 }
 
-//8 * 64,512 bit, 64 byte matrix(slice) multiplication
+//8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
 void mul_8_m3d(vbg *R, vbg *A, vbg *B)
 
 {

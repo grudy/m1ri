@@ -240,14 +240,8 @@ void m5d_print(m5d_t *a)
         
     }
                 
-       
-        
-    
-    
     printf("\n \n \n ");
     
-    
-
 }
 
 void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
@@ -257,9 +251,7 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
     for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         
-        
-        
-        
+    
         out[0] =  a & (leftbit >>  x);
         out[1] =   b & (leftbit >>  x);
         out[2]  =  c & (leftbit >>  x);
@@ -279,20 +271,14 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
         if(out[2] > 0 )
         {
             value = value + 4;
-            
-            
+                    
         }
         printf("[ %d ]", value);
 
-        
-        
+     
     }
     
-    
-    
-    
-    
-    
+      
 }
 
 void m7d_print(m7d_t *a)
@@ -382,10 +368,5 @@ void m3d_fullinfo(m3d_t * a)
 {
     m3d_print(a);
     m3d_specs(a);
-    
-    
-    
-    
-    
-    
+  
 }
