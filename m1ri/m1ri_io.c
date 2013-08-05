@@ -280,7 +280,10 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
     
       
 }
+/*
+	How this is printed is still undetermined until a representation is chosen 
 
+*/
 void m7d_print(m7d_t *a)
 {
     int i, m;
@@ -370,3 +373,58 @@ void m3d_fullinfo(m3d_t * a)
     m3d_specs(a);
   
 }
+
+
+void m5d_specs(m5d_t * a)
+{
+    
+    
+    if (a->flags == iswindowed) {
+        printf("Is Windowed   \n");
+    }
+    else if (a->flags == notwindowed)
+    {
+        printf("Is not windowed   \n");
+    }
+    printf("Number of columns: %d \n", a->ncols );
+    printf("Number of rows   : %d \n", a->nrows );
+    printf("Width------------: %d \n", a->width );
+    
+    
+}
+
+
+void m5d_fullinfo(m5d_t * a)
+{
+    m5d_print(a);
+    m5d_specs(a);
+  
+}
+
+
+void m7d_specs(m7d_t * a)
+{
+    
+    
+    if (a->flags == iswindowed) {
+        printf("Is Windowed   \n");
+    }
+    else if (a->flags == notwindowed)
+    {
+        printf("Is not windowed   \n");
+    }
+    printf("Number of columns: %d \n", a->ncols );
+    printf("Number of rows   : %d \n", a->nrows );
+    printf("Width------------: %d \n", a->width );
+    
+    
+}
+
+
+void m7d_fullinfo(m7d_t * a)
+{
+    m7d_print(a);
+    m7d_specs(a);
+  
+}
+

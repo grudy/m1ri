@@ -36,7 +36,9 @@ void add_vbg(vbg * r, vbg const * x, vbg const * y)
 }
 
 
+/*
 
+*/
 vbg add_m3dr(vbg  x, vbg const y)
 {
     vec t;

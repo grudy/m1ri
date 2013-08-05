@@ -2,7 +2,7 @@
 /*
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
- RUSSIANS OVER L/Users/grudy/Documents/c folders/m1rigf3/m1rigf3/m3d_tests.cARGER FINITE FIELDS"
+ RUSSIANS OVER LARGER FINITE FIELDS"
  
  Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  

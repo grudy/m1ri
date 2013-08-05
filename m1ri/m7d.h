@@ -1,7 +1,4 @@
-//  m1riproject
-//  Copyright (c) 2013 William Alumbaugh. All rights reserved.
-//
-/*
+/*  m1riproject
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -188,8 +185,13 @@ void iaddgf7(vtri *,vtri *);
  matrix r = (difference matrix r - matrix x)                //Or x will the function be  r  = x- r???
  ********************************************/
 
-
+/*
+	GF(7) Addition on a single M1RI word.
+*/
 void add_m1riw_gff7(vtri *R, vtri *A, vtri *B);
+
+
+
 
 m7d_t   m7d_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
 void   m7d_window_create(m7d_t *, m7d_t * , rci_t , rci_t , rci_t , rci_t);
