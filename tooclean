@@ -1,0 +1,13 @@
+#!/bin/bash
+rm -r  autom4te.cache
+rm  stamp-h1
+rm config.log
+rm config.h
+rm Makefile.in
+rm Makefile
+rm -r .deps 
+rm m1ri.pc
+rm aclocal.m4
+rm config.status
+make clean
+
