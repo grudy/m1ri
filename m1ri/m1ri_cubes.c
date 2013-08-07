@@ -271,6 +271,19 @@ m3d_t m3d_transpose_sliced(m3d_t * a)
   
 }
 
+void m3d_quarter(m3_slice * c , m3d_t * a)
+{
+	
+	 	
+	 c->block = m3_blockslice_allocate(c->block,  2,   2);
+    c->row = m3_rowslice_allocate(c->block,  c->row,   2, 2);
+    m3d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/2, a->ncols/2);
+	m3d_window_create(a, &c->row[0][1], 0, a->ncols/2 , a->nrows/2, a->ncols/2);   
+    m3d_window_create(a, &c->row[1][0], a->nrows/2, 0 , a->nrows/2, a->ncols/2);
+	 m3d_window_create(a, &c->row[1][1], a->nrows/2,a->ncols/2,  a->nrows/2, a->ncols/2);
+    
+}
+
 
 m5d_t  * m5_blockslice_allocate(m5d_t * block, rci_t  nrows,  wi_t  width)
 {
@@ -483,6 +496,18 @@ m5d_t m5d_transpose_sliced(m5d_t * a)
 
     return c;
   
+}
+void m5d_quarter(m5_slice * c , m5d_t * a)
+{
+	
+	 	
+	 c->block = m5_blockslice_allocate(c->block,  2,   2);
+    c->row = m5_rowslice_allocate(c->block,  c->row,   2, 2);
+    m5d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/2, a->ncols/2);
+	m5d_window_create(a, &c->row[0][1], 0, a->ncols/2 , a->nrows/2, a->ncols/2);   
+    m5d_window_create(a, &c->row[1][0], a->nrows/2, 0 , a->nrows/2, a->ncols/2);
+	 m5d_window_create(a, &c->row[1][1], a->nrows/2,a->ncols/2,  a->nrows/2, a->ncols/2);
+    
 }
 
 
@@ -699,4 +724,15 @@ m7d_t m7d_transpose_sliced(m7d_t * a)
   
 }
 
-
+void m7d_quarter(m7_slice * c , m7d_t * a)
+{
+	
+	 	
+	 c->block = m7_blockslice_allocate(c->block,  2,   2);
+    c->row = m7_rowslice_allocate(c->block,  c->row,   2, 2);
+    m7d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/2, a->ncols/2);
+	m7d_window_create(a, &c->row[0][1], 0, a->ncols/2 , a->nrows/2, a->ncols/2);   
+    m7d_window_create(a, &c->row[1][0], a->nrows/2, 0 , a->nrows/2, a->ncols/2);
+	 m7d_window_create(a, &c->row[1][1], a->nrows/2,a->ncols/2,  a->nrows/2, a->ncols/2);
+    
+}
