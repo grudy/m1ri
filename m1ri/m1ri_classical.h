@@ -1,3 +1,6 @@
+#ifndef M1RIPROJECT_CLASSICAL_H
+#define M1RIPROJECT_CLASSICAL_H
+
 /*
 //  m1ri_classical.h
 //  m1riproject
@@ -23,27 +26,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 //  Copyright (c) 2013 William Alumbaugh. All rights reserved.
 */
 
-#ifndef M1RIPROJECT_CLASSICAL_H
-#define M1RIPROJECT_CLASSICAL_H
 #include "m1ri_3dt.h"
 #include "m1riwrappers.h"
 #include "m1riarith.h"
 #include "m1ri_cubes.h"
 #include "m1ri_small.h"
+
 /*
- 
- 
- 
+  
 */
 void m3d_mul_naive_square(m3d_t *, m3d_t * , m3d_t *);
+
 void m3d_classic_mul(m3d_t *,  m3d_t * , m3d_t *);
 
-
-
-
-
-
-
-
-
-#endif
+#endif //M1RIPROJECT_CLASSICAL_H

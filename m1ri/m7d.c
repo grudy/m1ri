@@ -29,10 +29,10 @@ vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
     
     
     
-    wi_t  block = (y  ) / 64;
-    int  spill = (y  % 64) + n - 64;
+    wi_t  block = (y  ) / M1RI_RADIX;
+    int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
-    bits = (spill <= 0) ? M->rows[x][block].middle << -spill : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].middle >> spill);
+    bits = (spill <= 0) ? M->rows[x][block].middle << -spill : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].middle >> spill);
     return bits;
     
     
@@ -45,10 +45,10 @@ vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
     
     
     
-    wi_t  block = (y  ) / 64;
-    int  spill = (y  % 64) + n - 64;
+    wi_t  block = (y  ) / M1RI_RADIX;
+    int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
-    bits = (spill <= 0) ? M->rows[x][block].sign << -spill : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].sign >> spill);
+    bits = (spill <= 0) ? M->rows[x][block].sign << -spill : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].sign >> spill);
     return bits;
     
     
@@ -62,10 +62,10 @@ vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
 
 vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
 
-    wi_t  block = (y  ) / 64;
-    int  spill = (y  % 64) + n - 64;
+    wi_t  block = (y  ) / M1RI_RADIX;
+    int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
-    bits = (spill <= 0) ? M->rows[x][block].units << -spill : (M->rows[x][block + 1].units<< (64 - spill)) | (M->rows[x][block].units>> spill);
+    bits = (spill <= 0) ? M->rows[x][block].units << -spill : (M->rows[x][block + 1].units<< (M1RI_RADIX - spill)) | (M->rows[x][block].units>> spill);
     return bits;
     
     
@@ -85,15 +85,15 @@ vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
 vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n) {
 
     
-    wi_t  block = (y  ) / 64;
-    int  spill = (y  % 64) + n - 64;
+    wi_t  block = (y  ) / M1RI_RADIX;
+    int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vtri elem;
-    elem.units = (spill <= 0) ? M->rows[x][block].units << -spill : ((M->rows[x][(block + 1)].units<< (64 - spill)) | (M->rows[x][block].units >> spill));
-    elem.sign = (spill <= 0) ?  (M->rows[x][block].sign << -spill) : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].sign>> spill);
-    elem.middle = (spill <= 0) ?  (M->rows[x][block].middle << -spill) : (M->rows[x][block + 1].middle << (64 - spill)) | (M->rows[x][block].middle>> spill);
-    elem.middle = (elem.middle >> (64 - n));
-    elem.units = (elem.units >> (64 - n));
-    elem.sign = (elem.sign >> (64 - n));
+    elem.units = (spill <= 0) ? M->rows[x][block].units << -spill : ((M->rows[x][(block + 1)].units<< (M1RI_RADIX - spill)) | (M->rows[x][block].units >> spill));
+    elem.sign = (spill <= 0) ?  (M->rows[x][block].sign << -spill) : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].sign>> spill);
+    elem.middle = (spill <= 0) ?  (M->rows[x][block].middle << -spill) : (M->rows[x][block + 1].middle << (M1RI_RADIX - spill)) | (M->rows[x][block].middle>> spill);
+    elem.middle = (elem.middle >> (M1RI_RADIX - n));
+    elem.units = (elem.units >> (M1RI_RADIX - n));
+    elem.sign = (elem.sign >> (M1RI_RADIX - n));
     
     
     
@@ -145,12 +145,12 @@ m7d_t    m7d_identity_set(m7d_t * a)
         int k,i,  j,l;
         for( i  = 1; i < (a->width  ) ; ++i)
         {
-            l =  ((i - 1) * m1ri_word);
+            l =  ((i - 1) * M1RI_RADIX);
             j = i - 1;
-            for ( k = 0 ; k < m1ri_word; k++)
+            for ( k = 0 ; k < M1RI_RADIX; k++)
             {
                 
-                a->rows[l][j].units = lbit[k];
+              a->rows[l][j].units = (1ULL)<<k;
                 
                 l++;
                 
@@ -158,26 +158,26 @@ m7d_t    m7d_identity_set(m7d_t * a)
             
         }
         
-        if((a->ncols%m1ri_word) != 0)
+        if((a->ncols%M1RI_RADIX) != 0)
         {
-            l = a->ncols %m1ri_word;
-            k = ((a->width -1) * m1ri_word);
-            l = m1ri_word - l;
-            for(i = 0; i < (m1ri_word - l); i++)
+            l = a->ncols %M1RI_RADIX;
+            k = ((a->width -1) * M1RI_RADIX);
+            l = M1RI_RADIX - l;
+            for(i = 0; i < (M1RI_RADIX - l); i++)
             {
                 
-                a->rows[k + i][a->width-1].units = lbit[i];
+                a->rows[k + i][a->width-1].units = (1ULL)<<i;
             }
             
         }
-        if ((a->ncols%64) == 0)
+        if ((a->ncols%M1RI_RADIX) == 0)
         {
             
-            l = (a->width - 1) * 64;
-            for(i  = 0; i < 64; i++)
+            l = (a->width - 1) * M1RI_RADIX;
+            for(i  = 0; i < M1RI_RADIX; i++)
                 
             {
-                a->rows[l][a->width -1].units = lbit[i];
+                a->rows[l][a->width -1].units = (1ULL)<<i;
                 l++;
                 
             }
@@ -204,8 +204,8 @@ m7d_t   m7d_identity(m7d_t  *a, rci_t n)
 //unfinished
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
 {
-    wi_t  block = (y  ) / 64;
-    int   spill =  (y  % 64) ;
+    wi_t  block = (y  ) / M1RI_RADIX;
+    int   spill =  (y  % M1RI_RADIX) ;
     M->rows[x][block].units  = (u == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
     M->rows[x][block].middle  = (m == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].middle))  : ((leftbit  >> spill) | (M->rows[x][block].middle));
     M->rows[x][block].sign  = (s == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].sign))  : ((leftbit  >> spill) | (M->rows[x][block].sign));
@@ -254,7 +254,7 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
 {
     a->ncols = ncols;
     a->nrows = nrows;
-    a->width =  DN(ncols, m1ri_word);
+    a->width = M1RI_DN(ncols, M1RI_RADIX);
     a->block = m7d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m7d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = iswindowed;
@@ -289,12 +289,12 @@ m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t si
     
     
     
-    submatrix.nrows =   m1ri_word * sizecols;
-    submatrix.ncols =  m1ri_word * sizecols;
+    submatrix.nrows =   M1RI_RADIX * sizecols;
+    submatrix.ncols =  M1RI_RADIX * sizecols;
     submatrix.flags = iswindowed;
     submatrix.width =  sizecols;
     submatrix.block = &c->block[(stvtri * stvtri)];
-    submatrix.rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vtri *));
+    submatrix.rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vtri *));
     submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix.fcol   = 0;
     submatrix.svtri = stvtri;
@@ -303,7 +303,7 @@ m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t si
     
     int i;
     
-    for(  i =   strow; i < (strow + (m1ri_word * sizerows)) ; i++)
+    for(  i =   strow; i < (strow + (M1RI_RADIX * sizerows)) ; i++)
     {
         
         submatrix.rows[i - strow] = c->rows[i];
@@ -318,12 +318,12 @@ void   m7d_window_create(m7d_t *c, m7d_t * submatrix, rci_t strow, rci_t stvtri,
 {
     
     
-    submatrix->nrows =   m1ri_word * sizecols;
-    submatrix->ncols =  m1ri_word * sizecols;
+    submatrix->nrows =   M1RI_RADIX * sizecols;
+    submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
     submatrix->width = 1 * sizecols;
     submatrix->block = &c->block[(stvtri * stvtri)];
-    submatrix->rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vtri *));
+    submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vtri *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svtri = stvtri;
@@ -331,7 +331,7 @@ void   m7d_window_create(m7d_t *c, m7d_t * submatrix, rci_t strow, rci_t stvtri,
     
     int i;
     
-    for(  i =   strow; i < strow + (m1ri_word * sizerows) ; i++)
+    for(  i =   strow; i < strow + (M1RI_RADIX * sizerows) ; i++)
     {
         
         submatrix->rows[i - strow] = c->rows[i];
