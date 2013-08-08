@@ -30,7 +30,7 @@ void add_vbg(vbg * r, vbg const * x, vbg const * y)
 
 {
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
-    r->sign = (ST(x->units, y->sign, x->sign ) | ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
+    r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
     
   
 }
@@ -178,7 +178,7 @@ m3d_t * m3d_hadamard(m3d_t const *a, m3d_t const *b)
 void sub_64_m3d(vbg **R, vbg  **A, vbg  **B)
 {
     int i;
-    for (i= 0; i < m1ri_word; i++ )
+    for (i= 0; i < M1RI_RADIX; i++ )
     {
         R[i][0] = sub_m3dr(A[i][0], B[i][0]);
     }
@@ -189,7 +189,7 @@ void sub_64_m3d(vbg **R, vbg  **A, vbg  **B)
 void add_64_m3d(vbg **R, vbg   **A, vbg  **B)
 {
     int i;
-    for (i = 0; i < m1ri_word; i++ )
+    for (i = 0; i < M1RI_RADIX; i++ )
     {
         R[i][0] = add_m3dr(A[i][0], B[i][0]);
     }
