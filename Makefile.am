@@ -31,10 +31,6 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = m1ri.pc
 
 libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
-libm1ri_la_LIBADD = $(LIBPNG_LIBADD)
-
-
-
 
 check_PROGRAMS =  hadamard m3d_create_test m3d_functions m5d_tests m7d_tests 
 hadamard_SOURCES=tests/hadamard.c 
