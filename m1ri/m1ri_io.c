@@ -352,10 +352,10 @@ void m3d_specs(m3d_t * a)
 {
     
     
-    if (a->flags == iswindowed) {
+    if (a->flags & iswindowed) {
         printf("Is Windowed   \n");
     }
-    else if (a->flags == notwindowed)
+    else if (a->flags & iswindowed == 0)
     {
         printf("Is not windowed   \n");
     }
@@ -379,10 +379,10 @@ void m5d_specs(m5d_t * a)
 {
     
     
-    if (a->flags == iswindowed) {
+    if (a->flags & iswindowed) {
         printf("Is Windowed   \n");
     }
-    else if (a->flags == notwindowed)
+    else if ((a->flags & iswindowed) == 0)
     {
         printf("Is not windowed   \n");
     }
@@ -406,10 +406,10 @@ void m7d_specs(m7d_t * a)
 {
     
     
-    if (a->flags == iswindowed) {
+    if (a->flags & iswindowed) {
         printf("Is Windowed   \n");
     }
-    else if (a->flags == notwindowed)
+    else if ((a->flags & iswindowed) == 0)
     {
         printf("Is not windowed   \n");
     }

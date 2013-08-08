@@ -54,9 +54,9 @@ vec m3d_rs_bits(m3d_t const *M, rci_t  x, rci_t  y, int  n) {
     
     
     
-    wi_t  block = (y  ) / m1ri_word;
+    wi_t  block = (y  ) / M1RI_RADIX;
     
-    int  spill = (y  % m1ri_word) + n - m1ri_word;
+    int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     
     vec bits;
     
@@ -75,9 +75,9 @@ vec m3d_ru_bits(m3d_t const *M, rci_t  x, rci_t  y, int  n) {
     
     
     
-    wi_t  block = (y  ) / m1ri_word;
+    wi_t  block = (y  ) / M1RI_RADIX;
     
-    int  spill = (y  % m1ri_word) + n - m1ri_word;
+    int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     
     vec bits;
     
@@ -100,9 +100,9 @@ vbg m3d_read_elems(m3d_t const *M, rci_t  x, rci_t  y, int  n) {
     
     
     
-    wi_t  block = (y  ) / m1ri_word;
+    wi_t  block = (y  ) / M1RI_RADIX;
     
-    int  spill = (y  % m1ri_word) + n - m1ri_word;
+    int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     
     vbg elem;
     
@@ -110,9 +110,9 @@ vbg m3d_read_elems(m3d_t const *M, rci_t  x, rci_t  y, int  n) {
     
     elem.sign = (spill <= 0) ?  (M->rows[x][block].sign << -spill) : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].sign>> spill);
     
-    elem.units = (elem.units >> (m1ri_word - n));
+    elem.units = (elem.units >> (M1RI_RADIX - n));
     
-    elem.sign = (elem.sign >> (m1ri_word - n));
+    elem.sign = (elem.sign >> (M1RI_RADIX - n));
     
     
     
@@ -129,10 +129,10 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
         int i;
         vec block_a, block_b, dif_a, dif_b, a_place, b_place; 
         vbg tempa, tempb;
-         block_a = col_a/m1ri_word;
-         block_b = col_b/m1ri_word;
-         dif_a = col_a%m1ri_word;
-         dif_b = col_b%m1ri_word;
+         block_a = col_a/M1RI_RADIX;
+         block_b = col_b/M1RI_RADIX;
+         dif_a = col_a%M1RI_RADIX;
+         dif_b = col_b%M1RI_RADIX;
          a_place =  leftbit >>  dif_a ;
          b_place =  leftbit >> dif_b ;
        
@@ -159,8 +159,8 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
 }
 void  m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
 {
-    wi_t  block = (y  ) / m1ri_word;
-    int   spill =  (y  % m1ri_word) ;
+    wi_t  block = (y  ) / M1RI_RADIX;
+    int   spill =  (y  % M1RI_RADIX) ;
     M->rows[x][block].units  = (u == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
     M->rows[x][block].sign  = (s == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].sign))  : ((leftbit  >> spill) | (M->rows[x][block].sign));
     
@@ -184,12 +184,12 @@ m3d_t m3d_create( m3d_t *  a, rci_t nrows, rci_t ncols)
     
     a->ncols = ncols;
     a->nrows = nrows;
-    a->width =  DN(ncols, m1ri_word);
+    a->width =  M1RI_DN(ncols, M1RI_RADIX);
     a->block =  NULL;
     a->rows =  NULL;
     a->block = m3d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m3d_row_alloc(a->block, a->rows, a->width, a->nrows);
-    a->flags = notwindowed;
+    a->flags = 0;
     a->lblock = ncols%64;
     a->fcol = 0;
     a->svbg = 0;
@@ -260,12 +260,12 @@ m3d_t    m3d_identity_set(m3d_t * a)
         int k,i,  j,l;
         for( i  = 1; i < (a->width  ) ; ++i)
         {
-            l =  ((i - 1) * m1ri_word);
+            l =  ((i - 1) * M1RI_RADIX);
             j = i - 1;
-            for ( k = 0 ; k < m1ri_word; k++)
+            for ( k = 0 ; k < M1RI_RADIX; k++)
             {
                 
-                a->rows[l][j].units = lbit[k];
+              a->rows[l][j].units = (1ULL)<<k;
                 
                 l++;
                 
@@ -273,15 +273,15 @@ m3d_t    m3d_identity_set(m3d_t * a)
             
         }
         
-        if((a->ncols%m1ri_word) != 0)
+        if((a->ncols%M1RI_RADIX) != 0)
         {
-            l = a->ncols %m1ri_word;
-            k = ((a->width -1) * m1ri_word);
-            l = m1ri_word - l;
-            for(i = 0; i < (m1ri_word - l); i++)
+            l = a->ncols %M1RI_RADIX;
+            k = ((a->width -1) * M1RI_RADIX);
+            l = M1RI_RADIX - l;
+            for(i = 0; i < (M1RI_RADIX - l); i++)
             {
                 
-                a->rows[k + i][a->width-1].units = lbit[i];
+              a->rows[k + i][a->width-1].units = (1ULL)<<i;
             }
             
         }
@@ -292,7 +292,7 @@ m3d_t    m3d_identity_set(m3d_t * a)
             for(i  = 0; i < 64; i++)
                 
             {
-                a->rows[l][a->width -1].units = lbit[i];
+              a->rows[l][a->width -1].units = (1ULL)<i;
                 l++;
                 
             }
@@ -318,7 +318,7 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
 
 
 /*
- windows in m1ri_word rows * m1ri_word column incriments
+ windows in M1RI_RADIX rows * M1RI_RADIX column incriments
  stvbg = the vbg or width offset from the base matrix
  strow = row offset in increments of 64
  sizecol  = cols * 64
@@ -350,20 +350,20 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     
     
     
-    submatrix.nrows =   m1ri_word * sizerows;
-    submatrix.ncols =  m1ri_word * sizecols;
+    submatrix.nrows =   M1RI_RADIX * sizerows;
+    submatrix.ncols =  M1RI_RADIX * sizecols;
     submatrix.flags = iswindowed;
     submatrix.width =  sizecols;
-    submatrix.rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vbg *));
+    submatrix.rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vbg *));
     submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix.fcol   = 0;
     submatrix.svbg = stvbg;
     
     
-    int f = strow * m1ri_word;
+    int f = strow * M1RI_RADIX;
     int i;
     
-    for(  i =   f; i < (f + (m1ri_word * sizerows)) ; i++)
+    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
     {
        
         
@@ -393,20 +393,20 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
         
     }
     
-    submatrix->nrows =   m1ri_word * sizerows;
-    submatrix->ncols =  m1ri_word * sizecols;
+    submatrix->nrows =   M1RI_RADIX * sizerows;
+    submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
     submatrix->width =  sizecols;
     submatrix->block =      m1ri_calloc(sizecols * sizerows, sizeof(m3d_t));
     submatrix->block = &c->block[(strow * stvbg)];
-    submatrix->rows = m1ri_calloc(m1ri_word * sizerows ,  sizecols * sizeof(vbg *));
+    submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vbg *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svbg = stvbg;
-    int f = strow * m1ri_word;
+    int f = strow * M1RI_RADIX;
     int i;
     
-    for(  i =   f; i < (f + (m1ri_word * sizerows)) ; i++)
+    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
     {
         
         
