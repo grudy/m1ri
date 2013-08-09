@@ -609,7 +609,47 @@ void m5d_sub( vfd *r, vfd *a, vfd *b)
 void iaddgf5(vfd *r,vfd *x)
 {
   
-   
+  vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    c = x->units ^ r->units;
+    d = x->middle ^ r->middle;
+    e = x->sign ^ r->sign;
+    f = d & c;
+    g = f | x->middle;
+    h = f ^ r->sign;
+    i = h | e;
+/**/r->sign = i;
+    j = i ^ x->units;
+    k = j ^ r->middle;
+    l = k | c;
+    m = l ^ e;
+    n = m ^ g;
+/**/r->middle = n;
+    o = m | d;
+    p = o ^ c;
+    q = p^n;
+    /**/r->sign = q;
+
+    
+   /* def add(a,b):
+    c = b[0] ^ a[0]
+    d = b[1] ^ a[1]
+    e = b[2] ^ a[2]
+    f = d & c
+    g = f | b[1]
+    h = f ^ a[2]
+    i = h | e
+    j = i ^ b[0]
+    k = j ^ a[1]
+    l = k | c
+    m = l ^ e
+    n = m ^ g
+    o = m | d
+    p = o ^ c
+    q = p ^ n
+    return q,n,i
+    */
+    
+
     
     
     
@@ -657,7 +697,43 @@ vfd m5d_mul4(vfd a)
  //matrix r = (matrix r - matrix x)
 void isubgf5(vfd *r,vfd *x) 
 {
+    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    c = x->units ^ r->units;
+    d = x->middle ^ r->middle;
+    e = c ^ x->sign;
+    f = e ^ x->middle;
+    g = f ^ r->sign;
+    h = g | d;
+    i = h | c;
+    j = i ^ c;
+    k = j & r->sign;
+    l = k | x->middle;
+    m = l ^ g;
+    n = m ^ r->middle;
+    o = m | d;
+    p = o ^ c;
+    q = p ^ r->middle;
+    q = r->units;
     
+    /*
+    def sub(a,b):
+    c = b[0] ^ a[0]
+    d = b[1] ^ a[1]
+    e = c ^ b[2]
+    f = e | b[0]
+    g = f ^ a[2]
+    h = g | d
+    i = h | c
+    j = i ^ c
+    k = j & a[2]
+    l = k | b[1]
+    m = l ^ g
+    n = m ^ a[1]
+    o = m | d
+    p = o ^ c
+    q = p ^ a[1]
+    return q,n,i
+    */
     
     
 }
@@ -686,14 +762,26 @@ int m5d_equal(m5d_t const *a, m5d_t const *b)
     return 1;
 }
 
-void add_m1riw_gff5(vfd *R, vfd *A, vfd *B)
+void m5d_add_r(m5d_t *c, m5d_t *a, m5d_t *b)
 {
-    int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
+      if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-       addgf5(  &R[i], &A[i], &B[i]);
+      m5d_create(c, a->nrows , b->ncols);
+        int i, j;
+        
+        for( i = 0; i < a->nrows; i++)
+        {
+            for(j = 0; j < (a->width ); j++)
+            {
+                
+                addgf5(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+                
+            }
+            
+            
+        }
+        
     }
-    
 }
 
 

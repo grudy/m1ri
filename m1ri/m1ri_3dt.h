@@ -84,7 +84,7 @@ typedef struct {
  y = columns
  M = Matrix read from
  */
-m3d_t transpose(m3d_t  const *);
+
 vec m3d_rs_bits(m3d_t const *, rci_t  , rci_t  , int  );
 
 /*
@@ -107,7 +107,7 @@ vec m3d_ru_bits(m3d_t const  *, rci_t  , rci_t  , int  );
 */
 
 vbg m3d_read_elems(m3d_t const *, rci_t  , rci_t  , int  );
-m3d_t m3d_transposewin(m3d_t  const * );
+
 
 
 /*

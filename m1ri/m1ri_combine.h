@@ -28,7 +28,8 @@
 #include <m1ri/m1riwrappers.h>
 #include <m1ri/m1ri_3dt.h>
 #include <m1ri/m1riarith.h>
-
+#include <m1ri/m5d.h>
+#include <m1ri/m7d.h>
 void *  combine3(vbg *, vbg * );
 
 
@@ -41,6 +42,32 @@ void combine7(vbg *, vbg * );
 
 
 void combine8(vbg *, vbg *);
+
+void *  m5_combine3(vfd *, vfd * );
+
+
+void m5_combine4(vfd *, vfd * );
+
+void m5_combine5(vfd *, vfd * );
+void m5_combine6(vfd *, vfd * );
+
+void m5_combine7(vfd *, vfd * );
+
+
+void m5_combine8(vfd *, vfd *);
+
+void *  m7_combine3(vtri  *, vtri  * );
+
+
+void m7_combine4(vtri  *, vtri  * );
+
+void m7_combine5(vtri  *, vtri  * );
+void m7_combine6(vtri  *, vtri  * );
+
+void m7_combine7(vtri  *, vtri  * );
+
+
+void m7_combine8(vtri  *, vtri  *);
 
 
 

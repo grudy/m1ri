@@ -448,6 +448,7 @@ vtri addgf7r(vtri  *x, vtri *y)
 }
 
 
+
 void reduce_vtri( vtri * a)
 {
     vtri b = *a ;
@@ -552,4 +553,19 @@ void add_m1riw_gff7(vtri *R, vtri *A, vtri *B)
     
 }
 
+
+
+void m7d_add_r(m7d_t *c, m7d_t *a, m7d_t *b)
+{
+
+	
+
+
+}
+
+
+void isubgf7(vtri  *r, vtri *x)
+{
+
+}
 

@@ -120,7 +120,7 @@ void addgf5(vfd *, vfd * , vfd *);
 
 
 
-vfd m5d_add_r(vfd  *, vfd *);
+void m5d_add_r(m5d_t  *, m5d_t *, m5d_t *);
 
 
 void m5d_sub( vfd *, vfd *, vfd *);               //subtract vector x by by vector y.   The product is vector r.

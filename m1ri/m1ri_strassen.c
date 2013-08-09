@@ -77,56 +77,6 @@ void m3d_strassen_total16(m3_slice *c, m3_slice const *a, m3_slice const *b)
 }
 
 
-//Strassen winograd arithmatic on slices of size row
-void m3d_mul_slicerow(m3_slice *  c, m3_slice  *  a, m3_slice *   b, rci_t * rownum )
-{
-    int colnum;
-    m3d_t * x1 = m1ri_calloc(64, sizeof(m3d_t));
-    m3d_t * x2 = m1ri_calloc(64, sizeof(m3d_t));
-    m3d_create(x2, 64, 64);
-    m3d_create(x1,64,  64);
-    for( colnum = 0; colnum < c->nrows; colnum = colnum +2)
-    {
-        
-        
-        m3d_sub(x1, &a->row[*rownum][colnum], &a->row[*rownum + 1][colnum]);
-        m3d_sub(x2,&b->row[*rownum + 1][colnum + 1],&b->row[*rownum][colnum + 1]);
-        mul_64_m3d(c->row[*rownum + 1][colnum].rows ,x1->rows,x2->rows);
-        
-        
-        
-        
-        add_64_m3d(x1->rows,a->row[*rownum + 1][colnum].rows,a->row[*rownum + 1][colnum + 1].rows);
-        m3d_sub(x2,&b->row[*rownum][colnum + 1],&b->row[*rownum][colnum]);
-        mul_64_m3d(c->row[*rownum + 1][colnum + 1].rows,x1->rows,x2->rows);
-        
-        m3d_sub(x1,x1,&a->row[*rownum][colnum]);
-        m3d_sub(x2,&b->row[*rownum + 1][colnum + 1],x2);
-        mul_64_m3d(c->row[*rownum][colnum + 1].rows,x1->rows,x2->rows);
-        
-        
-        
-        
-        m3d_sub(x1,&a->row[*rownum][colnum + 1],x1);
-        mul_64_m3d(c->row[*rownum][colnum].rows,x1->rows,b->row[*rownum + 1][colnum + 1].rows);
-        mul_64_m3d(x1->rows,a->row[*rownum][colnum].rows,b->row[*rownum][colnum].rows);
-        
-        add_64_m3d(c->row[*rownum][colnum + 1].rows,x1->rows,c->row[*rownum][colnum + 1].rows);
-        add_64_m3d(c->row[*rownum + 1][colnum].rows,c->row[*rownum][colnum + 1].rows,c->row[*rownum + 1][colnum].rows);
-        add_64_m3d(c->row[*rownum][colnum + 1].rows,c->row[*rownum][colnum + 1].rows,c->row[*rownum + 1][colnum + 1].rows);
-        add_64_m3d(c->row[*rownum + 1][colnum + 1].rows,c->row[*rownum + 1][colnum].rows,c->row[*rownum + 1][colnum + 1].rows);
-        add_64_m3d(c->row[*rownum][colnum + 1].rows,c->row[*rownum][colnum + 1].rows,c->row[*rownum][colnum].rows);
-        
-        m3d_sub(x2,x2,&b->row[*rownum + 1][colnum]);
-        mul_64_m3d(c->row[*rownum][colnum].rows,a->row[*rownum + 1][colnum + 1].rows,x2->rows);
-        
-        m3d_sub(&c->row[*rownum + 1][colnum],&c->row[*rownum + 1][colnum],&c->row[*rownum][colnum]);
-        mul_64_m3d(c->row[*rownum][colnum].rows,a->row[*rownum][colnum + 1].rows,b->row[*rownum + 1][colnum].rows);
-        add_64_m3d(c->row[*rownum][colnum].rows,x1->rows,c->row[*rownum][colnum].rows);
-        
-    }
-    
-}
 
 
 void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )

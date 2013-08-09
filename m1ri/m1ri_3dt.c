@@ -220,35 +220,6 @@ m3d_t  m3d_rand(m3d_t * a)
  n = matrix size (row length and column width)
  
  */
-m3d_t m3d_transposewin(m3d_t const *a )
-{
-    m3d_t *b = m1ri_malloc(sizeof(m3d_t));
-    m3d_create(b, a->nrows, a->ncols);
-int i, x;
-vbg temp;
-for(i = 0; i < a->nrows; i ++)
-{
-	for(x = 0; x < a->ncols; x ++)
-	{
-	
-		temp.units =  (a->rows[x][0].units & (leftbit >> i) );
-		temp.sign =  (a->rows[x][0].sign & (leftbit >> i) );
-		
-        b->rows[i][0].units = (temp.units) ?  b->rows[i][0].units | (leftbit >> x) : b->rows[i][0].units ;
-        b->rows[i][0].sign = (temp.sign) ? b->rows[i][0].sign | (leftbit >> x) : b->rows[i][0].sign  ;
-       // b->rows[i][0].units = (temp.units) ? : ;
-     
-        
-        
-        
-	}
-	
-
-    }
-                                                
-        return *b;
-                                                
-}
 
                                                                                         
 
