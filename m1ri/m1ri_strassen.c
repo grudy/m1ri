@@ -25,7 +25,7 @@
 
 
 #include "m1ri_strassen.h"
-#import <math.h>
+#include <math.h>
 #include <stdlib.h>
 void m3d_strassen_total16(m3_slice *c, m3_slice const *a, m3_slice const *b)
 {

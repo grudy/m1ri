@@ -12,7 +12,8 @@ libm1ri_la_SOURCES = m1ri/m1ri_3dt.c\
 	m1ri/m1ri_combine.c\
 	m1ri/m7d.c\
 	m1ri/m5d.c\
-	m1ri/m1ri_io.c
+	m1ri/m1ri_io.c \
+	m1ri/misc.c
 
 pkgincludesubdir = $(includedir)/m1ri
 pkgincludesub_HEADERS = m1ri/m5d.h\
@@ -25,16 +26,13 @@ pkgincludesub_HEADERS = m1ri/m5d.h\
 	m1ri/m1riwrappers.h\
 	m1ri/m1riarith.h\
 	m1ri/m1ri_classical.h\
-	m1ri/m1ri_io.h
+	m1ri/m1ri_io.h \
+	m1ri/misc.h
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = m1ri.pc
 
 libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
-libm1ri_la_LIBADD = $(LIBPNG_LIBADD)
-
-
-
 
 check_PROGRAMS =  hadamard m3d_create_test m3d_functions m5d_tests m7d_tests 
 hadamard_SOURCES=tests/hadamard.c 

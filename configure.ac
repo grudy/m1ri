@@ -2,9 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
-AC_CONFIG_SRCDIR([config.h.in])
-AC_CONFIG_HEADERS([config.h])
+AC_INIT(m1ri,1)
+AC_CONFIG_SRCDIR([m1ri/config.h.in])
+AC_CONFIG_HEADERS([m1ri/config.h])
 
 # Checks for programs.
 AC_PROG_AWK
@@ -17,9 +17,7 @@ AM_INIT_AUTOMAKE
 LT_INIT
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lm':
-AC_CHECK_LIB([m], [main])
-# FIXME: Replace `main' with a function in `-lm1ri':
-AC_CHECK_LIB([m1ri], [main])
+AC_CHECK_LIB([m], [log])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdint.h stdlib.h string.h])
@@ -33,5 +31,9 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 
+RELEASE="AC_PACKAGE_VERSION"
+AC_SUBST(RELEASE)
+
 AC_CONFIG_FILES([Makefile m1ri.pc])
 AC_OUTPUT
+
