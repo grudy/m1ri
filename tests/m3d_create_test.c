@@ -29,8 +29,42 @@
 #include "time.h"
 int main(int argc, const char * argv[])
 {
-    
+ 	 m3d_t *a, *b, *c;
+    a = malloc(sizeof(m3d_t));
+    b = malloc(sizeof(m3d_t));
+    c =  malloc(sizeof(m3d_t));
+ 	 m3d_create(a, 128, 128);
+  m3d_create(b, 128, 128);
+   m3d_create(c, 128, 128);
+ // m3d_rand(a);
+    //m3d_rand(b);
+    	m3_slice * a_slice , * b_slice, * c_slice;
+    	a_slice = m1ri_malloc(sizeof(m3_slice));
+    	b_slice = m1ri_malloc(sizeof(m3_slice));
+    	c_slice = m1ri_malloc(sizeof(m3_slice));
+	//m3d_add_r(c, a ,b);
+	// m3d_create(a, 64, 64);
+  // m3d_create(b, 64, 64);
+    /// m3d_create(c, 64, 64);
+	//a->rows[0][0].units = leftbit;
+ 	//m3d_print(a);
+	//m3d_print(b);
+	//m3d_slices(a_slice, a, 1);
+	//m3d_identity_set(&a_slice->row[0][0]);
+	m3d_identity_set(a);
+ 
+  m3d_print(a);
+  		//m3d
+  
+  
+  ///	m3d_print(c);
+	//m3d_classic_mul(c, a, b);
+  //	m3d_mul_naive_square(c, a, b);
+	
+	//m3d_print(c);
     
     return 0;
+    
+    
 }
 

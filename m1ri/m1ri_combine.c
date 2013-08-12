@@ -173,3 +173,4 @@ void combine8(vbg *table, vbg *input)
     for (i = 1; i < 128; i++)
         add_vbg((t7 + i), (table+i), &h);
 }
+ 

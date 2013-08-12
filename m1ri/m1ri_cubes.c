@@ -274,13 +274,14 @@ m3d_t m3d_transpose_sliced(m3d_t * a)
 void m3d_quarter(m3_slice * c , m3d_t * a)
 {
 	
-	 	
+	 	int arows, acols;
 	 c->block = m3_blockslice_allocate(c->block,  2,   2);
-    c->row = m3_rowslice_allocate(c->block,  c->row,   2, 2);
-    m3d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/2, a->ncols/2);
-	m3d_window_create(a, &c->row[0][1], 0, a->ncols/2 , a->nrows/2, a->ncols/2);   
-    m3d_window_create(a, &c->row[1][0], a->nrows/2, 0 , a->nrows/2, a->ncols/2);
-	 m3d_window_create(a, &c->row[1][1], a->nrows/2,a->ncols/2,  a->nrows/2, a->ncols/2);
+     c->row = m3_rowslice_allocate(c->block,  c->row,   2, 2);
+   
+     m3d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/128, a->ncols/128);
+	m3d_window_create(a, &c->row[0][1], 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+    m3d_window_create(a, &c->row[1][0], a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	 m3d_window_create(a, &c->row[1][1], a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
     
 }
 

@@ -36,18 +36,27 @@ void mul_64_m3d(vbg **R, vbg **A, vbg **B)
     
     vbg  tables6[9][64];
     vbg tables5[2][32];
+    
+     
     for (i = 0; i < 9; i ++)
     {
-        combine6(&tables6[i][0], &(B[6*i][0]));
+        combine6(&tables6[i][0], &(B [6*i][0]));
     }
+   
+      
     for (i = 0; i < 2; i ++)
     {
         combine5(&tables5[i][0], &(B[54 + (5 * i)][0]));
     }
+  
+    
+    
+    
     for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
     {
         a = A[i][0];
         v2 = a.sign;
+    
         v1 = (a.units ^ v2);
         r1 = tables6[0][v1&63];
         v1 >>= 6;
@@ -76,8 +85,9 @@ void mul_64_m3d(vbg **R, vbg **A, vbg **B)
         
         iadd_vbg(&r1, &r2);
         R[i][0] = r1;
-        
+       // */
     }
+    
 }
 
 //32 * 64,2048 bit, 256 byte matrix(slice) multiplication

@@ -32,8 +32,6 @@
 #include <m1ri/m1ri_cubes.h>
 void m3d_strassen_total16(m3_slice * , m3_slice const * , m3_slice const * );
 void  m3d_strassen(m3d_t *, m3d_t *, m3d_t*);
-void m3d_mul_slicerow(m3_slice * , m3_slice *  , m3_slice * , rci_t *);
-void  m3d_strassen_window_directly(m3d_t *, m3d_t * , m3d_t   *);
 void m3d_qrt_mul(m3d_t * ,m3d_t *, m3d_t *  );
 
 #endif

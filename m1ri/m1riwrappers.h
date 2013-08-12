@@ -39,7 +39,8 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define M1RI_FN(a, b, c, d) ((a)^(b))&((c)^(d)) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
 #define M1RI_ST(a, b , c) ((a)^(b)^(c)) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
 #define M1RI_DN(a, n) ((a)/(n)) + ((1) && (a%n))//division by n rounded up
-#define M1RI_MAX(a,b)  ((a > b)? a: b)
+#define M1RI_MAX(a,b)  ((a > b)?  a: b)
+#define M1RI_MIN(a, b)  ((a > b)? b: a)
 
 typedef u_int64_t vec;
 
@@ -55,12 +56,27 @@ typedef int wi_t;
 
 typedef unsigned int vbit;
 
+
+static inline u_int32_t powerof2(u_int32_t v)
+{
+v--;
+v |= v >> 1;
+v |= v >> 2;
+v |= v >> 4;
+v |= v >> 8;
+v |= v >> 16;
+v++; 
+return v; 
+}
 static inline void * m1ri_malloc(size_t size) {
   void * allocate = malloc(size);
   if(allocate == NULL)
     m1ri_die("Out of memory, exiting\n");
   return  allocate;
 }
+
+
+
 
 static inline void * m1ri_calloc(size_t nobj, size_t size) {
   void * allocate = calloc(nobj, size);
@@ -197,7 +213,7 @@ typedef struct {
 
 
 //When to switch  from Strassen
-static  const int cutoff = 64;
+ 
 
 
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))

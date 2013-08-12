@@ -252,20 +252,20 @@ for(i = 0; i < a->nrows; i ++)
 
                                                                                         
 
-m3d_t    m3d_identity_set(m3d_t * a)
+m3d_t m3d_identity_set(m3d_t * a)
 
 {
     if(a->ncols == a->nrows)
     {
-        int k,i,  j,l;
-        for( i  = 1; i < (a->width  ) ; ++i)
+        int k,i, j,l;
+        for( i = 1; i < (a->width ) ; ++i)
         {
-            l =  ((i - 1) * M1RI_RADIX);
+            l = ((i - 1) * M1RI_RADIX);
             j = i - 1;
             for ( k = 0 ; k < M1RI_RADIX; k++)
             {
                 
-              a->rows[l][j].units = (1ULL)<<k;
+              a->rows[l][j].units = (leftbit)>>k;
                 
                 l++;
                 
@@ -281,7 +281,7 @@ m3d_t    m3d_identity_set(m3d_t * a)
             for(i = 0; i < (M1RI_RADIX - l); i++)
             {
                 
-              a->rows[k + i][a->width-1].units = (1ULL)<<i;
+              a->rows[k + i][a->width-1].units = (leftbit)>>i;
             }
             
         }
@@ -289,10 +289,10 @@ m3d_t    m3d_identity_set(m3d_t * a)
         {
             
             l = (a->width - 1) * 64;
-            for(i  = 0; i < 64; i++)
+            for(i = 0; i < 64; i++)
                 
             {
-              a->rows[l][a->width -1].units = (1ULL)<i;
+              a->rows[l][a->width -1].units = (leftbit)>>i;
                 l++;
                 
             }
@@ -303,8 +303,6 @@ m3d_t    m3d_identity_set(m3d_t * a)
     }
     return *a;
 }
-
-
 
 
 m3d_t   m3d_identity(m3d_t  *a, rci_t n)
@@ -508,11 +506,36 @@ m3d_t m3d_stack(m3d_t * c,  m3d_t * a, m3d_t * b)
 
 
 
-/*
- 
- Releases a m3d_t into the wilderness.
- */
 
+void m3d_copypadding(m3d_t  * r, m3d_t  const * x)
+{
+		int i, s;
+        for( i = 0; i < x->nrows; i++)
+        {
+        	 for( s = 0; s < x->width; s++)
+        	 {
+            r->rows[i][s] = x->rows[i][s];
+            }
+            
+        }
+	
+
+}
+
+void m3d_putpadding(m3d_t  * r, m3d_t  const * x)
+{
+		int i, s;
+        for( i = 0; i < r->nrows; i++)
+        {
+        	 for( s = 0; s < r->width; s++)
+        	 {
+            r->rows[i][s] = x->rows[i][s];
+            }
+            
+        }
+	
+
+}
 
 
 int m3d_equal(m3d_t const *a, m3d_t const *b)
@@ -540,6 +563,10 @@ int m3d_equal(m3d_t const *a, m3d_t const *b)
 
 
 
+/*
+ 
+ Releases a m3d_t into the wilderness.
+ */
 
 
 void m3d_free( m3d_t *  tofree)
