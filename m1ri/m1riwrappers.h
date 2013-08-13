@@ -128,83 +128,11 @@ static inline void m1ri_swap_vec(vec *a, vec *b) {
   *b = temp;
 }
 
-/********************************************
- Creates  a structure for GF(5) Matrices
- ********************************************/
-
-typedef struct {
-    
-    vec units;
-    
-    vec middle;
-    
-    vec sign;
-    
-} vfd;
 
 
 
 
-static inline  vfd fold5( vec s3, vec s2, vec s1, vec s0)
-{
-    vfd r;
-    vec t = s2 | s1;
-    r.units = s0 ^ t;
-    r.middle = (r.units & s0) ^ (s3 ^ s1);
-    r.sign = (t ^ s2 ) | (r.middle & s3  );
-    return r;
-}
 
-
-/*
- GF(5) Matrix structure
- 
- */
-
-typedef struct {
-    
-    rci_t nrows; //< number of rows
-    
-    rci_t ncols; //< number of columns
-    
-    wi_t width; //< the number vfd's needed to hold columns
-    
-    
-    vfd * block;  //< block containing the data contiguous in memory
-    
-    vfd ** rows;  // < pointers to rows of the matrix
-    u_int32_t  fblock; //  first block pointed to in a window
-    u_int32_t fcol;  //column offset of first block
-    
-    
-    u_int8_t flags;
-    
-    
-    vec  svfd;   //Identifies first vbg used in row
-    
-
-    
-    u_int32_t  lblock; //  first block pointed to in a window
-    
-    
-    
-} m5d_t;
-
-
-
-/*
- 
- For when 4 vecs are needs for operations on a 3 vec structure 
-*/
-typedef struct {
-    
-    vec s3;
-    vec s2;
-    vec s1;
-    vec s0;
-    
-    
-} S;
 
 
 

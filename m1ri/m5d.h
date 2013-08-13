@@ -28,11 +28,86 @@
 #include <stdlib.h>
 #include <m1ri/m1riwrappers.h>
 
+#ifndef _vfdm5_
+#define _vfdm5_
+/*
+The Representation for GF5
+(Boothby's Additive Method) 
+000 0
+001 1
+011 2
+101 3
+111 4
+
+*/
+
+/********************************************
+ Creates  a structure for GF(5) Matrices
+ ********************************************/
+
+typedef struct {
+    
+    vec units;
+    
+    vec middle;
+    
+    vec sign;
+    
+} vfd;
 
 
 
 
 
+/*
+
+This is unused because of the current representation 
+static inline  vfd fold5( vec s3, vec s2, vec s1, vec s0)
+{
+    vfd r;
+    vec t = s2 | s1;
+    r.units = s0 ^ t;
+    r.middle = (r.units & s0) ^ (s3 ^ s1);
+    r.sign = (t ^ s2 ) | (r.middle & s3  );
+    return r;
+}
+*/
+
+/*
+ GF(5) Matrix structure
+ 
+ */
+
+typedef struct m5d_t{
+    
+    rci_t nrows; //< number of rows
+    
+    rci_t ncols; //< number of columns
+    
+    wi_t width; //< the number vfd's needed to hold columns
+
+    vfd * block;  //< block containing the data contiguous in memory
+    
+    vfd ** rows;  // < pointers to rows of the matrix
+    u_int32_t  fblock; //  first block pointed to in a window
+    u_int32_t fcol;  //column offset of first block
+ 
+    u_int8_t flags;
+	  vec  svfd;   //Identifies first vbg used in row
+ 
+    u_int32_t  lblock; //  first block pointed to in a window
+    
+    
+    
+} m5d_t;
+
+ 
+
+#endif
+
+
+/*
+ 
 
 /*
  Matrix Windows
@@ -48,11 +123,11 @@
  */
 
 
-vec m5d_rm_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) ;
-vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n);
-vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n);
-vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  n);
-void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b);
+vec m5d_rm_bits(m5d_t *, rci_t  , rci_t  , int  ) ;
+vec m5d_rs_bits(m5d_t *, rci_t  , rci_t  , int  );
+vec m5d_ru_bits(m5d_t *, rci_t  , rci_t  , int  );
+vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  );
+void * m5d_rowswap (m5d_t * , rci_t , rci_t  );
 /*
  
 */
@@ -79,7 +154,7 @@ vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows);
  
  */
 
-m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols);
+m5d_t m5d_create( m5d_t * , rci_t nrows, rci_t ncols);
 /*
  
  */
@@ -94,13 +169,13 @@ vfd * m5d_rand(m5d_t * a);
  */
 
 
-m5d_t  m5d_identity_set(m5d_t * a);
+m5d_t  m5d_identity_set(m5d_t * );
 /*
  
  */
 
 
-m5d_t   m5d_identity(m5d_t  *a, rci_t n);
+m5d_t   m5d_identity(m5d_t  *, rci_t );
 
 /*
  
@@ -123,7 +198,7 @@ void addgf5(vfd *, vfd * , vfd *);
 vfd m5d_add_r(vfd  *, vfd *);
 
 
-void m5d_sub( vfd *, vfd *, vfd *);               //subtract vector x by by vector y.   The product is vector r.
+void m5d_rrdsub( vfd *, vfd *, vfd *);               //subtract vector x by by vector y.   The product is vector r.
 
 
 

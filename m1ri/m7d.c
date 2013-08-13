@@ -150,7 +150,7 @@ m7d_t    m7d_identity_set(m7d_t * a)
             for ( k = 0 ; k < M1RI_RADIX; k++)
             {
                 
-              a->rows[l][j].units = (1ULL)<<k;
+              a->rows[l][j].units = (leftbit)>>k;
                 
                 l++;
                 
@@ -166,7 +166,7 @@ m7d_t    m7d_identity_set(m7d_t * a)
             for(i = 0; i < (M1RI_RADIX - l); i++)
             {
                 
-                a->rows[k + i][a->width-1].units = (1ULL)<<i;
+                a->rows[k + i][a->width-1].units = (leftbit)>>i;
             }
             
         }
@@ -177,7 +177,7 @@ m7d_t    m7d_identity_set(m7d_t * a)
             for(i  = 0; i < M1RI_RADIX; i++)
                 
             {
-                a->rows[l][a->width -1].units = (1ULL)<<i;
+                a->rows[l][a->width -1].units = (leftbit)>>i;
                 l++;
                 
             }

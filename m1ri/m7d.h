@@ -51,7 +51,16 @@ typedef struct {
 
 /*
  GF(7) Matrix structure
- 
+ GF7
+
+000 = 0    
+100  = 1
+010 = 2
+110 = 3
+001 = 4
+101 = 5
+011 = 6
+
  */
 
 typedef struct {
@@ -195,11 +204,6 @@ void add_m1riw_gff7(vtri *R, vtri *A, vtri *B);
 
 m7d_t   m7d_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
 void   m7d_window_create(m7d_t *, m7d_t * , rci_t , rci_t , rci_t , rci_t);
-
-
-
-
-
 
 
 

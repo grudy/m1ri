@@ -394,7 +394,7 @@ m5d_t  m5d_identity_set(m5d_t * a)
             for ( k = 0 ; k < M1RI_RADIX; k++)
             {
                 
-              a->rows[l][j].units = (1ULL)<<k;
+              a->rows[l][j].units = (leftbit)>>k;
                 l++;
                 
             }
@@ -417,7 +417,7 @@ m5d_t  m5d_identity_set(m5d_t * a)
             for(i = 0; i < (M1RI_RADIX - l); i++)
             {
                 
-                a->rows[k + i][a->width-1].units = (1ULL)<<i;
+                a->rows[k + i][a->width-1].units = (leftbit)>>i;
             }
             
         }
@@ -430,7 +430,7 @@ m5d_t  m5d_identity_set(m5d_t * a)
             for(i  = 0; i < M1RI_RADIX; i++)
                 
             {
-                a->rows[l][a->width -1].units = (1ULL)<<i;
+                a->rows[l][a->width -1].units = (leftbit)>>i;
                 l++;
                 
             }
@@ -689,7 +689,7 @@ int m5d_equal(m5d_t const *a, m5d_t const *b)
 void add_m1riw_gff5(vfd *R, vfd *A, vfd *B)
 {
     int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
+    for (i = 0; i < M1RI_RADIX; i++ )
     {
        addgf5(  &R[i], &A[i], &B[i]);
     }

@@ -38,7 +38,7 @@
 Creates  a struct of 128 bits
 ********************************************/
 
-typedef struct {
+typedef struct vbg{
     
     vec units;
     vec sign;
