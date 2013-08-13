@@ -28,8 +28,8 @@
 #include <stdlib.h>
 #include <m1ri/m1riwrappers.h>
 
-#ifndef _vfdm5_
-#define _vfdm5_
+#ifndef _VFDM5_
+#define _VFDM5_
 /*
 The Representation for GF5
 (Boothby's Additive Method) 
