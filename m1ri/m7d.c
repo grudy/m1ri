@@ -23,6 +23,8 @@
  */
 
 #include "m7d.h"
+
+
 vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
     
     
@@ -363,6 +365,15 @@ vtri * m7d_allone(m7d_t * a)
     return a->block;
 }
 
+void vtri_negate(vtri * a)
+{
+	a->units = !a->units;
+	a->middle = !a->middle;
+	a->sign = !a->sign;
+
+
+}
+
 m7d_t  m7d_rand(m7d_t * a)
 {
     int i;
@@ -396,7 +407,7 @@ void m7d_free( m7d_t *  tofree)
 }
 
 
-void addgf7(vtri * r, vtri * x, vtri * y)
+void add_vtri(vtri * r, vtri * x, vtri * y)
 
 {
     
@@ -421,9 +432,16 @@ void addgf7(vtri * r, vtri * x, vtri * y)
 
 }
 
+void isub_m7d(vtri  *r, vtri *y)
+{
+	/*
+	Subtraction function
+	*/
+
+}
 
 
-vtri addgf7r(vtri  *x, vtri *y)
+void iadd_vtri(vtri  *x, vtri *y)
 {
     vtri  r;
     vec s;
@@ -439,12 +457,14 @@ vtri addgf7r(vtri  *x, vtri *y)
     s = x->sign | y->sign | t;
     
     t = (r.units & s );
-    r.units = s ^ r.units;
-    r.middle = r.middle ^ t ;
+    x->units  = s ^ r.units;
+    x->middle  = x->middle ^ t ;
+    x->sign  = x->sign ^ (  t & x->middle);
+    /*Cleanup*/
     
-    r.sign = r.sign ^ (  t & r.middle);
+	
     
-    return r;
+
 }
 
 
@@ -541,14 +561,63 @@ int m7d_equal(m7d_t const *a, m7d_t const *b)
 }
 
 
-
-void add_m1riw_gff7(vtri *R, vtri *A, vtri *B)
+void m7d_copypadding(m7d_t  * r, m7d_t  const * x)
 {
-    int i;
-    for (i = 0; i < (sizeof(vec)); i++ )
+		int i, s;
+        for( i = 0; i < x->nrows; i++)
+        {
+        	 for( s = 0; s < x->width; s++)
+        	 {
+            r->rows[i][s] = x->rows[i][s];
+            }
+            
+        }
+	
+
+}
+
+void m7d_putpadding(m7d_t  * r, m7d_t  const * x)
+{
+		int i, s;
+        for( i = 0; i < r->nrows; i++)
+        {
+        	 for( s = 0; s < r->width; s++)
+        	 {
+            r->rows[i][s] = x->rows[i][s];
+            }
+            
+        }
+	
+
+}
+void m7d_add_r(m7d_t *c, m7d_t *a, m7d_t *b)
+{
+  
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-        R[i] = addgf7r(&A[i], &B[i]);
+    
+        int i, j;
+        
+        for( i = 0; i < a->nrows; i++)
+        {
+            for(j = 0; j < (a->width ); j++)
+            {
+                
+                add_vtri(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+               
+   
+
+    
+    
+     
+            }
+            
+            
+        }
+        
     }
+    
+    
     
 }
 

@@ -57,8 +57,6 @@ typedef struct {
 
 
 
-
-
 /*
 
 This is unused because of the current representation 
@@ -105,6 +103,9 @@ typedef struct m5d_t{
 
 #endif
 
+
+void m5d_copypadding(m5d_t  * , m5d_t const * );
+void m5d_putpadding(m5d_t  * , m5d_t const * );
 
 /*
  
@@ -191,11 +192,11 @@ m5d_t   m5d_identity(m5d_t  *, rci_t );
 
 void m5d_free( m5d_t *  );
 
-void addgf5(vfd *, vfd * , vfd *);
+void add_vfd(vfd *, vfd * , vfd *);
 
 
 
-vfd m5d_add_r(vfd  *, vfd *);
+
 
 
 void m5d_rrdsub( vfd *, vfd *, vfd *);               //subtract vector x by by vector y.   The product is vector r.
@@ -219,9 +220,9 @@ vfd m5d_mul4(vfd);
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-void iaddgf5(vfd *,vfd *);
+void iadd_vfd(vfd *,vfd *);
 
-void isubgf5(vfd *,vfd *);
+void isub_m5d(vfd *,vfd *);
 
 
 
@@ -235,7 +236,7 @@ void   m5d_window_create(m5d_t *, m5d_t * , rci_t , rci_t , rci_t , rci_t );
 
 void sub_64gf5(vfd *, vfd *, vfd *);
 
-void add_m1riw_gff5(vfd *, vfd *, vfd *);
+void m5d_add_r(m5d_t *, m5d_t *, m5d_t *);
 
 
 

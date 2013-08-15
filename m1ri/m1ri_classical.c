@@ -224,9 +224,9 @@ void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 
 
 
-/*
-m5d and m7d multiplication are commented out because many  of the functions are 
-unwritten, untested, or unfinished
+
+//m5d and m7d multiplication are commented out because many  of the functions are 
+//unwritten, untested, or unfinished
 
 
 
@@ -278,34 +278,32 @@ void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
    
     else if((c_slice->row[0][0].ncols ) <= M1RI_RADIX)
     {
-          m5d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
+      m5d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
       m5d_create(&x2, M1RI_RADIX, M1RI_RADIX);
      
       mul_64_m5d(x1.rows, a_slice->row[0][0].rows, b_slice->row[0][0].rows);
 
        mul_64_m5d(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][0].rows);
 	
-       add_64_m5d(c_slice->row[0][0].rows, x1.rows, x2.rows) ;
-    
+       m5d_add_r(&c_slice->row[0][0], &x1, &x2) ;
+     
+      
         mul_64_m5d(x1.rows,  a_slice->row[0][0].rows, b_slice->row[0][1].rows );
         mul_64_m5d(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][1].rows);
 		
 
-       add_64_m5d(c_slice->row[0][1].rows, x1.rows, x2.rows) ; 
-	 
+       m5d_add_r(&c_slice->row[0][1], &x1, &x2) ;
+	  
        mul_64_m5d(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][0].rows);
        mul_64_m5d(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][0].rows);
       
-       add_64_m5d(c_slice->row[1][0].rows, x1.rows, x2.rows); 
+       m5d_add_r(&c_slice->row[1][0], &x1, &x2) ;
 	
        mul_64_m5d(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][1].rows);
        mul_64_m5d(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][1].rows); 
 
-		 add_64_m5d(c_slice->row[1][1].rows, x1.rows, x2.rows); 
-	
-	
+		 m5d_add_r(&c_slice->row[1][1],&x1, &x2) ;
 		
-		  
 		  
     }
     //m5d_free(a_slice);
@@ -404,7 +402,7 @@ void m5d_classic_mul(m5d_t *c, m5d_t  *a, m5d_t  *b)
 }
 
 
-
+/*
 
 
 

@@ -148,23 +148,26 @@ void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
         out[1] =  ( b & (leftbit >>  x));
         out[2]  = ( c & (leftbit >>  x));
         
-        if (out[0] > 0) {
-            value = 1;
-        }
+        if (out[2] > 0) {
+            value =  value + 11;
         
+        }
         
         if (out[1] > 0) {
-            value = value + 2;
+            value = value + 1;
         }
         
         
-        if(out[2] > 0)
+        if(out[0] > 0)
         {
-            value = value + 4;
+            value = value + 2;
             
             
         }
-        value = value%5;
+        
+        
+        
+        
         printf("[%d]", value);
         
         

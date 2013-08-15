@@ -338,8 +338,7 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
         
         c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),slicesize, extracols);
         z++;
-        
-
+   
         c->row[r] =  c->block + (c->ncols * i );
         r++;
         

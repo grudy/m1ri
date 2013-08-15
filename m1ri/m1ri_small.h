@@ -25,15 +25,11 @@
 #include "m1ri/m1ri_combine.h"
 #include "m1ri/m1riarith.h"
 #include "m1ri/m1riwrappers.h"
-
-
-
-
-
-
-
-
-
+#include "m1ri/m5d.h"
+#include "m1ri/m7d.h"
+/****************************************************************************
+								GF(3)
+*****************************************************************************/
 //64 * 64,4096 bit, 512 byte matrix(slice) multiplication
 void mul_64_m3d(vbg **, vbg **, vbg **);
 
@@ -46,12 +42,32 @@ void mul_16_m3d(vbg *, vbg *, vbg *);
 //8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
 void mul_8_m3d(vbg *, vbg *, vbg *);
 
-
-
-
-
 //4 * 64,256 bit, 32 byte matrix(slice) multiplication
 void mul_4_m3d(vbg *R, vbg *A, vbg *B);
+
+/****************************************************************************
+								GF(5)
+*****************************************************************************/
+
+void mul_64_m5d(vfd **, vfd **, vfd **);
+void mul_32_m5d(vfd *, vfd *, vfd *);
+void mul_16_m5d(vfd *, vfd *, vfd *);
+void mul_8_m5d(vfd *, vfd *, vfd *);
+void mul_4_m5d(vfd *R, vfd *A, vfd *B);
+
+
+
+/****************************************************************************
+								GF(7)
+*****************************************************************************/
+
+void mul_64_m7d(vtri **, vtri **, vtri **);
+void mul_32_m7d(vtri *, vtri *, vtri *);
+void mul_16_m7d(vtri *, vtri *, vtri *);
+void mul_8_m7d(vtri *, vtri *, vtri *);
+void mul_4_m7d(vtri *R, vtri *A, vtri *B);
+
+
 
 
 

@@ -39,6 +39,14 @@ void m3d_mul_naive_square(m3d_t *, m3d_t  * , m3d_t  *);
 
 void m3d_classic_mul(m3d_t *,  m3d_t  * , m3d_t  *);
 
+void m5d_mul_naive_square(m5d_t *, m5d_t  * , m5d_t  *);
+
+void m5d_classic_mul(m5d_t *,  m5d_t  * , m5d_t  *);
+
+
+void m7d_mul_naive_square(m7d_t *, m7d_t  * , m7d_t  *);
+
+void m7d_classic_mul(m7d_t *,  m7d_t  * , m7d_t  *);
 
 
 

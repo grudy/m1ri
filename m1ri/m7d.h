@@ -114,7 +114,8 @@ void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
 /*
  
  */
-
+void m7d_copypadding(m7d_t  * , m7d_t const * );
+void m7d_putpadding(m7d_t  * , m7d_t const * );
 
 //unfinished
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s,  vec m , vec u );
@@ -171,11 +172,17 @@ m7d_t   m7d_identity(m7d_t  *a, rci_t n);
 
 int m7d_equal(m7d_t const *, m7d_t const *);
 void m7d_free( m7d_t *  );
+void vtri_negate( vtri * );
 
-void addgf7(vtri *, vtri * , vtri *);
 
-vtri addgf7r(vtri  *, vtri *);
+/********************************************
+ matrix r = (direct sum matrix r + matrix x)
+ ********************************************/
+void add_vtri(vtri *, vtri * , vtri *);
 
+void iadd_vtri_(vtri  *, vtri *);
+
+void isub_m7d(vtri  *, vtri *);
 
 //Scalar  multiplication
 vtri m7d_mul_2(vtri);
@@ -185,11 +192,9 @@ vtri m7d_mul_5(vtri);
 vtri m7d_mul_6(vtri);
 
 
+// negate  r0, r1, r2 ← a0, a1, a2
 
-/********************************************
- matrix r = (direct sum matrix r + matrix x)
- ********************************************/
-void iaddgf7(vtri *,vtri *);
+
 /********************************************
  matrix r = (difference matrix r - matrix x)                //Or x will the function be  r  = x- r???
  ********************************************/
@@ -197,7 +202,7 @@ void iaddgf7(vtri *,vtri *);
 /*
 	GF(7) Addition on a single M1RI word.
 */
-void add_m1riw_gff7(vtri *R, vtri *A, vtri *B);
+void m7d_add_r(m7d_t *, m7d_t *, m7d_t *);
 
 
 

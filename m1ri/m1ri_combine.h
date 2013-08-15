@@ -20,28 +20,54 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
- m1ri_combine.h
+ m1ri_m3d_combine.h
  */
-#ifndef M1RIPROJECT_COMBINE_H
-#define M1RIPROJECT_COMBINE_H
+#ifndef M1RIPROJECT_combine_H
+#define M1RIPROJECT_combine_H
 
 #include <m1ri/m1riwrappers.h>
 #include <m1ri/m1ri_3dt.h>
 #include <m1ri/m1riarith.h>
-
-void *  combine3(vbg *, vbg * );
-
-
-void combine4(vbg *, vbg * );
-
-void combine5(vbg *, vbg * );
-void combine6(vbg *, vbg * );
-
-void combine7(vbg *, vbg * );
+#include <m1ri/m5d.h>
+#include <m1ri/m7d.h>
+void *  m3d_combine3(vbg *, vbg * );
 
 
-void combine8(vbg *, vbg *);
+void m3d_combine4(vbg *, vbg * );
 
+void m3d_combine5(vbg *, vbg * );
+void m3d_combine6(vbg *, vbg * );
+
+void m3d_combine7(vbg *, vbg * );
+
+
+void m3d_combine8(vbg *, vbg *);
+
+void *  m5d_combine3(vfd *, vfd * );
+
+
+void m5d_combine4(vfd *, vfd * );
+
+void m5d_combine5(vfd *, vfd * );
+void m5d_combine6(vfd *, vfd * );
+
+void m5d_combine7(vfd *, vfd * );
+
+
+void m5d_combine8(vfd *, vfd *);
+
+void *  m7d_combine3(vtri *, vtri * );
+
+
+void m7d_combine4(vtri *, vtri * );
+
+void m7d_combine5(vtri *, vtri * );
+void m7d_combine6(vtri *, vtri * );
+
+void m7d_combine7(vtri *, vtri * );
+
+
+void m7d_combine8(vtri *, vtri *);
 
 
 #endif

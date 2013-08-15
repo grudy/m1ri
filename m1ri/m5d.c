@@ -482,7 +482,7 @@ void m5d_free( m5d_t *  tofree)
 }
 
 
-void addgf5(vfd * r, vfd * a, vfd * b)
+void add_vfd(vfd * r, vfd * a, vfd * b)
 
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
@@ -503,8 +503,26 @@ void addgf5(vfd * r, vfd * a, vfd * b)
     o = m | d;
     p = o ^ c;
     q = p^n;
-    /**/r->sign = q;
+    /**/r->units = q;
+    
+    
 
+	/*
+	more optimized? 
+    vec c, d, e, f,   j,  m;
+    c = b->units ^ a->units;
+    d = b->middle ^ a->middle;
+    e = b->sign ^ a->sign;
+    f = d & c;
+    r->sign = (f ^ a->sign) | e;
+    j = r->sign ^ b->units;
+    m = ((j ^ a->middle)| c) ^ e;
+	r->middle  = m ^ (f | b->middle);
+    r->units = ((m | d) ^ c)^(r->middle)) ;
+    /**/// = q;
+    /*
+	
+	*/
     
    /* def add(a,b):
     c = b[0] ^ a[0]
@@ -538,20 +556,37 @@ void m5d_add2(vfd * r, vfd * a, vfd * b)
     g = d ^ a->sign;
     h = g | f;
     i = h | c;
-/**/r->units = 
+/**/r->sign = i; 
     j = h | e;
     k = h ^ a->sign;
     l = k | b->middle;
     m = l & j;
     n = m ^ c;
+    r->middle = n;
     o = n | c;
     p = o ^ f;
     q = p ^ e;
-
-    
-
-
-
+	r->units = q;
+    /*
+	def add2(a,b):
+    c = b[0] ^ a[1]
+    d = b[1] ^ a[0]
+    e = c & a[1]
+    f = d ^ b[2]
+    g = d ^ a[2]
+    h = g | f
+    i = h | c
+    j = h | e
+    k = h ^ a[2]
+    l = k | b[1]
+    m = l & j
+    n = m ^ c
+    o = n | c
+    p = o ^ f
+    q = p ^ e
+    return q,n,i
+	*/
+	
 
 }
 
@@ -567,15 +602,17 @@ void m5d_sub( vfd *r, vfd *a, vfd *b)
     g = f ^ a->sign;
     h = g | d;
     i = h | c;
+    r->sign = i;
     j = i ^ c;
     k = j & a->sign;
     l = k | b->middle;
     m = l ^ g;
     n = m ^ a->middle;
+    r->middle = n;
     o = m | d;
     p = o ^ c;
     q = p ^ a->middle;
-    q = r->units;
+    r->units = q;
     
     /*
     def sub(a,b):
@@ -606,15 +643,60 @@ void m5d_sub( vfd *r, vfd *a, vfd *b)
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-void iaddgf5(vfd *r,vfd *x)
+void iadd_vfd(vfd *r,vfd *x)
 {
-  
+      vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    c = x->units ^ r->units;
+    d = x->middle ^ r->middle;
+    e = x->sign ^ r->sign;
+    f = d & c;
+    g = f | x->middle;
+    h = f ^ r->sign;
+    i = h | e;
+/**/r->sign = i;
+    j = i ^ x->units;
+    k = j ^ r->middle;
+    l = k | c;
+    m = l ^ e;
+    n = m ^ g;
+/**/r->middle = n;
+    o = m | d;
+    p = o ^ c;
+    q = p^n;
+    /**/r->sign = q;
    
     
     
     
     
 }
+
+ //matrix r = (matrix r - matrix x)
+void isub_m5d(vfd *r,vfd *x) 
+{
+       vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    c = x->units ^ r->units;
+    d = x->middle ^ r->middle;
+    e = c ^ x->sign;
+    f = e ^ x->middle;
+    g = f ^ r->sign;
+    h = g | d;
+    i = h | c;
+    r->sign = i;
+    j = i ^ c;
+    k = j & r->sign;
+    l = k | x->middle;
+    m = l ^ g;
+    n = m ^ r->middle;
+    r->middle = n;
+    o = m | d;
+    p = o ^ c;
+    q = p ^ r->middle;
+    r->units = q;
+    
+    
+}
+
 
 /*
 	Scalar Multiplication
@@ -654,15 +736,40 @@ vfd m5d_mul4(vfd a)
     
 }
 
- //matrix r = (matrix r - matrix x)
-void isubgf5(vfd *r,vfd *x) 
+
+void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
 {
     
     
+   
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+    
+        int i, j;
+        
+        for( i = 0; i < a->nrows; i++)
+        {
+            for(j = 0; j < (a->width ); j++)
+            {
+                
+                add_vfd(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+               
+   
+
+    
+    
+     
+            }
+            
+            
+        }
+        
+    }
+    
+  
+    
     
 }
-
-
 int m5d_equal(m5d_t const *a, m5d_t const *b)
 {
     
@@ -686,19 +793,38 @@ int m5d_equal(m5d_t const *a, m5d_t const *b)
     return 1;
 }
 
-void add_m1riw_gff5(vfd *R, vfd *A, vfd *B)
+
+
+
+void m5d_copypadding(m5d_t  * r, m5d_t  const * x)
 {
-    int i;
-    for (i = 0; i < M1RI_RADIX; i++ )
-    {
-       addgf5(  &R[i], &A[i], &B[i]);
-    }
-    
+		int i, s;
+        for( i = 0; i < x->nrows; i++)
+        {
+        	 for( s = 0; s < x->width; s++)
+        	 {
+            r->rows[i][s] = x->rows[i][s];
+            }
+            
+        }
+	
+
 }
 
+void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
+{
+		int i, s;
+        for( i = 0; i < r->nrows; i++)
+        {
+        	 for( s = 0; s < r->width; s++)
+        	 {
+            r->rows[i][s] = x->rows[i][s];
+            }
+            
+        }
+	
 
-
-
+}
 
 
 

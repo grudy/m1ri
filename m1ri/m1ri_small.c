@@ -40,13 +40,13 @@ void mul_64_m3d(vbg **R, vbg **A, vbg **B)
      
     for (i = 0; i < 9; i ++)
     {
-        combine6(&tables6[i][0], &(B [6*i][0]));
+        m3d_combine6(&tables6[i][0], &(B [6*i][0]));
     }
    
       
     for (i = 0; i < 2; i ++)
     {
-        combine5(&tables5[i][0], &(B[54 + (5 * i)][0]));
+        m3d_combine5(&tables5[i][0], &(B[54 + (5 * i)][0]));
     }
   
     
@@ -101,9 +101,9 @@ void mul_32_m3d(vbg *R, vbg *A, vbg *B)
     vbg tables4[3][16];
     for (i = 1; i < 4; i ++)
         
-        combine5(tables5[i], B + 0 + 5*i);
+        m3d_combine5(tables5[i], B + 0 + 5*i);
     for (i = 0; i < 3; i++)
-        combine4(tables4[i], B + 20 + 4*i);
+        m3d_combine4(tables4[i], B + 20 + 4*i);
     
     for (i = 0;i < 32; i++)
     {
@@ -141,7 +141,7 @@ void mul_16_m3d(vbg *R, vbg *A, vbg *B)
     
     vbg tables4[4][16];
     for (i = 0; i < 4; i++)
-        combine4(tables4[i], B + (4*i));
+        m3d_combine4(tables4[i], B + (4*i));
     for (i = 0;  i < 16; i++)
     {
         a = A[i];
@@ -171,7 +171,7 @@ void mul_8_m3d(vbg *R, vbg *A, vbg *B)
     
     vbg tables4[2][16];
     for (i = 0; i < 2; i++)
-        combine4(tables4[i], B + (4*i));
+        m3d_combine4(tables4[i], B + (4*i));
     for (i = 0; i < 8; i++)
     {
         a = A[i];
@@ -201,7 +201,7 @@ void mul_4_m3d(vbg *R, vbg *A, vbg *B)
     
     vbg table4[16];
     for (i = 0; i < 1; i++)
-        combine4(table4, B + (4*i));
+        m3d_combine4(table4, B + (4*i));
     for(i = 0; i < 4; i++)
     {
         a = A[i];
@@ -217,5 +217,36 @@ void mul_4_m3d(vbg *R, vbg *A, vbg *B)
 }
 
 
+/****************************************************************************
+								GF(5)
+*****************************************************************************/
+
+void mul_64_m5d(vfd **c, vfd **a, vfd **b)
+{}
+void mul_32_m5d(vfd *c, vfd *a, vfd *b)
+{}
+void mul_16_m5d(vfd *c, vfd *a, vfd *b)
+{}
+void mul_8_m5d(vfd *c, vfd *a, vfd *b)
+{}
+void mul_4_m5d(vfd *R, vfd *A, vfd *B)
+{}
+
+
+
+/****************************************************************************
+								GF(7)
+*****************************************************************************/
+
+void mul_64_m7d(vtri ** c, vtri **a, vtri **b)
+{}
+void mul_32_m7d(vtri *c, vtri *a, vtri *b)
+{}
+void mul_16_m7d(vtri *c, vtri *a, vtri *b)
+{}
+void mul_8_m7d(vtri *c, vtri *a, vtri *b)
+{}
+void mul_4_m7d(vtri *R, vtri *A, vtri *B)
+{}
 
 

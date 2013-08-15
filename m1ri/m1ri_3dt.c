@@ -504,9 +504,6 @@ m3d_t m3d_stack(m3d_t * c,  m3d_t * a, m3d_t * b)
 
 
 
-
-
-
 void m3d_copypadding(m3d_t  * r, m3d_t  const * x)
 {
 		int i, s;
