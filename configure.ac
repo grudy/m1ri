@@ -12,13 +12,14 @@ AC_PROG_CC_C99
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
+
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_MACRO_DIR([m4])
 LT_INIT
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lm':
 AC_CHECK_LIB([m], [log])
-AM_PROG_CC_C_O
+
 # Checks for header files.
 AC_CHECK_HEADERS([stdint.h stdlib.h string.h])
 
