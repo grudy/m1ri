@@ -37,7 +37,6 @@ void vbg_negation(vbg * );
 
 vbg add_m3dr(vbg  , vbg );
 
-
 void sub_m3d( vbg *, vbg const *, vbg const * );               //multiply matrix x by by matrix y.   The product is matrix r.
 
 

@@ -177,7 +177,7 @@ void m3d_combine8(vbg *table, vbg *input)
 void *  m5d_combine3(vfd *table, vfd *input )
 {
     vfd t, a, b, c;
-    t.sign = t.units = 0;
+    t.sign = t.middle =  t.units = 0;
     a = input[0];
     b = input[1];
     c = input[2];
@@ -206,7 +206,7 @@ void *  m5d_combine3(vfd *table, vfd *input )
 void m5d_combine4(vfd *table, vfd *input )
 {
     vfd t, a, b, c , d;
-    t.sign = t.units = 0;
+    t.sign = t.middle = t.units = 0;
     a = input[0];
     b = input[1];
     c = input[2];
@@ -329,7 +329,7 @@ void m5d_combine8(vfd *table, vfd *input)
 void *  m7d_combine3(vtri *table, vtri *input )
 {
     vtri t, a, b, c;
-    t.sign = t.units = 0;
+    t.sign = t.middle = t.units = 0;
     a = input[0];
     b = input[1];
     c = input[2];
@@ -358,7 +358,7 @@ void *  m7d_combine3(vtri *table, vtri *input )
 void m7d_combine4(vtri *table, vtri *input )
 {
     vtri t, a, b, c , d;
-    t.sign = t.units = 0;
+    t.sign = t.middle =  t.units = 0;
     a = input[0];
     b = input[1];
     c = input[2];
