@@ -16,7 +16,8 @@ libm1ri_la_SOURCES = m1ri/m1ri_3dt.c\
 	m1ri/misc.c
 
 pkgincludesubdir = $(includedir)/m1ri
-pkgincludesub_HEADERS = m1ri/m5d.h\
+pkgincludesub_HEADERS =  m1ri/m1ri.h
+	m1ri/m5d.h\
 	m1ri/m1ri_3dt.h\
 	m1ri/m7d.h\
 	m1ri/m1ri_combine.h\
