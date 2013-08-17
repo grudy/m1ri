@@ -12,8 +12,8 @@ AC_PROG_CC_C99
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-AC_PROG_RANLIB
 AM_INIT_AUTOMAKE([subdir-objects])
+AC_CONFIG_MACRO_DIR([m4])
 LT_INIT
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lm':
