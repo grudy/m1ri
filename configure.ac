@@ -18,7 +18,7 @@ LT_INIT
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lm':
 AC_CHECK_LIB([m], [log])
-
+AM_PROG_CC_C_O
 # Checks for header files.
 AC_CHECK_HEADERS([stdint.h stdlib.h string.h])
 
