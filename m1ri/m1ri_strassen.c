@@ -3,14 +3,11 @@
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
- 
  Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
- 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -175,11 +172,6 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		arcr =  powerof2(arcr);
 		acbr =  powerof2(acbr);
 		bccc =  powerof2(bccc);
-        
-        	
-	
-		
-		
 		
 		m3d_create( c, a->nrows, b->ncols); 
 		int lasta, lastb, lastboth;
@@ -213,10 +205,7 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		
 		
 		m3d_qrt_mul(padded_c, padded_a, padded_b); 
-		
-		
-		
-		
+
 		m3d_free(padded_a);
 		m3d_free(padded_b);
 		m3d_free(padded_c);
@@ -229,17 +218,12 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		m3d_qrt_mul(c_main_partition, a_main_partition, b_main_partition); 
 		}
 		
-		
-		
-		
-		
-	
+
 		m3d_free(a_main_partition);
 		m3d_free(b_main_partition);
 		m3d_free(c_main_partition);
         
-        
-        
+           
     }
     
     

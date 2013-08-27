@@ -205,7 +205,8 @@ m3d_t  m3d_rand(m3d_t * a)
             {
         
        a->rows[i][z].units = m1ri_rand();
-        a->rows[i][z].sign = m1ri_rand();
+       a->rows[i][z].sign = m1ri_rand();
+       a->rows[i][z].sign = m1ri_rand();
             }
     }
     

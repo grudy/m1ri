@@ -40,7 +40,7 @@ void add_vbg(vbg * r, vbg const * x, vbg const * y)
 
 */
 vbg add_m3dr(vbg  x, vbg const y)
-{
+{ 
     vec t;
     x.sign  = y.units ^ x.sign;
     t = (x.sign & x.units) ^ y.sign;
@@ -65,7 +65,7 @@ void vbg_negation(vbg *r)
 {
 
 
-    r->units  = r->sign = r->sign ^ r->units;
+     r->sign = r->sign ^ r->units;
 
 }
 
@@ -81,7 +81,7 @@ vbg sub_m3dr(vbg const x, vbg const y)
 }
 
 
- void iadd_vbg(vbg *r,vbg  *x)
+ void iadd_vbg(vbg *r,vbg  	 *x)
 {
     
     vec t;
@@ -106,7 +106,7 @@ void isub_m3d(vbg  *r,vbg  *x)
     r->units = x->units ^ r->units;
     t  = r->units | r->sign;
     t = t ^ x->sign;
-    r->sign = r->units;
+    r->sign = x->units ^ r->sign;
     r->sign = r->sign & t;
     r->units = t | r->units;
     
@@ -193,11 +193,11 @@ void add_64_m3d(vbg **R, vbg   **A, vbg  **B)
     {
         R[i][0] = add_m3dr(A[i][0], B[i][0]);
     }
-    
-    
-    
-    
+
 }
+
+
+
 void m3d_sub( m3d_t *r, m3d_t const *x, m3d_t const *y)
 {
     int n , i;
@@ -257,10 +257,7 @@ void m3d_add_r(m3d_t * c, m3d_t  *a, m3d_t  *b)
                 
                 add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
                
-   
 
-    
-    
      
             }
             

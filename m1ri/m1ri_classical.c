@@ -402,7 +402,7 @@ void m5d_classic_mul(m5d_t *c, m5d_t  *a, m5d_t  *b)
 }
 
 
-/*
+
 
 
 
@@ -593,6 +593,6 @@ void m7d_classic_mul(m7d_t *c, m7d_t  *a, m7d_t  *b)
 
 
 
-*/
+
 
 

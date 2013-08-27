@@ -30,43 +30,27 @@
 #include <m1ri/m1riarith.h>
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>
+
+
 void *  m3d_combine3(vbg *, vbg * );
-
-
 void m3d_combine4(vbg *, vbg * );
-
 void m3d_combine5(vbg *, vbg * );
 void m3d_combine6(vbg *, vbg * );
-
 void m3d_combine7(vbg *, vbg * );
-
-
 void m3d_combine8(vbg *, vbg *);
 
 void *  m5d_combine3(vfd *, vfd * );
-
-
 void m5d_combine4(vfd *, vfd * );
-
 void m5d_combine5(vfd *, vfd * );
 void m5d_combine6(vfd *, vfd * );
-
 void m5d_combine7(vfd *, vfd * );
-
-
 void m5d_combine8(vfd *, vfd *);
 
 void *  m7d_combine3(vtri *, vtri * );
-
-
 void m7d_combine4(vtri *, vtri * );
-
 void m7d_combine5(vtri *, vtri * );
 void m7d_combine6(vtri *, vtri * );
-
 void m7d_combine7(vtri *, vtri * );
-
-
 void m7d_combine8(vtri *, vtri *);
 
 

@@ -173,6 +173,9 @@ void m3d_combine8(vbg *table, vbg *input)
     for (i = 1; i < 128; i++)
         add_vbg((t7 + i), (table+i), &h);
 }
+
+
+
  
 void *  m5d_combine3(vfd *table, vfd *input )
 {

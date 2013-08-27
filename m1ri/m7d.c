@@ -590,6 +590,20 @@ void m7d_putpadding(m7d_t  * r, m7d_t  const * x)
 	
 
 }
+
+void add_64_m7d(vtri **R, vtri   **A, vtri  **B)
+{
+    int i;
+    for (i = 0; i < M1RI_RADIX; i++ )
+    {
+    	add_vtri(&R[i][0], &A[i][0], &B[i][0]);
+       // R[i][0] = add_m3dr(A[i][0], B[i][0]);
+    }
+    
+    
+    
+    
+}
 void m7d_add_r(m7d_t *c, m7d_t *a, m7d_t *b)
 {
   

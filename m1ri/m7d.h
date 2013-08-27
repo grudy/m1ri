@@ -116,7 +116,7 @@ void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
  */
 void m7d_copypadding(m7d_t  * , m7d_t const * );
 void m7d_putpadding(m7d_t  * , m7d_t const * );
-
+void add_64_m7d(vtri ** , vtri **, vtri **);
 //unfinished
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s,  vec m , vec u );
 

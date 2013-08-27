@@ -330,22 +330,16 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
         {
             
             c->block[z] =  m5d_window(a, ( i ) , (f * slicesize), slicesize, slicesize);
-            z++;
-            
-            
+            z++;    
         }
         
         
         c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),slicesize, extracols);
         z++;
-   
-        c->row[r] =  c->block + (c->ncols * i );
+   		c->row[r] =  c->block + (c->ncols * i );
         r++;
         
     }
-    
-
-    
     for( f = 0; f <colroundeddown ; f++)
     {
         c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),extrarows, slicesize);
@@ -353,20 +347,9 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
         
     }
     
-    
     c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),extrarows, extracols);
-    
-  
-    
     c->row[r] =   c->block + (c->ncols * i );
-    
-
-    
 }
-
-
-
-
 
 m5d_t  m5d_cubes(m5d_t * c, m5d_t  *a, rci_t slicesize )
 {
@@ -439,16 +422,10 @@ m5d_t  m5d_cubes(m5d_t * c, m5d_t  *a, rci_t slicesize )
         
     }
     
-    
-  
     c->flags = 0;
-
-    c->fcol = 0;
-   
+	c->fcol = 0;
     return *c;
-    
- 
-    
+      
 }
 
 vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
