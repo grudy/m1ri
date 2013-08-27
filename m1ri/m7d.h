@@ -180,7 +180,7 @@ void vtri_negate( vtri * );
  ********************************************/
 void add_vtri(vtri *, vtri * , vtri *);
 
-void iadd_vtri_(vtri  *, vtri *);
+void iadd_vtri(vtri  *, vtri *);
 
 void isub_m7d(vtri  *, vtri *);
 

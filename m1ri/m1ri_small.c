@@ -234,7 +234,7 @@ Everything past here has functions that still need to be tuned for their specifi
 void mul_64_m5d(vfd **R, vfd **A, vfd **B)
 {
     int i;
-    vfd t1, t2, t3 r1, r2,, r3 a;
+    vfd t1, t2, t3,  r1, r2, r3 , a;
     vec v1, v2, v3;
     
     vfd  tables6[9][64];
@@ -294,7 +294,7 @@ void mul_64_m5d(vfd **R, vfd **A, vfd **B)
         
         t1 = tables5[1][v1&31]; iadd_vfd(&r1, &t1);
         t2 = tables5[1][v2&31]; iadd_vfd(&r2, &t2);
-        t3 = tables4[2][v3&131]; iadd_vfd(&r3, &t3);
+        t3 = tables5[1][v3&31]; iadd_vfd(&r3, &t3);
         
         iadd_vfd(&r1, &r2);
         
@@ -308,7 +308,7 @@ void mul_64_m5d(vfd **R, vfd **A, vfd **B)
 void mul_32_m5d(vfd *R, vfd *A, vfd *B)
 {
     long i;
-    vfd t1, t2, t3, r1, r2, t3, a;
+    vfd t1, t2, t3, r1, r2, r3, a;
     long v1, v2, v3;
     
     vfd tables5[4][32];
@@ -357,8 +357,8 @@ void mul_32_m5d(vfd *R, vfd *A, vfd *B)
 void mul_16_m5d(vfd *R, vfd *A, vfd *B)
 {
     long i;
-    vfd t1, t2, r1, r2, a;
-    long v1, v2;
+    vfd t1, t2, r1, r2, r3, a;
+    long v1, v2, v3;
     
     vfd tables4[4][16];
     for (i = 0; i < 4; i++)
@@ -628,7 +628,7 @@ void mul_4_m7d(vtri *R, vtri *A, vtri *B)
     {
         a = A[i];
         v2 = a.sign;
-        v1 = a.units ^ v2;-
+        v1 = a.units ^ v2;
         r1 = table4[v1&15];
         r2 = table4[v2&15];
         

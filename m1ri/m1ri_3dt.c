@@ -204,9 +204,10 @@ m3d_t  m3d_rand(m3d_t * a)
         for( z = 0; z  < (a->width); z++)
             {
         
+       
+       a->rows[i][z].sign = m1ri_rand();
        a->rows[i][z].units = m1ri_rand();
-       a->rows[i][z].sign = m1ri_rand();
-       a->rows[i][z].sign = m1ri_rand();
+       a->rows[i][z].sign =  a->rows[i][z].sign | a->rows[i][z].units;
             }
     }
     

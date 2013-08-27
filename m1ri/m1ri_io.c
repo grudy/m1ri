@@ -44,13 +44,13 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
         out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
         if((out == 0) && (b & (leftbit  >> x)))
         {
-               printf("[-1 ]");
+               printf("[ 1 ]");
             
         }
         
         else if((out == 1) && (b & (leftbit  >> x)))
         {
-            printf("[ 0 ]");
+            printf("[ 2 ]");
         }
         
         
