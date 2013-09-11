@@ -91,7 +91,7 @@ typedef struct m5d_t{
     u_int32_t fcol;  //column offset of first block
  
     u_int8_t flags;
-	  vec  svfd;   //Identifies first vbg used in row
+	vec  svfd;   //Identifies first vbg used in row
  
     u_int32_t  lblock; //  first block pointed to in a window
     
@@ -188,14 +188,7 @@ m5d_t   m5d_identity(m5d_t  *, rci_t );
  Releases a m5d_t into the wilderness.
  */
 
-
-
 void m5d_free( m5d_t *  );
-
-void add_vfd(vfd *, vfd * , vfd *);
-
-
-
 
 
 
@@ -205,28 +198,18 @@ void m5d_rrdsub( vfd *, vfd *, vfd *);               //subtract vector x by by v
 
 
 
-vfd m5d_sub_r(vfd , vfd );          
-
-vfd m5d_mul2(vfd);
-
-
-vfd m5d_mul3(vfd);
-
-
-vfd m5d_mul4(vfd);
-
-
-
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
 void iadd_vfd(vfd *,vfd *);
 
-void isub_m5d(vfd *,vfd *);
+void m5d_add_r(m5d_t *, m5d_t *, m5d_t *);
 
+void add_vfd(vfd *, vfd * , vfd *);
 
+void m5d_add2(vfd * , vfd * , vfd * );
 
-
+void m5d_add2_i(vfd * , vfd * );
 int m5d_equal(m5d_t const *, m5d_t const *);
 
 
@@ -236,10 +219,12 @@ void   m5d_window_create(m5d_t *, m5d_t * , rci_t , rci_t , rci_t , rci_t );
 
 void sub_64gf5(vfd *, vfd *, vfd *);
 
-void m5d_add_r(m5d_t *, m5d_t *, m5d_t *);
 
-
-
+vfd m5d_sub_r(vfd , vfd );          
+void m5d_sub_i(vfd *,vfd *);
+vfd m5d_mul2(vfd);
+vfd m5d_mul3(vfd);
+vfd m5d_mul4(vfd);
 
 
 

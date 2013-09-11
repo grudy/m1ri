@@ -34,18 +34,15 @@ void *  m3d_combine3(vbg *table, vbg *input )
     table[1] = a;
     table[2] = b;
     table[4] = c;
-    
+
     add_vbg(&t, &a, &b);
     table[3] = t;
     iadd_vbg(&t, &c);
     table[7] = t;
     isub_m3d(&t, &a);
     table[6] = t;
-    
     add_vbg((table + 5), &a , &b);
-    
-    
-    
+
     return 0;
     
 }
@@ -194,7 +191,7 @@ void *  m5d_combine3(vfd *table, vfd *input )
     table[3] = t;
     iadd_vfd(&t, &c);
     table[7] = t;
-    isub_m5d(&t, &a);
+    m5d_sub_i(&t, &a);
     table[6] = t;
     
     add_vfd((table + 5), &a , &b);
@@ -229,7 +226,7 @@ void m5d_combine4(vfd *table, vfd *input )
     table[6] = t;
     iadd_vfd(&t,&d);
     table[14] = t;
-    isub_m5d(&t,&c);
+    m5d_sub_i(&t,&c);
     table[10] = t;
     
     add_vfd(&t,&b,&c);
@@ -241,13 +238,13 @@ void m5d_combine4(vfd *table, vfd *input )
     table[11] = t;
     iadd_vfd(&t, &c);
     table[15] = t;
-    isub_m5d(&t, &d);
+    m5d_sub_i(&t, &d);
     table[7] = t;
-    isub_m5d(&t, &b);
+    m5d_sub_i(&t, &b);
     table[5] = t;
     iadd_vfd(&t, &d);
     table[13] = t;
-    isub_m5d(&t, &c);
+    m5d_sub_i(&t, &c);
     table[9] = t;
     
     
@@ -410,9 +407,6 @@ void m7d_combine5(vtri *table, vtri *input )
 {
 	int i;
     vtri e, *t4;
-    
-    
-    
     m7d_combine4(table, input);
     e = input[4];
     t4 = table + 16;
@@ -459,10 +453,7 @@ void m7d_combine7(vtri *table, vtri *input )
         add_vtri((t6 + i), (table + i), &g );
     }
     
-    
-    
-    
-    
+
 }
 
 

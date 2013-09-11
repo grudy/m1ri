@@ -24,55 +24,6 @@
 #include "m1ri_strassen.h"
 #include <math.h>
 #include <stdlib.h>
-void m3d_strassen_total16(m3_slice *c, m3_slice const *a, m3_slice const *b)
-{
-    m3d_t * x1 = m1ri_calloc(64, sizeof(m3d_t));
-    m3d_t * x2 = m1ri_calloc(64, sizeof(m3d_t));
-    m3d_create(x2, 64, 64);
-    m3d_create(x1,64,  64);
-    m3d_sub(x1, &a->row[0][0], &a->row[1][0]);
-    m3d_sub(x2,&b->row[1][1],&b->row[0][1]);
-    mul_64_m3d(c->row[1][0].rows ,x1->rows,x2->rows);
-    
-    
-    
-    
-    add_64_m3d(x1->rows,a->row[1][0].rows,a->row[1][1].rows);
-    m3d_sub(x2,&b->row[0][1],&b->row[0][0]);
-    mul_64_m3d(c->row[1][1].rows,x1->rows,x2->rows);
-    
-    m3d_sub(x1,x1,&a->row[0][0]);
-    m3d_sub(x2,&b->row[1][1],x2);
-    mul_64_m3d(c->row[0][1].rows,x1->rows,x2->rows);
-    
-    
-    
-    
-    m3d_sub(x1,&a->row[0][1],x1);
-    mul_64_m3d(c->row[0][0].rows,x1->rows,b->row[1][1].rows);
-    mul_64_m3d(x1->rows,a->row[0][0].rows,b->row[0][0].rows);
-    
-    add_64_m3d(c->row[0][1].rows,x1->rows,c->row[0][1].rows);
-    add_64_m3d(c->row[1][0].rows,c->row[0][1].rows,c->row[1][0].rows);
-    add_64_m3d(c->row[0][1].rows,c->row[0][1].rows,c->row[1][1].rows);
-    add_64_m3d(c->row[1][1].rows,c->row[1][0].rows,c->row[1][1].rows);
-    add_64_m3d(c->row[0][1].rows,c->row[0][1].rows,c->row[0][0].rows);
-    
-    m3d_sub(x2,x2,&b->row[1][0]);
-    mul_64_m3d(c->row[0][0].rows,a->row[1][1].rows,x2->rows);
-    
-    m3d_sub(&c->row[1][0],&c->row[1][0],&c->row[0][0]);
-    mul_64_m3d(c->row[0][0].rows,a->row[0][1].rows,b->row[1][0].rows);
-    add_64_m3d(c->row[0][0].rows,x1->rows,c->row[0][0].rows);
-    
-    //
-    m1ri_free(x1);
-    m1ri_free(x2);
-    
-    
-    
-}
-
 
 
 void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
@@ -89,15 +40,12 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
     if((c_slice.row[0][0].ncols) > M1RI_RADIX)
     {
        
-        
-  
-        
-       
-        m3d_sub(x2,&b_slice.row[1][1],&b_slice.row[0][1]);
-        m3d_qrt_mul(&c_slice.row[1][0], x1, x2);
-        m3d_add_r(x1,&a_slice.row[1][0],&a_slice.row[1][1]);
+        m3d_sub(x1, &a_slice.row[0][0], &a_slice.row[1][0]);  //1
+        m3d_sub(x2,&b_slice.row[1][1],&b_slice.row[0][1]);  //2
+        m3d_qrt_mul(&c_slice.row[1][0], x1, x2);  //3
+        m3d_add_r(x1,&a_slice.row[1][0],&a_slice.row[1][1]);  //4
         m3d_sub(x2,&b_slice.row[0][1],&b_slice.row[0][0]);  //5
-        m3d_qrt_mul(&c_slice.row[1][0], x1, x2);    //6
+        m3d_qrt_mul(&c_slice.row[1][1], x1, x2);    //6
         m3d_sub(x1,x1,&a_slice.row[0][0]);//7
         m3d_sub(x2,&b_slice.row[1][1],x2);  //8
         m3d_qrt_mul(&c_slice.row[0][1],x1,x2); //9
@@ -111,7 +59,7 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
         m3d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);  //17
         m3d_sub(x2, x2, &b_slice.row[1][0]);            //18
         m3d_qrt_mul(&c_slice.row[1][0], &a_slice.row[1][1], x2);            //19
-        m3d_sub(&c_slice.row[0][0], &c_slice.row[1][0], &c_slice.row[0][0]);  //20
+        m3d_sub(&c_slice.row[1][0], &c_slice.row[1][0], &c_slice.row[0][0]);  //20
         m3d_qrt_mul(&c_slice.row[0][0], &a_slice.row[0][1], &b_slice.row[1][0]);
         m3d_add_r(&c_slice.row[0][0], x1,&c_slice.row[0][0] );
         
@@ -122,37 +70,12 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
     else if((c_slice.row[0][0].ncols ) == M1RI_RADIX)
     {
         
-        m3d_strassen_total16(&c_slice, &a_slice, &c_slice);
+       
         
-        m3d_sub(x1, &a_slice.row[0][0], &a_slice.row[1][0]);
-        m3d_sub(x2,&b_slice.row[1][1],&b_slice.row[0][1]);
-        
-        m3d_qrt_mul(&c_slice.row[1][0], x1, x2);
-        m3d_add_r(x1,&a_slice.row[1][0],&a_slice.row[1][1]);
-        m3d_sub(x2,&b_slice.row[0][1],&b_slice.row[0][0]);  //5
-        m3d_qrt_mul(&c_slice.row[1][0], x1, x2);    //6
-        m3d_sub(x1,x1,&a_slice.row[0][0]);//7
-        m3d_sub(x2,&b_slice.row[1][1],x2);  //8
-        m3d_qrt_mul(&c_slice.row[0][1],x1,x2); //9
-        m3d_sub(x1,&a_slice.row[0][1],x1);    //10
-        m3d_qrt_mul(&c_slice.row[0][0],x1,&b_slice.row[1][1]);   //11
-        m3d_qrt_mul(x1, &a_slice.row[1][1], &b_slice.row[1][1]);  //12
-        m3d_add_r(&c_slice.row[0][1],x1 , &c_slice.row[0][1]);   //13
-        m3d_add_r(&c_slice.row[1][0],&c_slice.row[0][1] , &c_slice.row[1][0]);   //14
-        m3d_add_r(&c_slice.row[0][1],&c_slice.row[0][1] , &c_slice.row[1][1]);   //15
-        m3d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);    //16
-        m3d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);  //17
-        m3d_sub(x2, x2, &b_slice.row[1][0]);            //18
-        m3d_qrt_mul(&c_slice.row[1][0], &a_slice.row[1][1], x2);            //19
-        m3d_sub(&c_slice.row[0][0], &c_slice.row[1][0], &c_slice.row[0][0]);  //20
-        m3d_qrt_mul(&c_slice.row[0][0], &a_slice.row[0][1], &b_slice.row[1][0]);
-        m3d_add_r(&c_slice.row[0][0], x1,&c_slice.row[0][0] );
+
     
      	
     }
-    
-    
-    
     
 }
 
@@ -225,8 +148,6 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
         
            
     }
-    
-    
     
 }
 

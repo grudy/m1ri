@@ -25,8 +25,6 @@
 
 #include "m1ri_io.h"
 
-
-
 /*
  
  Print a block of an m3d

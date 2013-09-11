@@ -422,7 +422,7 @@ m5d_t  m5d_cubes(m5d_t * c, m5d_t  *a, rci_t slicesize )
         
     }
     
-    c->flags = 0;
+     c->flags = 0;
 	c->fcol = 0;
     return *c;
       

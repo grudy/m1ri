@@ -50,10 +50,8 @@ static  const u_int64_t leftbit  = (1ULL)<<(M1RI_RADIX-1);
 static  const u_int64_t rightbit = 1;
 
 static u_int64_t const ibits = 0x8040201008040201;
-
 typedef int rci_t;
 typedef int wi_t;
-
 typedef unsigned int vbit;
 
 

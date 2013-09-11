@@ -38,8 +38,6 @@ void * m3d_rowswap (m3d_t * M, rci_t row_a, rci_t  row_b)
         M->rows[row_a -1] = M->rows[row_b -1];
         M->rows[row_b -1] =  &temp;
         
-        
-        
     }
     
     
@@ -84,10 +82,6 @@ vec m3d_ru_bits(m3d_t const *M, rci_t  x, rci_t  y, int  n) {
     
     
     bits  = (n == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
-    
-    
-    
-    
     
     
     return bits;
@@ -209,6 +203,7 @@ m3d_t  m3d_rand(m3d_t * a)
        a->rows[i][z].units = m1ri_rand();
        a->rows[i][z].sign =  a->rows[i][z].sign | a->rows[i][z].units;
             }
+    
     }
     
     return *a;
@@ -226,8 +221,8 @@ m3d_t m3d_transposewin(m3d_t const *a )
 {
     m3d_t *b = m1ri_malloc(sizeof(m3d_t));
     m3d_create(b, a->nrows, a->ncols);
-int i, x;
-vbg temp;
+	int i, x;
+	vbg temp;
 for(i = 0; i < a->nrows; i ++)
 {
 	for(x = 0; x < a->ncols; x ++)
@@ -235,14 +230,8 @@ for(i = 0; i < a->nrows; i ++)
 	
 		temp.units =  (a->rows[x][0].units & (leftbit >> i) );
 		temp.sign =  (a->rows[x][0].sign & (leftbit >> i) );
-		
-        b->rows[i][0].units = (temp.units) ?  b->rows[i][0].units | (leftbit >> x) : b->rows[i][0].units ;
-        b->rows[i][0].sign = (temp.sign) ? b->rows[i][0].sign | (leftbit >> x) : b->rows[i][0].sign  ;
-       // b->rows[i][0].units = (temp.units) ? : ;
-     
-        
-        
-        
+		b->rows[i][0].units = (temp.units) ?  b->rows[i][0].units | (leftbit >> x) : b->rows[i][0].units ;
+        b->rows[i][0].sign = (temp.sign) ? b->rows[i][0].sign | (leftbit >> x) : b->rows[i][0].sign  ;      
 	}
 	
 
@@ -332,14 +321,9 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     m3d_t  submatrix;
     
     if((strow + sizerows) > c->width)
-    {
-        
-        
+    {    
         return submatrix;
     }
-    
-    
-    
     
     if((stvbg + sizecols) > c->width)
     {
@@ -379,9 +363,7 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
   
     
     if((strow + sizerows) > c->width)
-    {
-        
-        
+    {   
         return;
     
     }

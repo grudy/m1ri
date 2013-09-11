@@ -399,11 +399,7 @@ m5d_t  m5d_identity_set(m5d_t * a)
                 
             }
             
-            
-            
-            
-            
-            
+   
         }
         
         
@@ -590,6 +586,48 @@ void m5d_add2(vfd * r, vfd * a, vfd * b)
 
 }
 
+void m5d_add2_i(vfd * a, vfd * b)
+{
+	vec c, d, e, f, g, h, i, j, k, l, m, o, p, q;
+    c = b->units ^ a->middle;
+    d = b->middle ^ a->units;
+    e = c & a->middle;
+    f = d ^ b->sign;
+    g = d ^ a->sign;
+    h = g | f;
+    i = h | c;
+/**/ 
+    j = h | e;
+    k = h ^ a->sign;
+    l = k | b->middle;
+    m = l & j;
+    a->middle = m ^ c;
+    o = a->middle  | c;
+    p = o ^ f;
+    q = p ^ e;
+	a->units = q;
+	a->sign = i;
+    /*
+	def add2(a,b):
+    c = b[0] ^ a[1]
+    d = b[1] ^ a[0]
+    e = c & a[1]
+    f = d ^ b[2]
+    g = d ^ a[2]
+    h = g | f
+    i = h | c
+    j = h | e
+    k = h ^ a[2]
+    l = k | b[1]
+    m = l & j
+    n = m ^ c
+    o = n | c
+    p = o ^ f
+    q = p ^ e
+    return q,n,i
+	*/
+
+}
 
 void m5d_sub( vfd *r, vfd *a, vfd *b)
 
@@ -672,7 +710,7 @@ void iadd_vfd(vfd *r,vfd *x)
 }
 
  //matrix r = (matrix r - matrix x)
-void isub_m5d(vfd *r,vfd *x) 
+void m5d_sub_i(vfd *r,vfd *x) 
 {
        vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
     c = x->units ^ r->units;
@@ -736,7 +774,6 @@ vfd m5d_mul4(vfd a)
     
 }
 
-
 void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
 {
     
@@ -753,12 +790,6 @@ void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
             {
                 
                 add_vfd(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
-               
-   
-
-    
-    
-     
             }
             
             
@@ -823,7 +854,6 @@ void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
             
         }
 	
-
 }
 
 

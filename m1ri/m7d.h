@@ -47,8 +47,6 @@ typedef struct {
 } vtri;
 
 
-
-
 /*
  GF(7) Matrix structure
  GF7
@@ -203,10 +201,8 @@ vtri m7d_mul_6(vtri);
 	GF(7) Addition on a single M1RI word.
 */
 void m7d_add_r(m7d_t *, m7d_t *, m7d_t *);
-
-
-
-
+void m7d_add_2r(vtri *, vtri *, vtri *);
+void m7d_add_4r( vtri *, vtri *);
 m7d_t   m7d_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
 void   m7d_window_create(m7d_t *, m7d_t * , rci_t , rci_t , rci_t , rci_t);
 

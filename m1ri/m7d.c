@@ -28,9 +28,6 @@
 vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
     
     
-    
-    
-    
     wi_t  block = (y  ) / M1RI_RADIX;
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
@@ -84,9 +81,8 @@ vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
  M = Matrix read from
  */
 
-vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n) {
-
-    
+vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n) 
+{
     wi_t  block = (y  ) / M1RI_RADIX;
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vtri elem;
@@ -97,8 +93,7 @@ vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n) {
     elem.units = (elem.units >> (M1RI_RADIX - n));
     elem.sign = (elem.sign >> (M1RI_RADIX - n));
     
-    
-    
+     
     return elem;
     
     
@@ -121,8 +116,6 @@ void m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
         temp =  *M->rows[row_a -1];
         M->rows[row_a -1] = M->rows[row_b -1];
         M->rows[row_b -1] =  &temp;
-        
-      
         
     }
     
@@ -260,7 +253,6 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
     a->block = m7d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m7d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = iswindowed;
-    
     return *a;
     
 }
@@ -448,8 +440,6 @@ void iadd_vtri(vtri  *x, vtri *y)
     vec t;
 
     r.sign = x->units ^ y->units;
-    
-    
     s = (x->units & y->units);
     r.middle = s^ x->middle ^ y->middle;
     t = (((s) & (x->middle | y->middle)) | (x->middle & y->middle) );
@@ -496,7 +486,7 @@ vtri m7d_mul_3(vtri a)
   
     vec z = a.units | a.middle | a.sign;
     vec temp = a.units;
-   a.units =  a.sign ^ z;
+    a.units =  a.sign ^ z;
     a.sign =   a.middle  ^ z;
     a.middle = temp ^ z;
    
@@ -536,6 +526,28 @@ vtri m7d_mul_6(vtri a)
     
     
 }
+void m7d_add_4r(vtri *x, vtri * y)
+	{
+ 	vtri  r;
+    vec s;
+    vec t;
+	r.sign = x->units ^ y->units;
+    s = (x->units & y->units);
+    r.middle = s^ x->middle ^ y->middle;
+    t = (((s) & (x->middle | y->middle)) | (x->middle & y->middle) );
+    r.sign = x->sign ^ y->sign ^ t;
+    s = x->sign | y->sign | t;
+    t = (r.units & s );
+    x->units  = s ^ r.units;
+    x->middle  = x->middle ^ t ;
+    x->sign  = x->sign ^ (  t & x->middle);
+    
+    //Optimize the multiplication later
+    r.units = x->units;
+    x->units = x->sign;
+    x->sign = x->middle;
+    x->middle = r.units;
+	}
 
 
 int m7d_equal(m7d_t const *a, m7d_t const *b)
@@ -620,10 +632,6 @@ void m7d_add_r(m7d_t *c, m7d_t *a, m7d_t *b)
                 add_vtri(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
                
    
-
-    
-    
-     
             }
             
             

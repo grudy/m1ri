@@ -254,21 +254,16 @@ void m3d_add_r(m3d_t * c, m3d_t  *a, m3d_t  *b)
         {
             for(j = 0; j < (a->width ); j++)
             {
-                
+             
                 add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
-               
-
-     
+                    
             }
             
             
         }
         
     }
-    
-  
-    
-    
+      
 }
 
 
