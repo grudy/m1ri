@@ -56,7 +56,6 @@ void mul_8_m5d(vfd *, vfd *, vfd *);
 void mul_4_m5d(vfd *R, vfd *A, vfd *B);
 
 
-
 /****************************************************************************
 								GF(7)
 *****************************************************************************/
@@ -66,9 +65,6 @@ void mul_32_m7d(vtri *, vtri *, vtri *);
 void mul_16_m7d(vtri *, vtri *, vtri *);
 void mul_8_m7d(vtri *, vtri *, vtri *);
 void mul_4_m7d(vtri *R, vtri *A, vtri *B);
-
-
-
 
 
 #endif

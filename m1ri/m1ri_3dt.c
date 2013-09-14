@@ -46,58 +46,30 @@ void * m3d_rowswap (m3d_t * M, rci_t row_a, rci_t  row_b)
 }
 
 
-vec m3d_rs_bits(m3d_t const *M, rci_t  x, rci_t  y, int  n) {
-    
-    
-    
-    
+vec m3d_rs_bits(m3d_t const *M, rci_t  x, rci_t  y, int  n) 
+{
     
     wi_t  block = (y  ) / M1RI_RADIX;
-    
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
-    
     vec bits;
-    
     bits  = (n == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].sign))  : ((leftbit >> spill) | (M->rows[x][block].units));
-    
-    
     return bits;
-    
-    
 }
 
 
-vec m3d_ru_bits(m3d_t const *M, rci_t  x, rci_t  y, int  n) {
-    
-    
-    
-    
-    
-    wi_t  block = (y  ) / M1RI_RADIX;
-    
-    int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
-    
+vec m3d_ru_bits(m3d_t const *M, rci_t  x, rci_t  y, int  n) 
+{
+	wi_t  block = (y  ) / M1RI_RADIX;
+	int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
-    
-    
-    
     bits  = (n == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
-    
-    
-    return bits;
-    
-    
+    return bits;   
 }
 
-vbg m3d_read_elems(m3d_t const *M, rci_t  x, rci_t  y, int  n) {
-    
-    
-    
-    
+vbg m3d_read_elems(m3d_t const *M, rci_t  x, rci_t  y, int  n) 
+{
     wi_t  block = (y  ) / M1RI_RADIX;
-    
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
-    
     vbg elem;
     
     elem.units = (spill <= 0) ? M->rows[x][block].units << -spill : ((M->rows[x][(block + 1)].units<< (64 - spill)) | (M->rows[x][block].units >> spill));
@@ -129,15 +101,10 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
          dif_b = col_b%M1RI_RADIX;
          a_place =  leftbit >>  dif_a ;
          b_place =  leftbit >> dif_b ;
-       
-        
-        
+
         for( i = 0; i > M->nrows; i++)
         {
-            
-            
-            
-            tempa.sign = (M->rows[i][block_a].sign) & a_place;
+        	tempa.sign = (M->rows[i][block_a].sign) & a_place;
             tempa.units = (M->rows[i][block_a].units) & a_place;
             tempb.units = (M->rows[i][block_b].units) & b_place;
             tempb.sign = (M->rows[i][block_b].sign) & b_place;
@@ -327,13 +294,10 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     
     if((stvbg + sizecols) > c->width)
     {
-        
-        
         return submatrix;
     }
     
-    
-    
+
     submatrix.nrows =   M1RI_RADIX * sizerows;
     submatrix.ncols =  M1RI_RADIX * sizecols;
     submatrix.flags = iswindowed;
@@ -343,16 +307,12 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     submatrix.fcol   = 0;
     submatrix.svbg = stvbg;
     
-    
     int f = strow * M1RI_RADIX;
     int i;
     
     for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
     {
-       
-        
-        submatrix.rows[i - f] = c->rows[i] + stvbg;
-        
+        submatrix.rows[i - f] = c->rows[i] + stvbg;   
     }
     
     return submatrix;
@@ -360,21 +320,18 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
 }
  void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
-  
-    
+ 
     if((strow + sizerows) > c->width)
     {   
         return;
-    
     }
     
     if((stvbg + sizecols) > c->width)
     {
-        return;
-        
-        
+        return;    
     }
-    
+    int f = strow * M1RI_RADIX;
+    int i;
     submatrix->nrows =   M1RI_RADIX * sizerows;
     submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
@@ -385,17 +342,11 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svbg = stvbg;
-    int f = strow * M1RI_RADIX;
-    int i;
-    
+   
     for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
-    {
-        
-        
+    {    
         submatrix->rows[i - f] = c->rows[i] + stvbg;
-        
     }
-    
     
 }
 
@@ -437,7 +388,6 @@ m3d_t m3d_concat(m3d_t * c, m3d_t * a, m3d_t * b)
             {
                 
                 
-                
             }
             x++;
         }
@@ -468,25 +418,22 @@ m3d_t m3d_stack(m3d_t * c,  m3d_t * a, m3d_t * b)
     {
         *c = m3d_create(c, (a->nrows + b->nrows), a->ncols);
         int x =  0;
-        while (x < a->nrows) {
+        while (x < a->nrows)
+        {
             c->rows[x] = a->rows[x];
             x++;
         }
-        while(x < (a->nrows + b->nrows)){
-            
-            c->rows[x] = a->rows[x - a->nrows];
-            
+        while(x < (a->nrows + b->nrows))
+        {
+        
+            c->rows[x] = a->rows[x - a->nrows];    
             x++;
         }
         
     }
     
     return *c;
-    
-    
 }
-
-
 
 void m3d_copypadding(m3d_t  * r, m3d_t  const * x)
 {
@@ -499,8 +446,7 @@ void m3d_copypadding(m3d_t  * r, m3d_t  const * x)
             }
             
         }
-	
-
+        
 }
 
 void m3d_putpadding(m3d_t  * r, m3d_t  const * x)
@@ -508,20 +454,16 @@ void m3d_putpadding(m3d_t  * r, m3d_t  const * x)
 		int i, s;
         for( i = 0; i < r->nrows; i++)
         {
-        	 for( s = 0; s < r->width; s++)
-        	 {
-            r->rows[i][s] = x->rows[i][s];
-            }
-            
+        	for( s = 0; s < r->width; s++)
+        	{
+            	r->rows[i][s] = x->rows[i][s];
+            }          
         }
 	
-
 }
-
 
 int m3d_equal(m3d_t const *a, m3d_t const *b)
 {
-    //  for a->nrows
     if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
     {
         return 0;
@@ -542,21 +484,14 @@ int m3d_equal(m3d_t const *a, m3d_t const *b)
     return 1;
 }
 
-
-
-/*
- 
+/* 
  Releases a m3d_t into the wilderness.
  */
 
-
 void m3d_free( m3d_t *  tofree)
-{
-    
-    
+{ 		
     m1ri_free(tofree->rows);
     m1ri_free(tofree->block);
-    
 }
 
 

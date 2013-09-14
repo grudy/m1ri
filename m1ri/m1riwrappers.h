@@ -57,13 +57,13 @@ typedef unsigned int vbit;
 
 static inline u_int32_t powerof2(u_int32_t v)
 {
-v--;
-v |= v >> 1;
-v |= v >> 2;
-v |= v >> 4;
-v |= v >> 8;
-v |= v >> 16;
-v++; 
+  v--;
+  v |= v >> 1;
+  v |= v >> 2;
+  v |= v >> 4;
+  v |= v >> 8;
+  v |= v >> 16;
+  v++; 
 return v; 
 }
 static inline void * m1ri_malloc(size_t size) {
@@ -116,40 +116,10 @@ static inline u_int64_t  m1ri_rand() {
   randomword ^= (u_int64_t)random() << 50;
   return randomword;
 }
-
-
-/* MALB: WHY IS THIS HERE? */
-
-static inline void m1ri_swap_vec(vec *a, vec *b) {
-  vec temp = *a;
-  *a = *b;
-  *b = temp;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-//When to switch  from Strassen
- 
-
-
-static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
+void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
                {
                     qsort(  &ptr,  count, size,  comp);
                          
-               
                }
-               
-               
-               
-               
+                           
 #endif

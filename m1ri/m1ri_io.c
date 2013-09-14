@@ -20,11 +20,8 @@
  
  m1ri_io.c
  
- 
  */
-
 #include "m1ri_io.h"
-
 /*
  
  Print a block of an m3d
@@ -40,10 +37,10 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
     for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
+        
         if((out == 0) && (b & (leftbit  >> x)))
         {
                printf("[ 1 ]");
-            
         }
         
         else if((out == 1) && (b & (leftbit  >> x)))
@@ -51,18 +48,10 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
             printf("[ 2 ]");
         }
         
-        
-        
-        
-        
-        
-        
-        else
-        {
-            
+		else
+        {   
            printf("[ %d ]", out);
         }
-     
     }
   
     
@@ -71,11 +60,8 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
 void m3d_print(m3d_t *a)
 {
     int i, m;
-   
-        printf("\n \n");
-    //if (a->flags == notwindowed) {
-    
-    
+    printf("\n \n"); 
+       
     for( i  = 0; i < a->nrows ; i++)
     {
         
@@ -120,17 +106,11 @@ void m3d_print(m3d_t *a)
         }
      printf("\n");
         }
-    
-    
-
-
-       
+      
 //}
 
     printf("\n \n \n ");
     
-    
-
 }
 void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
 {
@@ -138,11 +118,8 @@ void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
     short value, x ;
     for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
-        
         value = 0;
-        
-        
-        out[0] = ( a & (leftbit >>  x));
+		out[0] = ( a & (leftbit >>  x));
         out[1] =  ( b & (leftbit >>  x));
         out[2]  = ( c & (leftbit >>  x));
         
@@ -155,47 +132,19 @@ void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
             value = value + 1;
         }
         
-        
         if(out[0] > 0)
         {
             value = value + 2;
-            
-            
         }
-        
-        
-        
-        
         printf("[%d]", value);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
-    
-    
-    
-
-
-
 }
-
 
 void m5d_print(m5d_t *a)
 {
     int i, m;
-    
     printf("\n \n");
-  
-        
-        
-        for( i  = 0; i < a->nrows ; i++)
+  	for( i  = 0; i < a->nrows ; i++)
         {
             
             if(a->width > 1)
@@ -240,9 +189,8 @@ void m5d_print(m5d_t *a)
             printf("\n");
         
     }
-                
-    printf("\n \n \n ");
     
+    printf("\n \n \n ");
 }
 
 void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
@@ -251,22 +199,15 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
     short value, x ;
     for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
-        
-    
         out[0] =  a & (leftbit >>  x);
         out[1] =   b & (leftbit >>  x);
         out[2]  =  c & (leftbit >>  x);
         
     	if((out[2]  ==  out[1]) & (out[1] == out[0]))
        	{
-       	
-       	printf("[ 0 ]", value);
-       	
+       	printf("[ 0 ]", value);	
        	}
        
-       
-        
-        
         else
         {
         value = 0;
@@ -279,7 +220,6 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
             value = value + 2;
         }
         
-        
         if(out[2] > 0 )
         {
             value = value + 4;
@@ -290,7 +230,6 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
      
     }
     
-      
 }
 /*
 	How this is printed is still undetermined until a representation is chosen 
@@ -299,13 +238,10 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
 void m7d_print(m7d_t *a)
 {
     int i, m;
-    
     printf("\n \n");
-    
     for( i  = 0; i < a->nrows ; i++)
     {
-        
-        if(a->width > 1)
+      if(a->width > 1)
         {
             print_m7d_block(a->rows[i][0].units, a->rows[i][0].middle, a->rows[i][0].sign, a->fcol, 0);
             
@@ -316,8 +252,6 @@ void m7d_print(m7d_t *a)
                 ++m;
             }
             
-            
-            
             if(a->ncols%64 == 0)
             {
                 print_m7d_block(a->rows[i][m].units,a->rows[i][m].middle, a->rows[i][m].sign, a->fcol, 0 );
@@ -327,7 +261,6 @@ void m7d_print(m7d_t *a)
             {
                 print_m7d_block(a->rows[i][m].units,a->rows[i][m].middle, a->rows[i][m].sign, 0, (64 - a->ncols%64) );
             }
-            
             
         }
         
@@ -346,7 +279,6 @@ void m7d_print(m7d_t *a)
             
         }
         
-        
         printf("\n");
         
     }
@@ -356,9 +288,6 @@ void m7d_print(m7d_t *a)
     
     
 }
-
-
-
 
 void m3d_specs(m3d_t * a)
 {
@@ -405,7 +334,6 @@ void m5d_specs(m5d_t * a)
     
 }
 
-
 void m5d_fullinfo(m5d_t * a)
 {
     m5d_print(a);
@@ -413,11 +341,8 @@ void m5d_fullinfo(m5d_t * a)
   
 }
 
-
 void m7d_specs(m7d_t * a)
 {
-    
-    
     if (a->flags & iswindowed) {
         printf("Is Windowed   \n");
     }
@@ -429,9 +354,7 @@ void m7d_specs(m7d_t * a)
     printf("Number of rows   : %d \n", a->nrows );
     printf("Width------------: %d \n", a->width );
     
-    
 }
-
 
 void m7d_fullinfo(m7d_t * a)
 {

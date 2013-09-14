@@ -63,23 +63,17 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
         m3d_qrt_mul(&c_slice.row[0][0], &a_slice.row[0][1], &b_slice.row[1][0]);
         m3d_add_r(&c_slice.row[0][0], x1,&c_slice.row[0][0] );
         
-        
-    
     }
     
     else if((c_slice.row[0][0].ncols ) == M1RI_RADIX)
     {
-        
-       
-        
+         mul_64_m3d(c_slice.row[1][0].rows, x1->rows, x2->rows);
 
-    
-     	
     }
+    m1ri_free(x1);
+    m1ri_free(x2);
     
 }
-
-
 
 
 void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
@@ -145,8 +139,7 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		m3d_free(a_main_partition);
 		m3d_free(b_main_partition);
 		m3d_free(c_main_partition);
-        
-           
+          
     }
     
 }

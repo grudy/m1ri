@@ -31,8 +31,6 @@ void add_vbg(vbg * r, vbg const * x, vbg const * y)
 {
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
     r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
-    
-  
 }
 
 
@@ -46,27 +44,18 @@ vbg add_m3dr(vbg  x, vbg const y)
     t = (x.sign & x.units) ^ y.sign;
     x.units = (y.units ^ x.units) |  t;
     x.sign = t & x.sign;
-    return x;
-    
-    
-    
+    return x; 
 }
 
 void sub_m3d( vbg *r, vbg const *x, vbg const *y)
 {
     r->units = ((x->units^y->units) | (x->sign^y->sign));
     r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
-    
-    
-    
 }
 
 void vbg_negation(vbg *r)
 {
-
-
      r->sign = r->sign ^ r->units;
-
 }
 
 vbg sub_m3dr(vbg const x, vbg const y)
@@ -75,28 +64,20 @@ vbg sub_m3dr(vbg const x, vbg const y)
     vbg r;
     r.units = ((x.units^y.units) | (x.sign^y.sign));
     r.sign = (((x.units^y.units)^x.sign)&(y.units ^ x.sign));
-    
     return r;
     
 }
 
-
- void iadd_vbg(vbg *r,vbg  	 *x)
+void iadd_vbg(vbg *r,vbg  	 *x)
 {
-    
     vec t;
-    
     t = x->units ^ r->sign;
     r->sign = x->units ^ r->units;
     r->units = x->units ^ r->units;
     r->sign = r->sign & t;
     t = t ^ x->sign;
     r->units = t | r->units;
-    
-    
-    
-    
-    
+
 }
 
 void isub_m3d(vbg  *r,vbg  *x)
@@ -109,12 +90,8 @@ void isub_m3d(vbg  *r,vbg  *x)
     r->sign = x->units ^ r->sign;
     r->sign = r->sign & t;
     r->units = t | r->units;
-    
-    
-    
-    
+        
 }
-
 
 
 void  vbg_mul( vbg *r, vbg  *x, vbg  *y)            {
@@ -122,10 +99,6 @@ void  vbg_mul( vbg *r, vbg  *x, vbg  *y)            {
     r->sign = (y->sign ^ x->sign) & (r->units);
     
 }
-
-
-
-
 
 
 vbg vbg_mul_i(vbg const x, vbg const y)
@@ -205,9 +178,8 @@ void m3d_sub( m3d_t *r, m3d_t const *x, m3d_t const *y)
     {
         for(n = 0; n < x->width; n++)
         {
-    sub_m3d(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
+		    sub_m3d(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
         }
-
     }
 
 }
@@ -215,55 +187,35 @@ void m3d_sub( m3d_t *r, m3d_t const *x, m3d_t const *y)
 m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
 {
     
-    
     m3d_t  c;
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
         c = m3d_create(&c, a->nrows , b->ncols);
         int i, j;
-        
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {
-              
             add_vbg(&c.rows[i][j], &a->rows[i][j], &b->rows[i][j]);
-            
-            }
-            
-            
+            }   
         }
-        
     }
     
-    return c;
-    
-    
+    return c;  
 }
 void m3d_add_r(m3d_t * c, m3d_t  *a, m3d_t  *b)
 {
-    
-    
-   
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-    
-        int i, j;
-        
+    	int i, j;
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {
-             
-                add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
-                    
+                add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);        
             }
-            
-            
         }
-        
-    }
-      
+    }  
 }
 
 

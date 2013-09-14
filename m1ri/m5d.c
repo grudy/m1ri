@@ -323,8 +323,7 @@ m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t siz
 
 void   m5d_window_create(m5d_t *c, m5d_t * submatrix, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t sizecols)
 {
-    
-    
+	int i;
     submatrix->nrows =   M1RI_RADIX * sizecols;
     submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
@@ -335,9 +334,6 @@ void   m5d_window_create(m5d_t *c, m5d_t * submatrix, rci_t strow, rci_t stvfd, 
     submatrix->fcol   = 0;
     submatrix->svfd = stvfd;
     
-    
-    int i;
-    
     for(  i =   strow; i < strow + (M1RI_RADIX * sizerows) ; i++)
     {
         
@@ -345,28 +341,17 @@ void   m5d_window_create(m5d_t *c, m5d_t * submatrix, rci_t strow, rci_t stvfd, 
         
     }
     
-    
-    
 }
-
-
 
 vfd * m5d_rand(m5d_t * a)
 {
     int i;
     for( i = 0; i < (a->nrows * a->width); i++)
     {
-        
         a->block[i].sign = m1ri_rand();
-        
-        
         a->block[i].middle = m1ri_rand() &  a->block[i].sign;
-        
         a->block[i].units = m1ri_rand() &  a->block[i].sign;;
-        
-        
-        
-        
+
     }
     return a->block;
 }
@@ -393,17 +378,10 @@ m5d_t  m5d_identity_set(m5d_t * a)
             j = i - 1;
             for ( k = 0 ; k < M1RI_RADIX; k++)
             {
-                
-              a->rows[l][j].units = (leftbit)>>k;
-                l++;
-                
-            }
-            
-   
+              	a->rows[l][j].units = (leftbit)>>k;
+				l++;   
+            }     
         }
-        
-        
-        
         
         if((a->ncols%M1RI_RADIX) != 0)
         {
@@ -411,13 +389,10 @@ m5d_t  m5d_identity_set(m5d_t * a)
             k = ((a->width -1) * M1RI_RADIX);
             l = M1RI_RADIX - l;
             for(i = 0; i < (M1RI_RADIX - l); i++)
-            {
-                
+            {   
                 a->rows[k + i][a->width-1].units = (leftbit)>>i;
             }
-            
         }
-        
         
         if ((a->ncols%M1RI_RADIX) == 0)
         {
@@ -427,22 +402,18 @@ m5d_t  m5d_identity_set(m5d_t * a)
                 
             {
                 a->rows[l][a->width -1].units = (leftbit)>>i;
-                l++;
-                
+                l++;    
             }
             
         }
-        
-        
     }
+    
     return *a;
 }
 
 /*
- 
+ Creates an Identity Matrix over GF(5)
  */
-
-
 m5d_t   m5d_identity(m5d_t  *a, rci_t n)
 {
     *a = m5d_create(a, n, n);
@@ -450,33 +421,17 @@ m5d_t   m5d_identity(m5d_t  *a, rci_t n)
     
     return *a;
     
-    
 }
 
-
 /*
- 
+  Releases a m5d_t into the wilderness.
  */
-
-
-
-
-/*
- 
- Releases a m5d_t into the wilderness.
- */
-
-
 
 void m5d_free( m5d_t *  tofree)
-{
-    
-    
+{ 
     m1ri_free(tofree->rows);
-    m1ri_free(tofree->block);
-    
+    m1ri_free(tofree->block);   
 }
-
 
 void add_vfd(vfd * r, vfd * a, vfd * b)
 
@@ -674,10 +629,6 @@ void m5d_sub( vfd *r, vfd *a, vfd *b)
     
 }
 
-
-
-
-
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
@@ -776,30 +727,20 @@ vfd m5d_mul4(vfd a)
 
 void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
 {
-    
-    
-   
+
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-    
         int i, j;
-        
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
-            {
-                
+            {   
                 add_vfd(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
             }
-            
-            
         }
         
     }
-    
-  
-    
-    
+
 }
 int m5d_equal(m5d_t const *a, m5d_t const *b)
 {
@@ -832,14 +773,11 @@ void m5d_copypadding(m5d_t  * r, m5d_t  const * x)
 		int i, s;
         for( i = 0; i < x->nrows; i++)
         {
-        	 for( s = 0; s < x->width; s++)
-        	 {
-            r->rows[i][s] = x->rows[i][s];
-            }
-            
+			for( s = 0; s < x->width; s++)
+        	{
+            	r->rows[i][s] = x->rows[i][s];
+            }   
         }
-	
-
 }
 
 void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
@@ -847,13 +785,12 @@ void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
 		int i, s;
         for( i = 0; i < r->nrows; i++)
         {
-        	 for( s = 0; s < r->width; s++)
-        	 {
-            r->rows[i][s] = x->rows[i][s];
-            }
-            
+        	for( s = 0; s < r->width; s++)
+        	{
+            	r->rows[i][s] = x->rows[i][s];
+            }   
         }
-	
+        
 }
 
 

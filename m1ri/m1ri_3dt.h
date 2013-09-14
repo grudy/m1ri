@@ -30,10 +30,6 @@
 #include <m1ri/m1riwrappers.h>
 
 
-
-
-
-
 /********************************************
 Creates  a struct of 128 bits
 ********************************************/
@@ -43,9 +39,6 @@ typedef struct vbg{
     vec units;
     vec sign;
 } vbg;
-
-
-
 
 /*
     GF(3) Matrix structure
@@ -66,13 +59,9 @@ typedef struct {
     
     vec  svbg;   //Identifies first vbg used in row
     u_int64_t a;
-    // wi_t rowstride;  //vbg's in block to traverse to  get to first
-    
     u_int32_t  lblock; //  first block pointed to in a window
     u_int32_t fcol;  //column offset of first block
     u_int8_t flags;    //IsWindowed, NotWindowed    
-    
-    
     
     
 } m3d_t;
@@ -96,9 +85,6 @@ vec m3d_rs_bits(m3d_t const *, rci_t  , rci_t  , int  );
 
 vec m3d_ru_bits(m3d_t const  *, rci_t  , rci_t  , int  );
 
-
-
-
 /*
  Read n elements
  x = rows
@@ -115,8 +101,6 @@ Swap rows in a matrix;
 */
 
 void * m3d_rowswap (m3d_t  * , rci_t , rci_t );
-
-
 
 /*
 Naive column swapping
@@ -155,24 +139,17 @@ static inline vbg ** m3d_row_alloc(vbg * block, vbg ** rows, wi_t width, rci_t n
 
 
 m3d_t m3d_create( m3d_t *  , rci_t nrows, rci_t );
-
-
-
 m3d_t m3d_rand(m3d_t * );
-
 
 /*
  Make an Identity Matrix
  a = Identity matrix 
  n = matrix size (row length and column width)
-
- 
+  
 */
 m3d_t    m3d_identity_set(m3d_t * );
 
-
 m3d_t   m3d_identity(m3d_t  *, rci_t );
-
 
 /*
  windows in m1ri_word rows * m1ri_word column incriments
@@ -209,28 +186,15 @@ m3d_t m3d_concat(m3d_t * , m3d_t * , m3d_t * );
  
 */
 m3d_t m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
-
-    
-  
-/*
  
+/*
  Releases a m3d_t into the wilderness.
  */
 
-
-
-
-
-
 int m3d_equal(m3d_t const  *, m3d_t const  *);
-
-
 void m3d_copypadding(m3d_t  * , m3d_t const * );
 void m3d_putpadding(m3d_t  * , m3d_t const * );
-
 void m3d_free( m3d_t *  );
-
-
 
 
 #endif

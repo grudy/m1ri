@@ -424,7 +424,7 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
 
 }
 
-void isub_m7d(vtri  *r, vtri *y)
+void m7d_sub_i(vtri  *r, vtri *y)
 {
 	/*
 	Subtraction function

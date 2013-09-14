@@ -27,11 +27,6 @@
 #include <m1ri/m1riwrappers.h>
 
 
-
-
-
-
-
 /********************************************
  Creates  a structure of 192 bits
  ********************************************/
@@ -41,8 +36,6 @@ typedef struct {
     vec units;
     vec middle;
     vec sign;
-    
-    
     
 } vtri;
 
@@ -180,7 +173,7 @@ void add_vtri(vtri *, vtri * , vtri *);
 
 void iadd_vtri(vtri  *, vtri *);
 
-void isub_m7d(vtri  *, vtri *);
+void m7d_sub_i(vtri  *, vtri *);
 
 //Scalar  multiplication
 vtri m7d_mul_2(vtri);

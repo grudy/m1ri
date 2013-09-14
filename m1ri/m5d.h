@@ -227,10 +227,4 @@ vfd m5d_mul3(vfd);
 vfd m5d_mul4(vfd);
 
 
-
-
-
-
-
-
 #endif

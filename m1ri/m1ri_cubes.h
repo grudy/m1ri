@@ -51,7 +51,6 @@ typedef struct
     
 }m3_slice;
 
-
 /*
 A holding structure for m5d_t windows
 */
