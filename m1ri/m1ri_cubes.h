@@ -25,23 +25,18 @@
  m1ri_cubes.h
  */
 
-
 #ifndef M1RIPROJECT_M1RI_CUBES_H
 #define M1RIPROJECT_M1RI_CUBES_H
-
-
-
-
 #include <m1ri/m1ri_3dt.h>
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>
+
 /*
 A holding structure for m3d_t windows
 */
 typedef struct
 {
- 
-    
+
     m3d_t * block;
     m3d_t ** row;
     wi_t slicesize;// (slicesize ^ 2) * 64
@@ -57,8 +52,6 @@ A holding structure for m5d_t windows
 
 typedef struct
 {
-    
-    
     m5d_t * block;
     m5d_t ** row;
     wi_t slicesize;// (slicesize ^ 2) * 64
@@ -71,11 +64,9 @@ typedef struct
 /*
 A holding structure for m7d_t windows
 */
-
 typedef struct
 {
-    
-    
+     
     m7d_t * block;
     m7d_t ** row;
     wi_t slicesize;// (slicesize ^ 2) * 64

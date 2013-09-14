@@ -74,8 +74,6 @@ static inline void * m1ri_malloc(size_t size) {
 }
 
 
-
-
 static inline void * m1ri_calloc(size_t nobj, size_t size) {
   void * allocate = calloc(nobj, size);
   if(allocate == NULL)
