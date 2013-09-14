@@ -28,7 +28,7 @@
 
 #include "m1ri_small.h"
 
-void mul_64_m3d(vbg **R, vbg **A, vbg **B)
+void m3d_mul_64(vbg **R, vbg **A, vbg **B)
 {
     int i;
     vbg t1, t2, r1, r2, a;
@@ -304,7 +304,6 @@ void mul_32_m5d(vfd *R, vfd *A, vfd *B)
     
     for (i = 0;i < 32; i++)
     {
-        
         a = A[i];
         v3 = a.sign;
         v2 = a.middle;
@@ -330,7 +329,7 @@ void mul_32_m5d(vfd *R, vfd *A, vfd *B)
         t1 = tables4[2][v1&15]; iadd_vfd(&r1, &t1);
         t2 = tables4[2][v2&15]; iadd_vfd(&r2, &t2);
         t3 = tables4[2][v3&15]; iadd_vfd(&r3, &t3);
-       // m5d_sub_i(&r1, &r2);
+        // m5d_sub_i(&r1, &r2);
         iadd_vfd(&r1, &r2);
         m5d_add2_i(&r1, &r3);
         
@@ -387,23 +386,22 @@ void mul_8_m5d(vfd *R, vfd *A, vfd *B)
         m5d_combine4(tables4[i], B + (4*i));
     for (i = 0; i < 8; i++)
     {
-    a = A[i];
-    v2 = a.sign;
-    v1 = a.units ^ v2;
-    r1 = tables4[0][v1&15]; v1 >>= 4;
-    r2 = tables4[0][v2&15]; v2 >>= 4;
-    r3 = tables4[0][v3&15]; v3 >>= 4;
-    t1 = tables4[1][v1&15]; iadd_vfd(&r1, &t1);
-    t2 = tables4[1][v2&15]; iadd_vfd(&r2, &t2);
-    t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3);
-    // m5d_sub_i((&r1, &r2);
-    iadd_vfd(&r1, &r2);
-	m5d_add2_i(&r1, &r3);
+    	a = A[i];
+    	v2 = a.sign;
+    	v1 = a.units ^ v2;
+    	r1 = tables4[0][v1&15]; v1 >>= 4;
+    	r2 = tables4[0][v2&15]; v2 >>= 4;
+    	r3 = tables4[0][v3&15]; v3 >>= 4;
+   	 	t1 = tables4[1][v1&15]; iadd_vfd(&r1, &t1);
+    	t2 = tables4[1][v2&15]; iadd_vfd(&r2, &t2);
+    	t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3);
+    	// m5d_sub_i((&r1, &r2);
+    	iadd_vfd(&r1, &r2);
+		m5d_add2_i(&r1, &r3);
         
     R[i] = r1;
     }
 }
-
 
 //4 * 64,256 bit, 32 byte matrix(slice) multiplication
 void mul_4_m5d(vfd *R, vfd *A, vfd *B)
@@ -419,8 +417,7 @@ void mul_4_m5d(vfd *R, vfd *A, vfd *B)
     {
         a = A[i];
         v2 = a.sign;
-        
-        v1 = a.sign;
+    	v1 = a.sign;
 		v2  = a.sign & a.middle;
 		v3 =  v2 & a.units; 
         r1 = table4[v1&15];
@@ -434,8 +431,6 @@ void mul_4_m5d(vfd *R, vfd *A, vfd *B)
     }
     
 }
-
-
 
 
 /****************************************************************************
@@ -464,8 +459,7 @@ void mul_64_m7d(vtri **R, vtri **A, vtri **B)
     {
         a = A[i][0];
         v2 = a.sign;
-    
-        v1 = (a.units ^ v2);
+    	v1 = (a.units ^ v2);
         r1 = tables6[0][v1&63];
         v1 >>= 6;
         r2 = tables6[0][v2&63];
@@ -623,7 +617,6 @@ void mul_8_m7d(vtri *R, vtri *A, vtri *B)
     R[i] = r1;
     }
 }
-
 
 
 //4 * 64,256 bit, 32 byte matrix(slice) multiplication

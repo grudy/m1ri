@@ -33,7 +33,6 @@ void add_vbg(vbg * r, vbg const * x, vbg const * y)
     r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
 }
 
-
 /*
 
 */
@@ -64,8 +63,8 @@ vbg sub_m3dr(vbg const x, vbg const y)
     vbg r;
     r.units = ((x.units^y.units) | (x.sign^y.sign));
     r.sign = (((x.units^y.units)^x.sign)&(y.units ^ x.sign));
-    return r;
     
+    return r;
 }
 
 void iadd_vbg(vbg *r,vbg  	 *x)
@@ -77,20 +76,17 @@ void iadd_vbg(vbg *r,vbg  	 *x)
     r->sign = r->sign & t;
     t = t ^ x->sign;
     r->units = t | r->units;
-
 }
 
 void isub_m3d(vbg  *r,vbg  *x)
 {
     vec t;
-    
     r->units = x->units ^ r->units;
     t  = r->units | r->sign;
     t = t ^ x->sign;
     r->sign = x->units ^ r->sign;
     r->sign = r->sign & t;
-    r->units = t | r->units;
-        
+    r->units = t | r->units;     
 }
 
 
@@ -100,23 +96,17 @@ void  vbg_mul( vbg *r, vbg  *x, vbg  *y)            {
     
 }
 
-
 vbg vbg_mul_i(vbg const x, vbg const y)
 {
-    
     vbg r;
     r.units = x.units & y.units;
     r.sign  = (y.sign ^ x.sign) & (r.units);
     
-    return r;
-    
+    return r;   
 }
-
-
 
 m3d_t * m3d_hadamard(m3d_t const *a, m3d_t const *b)
 {
-    
     
     m3d_t  * c = malloc(sizeof(m3d_t));
     
@@ -128,38 +118,28 @@ m3d_t * m3d_hadamard(m3d_t const *a, m3d_t const *b)
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
-            {
-                
+            {  
                 c->rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
-            }
-            
-            
+            }  
         }
-        
+
     }
     
-    
-
     return c;
-    
-    
 }
 
 
-
-
-void sub_64_m3d(vbg **R, vbg  **A, vbg  **B)
+void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
 {
     int i;
     for (i= 0; i < M1RI_RADIX; i++ )
     {
         R[i][0] = sub_m3dr(A[i][0], B[i][0]);
     }
+    
 }
 
-
-
-void add_64_m3d(vbg **R, vbg   **A, vbg  **B)
+void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
 {
     int i;
     for (i = 0; i < M1RI_RADIX; i++ )
@@ -168,8 +148,6 @@ void add_64_m3d(vbg **R, vbg   **A, vbg  **B)
     }
 
 }
-
-
 
 void m3d_sub( m3d_t *r, m3d_t const *x, m3d_t const *y)
 {
@@ -186,7 +164,6 @@ void m3d_sub( m3d_t *r, m3d_t const *x, m3d_t const *y)
 
 m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
 {
-    
     m3d_t  c;
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
@@ -203,6 +180,7 @@ m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
     
     return c;  
 }
+
 void m3d_add_r(m3d_t * c, m3d_t  *a, m3d_t  *b)
 {
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))

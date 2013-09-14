@@ -52,10 +52,18 @@ A holding structure for m5d_t windows
 
 typedef struct
 {
+	/*
+	
+	 */
     m5d_t * block;
+    /*
+    (slicesize ^ 2) * 64
+    */
     m5d_t ** row;
-    wi_t slicesize;// (slicesize ^ 2) * 64
-    wi_t width;   ///width in slices horizaontally per row
+    // (slicesize ^ 2) * 64
+    wi_t slicesize;
+    //width in slices horizaontally per row
+    wi_t width;   
     rci_t nrows;
     rci_t ncols;
     
@@ -122,9 +130,7 @@ void  m7d_slices(m7_slice *  , m7d_t * , wi_t );
 void  m7d_quarter(m7_slice *  , m7d_t * );
 
 m7d_t m7d_transpose_sliced(m7d_t * );
-
 m7d_t  * m7_blockslice_allocate(m7d_t * , rci_t  ,  wi_t  );
-
 m7d_t ** m7_rowslice_allocate(m7d_t * , m7d_t ** , wi_t , rci_t );
 
 

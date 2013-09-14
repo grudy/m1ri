@@ -25,40 +25,36 @@
 
 #include "m1ri_cubes.h"
 
-//This copies a matrix as a contingous matrix of in (slicesize ^2) * m1ri_word slices 
+/*This copies a matrix as a contingous matrix of in (slicesize ^2) * m1ri_word slices 
+   (This function has not been used, and not tested in a while)*/
 m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
 {
-
-    
-        int l, i, f, x, y, z, lf, r, extracols, extrarows, colroundeddown;
-        extracols = a->width%slicesize;
-        colroundeddown = a->width/slicesize;
-        c->ncols = M1RI_DN(a->width, slicesize);
-        extrarows = a->nrows%(M1RI_RADIX * slicesize);
-        c->nrows = M1RI_DN(a->nrows, (M1RI_RADIX * slicesize));
-        c->width =  a->width;
-    l = a->nrows / (M1RI_RADIX * slicesize);
-   l  = l  * M1RI_RADIX * slicesize;
-    
-        c->block = m3d_block_allocate(a->block,  a->nrows,   a->width);
+	int l, i, f, x, y, z, lf, r, extracols, extrarows, colroundeddown;
+	extracols = a->width%slicesize;
+    colroundeddown = a->width/slicesize;
+    c->ncols = M1RI_DN(a->width, slicesize);
+    extrarows = a->nrows%(M1RI_RADIX * slicesize);
+    c->nrows = M1RI_DN(a->nrows, (M1RI_RADIX * slicesize));
+    c->width =  a->width;
+   	l = a->nrows / (M1RI_RADIX * slicesize);
+  	l  = l  * M1RI_RADIX * slicesize;
+    c->block = m3d_block_allocate(a->block,  a->nrows,   a->width);
     z = 0;
     r = 0 ;
+    c->rows = m1ri_malloc( a->nrows * a->width * sizeof(vbg *));
     
-      c->rows = m1ri_malloc( a->nrows * a->width * sizeof(vbg *));
-        for ( i = 0; i <  l;  i = i + (slicesize* M1RI_RADIX))
-        {
-            for( f = 0; f <colroundeddown ; f++)
+    for ( i = 0; i <  l;  i = i + (slicesize* M1RI_RADIX))
+	{
+        for( f = 0; f <colroundeddown ; f++)
             {   
-                 lf = f * slicesize; 
+                lf = f * slicesize; 
                 for( x = 0; x <(slicesize  * M1RI_RADIX ) ; x++)
                 {
-                    for (y = 0 ; y < slicesize; y++) {
-                       
-                       c->block[z] = a->rows[i+ x][lf  + y];
-                        z++;
-                        
+                    for (y = 0 ; y < slicesize; y++) 
+                    {   
+                    	c->block[z] = a->rows[i+ x][lf  + y];
+                    	z++;
                     }
-
                 }
       
             }
@@ -67,20 +63,16 @@ m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
             {
                 for (y = 0 ; y < extracols; y++) {
                     
-                  c->block[z] = a->rows[i+ x][(f * slicesize) + y];
-                    z++;
+                  	c->block[z] = a->rows[i+ x][(f * slicesize) + y];
+                	z++;
                     
                 }
-
             }
-            
-        
+             
         c->rows[r]  = c->block + (i * slicesize );
-            r++;
-            
-        }
-    
-    
+        r++;    
+    }
+     
     for( f = 0; f <colroundeddown ; f++)
     {
         for( x = 0; x <(extrarows   ) ; x++)
@@ -93,32 +85,30 @@ m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
             }
             
         }
-
     }
 
     for( x = 0; x <(extrarows  ) ; x++)
     {
-        for (y = 0 ; y < extracols; y++) {
-            
+        for (y = 0 ; y < extracols; y++) 
+        {    
             c->block[z] = a->rows[i+ x][(f * slicesize) + y];
             z++;
-            
         }
     }
     
-        c->flags = 0;
-        c->lblock = a->ncols%64;
-        c->fcol = 0;
-        c->svbg = 0;
-        return *c;
-        c->rows[r]  = c->block + (i * slicesize );  
+    c->flags = 0;
+	c->lblock = a->ncols%64;
+	c->fcol = 0;
+    c->svbg = 0;
+    return *c;
+    c->rows[r]  = c->block + (i * slicesize );  
     
 }
 
 
  m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width)
 {
-        block  = m1ri_calloc(nrows *  width  ,   sizeof(m3d_t  ) );
+    block  = m1ri_calloc(nrows *  width  ,   sizeof(m3d_t  ) );
     return block;
 }
 
@@ -148,29 +138,24 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
     l = a->nrows / (M1RI_RADIX * slicesize);
     l = l * slicesize;
     c->slicesize = slicesize;
- 
-    c->block = m3_blockslice_allocate(c->block,  c->nrows,   c->width);
+ 	c->block = m3_blockslice_allocate(c->block,  c->nrows,   c->width);
     c->row = m3_rowslice_allocate(c->block,  c->row,   c->width, c->nrows);
-    //z = 0;
     r = 0 ;
-    
-    
+     
     for ( i = 0; i <  l;  i = i + slicesize)
     {       
     	for( f = 0; f <colroundeddown ; f++)
         {
-           
-              m3d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, slicesize);
+        	m3d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, slicesize);
         }
         
         if(extracols > 0)
         {
-             m3d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, extracols);
+        	m3d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, extracols);
 		}
         r++;
         
     }
-    
     
     if(extrarows >0 )
     {
@@ -179,10 +164,10 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
            m3d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, slicesize);
         }
 
-    if(extracols > 0)
-    {
+    	if(extracols > 0)
+    	{
            m3d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, extracols);
-    }
+    	}
     }
 }
 
@@ -195,10 +180,10 @@ vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
     {
         for(x = 0; x < 64; x ++)
         {
-            temp.units =  (a[x][0].units & (leftbit >> i) );
-            temp.sign =  (a[x][0].sign & (leftbit >> i) );
-            b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
-            b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
+          temp.units =  (a[x][0].units & (leftbit >> i) );
+          temp.sign =  (a[x][0].sign & (leftbit >> i) );
+          b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
+          b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
         }
     }
     return *b;
@@ -220,7 +205,6 @@ m3d_t m3d_transpose_sliced(m3d_t * a)
             
         }
     }
-
     return c;
   
 }
@@ -254,7 +238,6 @@ m5d_t ** m5_rowslice_allocate(m5d_t * block, m5d_t ** rows, wi_t width, rci_t nr
     return rows;
 }
 
-
 void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
 {
     wi_t l, z, r,  colroundeddown;
@@ -272,7 +255,6 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
     c->row = m5_rowslice_allocate(c->block,  c->row,   c->width, c->nrows);
     z = 0;
     r = 0 ;
-    
     
     for ( i = 0; i <  l;  i = i + slicesize)
     {
@@ -293,7 +275,6 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
     {
         c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),extrarows, slicesize);
         z++;
-        
     }
     
     c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),extrarows, extracols);
@@ -368,23 +349,20 @@ vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
     vfd temp;
     for(i = 0; i <64; i ++)
     {
-        for(x = 0; x < 64; x ++)
-        {
-            
-            temp.units =  (a[x][0].units & (leftbit >> i) );
-            temp.sign =  (a[x][0].sign & (leftbit >> i) );
-            temp.middle =  (a[x][0].middle & (leftbit >> i) );
-            
-            b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
-            b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
-            b[i][0].middle = (temp.middle) ? b[i][0].middle | (leftbit >> x) : b[i][0].middle  ;
-    
+      for(x = 0; x < 64; x ++)
+       {
+       
+        temp.units =  (a[x][0].units & (leftbit >> i) );
+        temp.sign =  (a[x][0].sign & (leftbit >> i) );
+        temp.middle =  (a[x][0].middle & (leftbit >> i) );    
+        b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
+        b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
+        b[i][0].middle = (temp.middle) ? b[i][0].middle | (leftbit >> x) : b[i][0].middle;    
         }
 
     }
     
     return *b;
-    
 }
 
 m5d_t m5d_transpose_sliced(m5d_t * a)
@@ -399,8 +377,7 @@ m5d_t m5d_transpose_sliced(m5d_t * a)
     m5d_slices(d, &c, 1);
     for (x = 0; x < b->nrows; x++) {
         for (y = 0; y < b->ncols; y ++) {
-         m5d_transpose_vfd(b->row[x][y].rows, d->row[y][x].rows);
-            
+			m5d_transpose_vfd(b->row[x][y].rows, d->row[y][x].rows);  
         }
     }
     return c;
@@ -413,7 +390,7 @@ void m5d_quarter(m5_slice * c , m5d_t * a)
     m5d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/2, a->ncols/2);
 	m5d_window_create(a, &c->row[0][1], 0, a->ncols/2 , a->nrows/2, a->ncols/2);   
     m5d_window_create(a, &c->row[1][0], a->nrows/2, 0 , a->nrows/2, a->ncols/2);
-	 m5d_window_create(a, &c->row[1][1], a->nrows/2,a->ncols/2,  a->nrows/2, a->ncols/2);
+	m5d_window_create(a, &c->row[1][1], a->nrows/2,a->ncols/2,  a->nrows/2, a->ncols/2);
     
 }
 
@@ -501,22 +478,20 @@ vtri *  m7d_transpose_vtri(vtri  **a, vtri  **b  )
     vtri temp;
     for(i = 0; i <64; i ++)
     {
-        for(x = 0; x < 64; x ++)
-        {
+      for(x = 0; x < 64; x ++)
+      {
             
-            temp.units =  (a[x][0].units & (leftbit >> i) );
-            temp.sign =  (a[x][0].sign & (leftbit >> i) );
-            temp.middle =  (a[x][0].middle & (leftbit >> i) );
-            
-            b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
-            b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
-            b[i][0].middle = (temp.middle) ? b[i][0].middle | (leftbit >> x) : b[i][0].middle  ;
+        temp.units =  (a[x][0].units & (leftbit >> i) );
+        temp.sign =  (a[x][0].sign & (leftbit >> i) );
+        temp.middle =  (a[x][0].middle & (leftbit >> i) );
+        b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
+        b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
+        b[i][0].middle = (temp.middle) ? b[i][0].middle | (leftbit >> x) : b[i][0].middle;
     
-        }
+      }
     }
     
     return *b;
-    
 }
 
 void  m7d_slices(m7_slice *  c, m7d_t * a, wi_t slicesize)
@@ -542,13 +517,9 @@ void  m7d_slices(m7_slice *  c, m7d_t * a, wi_t slicesize)
    
         for( f = 0; f <colroundeddown ; f++)
         {
-            
             c->block[z] =  m7d_window(a, ( i ) , (f * slicesize), slicesize, slicesize);
-            z++;
-            
-            
+            z++;    
         }
-        
         
         c->block[z] =  m7d_window(a, ( i ) , (f * slicesize),slicesize, extracols);
         z++;
@@ -582,7 +553,7 @@ m7d_t m7d_transpose_sliced(m7d_t * a)
      {
         for (y = 0; y < b->ncols; y ++)
          {
-         m7d_transpose_vtri(b->row[x][y].rows, d->row[y][x].rows);  
+         	m7d_transpose_vtri(b->row[x][y].rows, d->row[y][x].rows);  
         }
     }
     

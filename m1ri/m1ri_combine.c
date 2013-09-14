@@ -214,8 +214,6 @@ void m5d_combine4(vfd *table, vfd *input )
     table[3] = t;
     iadd_vfd(&t, &d);
     
-    
-    
     table[11] = t;
     iadd_vfd(&t, &c);
     table[15] = t;
@@ -227,8 +225,7 @@ void m5d_combine4(vfd *table, vfd *input )
     table[13] = t;
     m5d_sub_i(&t, &c);
     table[9] = t;
-    
-    
+  
 }
 
 
@@ -236,8 +233,6 @@ void m5d_combine5(vfd *table, vfd *input )
 {
 	int i;
     vfd e, *t4;
-    
-    
     
     m5d_combine4(table, input);
     e = input[4];
@@ -263,16 +258,13 @@ void m5d_combine6(vfd *table, vfd *input )
     for (i = 1; i < 32; i++)
         add_vfd((t5 + i), (table + i), &f);
     
-    
 }
 
 void m5d_combine7(vfd *table, vfd *input )
-
 {
-    
     vfd g, *t6;
     int i;
-    
+   
     m5d_combine6(table, input);
     g = input[6];
     t6 = (table+64);
@@ -282,15 +274,10 @@ void m5d_combine7(vfd *table, vfd *input )
         add_vfd((t6 + i), (table + i), &g );
     }
     
-    
-    
-    
-    
 }
 
 
 void m5d_combine8(vfd *table, vfd *input)
-
 {
     vfd h, *t7;
     int i;
@@ -325,9 +312,7 @@ void *  m7d_combine3(vtri *table, vtri *input )
     table[6] = t;
     
     add_vtri((table + 5), &a , &b);
-    
-    
-    
+
     return 0;
     
 }
@@ -362,9 +347,7 @@ void m7d_combine4(vtri *table, vtri *input )
     add_vtri(&t,&b,&c);
     table[3] = t;
     iadd_vtri(&t, &d);
-    
-    
-    
+     
     table[11] = t;
     iadd_vtri(&t, &c);
     table[15] = t;
@@ -378,7 +361,6 @@ void m7d_combine4(vtri *table, vtri *input )
     table[9] = t;
     
 }
-
 
 void m7d_combine5(vtri *table, vtri *input )
 {

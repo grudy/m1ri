@@ -391,11 +391,9 @@ m7d_t  m7d_rand(m7d_t * a)
 
 void m7d_free( m7d_t *  tofree)
 {
-    
-    
     m1ri_free(tofree->rows);
     m1ri_free(tofree->block);
-    
+   
 }
 
 
@@ -421,7 +419,6 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
     
    r->sign = r->sign ^ ( t & r->middle);
     
-
 }
 
 void m7d_sub_i(vtri  *r, vtri *y)
@@ -451,9 +448,7 @@ void iadd_vtri(vtri  *x, vtri *y)
     x->middle  = x->middle ^ t ;
     x->sign  = x->sign ^ (  t & x->middle);
     /*Cleanup*/
-    
-	
-    
+      
 
 }
 
@@ -461,7 +456,6 @@ void iadd_vtri(vtri  *x, vtri *y)
 void reduce_vtri( vtri * a)
 {
     vtri b = *a ;
-    
     a->units  = b.units ^ (b.units  | b.sign | b.middle) ;//  )
     a->middle  = b.middle ^ (b.units  | b.sign | b.middle) ;
     a->sign  = b.units ^ (b.units  | b.sign | b.middle) ;
@@ -517,17 +511,15 @@ vtri m7d_mul_5(vtri a)
 vtri m7d_mul_6(vtri a)
 {
     vec z = a.units | a.middle | a.sign;
-
-    a.units =  a.units ^ z;
+	a.units =  a.units ^ z;
     a.sign =   a.sign  ^ z;
     a.middle = a.middle ^ z;
     
     return a;
-    
-    
+     
 }
 void m7d_add_4r(vtri *x, vtri * y)
-	{
+{
  	vtri  r;
     vec s;
     vec t;
@@ -547,12 +539,37 @@ void m7d_add_4r(vtri *x, vtri * y)
     x->units = x->sign;
     x->sign = x->middle;
     x->middle = r.units;
-	}
+}
 
+
+
+
+
+/*************
+sub_m7dr is a placeholder for now
+**********************/
+vtri sub_m7dr(vtri const x, vtri const y)
+{
+    vtri r;
+    r.units = ((x.units^y.units) | (x.sign^y.sign));
+    r.sign = (((x.units^y.units)^x.sign)&(y.units ^ x.sign));
+    
+    return r;
+}
+
+void m7d_sub_64(vtri **R, vtri  **A, vtri  **B)
+{
+    int i;
+    for (i= 0; i < M1RI_RADIX; i++ )
+    {
+        R[i][0] = sub_m7dr(A[i][0], B[i][0]);
+    }
+    
+}
 
 int m7d_equal(m7d_t const *a, m7d_t const *b)
 {
-      if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
+    if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
     {
         return 0;
     }
@@ -578,13 +595,12 @@ void m7d_copypadding(m7d_t  * r, m7d_t  const * x)
 		int i, s;
         for( i = 0; i < x->nrows; i++)
         {
-        	 for( s = 0; s < x->width; s++)
-        	 {
-            r->rows[i][s] = x->rows[i][s];
+        	for( s = 0; s < x->width; s++)
+        	{
+            	r->rows[i][s] = x->rows[i][s];
             }
             
         }
-	
 
 }
 
@@ -600,47 +616,35 @@ void m7d_putpadding(m7d_t  * r, m7d_t  const * x)
             
         }
 	
-
 }
 
-void add_64_m7d(vtri **R, vtri   **A, vtri  **B)
+void m7d_add_64(vtri **R, vtri   **A, vtri  **B)
 {
     int i;
     for (i = 0; i < M1RI_RADIX; i++ )
     {
     	add_vtri(&R[i][0], &A[i][0], &B[i][0]);
-       // R[i][0] = add_m3dr(A[i][0], B[i][0]);
+       // R[i][0] = add_m7dr(A[i][0], B[i][0]);
     }
-    
-    
-    
-    
+
 }
 void m7d_add_r(m7d_t *c, m7d_t *a, m7d_t *b)
 {
-  
+
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-    
         int i, j;
-        
+     
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {
-                
-                add_vtri(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
-               
-   
+                add_vtri(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);    
             }
-            
-            
         }
         
     }
-    
-    
-    
+      
 }
 
 

@@ -20,11 +20,9 @@
  m1ri_strassen.c
  */
 
-
 #include "m1ri_strassen.h"
 #include <math.h>
 #include <stdlib.h>
-
 
 void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
 {
@@ -67,12 +65,32 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
     
     else if((c_slice.row[0][0].ncols ) == M1RI_RADIX)
     {
-         mul_64_m3d(c_slice.row[1][0].rows, x1->rows, x2->rows);
-
+		m3d_sub_64(x1->rows, a_slice.row[0][0].rows, a_slice.row[1][0].rows);  //1
+        m3d_sub_64(x2->rows,b_slice.row[1][1].rows,b_slice.row[0][1].rows) ;  //2
+        m3d_mul_64(c_slice.row[1][0].rows, x1->rows, x2->rows);  //3
+        m3d_add_64(x1->rows,a_slice.row[1][0].rows,a_slice.row[1][1].rows) ;  //4
+        m3d_sub_64(x2->rows,b_slice.row[0][1].rows,b_slice.row[0][0].rows) ;  //5
+        m3d_mul_64(c_slice.row[1][1].rows, x1->rows, x2->rows);    //6
+        m3d_sub_64(x1->rows,x1->rows,a_slice.row[0][0].rows) ;//7
+        m3d_sub_64(x2->rows,b_slice.row[1][1].rows,x2->rows);  //8
+        m3d_mul_64(c_slice.row[0][1].rows,x1->rows,x2->rows); //9
+        m3d_sub_64(x1->rows,a_slice.row[0][1].rows,x1->rows);    //10
+        m3d_mul_64(c_slice.row[0][0].rows,x1->rows,b_slice.row[1][1].rows);   //11
+        m3d_mul_64(x1->rows, a_slice.row[1][1].rows, b_slice.row[1][1].rows);  //12
+        m3d_add_64(c_slice.row[0][1].rows,x1->rows , c_slice.row[0][1].rows) ;   //13
+        m3d_add_64(c_slice.row[1][0].rows,c_slice.row[0][1].rows , c_slice.row[1][0].rows) ;   //14
+        m3d_add_64(c_slice.row[0][1].rows,c_slice.row[0][1].rows , c_slice.row[1][1].rows) ;   //15
+        m3d_add_64(c_slice.row[1][1].rows,c_slice.row[1][0].rows , c_slice.row[1][1].rows) ;    //16
+        m3d_add_64(c_slice.row[1][1].rows,c_slice.row[1][0].rows , c_slice.row[1][1].rows) ;  //17
+        m3d_sub_64(x2->rows, x2->rows, b_slice.row[1][0].rows) ;            //18
+        m3d_mul_64(c_slice.row[1][0].rows, a_slice.row[1][1].rows, x2->rows);            //19
+        m3d_sub_64(c_slice.row[1][0].rows, c_slice.row[1][0].rows,c_slice.row[0][0].rows);  //20
+        m3d_mul_64(c_slice.row[0][0].rows, a_slice.row[0][1].rows,b_slice.row[1][0].rows);
+        m3d_add_64(c_slice.row[0][0].rows, x1->rows,c_slice.row[0][0].rows) ;
     }
+    
     m1ri_free(x1);
     m1ri_free(x2);
-    
 }
 
 
@@ -80,7 +98,7 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 {
     if(a->ncols == b->nrows)
     {
-      		// These hold the padded matrix sizes
+      	// These hold the padded matrix sizes
 		u_int32_t  arcr, acbr, bccc;
 		a->nrows = arcr;
 		a->ncols = acbr;
@@ -101,11 +119,9 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		m3d_t * a_main_partition = m1ri_malloc(sizeof(m3d_t));
 		m3d_t * b_main_partition = m1ri_malloc(sizeof(m3d_t));
 		
-		
 		m3d_window_create(c, c_main_partition, 0, 0, c->nrows -1, c->ncols -1); 
 		m3d_window_create(a, a_main_partition, 0, 0, a->nrows -1, a->ncols -1   ); 
 		m3d_window_create(b, b_main_partition,  0, 0,b->nrows -1 , b->ncols -1); 
-		
 		
 		
 		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (bccc))

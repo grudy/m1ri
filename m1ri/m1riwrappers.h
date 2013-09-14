@@ -54,7 +54,6 @@ typedef int rci_t;
 typedef int wi_t;
 typedef unsigned int vbit;
 
-
 static inline u_int32_t powerof2(u_int32_t v)
 {
   v--;
@@ -64,8 +63,9 @@ static inline u_int32_t powerof2(u_int32_t v)
   v |= v >> 8;
   v |= v >> 16;
   v++; 
-return v; 
+  return v; 
 }
+
 static inline void * m1ri_malloc(size_t size) {
   void * allocate = malloc(size);
   if(allocate == NULL)
@@ -94,12 +94,11 @@ static inline void * m1ri_realloc(void * val, size_t size) {
 
 /*
  
- */
+*/
 
 static inline void m1ri_free(void * val) {
   free(val);    
 }
-
 
 /*
  For testing if windowed
@@ -116,8 +115,7 @@ static inline u_int64_t  m1ri_rand() {
 }
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
                {
-                    qsort(  &ptr,  count, size,  comp);
-                         
+                    qsort(  &ptr,  count, size,  comp);           
                }
                            
 #endif

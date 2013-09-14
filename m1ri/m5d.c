@@ -24,7 +24,6 @@
 
 #include "m5d.h"
 
-
 /*
  Read n bits from a sign portion of an element
  x = rows
@@ -34,39 +33,23 @@
 
 vec m5d_rm_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
     
-
-    
-    wi_t  block = (y  ) / M1RI_RADIX;
-    
+	wi_t  block = (y  ) / M1RI_RADIX;
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
-    
     vec bits;
-    
     bits = (spill <= 0) ? M->rows[x][block].middle << -spill : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].middle >> spill);
-    
-    
     return bits;
-    
-    
+      
 }
 
 
 vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
     
-    
-    
-    wi_t  block = (y  ) / M1RI_RADIX;
-    
+	wi_t  block = (y  ) / M1RI_RADIX;
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
-    
     vec bits;
-    
     bits = (spill <= 0) ? M->rows[x][block].sign << -spill : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].sign >> spill);
-    
-    
+
     return bits;
-    
-    
 }
 /*
  Read n bits from units
@@ -77,22 +60,13 @@ vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 
 vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
     
-    
     wi_t  block = (y  ) / M1RI_RADIX;
-    
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
-    
     vec bits;
-    
     bits = (spill <= 0) ? M->rows[x][block].units << -spill : (M->rows[x][block + 1].units<< (M1RI_RADIX - spill)) | (M->rows[x][block].units>> spill);
   
     return bits;
-    
-    
 }
-
-
-
 
 
 /*
@@ -105,28 +79,17 @@ vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  n) {
     
     
-    
-    
     wi_t  block = (y  ) / M1RI_RADIX;
-    
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
-    
     vfd elem;
     
     elem.units = (spill <= 0) ? M->rows[x][block].units << -spill : ((M->rows[x][(block + 1)].units<< (M1RI_RADIX - spill)) | (M->rows[x][block].units >> spill));
-    
     elem.sign = (spill <= 0) ?  (M->rows[x][block].sign << -spill) : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].sign>> spill);
-    
     elem.middle = (spill <= 0) ?  (M->rows[x][block].middle << -spill) : (M->rows[x][block + 1].middle << (M1RI_RADIX - spill)) | (M->rows[x][block].middle>> spill);
-    
     elem.middle = (elem.middle >> (M1RI_RADIX - n));
-    
     elem.units = (elem.units >> (M1RI_RADIX - n));
-    
     elem.sign = (elem.sign >> (M1RI_RADIX - n));
-    //a->frows
-    
-    
+
     return elem;
     
     
@@ -137,7 +100,7 @@ vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 
 
 /*
- Swap rows in a matrix;
+ Swap rows in a matrix;  Finish the else statement here
  */
 void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
 {
@@ -152,7 +115,6 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
       
         
     }
-    
     
     {
         
@@ -170,27 +132,16 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
 //unfinished
 void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u , vec m)
 {
-    
-    
-    
+      
     wi_t  block = (y  ) / M1RI_RADIX;
-    
     int   spill = (y  % M1RI_RADIX) - (M1RI_RADIX -1);
-    
-    
-    
-    s = ~(s == 0);
+	s = ~(s == 0);
     u = ~(u == 0);
-    
-    
-    M->rows[x][block].units  = (u == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (M1RI_RADIX - spill)) | (M->rows[x][block].units));
-    
+	M->rows[x][block].units  = (u == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (M1RI_RADIX - spill)) | (M->rows[x][block].units));
     M->rows[x][block].sign  = (s == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (M1RI_RADIX - spill)) | (M->rows[x][block].units));
     M->rows[x][block].middle  = (m == 0) ? (~(rightbit << -spill) &  (M->rows[x][block].units))  : ((u << (M1RI_RADIX - spill)) | (M->rows[x][block].units));
     
     return 0;
-    
-    
 }
 
 
@@ -203,33 +154,20 @@ void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u , vec m)
 vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width)
 {
     
-    
     block  = m1ri_malloc(nrows * width * sizeof(vfd) );
-    
-    
-    
     return block;
-    
-    
-    
+     
 }
 
 /*
  
  */
 
-
-
-
 vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows)
 {
-    
-    
-    
+ 
     int i;
     rows = m1ri_malloc( nrows * width * sizeof(vfd *));
-    
-    
     for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = (block + (i * width));
@@ -273,28 +211,18 @@ m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
 
 m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t sizecols)
 {
-    
-    
+    int i;
     m5d_t  submatrix;
     
     if((strow + sizerows) > c->width)
-    {
-        
-        
+    {    
         return submatrix;
     }
-    
-    
-    
     
     if((stvfd + sizecols) > c->width)
-    {
-        
-        
+    {   
         return submatrix;
     }
-    
-    
     
     submatrix.nrows =   M1RI_RADIX * sizecols;
     submatrix.ncols =  M1RI_RADIX * sizecols;
@@ -305,16 +233,10 @@ m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t siz
     submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix.fcol   = 0;
     submatrix.svfd = stvfd;
-    
-    
-    
-    int i;
-    
+
     for(  i =   strow; i < (strow + (M1RI_RADIX * sizerows)) ; i++)
     {
-        
         submatrix.rows[i - strow] = c->rows[i];
-        
     }
     
     return submatrix;
@@ -336,9 +258,7 @@ void   m5d_window_create(m5d_t *c, m5d_t * submatrix, rci_t strow, rci_t stvfd, 
     
     for(  i =   strow; i < strow + (M1RI_RADIX * sizerows) ; i++)
     {
-        
-        submatrix->rows[i - strow] = c->rows[i];
-        
+    	submatrix->rows[i - strow] = c->rows[i];    
     }
     
 }
@@ -351,7 +271,6 @@ vfd * m5d_rand(m5d_t * a)
         a->block[i].sign = m1ri_rand();
         a->block[i].middle = m1ri_rand() &  a->block[i].sign;
         a->block[i].units = m1ri_rand() &  a->block[i].sign;;
-
     }
     return a->block;
 }
@@ -361,10 +280,7 @@ vfd * m5d_rand(m5d_t * a)
  Make an Identity Matrix
  a = Identity matrix
  n = matrix size (row length and column width)
- 
- 
- */
-
+*/
 
 m5d_t  m5d_identity_set(m5d_t * a)
 
@@ -419,8 +335,7 @@ m5d_t   m5d_identity(m5d_t  *a, rci_t n)
     *a = m5d_create(a, n, n);
     *a = m5d_identity_set(a);
     
-    return *a;
-    
+    return *a;   
 }
 
 /*
@@ -444,20 +359,17 @@ void add_vfd(vfd * r, vfd * a, vfd * b)
     g = f | b->middle;
     h = f ^ a->sign;
     i = h | e;
-/**/r->sign = i;
+	r->sign = i; /**/
     j = i ^ b->units;
     k = j ^ a->middle;
     l = k | c;
     m = l ^ e;
     n = m ^ g;
-/**/r->middle = n;
+	r->middle = n; /**/
     o = m | d;
     p = o ^ c;
     q = p^n;
     /**/r->units = q;
-    
-    
-
 	/*
 	more optimized? 
     vec c, d, e, f,   j,  m;
@@ -472,7 +384,6 @@ void add_vfd(vfd * r, vfd * a, vfd * b)
     r->units = ((m | d) ^ c)^(r->middle)) ;
     /**/// = q;
     /*
-	
 	*/
     
    /* def add(a,b):
@@ -507,7 +418,7 @@ void m5d_add2(vfd * r, vfd * a, vfd * b)
     g = d ^ a->sign;
     h = g | f;
     i = h | c;
-/**/r->sign = i; 
+	r->sign = i; /**/
     j = h | e;
     k = h ^ a->sign;
     l = k | b->middle;
@@ -537,8 +448,6 @@ void m5d_add2(vfd * r, vfd * a, vfd * b)
     q = p ^ e
     return q,n,i
 	*/
-	
-
 }
 
 void m5d_add2_i(vfd * a, vfd * b)
@@ -551,7 +460,6 @@ void m5d_add2_i(vfd * a, vfd * b)
     g = d ^ a->sign;
     h = g | f;
     i = h | c;
-/**/ 
     j = h | e;
     k = h ^ a->sign;
     l = k | b->middle;
@@ -626,7 +534,7 @@ void m5d_sub( vfd *r, vfd *a, vfd *b)
     q = p ^ a[1]
     return q,n,i
     */
-    
+
 }
 
 /********************************************
@@ -634,7 +542,7 @@ void m5d_sub( vfd *r, vfd *a, vfd *b)
  ********************************************/
 void iadd_vfd(vfd *r,vfd *x)
 {
-      vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
     c = x->units ^ r->units;
     d = x->middle ^ r->middle;
     e = x->sign ^ r->sign;
@@ -642,28 +550,24 @@ void iadd_vfd(vfd *r,vfd *x)
     g = f | x->middle;
     h = f ^ r->sign;
     i = h | e;
-/**/r->sign = i;
+	r->sign = i;  /*/
     j = i ^ x->units;
     k = j ^ r->middle;
     l = k | c;
     m = l ^ e;
     n = m ^ g;
-/**/r->middle = n;
+	r->middle = n; /**/
     o = m | d;
     p = o ^ c;
     q = p^n;
-    /**/r->sign = q;
+    r->sign = q; /**/
    
-    
-    
-    
-    
 }
 
  //matrix r = (matrix r - matrix x)
 void m5d_sub_i(vfd *r,vfd *x) 
 {
-       vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
     c = x->units ^ r->units;
     d = x->middle ^ r->middle;
     e = c ^ x->sign;
@@ -682,10 +586,8 @@ void m5d_sub_i(vfd *r,vfd *x)
     p = o ^ c;
     q = p ^ r->middle;
     r->units = q;
-    
-    
+       
 }
-
 
 /*
 	Scalar Multiplication
@@ -697,9 +599,7 @@ vfd m5d_mul2(vfd a)
     a.units = a.middle & temp;
     a.middle = temp;
     
-    
     return a;
-
 }
 /*
 	Scalar Multiplication
@@ -710,6 +610,7 @@ vfd m5d_mul3(vfd a)
     a.sign = a.middle;
     a.middle = a.units | temp;
     a.units = temp;
+    
     return a;
 }
 /*
@@ -721,8 +622,7 @@ vfd m5d_mul4(vfd a)
     a.units = x & a.sign;
     a.middle = x;
     
-    return a;
-    
+    return a; 
 }
 
 void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
@@ -740,7 +640,7 @@ void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
         }
         
     }
-
+    
 }
 int m5d_equal(m5d_t const *a, m5d_t const *b)
 {
@@ -764,8 +664,6 @@ int m5d_equal(m5d_t const *a, m5d_t const *b)
     }
     return 1;
 }
-
-
 
 
 void m5d_copypadding(m5d_t  * r, m5d_t  const * x)

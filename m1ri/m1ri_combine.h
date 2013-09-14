@@ -31,8 +31,11 @@
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>
 
-
-void *  m3d_combine3(vbg *, vbg * );
+/*These Functions are expanded upon Toms 
+ implementation of the method of four RUSSIANS
+ 
+ */
+void * m3d_combine3(vbg *, vbg * );
 void m3d_combine4(vbg *, vbg * );
 void m3d_combine5(vbg *, vbg * );
 void m3d_combine6(vbg *, vbg * );

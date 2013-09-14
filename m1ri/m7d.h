@@ -107,7 +107,7 @@ void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
  */
 void m7d_copypadding(m7d_t  * , m7d_t const * );
 void m7d_putpadding(m7d_t  * , m7d_t const * );
-void add_64_m7d(vtri ** , vtri **, vtri **);
+void m7d_add_64(vtri ** , vtri **, vtri **);
 //unfinished
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s,  vec m , vec u );
 
@@ -182,14 +182,13 @@ vtri m7d_mul_4(vtri);
 vtri m7d_mul_5(vtri);
 vtri m7d_mul_6(vtri);
 
-
 // negate  r0, r1, r2 ← a0, a1, a2
 
 
 /********************************************
  matrix r = (difference matrix r - matrix x)                //Or x will the function be  r  = x- r???
  ********************************************/
-
+vtri sub_m7dr(vtri const x, vtri const y);
 /*
 	GF(7) Addition on a single M1RI word.
 */
@@ -198,7 +197,5 @@ void m7d_add_2r(vtri *, vtri *, vtri *);
 void m7d_add_4r( vtri *, vtri *);
 m7d_t   m7d_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
 void   m7d_window_create(m7d_t *, m7d_t * , rci_t , rci_t , rci_t , rci_t);
-
-
 
 #endif

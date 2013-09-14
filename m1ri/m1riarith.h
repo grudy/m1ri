@@ -69,14 +69,14 @@ m3d_t * m3d_hadamard(m3d_t const *, m3d_t const *);
  1 kilobyte Matrix
  * * * * * * * * * * * * * * * * * * * * */
 
-void sub_64_m3d(vbg **, vbg  **, vbg  **);
+void m3d_sub_64(vbg **, vbg  **, vbg  **);
 
 /* * * * * * * * * * * * * * * * * * * * * *
  Add a 1 kilobyte Matrix from another
  1 kilobyte Matrix
  * * * * * * * * * * * * * * * * * * * * * * */
 
-void add_64_m3d(vbg **, vbg   **, vbg    ** );
+void m3d_add_64(vbg **, vbg   **, vbg    ** );
 
 m3d_t m3d_add(m3d_t  *, m3d_t  *);
 

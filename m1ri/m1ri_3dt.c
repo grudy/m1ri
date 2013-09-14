@@ -39,10 +39,9 @@ void * m3d_rowswap (m3d_t * M, rci_t row_a, rci_t  row_b)
         M->rows[row_b -1] =  &temp;
         
     }
-    
-    
-    
+        
     return 0;
+
 }
 
 
@@ -127,21 +126,8 @@ void  m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
     
 }
 
-
-/*
- 
- */
-
-
-
-
-/*
- 
- */
-
 m3d_t m3d_create( m3d_t *  a, rci_t nrows, rci_t ncols)
 {
-    
     
     a->ncols = ncols;
     a->nrows = nrows;
@@ -163,18 +149,15 @@ m3d_t  m3d_rand(m3d_t * a)
     for(i = 0; i < (a->nrows); i++)
     {
         for( z = 0; z  < (a->width); z++)
-            {
-        
-       
-       a->rows[i][z].sign = m1ri_rand();
-       a->rows[i][z].units = m1ri_rand();
-       a->rows[i][z].sign =  a->rows[i][z].sign | a->rows[i][z].units;
+            {  
+       			a->rows[i][z].sign = m1ri_rand();
+       			a->rows[i][z].units = m1ri_rand();
+       			a->rows[i][z].sign =  a->rows[i][z].sign | a->rows[i][z].units;
             }
     
     }
     
-    return *a;
-    
+    return *a;    
 }
 
 
@@ -209,7 +192,6 @@ for(i = 0; i < a->nrows; i ++)
 }
 
                                                                                         
-
 m3d_t m3d_identity_set(m3d_t * a)
 
 {
@@ -270,9 +252,6 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
     return *a;
 }
 
-
-
-
 /*
  windows in M1RI_RADIX rows * M1RI_RADIX column incriments
  stvbg = the vbg or width offset from the base matrix
@@ -283,8 +262,7 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
 
 m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
-    
-    
+
     m3d_t  submatrix;
     
     if((strow + sizerows) > c->width)
@@ -296,8 +274,8 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     {
         return submatrix;
     }
-    
-
+    int i, f;
+	f = strow * M1RI_RADIX;
     submatrix.nrows =   M1RI_RADIX * sizerows;
     submatrix.ncols =  M1RI_RADIX * sizecols;
     submatrix.flags = iswindowed;
@@ -307,8 +285,7 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     submatrix.fcol   = 0;
     submatrix.svbg = stvbg;
     
-    int f = strow * M1RI_RADIX;
-    int i;
+    
     
     for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
     {
@@ -318,7 +295,7 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     return submatrix;
     
 }
- void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
+void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
  
     if((strow + sizerows) > c->width)
@@ -350,68 +327,56 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
     
 }
 
-
 /*
- Concat b on the end of a, the result is c
- 
- 
- 
+ Concat b on the end of a, the result is c 
  [a] [b] ----->  [a b]   ===  C
+ /*This function still needs work*/
  
- */
 m3d_t m3d_concat(m3d_t * c, m3d_t * a, m3d_t * b)
 {
     if (a->nrows != b->nrows)
     {
         /*if concat hath failed*/
-        return *c;
-        
+        return *c;  
     }
     
     if(a->nrows == b->nrows)
     {
-        *c = m3d_create(c, a->nrows , a->ncols + b->ncols);
+    	*c = m3d_create(c, a->nrows , a->ncols + b->ncols);
         int x, y;
         x =  0;
         
-        
         while (x < a->nrows) {
-            
             
             for(y = 0; y < a->width; y++)
             {
-                c->rows[x] = a->rows[x];
+            	c->rows[x] = a->rows[x];
             }
-            
             
             for(y = a->width; y  < c->width; y++)
             {
-                
                 
             }
             x++;
         }
         
-        
     }
     return  *c;
 }
-
 
 /*
  Stacks a on b, resulting matrix is c
  [a]
  ===  C
  [b]
- 
  */
+ 
 m3d_t m3d_stack(m3d_t * c,  m3d_t * a, m3d_t * b)
 {
     if (a->ncols != b->ncols)
     {
         /*If a stacked matrix cannot be created*/
         return *c;
-        
     }
     
     if(a->ncols == b->ncols)

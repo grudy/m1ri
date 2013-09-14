@@ -31,7 +31,7 @@
 								GF(3)
 *****************************************************************************/
 //64 * 64,4096 bit, 512 byte matrix(slice) multiplication
-void mul_64_m3d(vbg **, vbg **, vbg **);
+void m3d_mul_64(vbg **, vbg **, vbg **);
 
 //32 * 64,2048 bit, 256 byte matrix(slice) multiplication
 void mul_32_m3d(vbg *, vbg *, vbg *);

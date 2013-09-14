@@ -40,10 +40,9 @@ typedef struct vbg{
     vec sign;
 } vbg;
 
-/*
+/*************************************************
     GF(3) Matrix structure
- 
-*/
+********************************************/
 
 typedef struct {
     
@@ -95,7 +94,6 @@ vec m3d_ru_bits(m3d_t const  *, rci_t  , rci_t  , int  );
 vbg m3d_read_elems(m3d_t const *, rci_t  , rci_t  , int  );
 m3d_t m3d_transposewin(m3d_t  const * );
 
-
 /*
 Swap rows in a matrix;
 */
@@ -106,14 +104,12 @@ void * m3d_rowswap (m3d_t  * , rci_t , rci_t );
 Naive column swapping
 */
 
+/*
 
-
+*/
 void * m3d_colswap(m3d_t *, rci_t , rci_t );
 
-
-
-
- void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
+void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
 
 static inline void  * m3d_block_allocate(vbg * block, rci_t  nrows,  wi_t  width)
 {
@@ -124,7 +120,6 @@ static inline void  * m3d_block_allocate(vbg * block, rci_t  nrows,  wi_t  width
 /*
  
  */
-
 
 static inline vbg ** m3d_row_alloc(vbg * block, vbg ** rows, wi_t width, rci_t nrows)
 {
@@ -164,19 +159,12 @@ m3d_t  m3d_window(m3d_t  *, rci_t , rci_t , rci_t , rci_t );
 /*
  Same as m3d_window but the second argument is made into the window
  */
-
- void   m3d_window_create(m3d_t *, m3d_t * , rci_t , rci_t , rci_t , rci_t );
-
+void   m3d_window_create(m3d_t *, m3d_t * , rci_t , rci_t , rci_t , rci_t );
 /*
  Concat b on the end of a, the result is c
- 
- 
- 
    [a] [b] ----->  [a b]   ===  C
-
 */
 m3d_t m3d_concat(m3d_t * , m3d_t * , m3d_t * );
-
 
 /*
     Stacks a on b, resulting matrix is c
