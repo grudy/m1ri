@@ -88,7 +88,7 @@ static inline void * m1ri_calloc(size_t nobj, size_t size) {
 static inline void * m1ri_realloc(void * val, size_t size) {
   void  * reallocate =  realloc(val, size);
   if(reallocate == NULL)
-    m1ri_die("Out of memory, exiting\n");
+  m1ri_die("Out of memory, exiting\n");
   return reallocate;
 }
 
@@ -114,7 +114,9 @@ static inline u_int64_t  m1ri_rand() {
   randomword ^= (u_int64_t)random() << 50;
   return randomword;
 }
-void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
+
+
+static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
                {
                     qsort(  &ptr,  count, size,  comp);
                          
