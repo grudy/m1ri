@@ -518,6 +518,33 @@ vtri m7d_mul_6(vtri a)
     return a;
      
 }
+
+/*Summing and multiplying result by two, for method of four russian*/
+void m7d_add_2r(vtri *x, vtri * y)
+{
+ 	vtri  r;
+    vec s;
+    vec t;
+	r.sign = x->units ^ y->units;
+    s = (x->units & y->units);
+    r.middle = s^ x->middle ^ y->middle;
+    t = (((s) & (x->middle | y->middle)) | (x->middle & y->middle) );
+    r.sign = x->sign ^ y->sign ^ t;
+    s = x->sign | y->sign | t;
+    t = (r.units & s );
+    x->units  = s ^ r.units;
+    x->middle  = x->middle ^ t ;
+    x->sign  = x->sign ^ (  t & x->middle);
+
+
+	/*Optimize later*/
+
+    s = a.units;
+    x->units = x->middle;
+    x->middle = x->sign;
+    x->sign = s;
+
+}
 void m7d_add_4r(vtri *x, vtri * y)
 {
  	vtri  r;

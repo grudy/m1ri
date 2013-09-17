@@ -150,18 +150,12 @@ m7d_t  m7d_identity_set(m7d_t * a);
 m7d_t   m7d_identity(m7d_t  *a, rci_t n);
 
 /*
- 
- */
-
-
-
-/*
  Releases a m7d_t into the wilderness.
  */
 
-
-
 int m7d_equal(m7d_t const *, m7d_t const *);
+
+
 void m7d_free( m7d_t *  );
 void vtri_negate( vtri * );
 

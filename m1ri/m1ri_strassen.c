@@ -93,7 +93,6 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
     m1ri_free(x2);
 }
 
-
 void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 {
     if(a->ncols == b->nrows)

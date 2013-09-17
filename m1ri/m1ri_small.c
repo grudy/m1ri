@@ -245,8 +245,10 @@ void mul_64_m5d(vfd **R, vfd **A, vfd **B)
     for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
     {
         a = A[i][0];
-        v2 = a.sign;
-    	v1 = (a.units ^ v2);
+        
+  		v3 = sign;
+        v2 = sign & a.middle;
+    	v1 = v2 & a.units;
         r1 = tables6[0][v1&63];
         v1 >>= 6;
         r2 = tables6[0][v2&63];
@@ -305,9 +307,9 @@ void mul_32_m5d(vfd *R, vfd *A, vfd *B)
     for (i = 0;i < 32; i++)
     {
         a = A[i];
-        v3 = a.sign;
-        v2 = a.middle;
-        v1 = a.units ^ v2;
+ 		v3 = sign;
+        v2 = sign & a.middle;
+    	v1 = v2 & a.units;
         t1 = tables5[0][v1&31]; v1 >>= 5;
         t2 = tables5[0][v2&31]; v2 >>= 5;
         t3 = tables5[0][v3&31]; v3 >>= 5;
@@ -351,8 +353,9 @@ void mul_16_m5d(vfd *R, vfd *A, vfd *B)
     for (i = 0;  i < 16; i++)
     {
         a = A[i];
-        v2 = a.sign;
-        v1 = a.units ^ v2;
+  		v3 = sign;
+        v2 = sign & a.middle;
+    	v1 = v2 & a.units;
         r1 = tables4[0][v1&15]; v1 >>= 4;
         r2 = tables4[0][v2&15]; v2 >>= 4;
         r3 = tables4[0][v3&15]; v3 >>= 4;
@@ -364,7 +367,7 @@ void mul_16_m5d(vfd *R, vfd *A, vfd *B)
         t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3); v3 >>= 4;
         t1 = tables4[3][v1&15]; iadd_vfd(&r1, &t1);
         t2 = tables4[3][v2&15]; iadd_vfd(&r2, &t2);
-        t2 = tables4[3][v2&15]; iadd_vfd(&r2, &t2);
+        t3 = tables4[3][v3&15]; iadd_vfd(&r3, &t3);
     
     	iadd_vfd(&r1, &r2);
         m5d_add2_i(&r1, &r3);
@@ -387,8 +390,9 @@ void mul_8_m5d(vfd *R, vfd *A, vfd *B)
     for (i = 0; i < 8; i++)
     {
     	a = A[i];
-    	v2 = a.sign;
-    	v1 = a.units ^ v2;
+     	v3 = sign;
+        v2 = sign & a.middle;
+    	v1 = v2 & a.units;
     	r1 = tables4[0][v1&15]; v1 >>= 4;
     	r2 = tables4[0][v2&15]; v2 >>= 4;
     	r3 = tables4[0][v3&15]; v3 >>= 4;
@@ -396,10 +400,11 @@ void mul_8_m5d(vfd *R, vfd *A, vfd *B)
     	t2 = tables4[1][v2&15]; iadd_vfd(&r2, &t2);
     	t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3);
     	// m5d_sub_i((&r1, &r2);
+    	
     	iadd_vfd(&r1, &r2);
 		m5d_add2_i(&r1, &r3);
         
-    R[i] = r1;
+        R[i] = r1;
     }
 }
 
@@ -416,8 +421,9 @@ void mul_4_m5d(vfd *R, vfd *A, vfd *B)
     for(i = 0; i < 4; i++)
     {
         a = A[i];
-        v2 = a.sign;
-    	v1 = a.sign;
+        v3 = sign;
+        v2 = sign & a.middle;
+    	v1 = v2 & a.units;
 		v2  = a.sign & a.middle;
 		v3 =  v2 & a.units; 
         r1 = table4[v1&15];
@@ -502,8 +508,10 @@ void mul_64_m7d(vtri **R, vtri **A, vtri **B)
         t1 = tables5[1][v1&31]; iadd_vtri(&r1, &t1);
         t2 = tables5[1][v2&31]; iadd_vtri(&r2, &t2);
         t3 = tables6[1][v3&63]; iadd_vtri(&r3, &t3); 
+       
+         m7d_add_2r(r1, r2)
+		m7d_add_4r( r1 ,r3);
         
-        iadd_vtri(&r1, &r2);
         R[i][0] = r1;
        // */
     }
@@ -529,7 +537,8 @@ void mul_32_m7d(vtri *R, vtri *A, vtri *B)
     {
         
         a = A[i];
-        v2 = a.sign;
+        v3 = a.sign;
+        v2 = a.middle;
         v1 = a.units ^ v2;
         t1 = tables5[0][v1&31]; v1 >>= 5;
         t2 = tables5[0][v2&31]; v2 >>= 5;
@@ -552,7 +561,9 @@ void mul_32_m7d(vtri *R, vtri *A, vtri *B)
         t1 = tables4[2][v1&15]; iadd_vtri(&r1, &t1);
         t2 = tables4[2][v2&15]; iadd_vtri(&r2, &t2);
         t3 = tables4[3][v3&15]; iadd_vtri(&r3, &t3);
-        m7d_sub_i(&r1, &r2);
+        
+        m7d_add_2r(r1, r2);
+		m7d_add_4r( r1 ,r3);
         R[i] = r1;
     }
     
@@ -571,8 +582,8 @@ void mul_16_m7d(vtri *R, vtri *A, vtri *B)
     for (i = 0;  i < 16; i++)
     {
         a = A[i];
-        v3 = a.middle;
-        v2 = a.sign;
+        v2 = a.middle;
+        v3 = a.sign;
         v1 = a.units;
         r1 = tables4[0][v1&15]; v1 >>= 4;
         r2 = tables4[0][v2&15]; v2 >>= 4;
@@ -586,8 +597,9 @@ void mul_16_m7d(vtri *R, vtri *A, vtri *B)
         t1 = tables4[3][v1&15]; iadd_vtri(&r1, &t1);
         t2 = tables4[3][v2&15]; iadd_vtri(&r2, &t2);
         t3 = tables4[1][v3&15]; iadd_vtri(&r3, &t3);
-    
-        //m7d_sub_i(&r1, &r2);
+    	
+    	m7d_add_2r(r1, r2);
+		m7d_add_4r( r1 ,r3);
         R[i] = r1;
     }
 }
@@ -606,14 +618,18 @@ void mul_8_m7d(vtri *R, vtri *A, vtri *B)
     for (i = 0; i < 8; i++)
     {
         a = A[i];
-    v2 = a.sign;
+    v3 = a.sign;
+    v2 = a.middle;
     v1 = a.units;
     r1 = tables4[0][v1&15]; v1 >>= 4;
     r2 = tables4[0][v2&15]; v2 >>= 4;
+    r3 = tables4[0][v3&15]; v3 >>= 4;
     t1 = tables4[1][v1&15]; iadd_vtri(&r1, &t1);
     t2 = tables4[1][v2&15]; iadd_vtri(&r2, &t2);
+    t3 = tables4[1][v3&15]; iadd_vtri(&r3, &t3);
     
-    // m7d_sub_i((&r1, &r2);
+    m7d_add_2r(r1, r2);
+	m7d_add_4r( r1 ,r3);
     R[i] = r1;
     }
 }
@@ -632,14 +648,16 @@ void mul_4_m7d(vtri *R, vtri *A, vtri *B)
     for(i = 0; i < 4; i++)
     {
         a = A[i];
-        v3 = a.middle;
-        v2 = a.sign;
+        v2 = a.middle;
+        v3 = a.sign;
         v1 = a.units;
         r1 = table4[v1&15];
         r2 = table4[v2&15];
         r3 = table4[v3&15];
+    
+		m7d_add_2r(r1, r2);
+		m7d_add_4r( r1 ,r3);
         
-        //m7d_sub_i(&r1, &r2);
         R[i] = r1;
     }
     
