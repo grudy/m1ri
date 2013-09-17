@@ -539,7 +539,7 @@ void m7d_add_2r(vtri *x, vtri * y)
 
 	/*Optimize later*/
 
-    s = a.units;
+    s = x->units;
     x->units = x->middle;
     x->middle = x->sign;
     x->sign = s;
