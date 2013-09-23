@@ -264,7 +264,7 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
 {
 
     m3d_t  submatrix;
-    
+    /*c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {    
         return submatrix;
@@ -297,7 +297,8 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
 }
 void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
- 
+     /*c->width should not be compared twice */
+    
     if((strow + sizerows) > c->width)
     {   
         return;

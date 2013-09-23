@@ -170,11 +170,11 @@ void iadd_vtri(vtri  *, vtri *);
 void m7d_sub_i(vtri  *, vtri *);
 
 //Scalar  multiplication
-vtri m7d_mul_2(vtri);
-vtri m7d_mul_3(vtri);
-vtri m7d_mul_4(vtri);
-vtri m7d_mul_5(vtri);
-vtri m7d_mul_6(vtri);
+vtri vtri_mul_2(vtri);
+vtri vtri_mul_3(vtri);
+vtri vtri_mul_4(vtri);
+vtri vtri_mul_5(vtri);
+vtri vtri_mul_6(vtri);
 
 // negate  r0, r1, r2 ← a0, a1, a2
 

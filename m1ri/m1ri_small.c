@@ -177,7 +177,7 @@ void mul_8_m3d(vbg *R, vbg *A, vbg *B)
     t1 = tables4[1][v1&15]; iadd_vbg(&r1, &t1);
     t2 = tables4[1][v2&15]; iadd_vbg(&r2, &t2);
     
-    // isub_m3d((&r1, &r2);
+    isub_m3d(&r1, &r2);
     R[i] = r1;
     }
 }
@@ -222,7 +222,7 @@ their specific Galois field
 *****************************************************************************/
 
 
-void mul_64_m5d(vfd **R, vfd **A, vfd **B)
+void m5d_mul_64(vfd **R, vfd **A, vfd **B)
 {
     int i;
     vfd t1, t2, t3,  r1, r2, r3 , a;
@@ -290,7 +290,7 @@ void mul_64_m5d(vfd **R, vfd **A, vfd **B)
 }
 
 //32 * 64,2048 bit, 256 byte matrix(slice) multiplication
-void mul_32_m5d(vfd *R, vfd *A, vfd *B)
+void m5d_mul_32(vfd *R, vfd *A, vfd *B)
 {
     long i;
     vfd t1, t2, t3, r1, r2, r3, a;
@@ -341,7 +341,7 @@ void mul_32_m5d(vfd *R, vfd *A, vfd *B)
 }
 
 //16 * 64,1024 bit, 128 byte matrix(slice) multiplication
-void mul_16_m5d(vfd *R, vfd *A, vfd *B)
+void m5d_mul_16(vfd *R, vfd *A, vfd *B)
 {
     long i;
     vfd t1, t2, t3, r1, r2, r3, a;
@@ -377,7 +377,7 @@ void mul_16_m5d(vfd *R, vfd *A, vfd *B)
 }
 
 //8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
-void mul_8_m5d(vfd *R, vfd *A, vfd *B)
+void m5d_mul_8(vfd *R, vfd *A, vfd *B)
 
 {
     int i;
@@ -409,7 +409,7 @@ void mul_8_m5d(vfd *R, vfd *A, vfd *B)
 }
 
 //4 * 64,256 bit, 32 byte matrix(slice) multiplication
-void mul_4_m5d(vfd *R, vfd *A, vfd *B)
+void m5d_mul_4(vfd *R, vfd *A, vfd *B)
 {
     int i;
     vfd r1, r2, r3,  a;
@@ -443,7 +443,7 @@ void mul_4_m5d(vfd *R, vfd *A, vfd *B)
 								GF(7)
 *****************************************************************************/
 
-void mul_64_m7d(vtri **R, vtri **A, vtri **B)
+void m7d_mul_64(vtri **R, vtri **A, vtri **B)
 {
     int i;
     vtri t1, t2, t3,  r1, r2, r3,  a;
@@ -519,7 +519,7 @@ void mul_64_m7d(vtri **R, vtri **A, vtri **B)
 }
 
 //32 * 64,2048 bit, 256 byte matrix(slice) multiplication
-void mul_32_m7d(vtri *R, vtri *A, vtri *B)
+void m7d_mul_32(vtri *R, vtri *A, vtri *B)
 {
     long i;
     vtri t1, t2, t3,  r1, r2, r3,  a;
@@ -570,7 +570,7 @@ void mul_32_m7d(vtri *R, vtri *A, vtri *B)
 }
 
 //16 * 64,1024 bit, 128 byte matrix(slice) multiplication
-void mul_16_m7d(vtri *R, vtri *A, vtri *B)
+void m7d_mul_16(vtri *R, vtri *A, vtri *B)
 {
     long i;
     vtri t1, t2, t3,  r1, r2, r3,  a;
@@ -605,7 +605,7 @@ void mul_16_m7d(vtri *R, vtri *A, vtri *B)
 }
 
 //8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
-void mul_8_m7d(vtri *R, vtri *A, vtri *B)
+void m7d_mul_8(vtri *R, vtri *A, vtri *B)
 
 {
     int i;
@@ -636,7 +636,7 @@ void mul_8_m7d(vtri *R, vtri *A, vtri *B)
 
 
 //4 * 64,256 bit, 32 byte matrix(slice) multiplication
-void mul_4_m7d(vtri *R, vtri *A, vtri *B)
+void m7d_mul_4(vtri *R, vtri *A, vtri *B)
 {
     int i;
     vtri r1, r2, r3 ,  a;

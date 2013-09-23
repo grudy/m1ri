@@ -49,22 +49,22 @@ void mul_4_m3d(vbg *R, vbg *A, vbg *B);
 								GF(5)
 *****************************************************************************/
 
-void mul_64_m5d(vfd **, vfd **, vfd **);
-void mul_32_m5d(vfd *, vfd *, vfd *);
-void mul_16_m5d(vfd *, vfd *, vfd *);
-void mul_8_m5d(vfd *, vfd *, vfd *);
-void mul_4_m5d(vfd *R, vfd *A, vfd *B);
+void m5d_mul_64(vfd **, vfd **, vfd **);
+void m5d_mul_32(vfd *, vfd *, vfd *);
+void m5d_mul_16(vfd *, vfd *, vfd *);
+void m5d_mul_8(vfd *, vfd *, vfd *);
+void m5d_mul_4(vfd *R, vfd *A, vfd *B);
 
 
 /****************************************************************************
 								GF(7)
 *****************************************************************************/
 
-void mul_64_m7d(vtri **, vtri **, vtri **);
-void mul_32_m7d(vtri *, vtri *, vtri *);
-void mul_16_m7d(vtri *, vtri *, vtri *);
-void mul_8_m7d(vtri *, vtri *, vtri *);
-void mul_4_m7d(vtri *R, vtri *A, vtri *B);
+void m7d_mul_64(vtri **, vtri **, vtri **);
+void m7d_mul_32(vtri *, vtri *, vtri *);
+void m7d_mul_16(vtri *, vtri *, vtri *);
+void m7d_mul_8(vtri *, vtri *, vtri *);
+void m7d_mul_4(vtri *R, vtri *A, vtri *B);
 
 
 #endif

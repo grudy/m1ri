@@ -213,7 +213,7 @@ m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t siz
 {
     int i;
     m5d_t  submatrix;
-    
+     /*c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {    
         return submatrix;
@@ -246,6 +246,7 @@ m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t siz
 void   m5d_window_create(m5d_t *c, m5d_t * submatrix, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t sizecols)
 {
 	int i;
+	 /*c->width should not be compared twice */
     submatrix->nrows =   M1RI_RADIX * sizecols;
     submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
@@ -642,6 +643,7 @@ void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
     }
     
 }
+
 int m5d_equal(m5d_t const *a, m5d_t const *b)
 {
     
@@ -665,11 +667,20 @@ int m5d_equal(m5d_t const *a, m5d_t const *b)
     return 1;
 }
 
+void m5d_add_64(vfd **R, vfd   **A, vfd  **B)
+{
+    
+    for (int i = 0; i < M1RI_RADIX; i++ )
+    {
+		add_vfd(R[i], A[i], B[i]);
+    }
+
+}
 
 void m5d_copypadding(m5d_t  * r, m5d_t  const * x)
 {
 		int i, s;
-        for( i = 0; i < x->nrows; i++)
+        for(int i = 0; i < x->nrows; i++)
         {
 			for( s = 0; s < x->width; s++)
         	{
@@ -691,6 +702,33 @@ void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
         
 }
 
+m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b)
+{
+
+    /*todo: Test this functions */
+        for(int i = 0; i < a->nrows; i++)
+        {
+            m5d_sub(c->rows[i], a->rows[i], b->rows[i]);
+        }  
+}
+
+
+
+void m5d_sub_r(m5d_t * c ,m5d_t  * a , m5d_t * b)
+{
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+        int i, j;
+        for( i = 0; i < a->nrows; i++)
+        {
+            for(j = 0; j < (a->width ); j++)
+            {   
+                m5d_sub(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+            }
+        }
+        
+    }
+}
 
 
 

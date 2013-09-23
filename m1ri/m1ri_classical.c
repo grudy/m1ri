@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <m1ri/m1ri_classical.h>
 #include <m1ri/m1ri_cubes.h>
-
+#include <m1ri/m7d.h>
 void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
 {
 	
@@ -185,17 +185,17 @@ void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
     {
     	m5d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
       	m5d_create(&x2, M1RI_RADIX, M1RI_RADIX);
-   	  	mul_64_m5d(x1.rows, a_slice->row[0][0].rows, b_slice->row[0][0].rows);
-		mul_64_m5d(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][0].rows);
+   	  	m5d_mul_64(x1.rows, a_slice->row[0][0].rows, b_slice->row[0][0].rows);
+		m5d_mul_64(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][0].rows);
 		m5d_add_r(&c_slice->row[0][0], &x1, &x2) ;
-        mul_64_m5d(x1.rows,  a_slice->row[0][0].rows, b_slice->row[0][1].rows );
-        mul_64_m5d(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][1].rows);
+        m5d_mul_64(x1.rows,  a_slice->row[0][0].rows, b_slice->row[0][1].rows );
+        m5d_mul_64(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][1].rows);
 		m5d_add_r(&c_slice->row[0][1], &x1, &x2) ;
-       	mul_64_m5d(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][0].rows);
-      	mul_64_m5d(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][0].rows);
+       	m5d_mul_64(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][0].rows);
+      	m5d_mul_64(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][0].rows);
 		m5d_add_r(&c_slice->row[1][0], &x1, &x2) ;
-		mul_64_m5d(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][1].rows);
-       	mul_64_m5d(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][1].rows); 
+		m5d_mul_64(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][1].rows);
+       	m5d_mul_64(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][1].rows); 
 		m5d_add_r(&c_slice->row[1][1],&x1, &x2) ;
 			  
     }
@@ -296,17 +296,17 @@ void m7d_mul_naive_square(m7d_t *c, m7d_t *a, m7d_t *b)
     {
         m7d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
       	m7d_create(&x2, M1RI_RADIX, M1RI_RADIX);
-     	mul_64_m7d(x1.rows, a_slice->row[0][0].rows, b_slice->row[0][0].rows);
-		mul_64_m7d(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][0].rows);
+     	m7d_mul_64(x1.rows, a_slice->row[0][0].rows, b_slice->row[0][0].rows);
+		m7d_mul_64(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][0].rows);
 		m7d_add_64(c_slice->row[0][0].rows, x1.rows, x2.rows) ;
-		mul_64_m7d(x1.rows,  a_slice->row[0][0].rows, b_slice->row[0][1].rows );
-        mul_64_m7d(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][1].rows);
+		m7d_mul_64(x1.rows,  a_slice->row[0][0].rows, b_slice->row[0][1].rows );
+        m7d_mul_64(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][1].rows);
 	    m7d_add_64(c_slice->row[0][1].rows, x1.rows, x2.rows) ; 
-		mul_64_m7d(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][0].rows);
-       	mul_64_m7d(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][0].rows);
+		m7d_mul_64(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][0].rows);
+       	m7d_mul_64(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][0].rows);
       	m7d_add_64(c_slice->row[1][0].rows, x1.rows, x2.rows); 
-		mul_64_m7d(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][1].rows);
-		mul_64_m7d(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][1].rows); 
+		m7d_mul_64(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][1].rows);
+		m7d_mul_64(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][1].rows); 
 		m7d_add_64(c_slice->row[1][1].rows, x1.rows, x2.rows); 
 		
     }

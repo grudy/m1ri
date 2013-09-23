@@ -53,7 +53,7 @@ void isub_m3d(vbg *,vbg  *);
 void  vbg_mul( vbg *, vbg  *, vbg  *);             //multiply matrix x by y assinging the output to r
 
 
-void m3d_sub( m3d_t *, m3d_t const *, m3d_t const *);
+void m3d_sub( m3d_t *, m3d_t  *, m3d_t  *);
 
 //return the value of the matrix multiplied
 

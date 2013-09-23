@@ -149,7 +149,7 @@ void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
 
 }
 
-void m3d_sub( m3d_t *r, m3d_t const *x, m3d_t const *y)
+void m3d_sub( m3d_t *r, m3d_t  *x, m3d_t  *y)
 {
     int n , i;
     for(i = 0; i < x->nrows; i++)

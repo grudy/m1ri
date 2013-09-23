@@ -263,7 +263,7 @@ m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t si
     
     
     m7d_t  submatrix;
-    
+     /*c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {
         
@@ -310,7 +310,7 @@ m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t si
 
 void   m7d_window_create(m7d_t *c, m7d_t * submatrix, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t sizecols)
 {
-    
+    /*Fix: This needs to have checks in place for windows too large*/
     
     submatrix->nrows =   M1RI_RADIX * sizecols;
     submatrix->ncols =  M1RI_RADIX * sizecols;
@@ -465,7 +465,7 @@ void reduce_vtri( vtri * a)
 
 
 
-vtri m7d_mul_2(vtri a)
+vtri vtri_mul_2(vtri a)
 {
     vec temp;
     temp = a.units;
@@ -475,7 +475,7 @@ vtri m7d_mul_2(vtri a)
     return a;
     
 }
-vtri m7d_mul_3(vtri a)
+vtri vtri_mul_3(vtri a)
 {
   
     vec z = a.units | a.middle | a.sign;
@@ -487,7 +487,7 @@ vtri m7d_mul_3(vtri a)
     return a;
     
 }
-vtri m7d_mul_4(vtri a)
+vtri vtri_mul_4(vtri a)
 {
     vec temp = a.units;
     a.units = a.sign;
@@ -498,7 +498,7 @@ vtri m7d_mul_4(vtri a)
     
     
 }
-vtri m7d_mul_5(vtri a)
+vtri vtri_mul_5(vtri a)
 {
     vec z = a.units| a.middle | a.sign;
     vec temp = a.units;
@@ -508,7 +508,7 @@ vtri m7d_mul_5(vtri a)
     return a;
     
 }
-vtri m7d_mul_6(vtri a)
+vtri vtri_mul_6(vtri a)
 {
     vec z = a.units | a.middle | a.sign;
 	a.units =  a.units ^ z;
