@@ -36,6 +36,8 @@ void  m3d_strassen(m3d_t *, m3d_t *, m3d_t*);
 void m3d_qrt_mul(m3d_t * ,m3d_t *, m3d_t *  );
 void m5d_strassen(m5d_t * ,m5d_t *, m5d_t *);
 void m5d_qrt_mul(m5d_t * ,m5d_t *, m5d_t *  );
+void m7d_strassen(m7d_t * ,m7d_t *, m7d_t *);
+void m7d_qrt_mul(m7d_t * ,m7d_t *, m7d_t *  );
 
 #endif
 

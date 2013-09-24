@@ -33,8 +33,8 @@
 
 /*These Functions are expanded upon Toms 
  implementation of the method of four RUSSIANS
- 
  */
+ 
 void * m3d_combine3(vbg *, vbg * );
 void m3d_combine4(vbg *, vbg * );
 void m3d_combine5(vbg *, vbg * );

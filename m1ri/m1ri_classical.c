@@ -365,7 +365,6 @@ void m7d_classic_mul(m7d_t *c, m7d_t  *a, m7d_t  *b)
 			m7d_free(padded_c);
 			
 		}
-		
 		else
 		{
 			m7d_mul_naive_square(c, a, b); 

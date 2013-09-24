@@ -285,7 +285,6 @@ void  m5d_strassen(m5d_t *c, m5d_t  *a, m5d_t   *b)
 		m5d_qrt_mul(c_main_partition, a_main_partition, b_main_partition); 
 		}
 		
-
 		m5d_free(a_main_partition);
 		m5d_free(b_main_partition);
 		m5d_free(c_main_partition);
@@ -295,5 +294,139 @@ void  m5d_strassen(m5d_t *c, m5d_t  *a, m5d_t   *b)
 }
 
 
+
+void m7d_qrt_mul(m7d_t * c,m7d_t *a, m7d_t * b )
+{
+    m7d_t * x1, *x2;
+    x1 = x2 = m1ri_malloc(sizeof(m7d_t));
+    m7_slice  a_slice, b_slice, c_slice;
+    m7d_create(x1, c->nrows, c->ncols);
+    m7d_create(x2, c->nrows, c->ncols);
+    m7d_quarter(&a_slice, a);
+    m7d_quarter(&b_slice, b);
+    m7d_quarter(&c_slice, c);
+    
+    if((c_slice.row[0][0].ncols) > M1RI_RADIX)
+    {
+       
+        m7d_sub(x1, &a_slice.row[0][0], &a_slice.row[1][0]);  //1
+        m7d_sub(x2,&b_slice.row[1][1],&b_slice.row[0][1]);  //2
+        m7d_qrt_mul(&c_slice.row[1][0], x1, x2);  //5
+        m7d_add_r(x1,&a_slice.row[1][0],&a_slice.row[1][1]);  //4
+        m7d_sub(x2,&b_slice.row[0][1],&b_slice.row[0][0]);  //5
+        m7d_qrt_mul(&c_slice.row[1][1], x1, x2);    //6
+        m7d_sub(x1,x1,&a_slice.row[0][0]);//7
+        m7d_sub(x2,&b_slice.row[1][1],x2);  //8
+        m7d_qrt_mul(&c_slice.row[0][1],x1,x2); //9
+        m7d_sub(x1,&a_slice.row[0][1],x1);    //10
+        m7d_qrt_mul(&c_slice.row[0][0],x1,&b_slice.row[1][1]);   //11
+        m7d_qrt_mul(x1, &a_slice.row[1][1], &b_slice.row[1][1]);  //12
+        m7d_add_r(&c_slice.row[0][1],x1 , &c_slice.row[0][1]);   //15
+        m7d_add_r(&c_slice.row[1][0],&c_slice.row[0][1] , &c_slice.row[1][0]);   //14
+        m7d_add_r(&c_slice.row[0][1],&c_slice.row[0][1] , &c_slice.row[1][1]);   //15
+        m7d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);    //16
+        m7d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);  //17
+        m7d_sub(x2, x2, &b_slice.row[1][0]);            //18
+        m7d_qrt_mul(&c_slice.row[1][0], &a_slice.row[1][1], x2);            //19
+        m7d_sub(&c_slice.row[1][0], &c_slice.row[1][0], &c_slice.row[0][0]);  //20
+        m7d_qrt_mul(&c_slice.row[0][0], &a_slice.row[0][1], &b_slice.row[1][0]);
+        m7d_add_r(&c_slice.row[0][0], x1,&c_slice.row[0][0] );
+        
+    }
+    
+    else if((c_slice.row[0][0].ncols ) == M1RI_RADIX)
+    {
+		m7d_sub_64(x1->rows, a_slice.row[0][0].rows, a_slice.row[1][0].rows);  //1
+        m7d_sub_64(x2->rows,b_slice.row[1][1].rows,b_slice.row[0][1].rows) ;  //2
+        m7d_mul_64(c_slice.row[1][0].rows, x1->rows, x2->rows);  //5
+        m7d_add_64(x1->rows,a_slice.row[1][0].rows,a_slice.row[1][1].rows) ;  //4
+        m7d_sub_64(x2->rows,b_slice.row[0][1].rows,b_slice.row[0][0].rows) ;  //5
+        m7d_mul_64(c_slice.row[1][1].rows, x1->rows, x2->rows);    //6
+        m7d_sub_64(x1->rows,x1->rows,a_slice.row[0][0].rows) ;//7
+        m7d_sub_64(x2->rows,b_slice.row[1][1].rows,x2->rows);  //8
+        m7d_mul_64(c_slice.row[0][1].rows,x1->rows,x2->rows); //9
+        m7d_sub_64(x1->rows,a_slice.row[0][1].rows,x1->rows);    //10
+        m7d_mul_64(c_slice.row[0][0].rows,x1->rows,b_slice.row[1][1].rows);   //11
+        m7d_mul_64(x1->rows, a_slice.row[1][1].rows, b_slice.row[1][1].rows);  //12
+        m7d_add_64(c_slice.row[0][1].rows,x1->rows , c_slice.row[0][1].rows) ;   //15
+        m7d_add_64(c_slice.row[1][0].rows,c_slice.row[0][1].rows , c_slice.row[1][0].rows) ;   //14
+        m7d_add_64(c_slice.row[0][1].rows,c_slice.row[0][1].rows , c_slice.row[1][1].rows) ;   //15
+        m7d_add_64(c_slice.row[1][1].rows,c_slice.row[1][0].rows , c_slice.row[1][1].rows) ;    //16
+        m7d_add_64(c_slice.row[1][1].rows,c_slice.row[1][0].rows , c_slice.row[1][1].rows) ;  //17
+        m7d_sub_64(x2->rows, x2->rows, b_slice.row[1][0].rows) ;            //18
+        m7d_mul_64(c_slice.row[1][0].rows, a_slice.row[1][1].rows, x2->rows);            //19
+        m7d_sub_64(c_slice.row[1][0].rows, c_slice.row[1][0].rows,c_slice.row[0][0].rows);  //20
+        m7d_mul_64(c_slice.row[0][0].rows, a_slice.row[0][1].rows,b_slice.row[1][0].rows);
+        m7d_add_64(c_slice.row[0][0].rows, x1->rows,c_slice.row[0][0].rows) ;
+    }
+    
+    m1ri_free(x1);
+    m1ri_free(x2);
+}
+
+void  m7d_strassen(m7d_t *c, m7d_t  *a, m7d_t   *b)
+{
+    if(a->ncols == b->nrows)
+    {
+      	// These hold the padded matrix sizes
+		u_int32_t  arcr, acbr, bccc;
+		a->nrows = arcr;
+		a->ncols = acbr;
+		b->ncols = bccc;
+
+		arcr =  powerof2(arcr);
+		acbr =  powerof2(acbr);
+		bccc =  powerof2(bccc);
+		
+		m7d_create( c, a->nrows, b->ncols); 
+		int lasta, lastb, lastboth;
+		lasta = 64 - a->nrows%64;
+		lastb = 64 -  b->ncols%64;  
+		lastboth = 64 - a->nrows; 
+		
+		
+		m7d_t * c_main_partition = m1ri_malloc(sizeof(m7d_t));
+		m7d_t * a_main_partition = m1ri_malloc(sizeof(m7d_t));
+		m7d_t * b_main_partition = m1ri_malloc(sizeof(m7d_t));
+		
+		m7d_window_create(c, c_main_partition, 0, 0, c->nrows -1, c->ncols -1); 
+		m7d_window_create(a, a_main_partition, 0, 0, a->nrows -1, a->ncols -1   ); 
+		m7d_window_create(b, b_main_partition,  0, 0,b->nrows -1 , b->ncols -1); 
+		
+		
+		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (bccc))
+		{
+		m7d_t * padded_a  = m1ri_malloc(sizeof(m7d_t));
+		m7d_t  * padded_b  = m1ri_malloc(sizeof(m7d_t));
+		m7d_t * padded_c = m1ri_malloc(sizeof(m7d_t));;
+		m7d_create(padded_a, arcr, acbr);
+		m7d_create(padded_b, acbr, bccc);
+		m7d_create(padded_c, arcr, bccc);
+		m7d_copypadding(padded_a, a_main_partition);
+		m7d_copypadding(padded_b, b_main_partition);
+		m7d_copypadding(padded_c, c_main_partition);
+		
+		
+		m7d_qrt_mul(padded_c, padded_a, padded_b); 
+
+		m7d_free(padded_a);
+		m7d_free(padded_b);
+		m7d_free(padded_c);
+		}
+		
+		//m7d_create(padded_c
+		
+		else
+		{
+		m7d_qrt_mul(c_main_partition, a_main_partition, b_main_partition); 
+		}
+		
+		m7d_free(a_main_partition);
+		m7d_free(b_main_partition);
+		m7d_free(c_main_partition);
+          
+    }
+    
+}
 
 

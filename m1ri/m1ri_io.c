@@ -124,7 +124,7 @@ void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
         out[2]  = ( c & (leftbit >>  x));
         
         if (out[2] > 0) {
-            value =  value + 11;
+            value =  value + 1;
         
         }
         

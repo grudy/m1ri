@@ -408,7 +408,7 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
 
     s = (x->units & y->units);
     r->middle = s^ x->middle ^ y->middle;
-    t = (((s) & (x->middle | y->middle)) | (x->middle & y->middle) );
+    t = ((s) & (x->middle | y->middle)) | (x->middle & y->middle);
     r->sign = x->sign ^ y->sign ^ t;
     s = x->sign | y->sign | t;
     
@@ -420,6 +420,28 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
    r->sign = r->sign ^ ( t & r->middle);
     
 }
+
+void m7d_sub(vtri * r ,vtri * x, vtri * y)
+{
+     /*todo: test function output*/
+    vec s;
+    vec t;
+    
+    r->sign = x->units ^ !y->units;
+
+    s = (x->units & !y->units);
+    r->middle = s^ x->middle ^ !y->middle;
+    t = (((s) & (x->middle | !y->middle)) | (x->middle & !y->middle) );
+    r->sign = x->sign ^ !y->sign ^ t;
+    s = x->sign | !y->sign | t;
+    t = (r->units & s );
+    r->units = s ^ r->units;
+    r->middle = r->middle ^ t ;
+    r->sign = r->sign ^ ( t & r->middle);
+    
+
+}
+
 
 void m7d_sub_i(vtri  *r, vtri *y)
 {

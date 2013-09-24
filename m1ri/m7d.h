@@ -110,11 +110,9 @@ void m7d_putpadding(m7d_t  * , m7d_t const * );
 void m7d_add_64(vtri ** , vtri **, vtri **);
 //unfinished
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s,  vec m , vec u );
-
 /*
  
  */
-
 
 vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width);
 /*
@@ -146,7 +144,6 @@ m7d_t  m7d_identity_set(m7d_t * a);
  
  */
 
-
 m7d_t   m7d_identity(m7d_t  *a, rci_t n);
 
 /*
@@ -155,10 +152,8 @@ m7d_t   m7d_identity(m7d_t  *a, rci_t n);
 
 int m7d_equal(m7d_t const *, m7d_t const *);
 
-
 void m7d_free( m7d_t *  );
 void vtri_negate( vtri * );
-
 
 /********************************************
  matrix r = (direct sum matrix r + matrix x)
@@ -169,6 +164,8 @@ void iadd_vtri(vtri  *, vtri *);
 
 void m7d_sub_i(vtri  *, vtri *);
 
+void m7d_sub(vtri *, vtri *, vtri * );
+
 //Scalar  multiplication
 vtri vtri_mul_2(vtri);
 vtri vtri_mul_3(vtri);
@@ -177,7 +174,6 @@ vtri vtri_mul_5(vtri);
 vtri vtri_mul_6(vtri);
 
 // negate  r0, r1, r2 ← a0, a1, a2
-
 
 /********************************************
  matrix r = (difference matrix r - matrix x)                //Or x will the function be  r  = x- r???
