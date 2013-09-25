@@ -26,7 +26,8 @@
 
 void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
 {
-    m3d_t * x1, *x2;
+    m3d_t * x1;
+    m3d_t * x2;
     x1 = x2 = m1ri_malloc(sizeof(m3d_t));
     m3_slice  a_slice, b_slice, c_slice;
     m3d_create(x1, c->nrows, c->ncols);
@@ -97,6 +98,7 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 {
     if(a->ncols == b->nrows)
     {
+        m3d_create( c, a->nrows, b->ncols); 
       	// These hold the padded matrix sizes
 		u_int32_t  arcr, acbr, bccc;
 		a->nrows = arcr;
@@ -114,15 +116,7 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		lastboth = 64 - a->nrows; 
 		
 		
-		m3d_t * c_main_partition = m1ri_malloc(sizeof(m3d_t));
-		m3d_t * a_main_partition = m1ri_malloc(sizeof(m3d_t));
-		m3d_t * b_main_partition = m1ri_malloc(sizeof(m3d_t));
-		
-		m3d_window_create(c, c_main_partition, 0, 0, c->nrows -1, c->ncols -1); 
-		m3d_window_create(a, a_main_partition, 0, 0, a->nrows -1, a->ncols -1   ); 
-		m3d_window_create(b, b_main_partition,  0, 0,b->nrows -1 , b->ncols -1); 
-		
-		
+
 		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (bccc))
 		{
 		m3d_t * padded_a  = m1ri_malloc(sizeof(m3d_t));
@@ -131,9 +125,9 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		m3d_create(padded_a, arcr, acbr);
 		m3d_create(padded_b, acbr, bccc);
 		m3d_create(padded_c, arcr, bccc);
-		m3d_copypadding(padded_a, a_main_partition);
-		m3d_copypadding(padded_b, b_main_partition);
-		m3d_copypadding(padded_c, c_main_partition);
+		m3d_copypadding(padded_a, a);
+		m3d_copypadding(padded_b, b);
+		m3d_copypadding(padded_c, c);
 		
 		
 		m3d_qrt_mul(padded_c, padded_a, padded_b); 
@@ -147,13 +141,10 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		
 		else
 		{
-		m3d_qrt_mul(c_main_partition, a_main_partition, b_main_partition); 
+		m3d_qrt_mul(c, a, b); 
 		}
 		
 
-		m3d_free(a_main_partition);
-		m3d_free(b_main_partition);
-		m3d_free(c_main_partition);
           
     }
     
@@ -162,7 +153,8 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 void m5d_qrt_mul(m5d_t * c,m5d_t *a, m5d_t * b )
 {
     m5d_t * x1, *x2;
-    x1 = x2 = m1ri_malloc(sizeof(m5d_t));
+    x1 = m1ri_malloc(sizeof(m5d_t));
+    x2 = m1ri_malloc(sizeof(m5d_t));
     m5_slice  a_slice, b_slice, c_slice;
     m5d_create(x1, c->nrows, c->ncols);
     m5d_create(x2, c->nrows, c->ncols);
@@ -232,6 +224,7 @@ void  m5d_strassen(m5d_t *c, m5d_t  *a, m5d_t   *b)
 {
     if(a->ncols == b->nrows)
     {
+        m5d_create( c, a->nrows, b->ncols); 
       	// These hold the padded matrix sizes
 		u_int32_t  arcr, acbr, bccc;
 		a->nrows = arcr;
@@ -249,15 +242,7 @@ void  m5d_strassen(m5d_t *c, m5d_t  *a, m5d_t   *b)
 		lastboth = 64 - a->nrows; 
 		
 		
-		m5d_t * c_main_partition = m1ri_malloc(sizeof(m5d_t));
-		m5d_t * a_main_partition = m1ri_malloc(sizeof(m5d_t));
-		m5d_t * b_main_partition = m1ri_malloc(sizeof(m5d_t));
-		
-		m5d_window_create(c, c_main_partition, 0, 0, c->nrows -1, c->ncols -1); 
-		m5d_window_create(a, a_main_partition, 0, 0, a->nrows -1, a->ncols -1   ); 
-		m5d_window_create(b, b_main_partition,  0, 0,b->nrows -1 , b->ncols -1); 
-		
-		
+
 		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (bccc))
 		{
 		m5d_t * padded_a  = m1ri_malloc(sizeof(m5d_t));
@@ -266,9 +251,9 @@ void  m5d_strassen(m5d_t *c, m5d_t  *a, m5d_t   *b)
 		m5d_create(padded_a, arcr, acbr);
 		m5d_create(padded_b, acbr, bccc);
 		m5d_create(padded_c, arcr, bccc);
-		m5d_copypadding(padded_a, a_main_partition);
-		m5d_copypadding(padded_b, b_main_partition);
-		m5d_copypadding(padded_c, c_main_partition);
+		m5d_copypadding(padded_a, a);
+		m5d_copypadding(padded_b, b);
+		m5d_copypadding(padded_c, c);
 		
 		
 		m5d_qrt_mul(padded_c, padded_a, padded_b); 
@@ -282,23 +267,22 @@ void  m5d_strassen(m5d_t *c, m5d_t  *a, m5d_t   *b)
 		
 		else
 		{
-		m5d_qrt_mul(c_main_partition, a_main_partition, b_main_partition); 
+		m5d_qrt_mul(c, a, b); 
 		}
 		
-		m5d_free(a_main_partition);
-		m5d_free(b_main_partition);
-		m5d_free(c_main_partition);
+
           
     }
     
 }
 
 
-
 void m7d_qrt_mul(m7d_t * c,m7d_t *a, m7d_t * b )
 {
     m7d_t * x1, *x2;
-    x1 = x2 = m1ri_malloc(sizeof(m7d_t));
+    
+    x1 = m1ri_malloc(sizeof(m7d_t));
+    x2 = m1ri_malloc(sizeof(m7d_t));
     m7_slice  a_slice, b_slice, c_slice;
     m7d_create(x1, c->nrows, c->ncols);
     m7d_create(x2, c->nrows, c->ncols);
@@ -368,6 +352,7 @@ void  m7d_strassen(m7d_t *c, m7d_t  *a, m7d_t   *b)
 {
     if(a->ncols == b->nrows)
     {
+        m7d_create( c, a->nrows, b->ncols); 
       	// These hold the padded matrix sizes
 		u_int32_t  arcr, acbr, bccc;
 		a->nrows = arcr;
@@ -385,15 +370,7 @@ void  m7d_strassen(m7d_t *c, m7d_t  *a, m7d_t   *b)
 		lastboth = 64 - a->nrows; 
 		
 		
-		m7d_t * c_main_partition = m1ri_malloc(sizeof(m7d_t));
-		m7d_t * a_main_partition = m1ri_malloc(sizeof(m7d_t));
-		m7d_t * b_main_partition = m1ri_malloc(sizeof(m7d_t));
-		
-		m7d_window_create(c, c_main_partition, 0, 0, c->nrows -1, c->ncols -1); 
-		m7d_window_create(a, a_main_partition, 0, 0, a->nrows -1, a->ncols -1   ); 
-		m7d_window_create(b, b_main_partition,  0, 0,b->nrows -1 , b->ncols -1); 
-		
-		
+
 		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (bccc))
 		{
 		m7d_t * padded_a  = m1ri_malloc(sizeof(m7d_t));
@@ -402,9 +379,9 @@ void  m7d_strassen(m7d_t *c, m7d_t  *a, m7d_t   *b)
 		m7d_create(padded_a, arcr, acbr);
 		m7d_create(padded_b, acbr, bccc);
 		m7d_create(padded_c, arcr, bccc);
-		m7d_copypadding(padded_a, a_main_partition);
-		m7d_copypadding(padded_b, b_main_partition);
-		m7d_copypadding(padded_c, c_main_partition);
+		m7d_copypadding(padded_a, a);
+		m7d_copypadding(padded_b, b);
+		m7d_copypadding(padded_c, c);
 		
 		
 		m7d_qrt_mul(padded_c, padded_a, padded_b); 
@@ -418,15 +395,12 @@ void  m7d_strassen(m7d_t *c, m7d_t  *a, m7d_t   *b)
 		
 		else
 		{
-		m7d_qrt_mul(c_main_partition, a_main_partition, b_main_partition); 
+		m7d_qrt_mul(c, a, b); 
 		}
 		
-		m7d_free(a_main_partition);
-		m7d_free(b_main_partition);
-		m7d_free(c_main_partition);
+
           
     }
     
 }
-
 

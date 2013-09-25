@@ -115,11 +115,7 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
       
         
     }
-    
-    {
-        
-        
-    }
+
     return 0;
 }
 

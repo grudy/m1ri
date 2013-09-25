@@ -151,7 +151,7 @@ void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
 {
 
-  	m5_slice *  a_slice, *  b_slice, *  c_slice;
+  	/*m5_slice *  a_slice, *  b_slice, *  c_slice;
 	a_slice =  m1ri_malloc(sizeof(m5_slice));
 	b_slice =   m1ri_malloc(sizeof(m5_slice));
 	c_slice = m1ri_malloc(sizeof(m5_slice));
@@ -183,7 +183,7 @@ void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
    
     else if((c_slice->row[0][0].ncols ) <= M1RI_RADIX)
     {
-    	m5d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
+      	m5d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
       	m5d_create(&x2, M1RI_RADIX, M1RI_RADIX);
    	  	m5d_mul_64(x1.rows, a_slice->row[0][0].rows, b_slice->row[0][0].rows);
 		m5d_mul_64(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][0].rows);
@@ -197,9 +197,9 @@ void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
 		m5d_mul_64(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][1].rows);
        	m5d_mul_64(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][1].rows); 
 		m5d_add_r(&c_slice->row[1][1],&x1, &x2) ;
-			  
+		
     }
-    
+    */
 }
 
 void m5d_classic_mul(m5d_t *c, m5d_t  *a, m5d_t  *b)

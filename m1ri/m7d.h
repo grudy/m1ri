@@ -164,8 +164,9 @@ void iadd_vtri(vtri  *, vtri *);
 
 void m7d_sub_i(vtri  *, vtri *);
 
-void m7d_sub(vtri *, vtri *, vtri * );
-
+void m7d_sub(m7d_t * , m7d_t * , m7d_t *);
+void m7d_vtri_sub(vtri *, vtri *, vtri * );
+void m7d_sub_64(vtri **, vtri   **, vtri  **);
 //Scalar  multiplication
 vtri vtri_mul_2(vtri);
 vtri vtri_mul_3(vtri);

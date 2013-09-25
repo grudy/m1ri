@@ -27,8 +27,14 @@
 int main(int argc, const char * argv[])
 {
     int isequal;
-    m5d_t * a, * b,  *d, *e;
-    a = b  = d = e =   m1ri_malloc(sizeof(m5d_t));
+    m5d_t * a, * b,  *d, *e, *f, *g, *h;
+    a = m1ri_malloc(sizeof(m5d_t));
+    b  = m1ri_malloc(sizeof(m5d_t));
+    d = m1ri_malloc(sizeof(m5d_t));
+     e = m1ri_malloc(sizeof(m5d_t));
+     f =  m1ri_malloc(sizeof(m5d_t));
+     g  = m1ri_malloc(sizeof(m5d_t));
+     h = m1ri_malloc(sizeof(m5d_t));
     m5d_rand(a);
     
     m5d_rand(b);
@@ -74,6 +80,14 @@ int main(int argc, const char * argv[])
     m5d_print(&test_m5d_output);
     
     
+    m5d_create(f, 256, 256);
+    m5d_create(g, 256, 256);
+    
+    m5d_rand(f);
+    m5d_rand(g);
+    m5d_classic_mul(h, f, g);
+   //m5d_strassen(h, f, g);
+ //  m5d_print(h);
     
     return 0;
 }

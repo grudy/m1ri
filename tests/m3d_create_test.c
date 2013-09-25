@@ -29,18 +29,25 @@
 #include "time.h"
 int main(int argc, const char * argv[])
 {
- 	 m3d_t *a, *b, *c;
+ 	 m3d_t *a, *b, *c, *d, *e, *f;
     a = malloc(sizeof(m3d_t));
     b = malloc(sizeof(m3d_t));
     c =  malloc(sizeof(m3d_t));
- 	 m3d_create(a, 256, 256);
-  m3d_create(b, 256, 256);
-  
-  m3d_rand(a);
-  m3d_rand(b);
-
+    d = malloc(sizeof(m3d_t));
+    e = malloc(sizeof(m3d_t));
+    f = malloc(sizeof(m3d_t));
+ 	m3d_create(a, 256, 256);
+ 	m3d_create(b, 256, 256);
+    m3d_create(d, 256, 256);
+ 	m3d_create(e, 256, 256);
+ 
+    m3d_rand(a);
+    m3d_rand(b);
+    m3d_rand(d);
+    m3d_rand(e);
 	m3d_classic_mul(c, a, b);
-       m3d_print(c);
+	//m3d_strassen(f, d, e);
+    m3d_print(c);
     return 0;
     
     

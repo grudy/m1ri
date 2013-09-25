@@ -266,22 +266,14 @@ m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t si
      /*c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {
-        
-        
         return submatrix;
     }
-    
-    
-    
-    
+        
     if((stvtri + sizecols) > c->width)
     {
-        
-        
+
         return submatrix;
     }
-    
-    
     
     submatrix.nrows =   M1RI_RADIX * sizecols;
     submatrix.ncols =  M1RI_RADIX * sizecols;
@@ -292,8 +284,6 @@ m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t si
     submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix.fcol   = 0;
     submatrix.svtri = stvtri;
-    
-    
     
     int i;
     
@@ -310,30 +300,32 @@ m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t si
 
 void   m7d_window_create(m7d_t *c, m7d_t * submatrix, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t sizecols)
 {
-    /*Fix: This needs to have checks in place for windows too large*/
+     /*c->width should not be compared twice */
     
-    submatrix->nrows =   M1RI_RADIX * sizecols;
+    if((strow + sizerows) > c->width)
+    {   
+        return;
+    }
+    if((stvtri + sizecols) > c->width)
+    {
+        return;    
+    }
+    int f = strow * M1RI_RADIX;
+    int i;
+    submatrix->nrows =   M1RI_RADIX * sizerows;
     submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
-    submatrix->width = 1 * sizecols;
-    submatrix->block = &c->block[(stvtri * stvtri)];
+    submatrix->width =  sizecols;
+    submatrix->block =      m1ri_calloc(sizecols * sizerows, sizeof(m7d_t));
+    submatrix->block = &c->block[(strow * stvtri)];
     submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vtri *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svtri = stvtri;
-    
-    
-    int i;
-    
-    for(  i =   strow; i < strow + (M1RI_RADIX * sizerows) ; i++)
-    {
-        
-        submatrix->rows[i - strow] = c->rows[i];
-        
-    }
-    
-    
-    
+   	for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
+    {    
+        submatrix->rows[i - f] = c->rows[i] + stvtri;
+    }   
 }
 
 /*
@@ -350,9 +342,7 @@ vtri * m7d_allone(m7d_t * a)
         a->block[i].middle = 0xffffffffffffffff;
         
         a->block[i].units = 0xffffffffffffffff;
-        
-    
-        
+     
     }
     return a->block;
 }
@@ -362,8 +352,6 @@ void vtri_negate(vtri * a)
 	a->units = !a->units;
 	a->middle = !a->middle;
 	a->sign = !a->sign;
-
-
 }
 
 m7d_t  m7d_rand(m7d_t * a)
@@ -393,7 +381,7 @@ void m7d_free( m7d_t *  tofree)
 {
     m1ri_free(tofree->rows);
     m1ri_free(tofree->block);
-   
+    
 }
 
 
@@ -421,7 +409,7 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
     
 }
 
-void m7d_sub(vtri * r ,vtri * x, vtri * y)
+void m7d_vtri_sub(vtri * r ,vtri * x, vtri * y)
 {
      /*todo: test function output*/
     vec s;
@@ -614,6 +602,18 @@ void m7d_sub_64(vtri **R, vtri  **A, vtri  **B)
         R[i][0] = sub_m7dr(A[i][0], B[i][0]);
     }
     
+}
+void m7d_sub( m7d_t *r, m7d_t  *x, m7d_t  *y)
+{
+    int n , i;
+    for(i = 0; i < x->nrows; i++)
+    {
+        for(n = 0; n < x->width; n++)
+        {
+		    m7d_vtri_sub(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
+        }
+    }
+
 }
 
 int m7d_equal(m7d_t const *a, m7d_t const *b)
