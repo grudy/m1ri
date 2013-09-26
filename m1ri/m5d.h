@@ -201,17 +201,18 @@ void iadd_vfd(vfd *,vfd *);
 
 void m5d_add_r(m5d_t *, m5d_t *, m5d_t *);
 void m5d_sub_r(m5d_t *, m5d_t *, m5d_t *);
+void m5d_sub_d(m5d_t  * a , m5d_t * b);
 void add_vfd(vfd *, vfd * , vfd *);
 void sub_vfd(vfd *, vfd * , vfd *);
 void m5d_add2(vfd * , vfd * , vfd * );
 
 void m5d_add2_i(vfd * , vfd * );
 int m5d_equal(m5d_t const *, m5d_t const *);
-
+void m5d_add_64(vfd **, vfd **  , vfd ** );
 m5d_t   m5d_window(m5d_t *, rci_t , rci_t , rci_t , rci_t );
 void   m5d_window_create(m5d_t *, m5d_t * , rci_t , rci_t , rci_t , rci_t );
 
-void m5d_sub_64(vfd **, vfd **, vfd **);
+void m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b);
 
 
         

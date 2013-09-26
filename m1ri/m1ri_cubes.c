@@ -385,12 +385,13 @@ m5d_t m5d_transpose_sliced(m5d_t * a)
 void m5d_quarter(m5_slice * c , m5d_t * a)
 {
 
+	int arows, acols;
 	c->block = m5_blockslice_allocate(c->block,  2,   2);
     c->row = m5_rowslice_allocate(c->block,  c->row,   2, 2);
-    m5d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/2, a->ncols/2);
-	m5d_window_create(a, &c->row[0][1], 0, a->ncols/2 , a->nrows/2, a->ncols/2);   
-    m5d_window_create(a, &c->row[1][0], a->nrows/2, 0 , a->nrows/2, a->ncols/2);
-	m5d_window_create(a, &c->row[1][1], a->nrows/2,a->ncols/2,  a->nrows/2, a->ncols/2);
+    m5d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/128, a->ncols/128);
+	m5d_window_create(a, &c->row[0][1], 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+    m5d_window_create(a, &c->row[1][0], a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	m5d_window_create(a, &c->row[1][1], a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
     
 }
 
@@ -553,7 +554,9 @@ m7d_t m7d_transpose_sliced(m7d_t * a)
      {
         for (y = 0; y < b->ncols; y ++)
          {
+         
          	m7d_transpose_vtri(b->row[x][y].rows, d->row[y][x].rows);  
+         	 
         }
     }
     
@@ -562,11 +565,12 @@ m7d_t m7d_transpose_sliced(m7d_t * a)
 
 void m7d_quarter(m7_slice * c , m7d_t * a)
 {
+	int arows, acols;
 	c->block = m7_blockslice_allocate(c->block,  2,   2);
     c->row = m7_rowslice_allocate(c->block,  c->row,   2, 2);
-    m7d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/2, a->ncols/2);
-	m7d_window_create(a, &c->row[0][1], 0, a->ncols/2 , a->nrows/2, a->ncols/2);   
-    m7d_window_create(a, &c->row[1][0], a->nrows/2, 0 , a->nrows/2, a->ncols/2);
-	m7d_window_create(a, &c->row[1][1], a->nrows/2,a->ncols/2,  a->nrows/2, a->ncols/2);
+    m7d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/128, a->ncols/128);
+	m7d_window_create(a, &c->row[0][1], 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+    m7d_window_create(a, &c->row[1][0], a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	m7d_window_create(a, &c->row[1][1], a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
     
 }

@@ -1,6 +1,6 @@
  
 /*
- Matrix Represenations and basic operations
+ 
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -20,6 +20,8 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
+ 
+ Matrix Represenations and basic operations over GF(3)
  m1ri_3dt.h
  */
 

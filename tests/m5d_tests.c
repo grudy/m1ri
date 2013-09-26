@@ -82,12 +82,15 @@ int main(int argc, const char * argv[])
     
     m5d_create(f, 256, 256);
     m5d_create(g, 256, 256);
-    
+    printf("specs f:");
+    m5d_specs(f); 
+    printf("specs g:");
+    m5d_specs(g); 
     m5d_rand(f);
     m5d_rand(g);
-    m5d_classic_mul(h, f, g);
-   //m5d_strassen(h, f, g);
- //  m5d_print(h);
-    
+    // m5d_classic_mul(h, f, g);
+    m5d_strassen(h, f, g);
+    m5d_print(h);
+	m5d_specs(h);    
     return 0;
 }

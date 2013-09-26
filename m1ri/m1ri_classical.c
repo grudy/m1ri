@@ -21,6 +21,8 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
  m1ri_classical.c
+ 
+ Traditional (0)
  */
 
 #include <stdio.h>
@@ -46,7 +48,7 @@ void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
     	m3d_create(&x1, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    
      	m3d_create(&x2, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    	   
     	m3d_mul_naive_square(&x1, &a_slice->row[0][0], &b_slice->row[0][0]);
-       	m3d_mul_naive_square(&x2, &a_slice->row[0][1], &b_slice->row[1][0]);
+    	m3d_mul_naive_square(&x2, &a_slice->row[0][1], &b_slice->row[1][0]);
 	    m3d_add_r(&c_slice->row[0][0], &x1, &x2) ; 
 		m3d_mul_naive_square(&x1, &a_slice->row[0][0], &b_slice->row[0][1]);
        	m3d_mul_naive_square(&x2, &a_slice->row[0][1], &b_slice->row[1][1]);
@@ -151,7 +153,7 @@ void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
 {
 
-  	/*m5_slice *  a_slice, *  b_slice, *  c_slice;
+  	m5_slice *  a_slice, *  b_slice, *  c_slice;
 	a_slice =  m1ri_malloc(sizeof(m5_slice));
 	b_slice =   m1ri_malloc(sizeof(m5_slice));
 	c_slice = m1ri_malloc(sizeof(m5_slice));
@@ -159,13 +161,14 @@ void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
     m5d_quarter(b_slice, b);
     m5d_quarter(c_slice, c);
     m5d_t  x1; 
-    m5d_t  x2; 
+    m5d_t  x2;
+     
 
     if((c_slice->row[0][0].ncols) > M1RI_RADIX)
     {
      
 		m5d_create(&x1, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    
-     	m5d_create(&x2, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    
+     	m5d_create(&x2, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    		
 		m5d_mul_naive_square(&x1, &a_slice->row[0][0], &b_slice->row[0][0]);
        	m5d_mul_naive_square(&x2, &a_slice->row[0][1], &b_slice->row[1][0]);
         m5d_add_r(&c_slice->row[0][0], &x1, &x2) ; 
@@ -199,7 +202,7 @@ void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
 		m5d_add_r(&c_slice->row[1][1],&x1, &x2) ;
 		
     }
-    */
+    
 }
 
 void m5d_classic_mul(m5d_t *c, m5d_t  *a, m5d_t  *b)

@@ -21,8 +21,7 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
  
- Makes the grease table for the method of four russians. 
- 
+Base cases over GF(3), GF(5), GF(7)
  m1ri_small.c
  */
 

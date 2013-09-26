@@ -72,12 +72,14 @@ int main(int argc, const char * argv[])
     
     m7d_create(f, 256, 256);
     m7d_create(g, 256, 256);
-    m7d_create(h, 256, 256);
+     m7d_create(h, 256, 256);
 	m7d_window_create(f, i, 0, 0, 64, 64);
     m7d_rand(f);
     m7d_rand(g);
-   	m7d_strassen(h, f, g);
-   //	m7d_print(g);
+   	
+   	m7d_classic_mul(h, f, g);
+   //	    m7d_strassen(h, f, g);
+   	m7d_print(g);
    m7d_print(h);
     
     return 0;

@@ -220,7 +220,7 @@ m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t siz
         return submatrix;
     }
     
-    submatrix.nrows =   M1RI_RADIX * sizecols;
+    submatrix.nrows =   M1RI_RADIX * sizerows;
     submatrix.ncols =  M1RI_RADIX * sizecols;
     submatrix.flags = iswindowed;
     submatrix.width =  sizecols;
@@ -726,7 +726,23 @@ void m5d_sub_r(m5d_t * c ,m5d_t  * a , m5d_t * b)
     }
 }
 
+m5d_sub_d(m5d_t  * a , m5d_t * b)
+{
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+        int i, j;
+        for( i = 0; i < a->nrows; i++)
+        {
+            for(j = 0; j < (a->width ); j++)
+            {   
+                m5d_sub_i(&a->rows[i][j], &b->rows[i][j]);
+            }
+        }
+        
+    }
 
+
+}
 
 
 

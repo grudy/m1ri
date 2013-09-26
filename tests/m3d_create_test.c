@@ -40,14 +40,15 @@ int main(int argc, const char * argv[])
  	m3d_create(b, 256, 256);
     m3d_create(d, 256, 256);
  	m3d_create(e, 256, 256);
- 
+    
     m3d_rand(a);
     m3d_rand(b);
     m3d_rand(d);
     m3d_rand(e);
-	m3d_classic_mul(c, a, b);
-	//m3d_strassen(f, d, e);
-    m3d_print(c);
+	//m3d_classic_mul(c, a, b);
+	printf("f");
+	m3d_strassen(f, d, e);
+    m3d_print(f);
     return 0;
     
     
