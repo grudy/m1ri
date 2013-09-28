@@ -1,4 +1,4 @@
-/* M1RI
+/** * M1RI
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -27,14 +27,20 @@
 #include <m1ri/m7d.h>
 #include "m5d.h"
 
-
+/** 
+	Prints an m3d_t matrix
+*/
 void m3d_print(m3d_t *);
 //void print_m3d_block(vec , vec , u_int32_t , u_int32_t );
 //void print_m7d_block(vec , vec , vec,  u_int32_t , u_int32_t );
 //void print_m5d_block(vec , vec , vec,  u_int32_t , u_int32_t );
-
+/** 
+	Prints an m5d_t matrix
+*/
 void m5d_print(m5d_t *);
-
+/** 
+	Prints an m7d_t matrix
+*/
 void m7d_print(m7d_t * );
 
 void m3d_specs(m3d_t *);

@@ -1,5 +1,5 @@
 
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -31,7 +31,7 @@
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>
 
-/*These Functions are expanded upon Toms 
+/** These Functions are expanded upon Toms 
  implementation of the method of four RUSSIANS
  */
  

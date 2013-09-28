@@ -1,4 +1,4 @@
-/*  Cube Form 
+/** *  Cube Form 
  //  
  //  m1riproject
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
@@ -31,7 +31,7 @@
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>
 
-/*
+/** 
 A holding structure for m3d_t windows
 */
 typedef struct
@@ -46,17 +46,18 @@ typedef struct
     
 }m3_slice;
 
-/*
-A holding structure for m5d_t windows
+/** 
+	A holding structure for m5d_t windows
+	
 */
 
 typedef struct
 {
-	/*
+	/** 
 	
 	 */
     m5d_t * block;
-    /*
+    /** 
     (slicesize ^ 2) * 64
     */
     m5d_t ** row;
@@ -69,7 +70,7 @@ typedef struct
     
 }m5_slice;
 
-/*
+/** 
 A holding structure for m7d_t windows
 */
 typedef struct
@@ -91,7 +92,6 @@ m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width);
 
 m3d_t ** m3_rowslice_allocate(m3d_t * block, m3d_t ** rows, wi_t width, rci_t nrows);
 
-m3d_t  m3d_cubes(m3d_t *, m3d_t   * , rci_t );
 
 void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
 
@@ -103,7 +103,6 @@ m3d_t m3d_transpose_sliced(m3d_t * );
 
 vbg * m5d_transpose_vbg(vbg  **, vbg **);
 
-m5d_t  m5d_cubes(m5d_t *, m5d_t   * , rci_t );
 
 void  m5d_slices(m5_slice *  , m5d_t * , wi_t );
 
@@ -121,12 +120,14 @@ m5d_t ** m5_rowslice_allocate(m5d_t * , m5d_t ** , wi_t , rci_t );
 
 vbg * m7d_transpose_vbg(vbg  ** , vbg **);
 
-m7d_t  m7d_cubes(m7d_t *, m7d_t   * , rci_t );
-
+/**
+An array of m7d_t windows
+*/
 void  m7d_slices(m7_slice *  , m7d_t * , wi_t );
 
-//A direct transpose, using no windows
-
+/**
+A direct transpose, using no windows
+*/
 void  m7d_quarter(m7_slice *  , m7d_t * );
 
 m7d_t m7d_transpose_sliced(m7d_t * );

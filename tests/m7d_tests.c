@@ -1,4 +1,4 @@
-/* M1RI
+/** * M1RI
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -78,8 +78,8 @@ int main(int argc, const char * argv[])
     m7d_rand(g);
    	
    	m7d_classic_mul(h, f, g);
-   //	    m7d_strassen(h, f, g);
-   	m7d_print(g);
+   //	 m7d_strassen(h, f, g);
+   	 m7d_print(g);
    m7d_print(h);
     
     return 0;

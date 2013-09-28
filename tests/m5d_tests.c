@@ -1,4 +1,4 @@
-/* M1RI
+/** * M1RI
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -27,7 +27,7 @@
 int main(int argc, const char * argv[])
 {
     int isequal;
-    m5d_t * a, * b,  *d, *e, *f, *g, *h;
+    m5d_t * a, * b,  *d, *e, *f, *g, *h, *i, *j, *k;
     a = m1ri_malloc(sizeof(m5d_t));
     b  = m1ri_malloc(sizeof(m5d_t));
     d = m1ri_malloc(sizeof(m5d_t));
@@ -35,6 +35,11 @@ int main(int argc, const char * argv[])
      f =  m1ri_malloc(sizeof(m5d_t));
      g  = m1ri_malloc(sizeof(m5d_t));
      h = m1ri_malloc(sizeof(m5d_t));
+    i = m1ri_malloc(sizeof(m5d_t));
+    j = m1ri_malloc(sizeof(m5d_t));
+	k = m1ri_malloc(sizeof(m5d_t));
+    
+    
     m5d_rand(a);
     
     m5d_rand(b);
@@ -82,15 +87,26 @@ int main(int argc, const char * argv[])
     
     m5d_create(f, 256, 256);
     m5d_create(g, 256, 256);
-    printf("specs f:");
-    m5d_specs(f); 
-    printf("specs g:");
-    m5d_specs(g); 
+    m5d_create(h, 256, 256);
+    m5d_create(i, 256, 256);
+    m5d_create(j, 256, 256);
+    m5d_create(k, 256, 256);
+    
+    
     m5d_rand(f);
     m5d_rand(g);
-    // m5d_classic_mul(h, f, g);
-    m5d_strassen(h, f, g);
+    m5d_rand(i);
+    m5d_rand(j);
+    
+    
+   
+  	m5d_strassen(h, f, g);
+  	
     m5d_print(h);
-	m5d_specs(h);    
+	
+	m5d_classic_mul(k, i, j);
+	m5d_print(k);
+	
+	
     return 0;
 }

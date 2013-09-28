@@ -1,6 +1,6 @@
 #ifndef M1RIPROJECT_M1RIWRAPPERS_H
 #define M1RIPROJECT_M1RIWRAPPERS_H
-/*
+/** 
  
 Function wrappers
 TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
@@ -54,6 +54,10 @@ typedef int rci_t;
 typedef int wi_t;
 typedef unsigned int vbit;
 
+
+/*
+	Computes the size for padding
+*/
 static inline u_int32_t powerof2(u_int32_t v)
 {
   v--;
@@ -73,7 +77,9 @@ static inline void * m1ri_malloc(size_t size) {
   return  allocate;
 }
 
-
+/*
+	Wrapper for calloc
+*/
 static inline void * m1ri_calloc(size_t nobj, size_t size) {
   void * allocate = calloc(nobj, size);
   if(allocate == NULL)
@@ -81,10 +87,9 @@ static inline void * m1ri_calloc(size_t nobj, size_t size) {
   return allocate;
 }
 
-/*
- 
+/** 
+	Wrapper for realloc  
  */
-
 static inline void * m1ri_realloc(void * val, size_t size) {
   void  * reallocate =  realloc(val, size);
   if(reallocate == NULL)
@@ -92,18 +97,17 @@ static inline void * m1ri_realloc(void * val, size_t size) {
   return reallocate;
 }
 
-/*
- 
+/** 
+ Releases a value into the wilderness
 */
 
 static inline void m1ri_free(void * val) {
   free(val);    
 }
 
-/*
+/** 
  For testing if windowed
  */
-
 static u_int8_t const iswindowed = 0x1; 
 
 static inline u_int64_t  m1ri_rand() {
@@ -113,6 +117,8 @@ static inline u_int64_t  m1ri_rand() {
   randomword ^= (u_int64_t)random() << 50;
   return randomword;
 }
+
+
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
                {
                     qsort(  &ptr,  count, size,  comp);           

@@ -1,4 +1,4 @@
-/* M1RI
+/** * M1RI
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -22,7 +22,7 @@
  
  */
 #include "m1ri_io.h"
-/*
+/** 
  
  Print a block of an m3d
  a = the unit bits
@@ -56,7 +56,9 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
   
     
 }
-//  The function used to print m3d
+/**  
+	The function is  to print m3d_t
+*/
 void m3d_print(m3d_t *a)
 {
     int i, m;
@@ -223,9 +225,8 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
     }
     
 }
-/*
-	How this is printed is still undetermined until a representation is chosen 
-
+/** 
+	Prints an m7d_t matrix
 */
 void m7d_print(m7d_t *a)
 {
@@ -280,7 +281,12 @@ void m7d_print(m7d_t *a)
     
     
 }
-
+/**
+	Prints an m3d_t to standard output and then displays: 
+	1.  Number of columns
+	2.  Number of rows
+	3.  Width in vbg's .
+*/
 void m3d_specs(m3d_t * a)
 {
     
@@ -324,7 +330,12 @@ void m5d_specs(m5d_t * a)
     
     
 }
-
+/**
+	Prints an m5d_t to standard output and then displays: 
+	1.  Number of columns
+	2.  Number of rows
+	3.  Width in vfd's .
+*/
 void m5d_fullinfo(m5d_t * a)
 {
     m5d_print(a);
@@ -347,6 +358,12 @@ void m7d_specs(m7d_t * a)
     
 }
 
+/**
+	Prints an m7d_t to standard output and then displays: 
+	1.  Number of columns
+	2.  Number of rows
+	3.  Width in vtri's .
+*/
 void m7d_fullinfo(m7d_t * a)
 {
     m7d_print(a);

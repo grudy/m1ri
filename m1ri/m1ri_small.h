@@ -2,7 +2,7 @@
 // TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
 // RUSSIANS OVER LARGER FINITE FIELDS"
 //
-/*Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
+/** Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 #include "m1ri/m1riwrappers.h"
 #include "m1ri/m5d.h"
 #include "m1ri/m7d.h"
-/****************************************************************************
+/** ***************************************************************************
 								GF(3)
 *****************************************************************************/
 //64 * 64,4096 bit, 512 byte matrix(slice) multiplication
@@ -45,7 +45,7 @@ void mul_8_m3d(vbg *, vbg *, vbg *);
 //4 * 64,256 bit, 32 byte matrix(slice) multiplication
 void mul_4_m3d(vbg *R, vbg *A, vbg *B);
 
-/****************************************************************************
+/** ***************************************************************************
 								GF(5)
 *****************************************************************************/
 
@@ -56,7 +56,7 @@ void m5d_mul_8(vfd *, vfd *, vfd *);
 void m5d_mul_4(vfd *R, vfd *A, vfd *B);
 
 
-/****************************************************************************
+/** ***************************************************************************
 								GF(7)
 *****************************************************************************/
 

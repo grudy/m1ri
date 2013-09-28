@@ -1,5 +1,5 @@
 
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -26,6 +26,9 @@
 #include "m1riarith.h"
 #include "m5d.h"
 #include "m7d.h"
+
+
+
 void add_vbg(vbg * r, vbg const * x, vbg const * y)
 
 {
@@ -33,7 +36,7 @@ void add_vbg(vbg * r, vbg const * x, vbg const * y)
     r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
 }
 
-/*
+/** 
 
 */
 vbg add_m3dr(vbg  x, vbg const y)
@@ -138,7 +141,9 @@ void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
     }
     
 }
-
+/**
+	Adds two 64 by 64 m3d_t matrices
+*/
 void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
 {
     int i;
@@ -148,6 +153,11 @@ void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
     }
 
 }
+/**
+	Subtracts m3d_t a  of arbitrary 
+	length and height.
+	r = (x * y) 
+*/
 
 void m3d_sub( m3d_t *r, m3d_t  *x, m3d_t  *y)
 {
@@ -181,6 +191,10 @@ m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
     return c;  
 }
 
+/**
+	Adds two m3d_t's
+	If this isn't possible it does nothing
+*/
 void m3d_add_r(m3d_t * c, m3d_t  *a, m3d_t  *b)
 {
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))

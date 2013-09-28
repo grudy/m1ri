@@ -1,5 +1,5 @@
 
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -34,14 +34,16 @@ void add_vbg(vbg * r, vbg const * x, vbg const * y);
 void vbg_negation(vbg * );
 
 vbg add_m3dr(vbg  , vbg );
-
+/**
+	
+*/
 void sub_m3d( vbg *, vbg const *, vbg const * );               //multiply matrix x by by matrix y.   The product is matrix r.
 
 
 vbg sub_m3dr(vbg , vbg );               //multiply matrix x by by matrix y.   The product is matrix r.
 
 
-/********************************************
+/** *******************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
 void iadd_vbg(vbg *,vbg  *);
@@ -52,30 +54,33 @@ void isub_m3d(vbg *,vbg  *);
 
 void  vbg_mul( vbg *, vbg  *, vbg  *);             //multiply matrix x by y assinging the output to r
 
-
+/**
+	m3d_t subtraction
+	
+*/
 void m3d_sub( m3d_t *, m3d_t  *, m3d_t  *);
 
-//return the value of the matrix multiplied
-
+/**
+	Return the value of the matrix multiplied
+*/
 vbg vbg_mul_i(vbg const , vbg const);
 void m3d_add_r(m3d_t * , m3d_t  *, m3d_t  *);
-/*
+/** 
     Hadamard multiplication
 */
 m3d_t * m3d_hadamard(m3d_t const *, m3d_t const *);
 
-/* * * * * * * * * * * * * * * * * * * *
+/** * * * * * * * * * * * * * * * * * * * *
  Subtract a 1 kilobyte Matrix from another
  1 kilobyte Matrix
  * * * * * * * * * * * * * * * * * * * * */
 
 void m3d_sub_64(vbg **, vbg  **, vbg  **);
 
-/* * * * * * * * * * * * * * * * * * * * * *
+/** * * * * * * * * * * * * * * * * * * * * * *
  Add a 1 kilobyte Matrix from another
  1 kilobyte Matrix
  * * * * * * * * * * * * * * * * * * * * * * */
-
 void m3d_add_64(vbg **, vbg   **, vbg    ** );
 
 m3d_t m3d_add(m3d_t  *, m3d_t  *);

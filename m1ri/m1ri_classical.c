@@ -1,5 +1,5 @@
 
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -29,6 +29,10 @@
 #include <m1ri/m1ri_classical.h>
 #include <m1ri/m1ri_cubes.h>
 #include <m1ri/m7d.h>
+
+/**
+	Recursive Matrix Multiplication over GF(3), on a square matrix.
+*/
 void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
 {
 	
@@ -83,6 +87,11 @@ void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
 
 }
 
+
+/***
+	Classic O(N)^3 algorithm for Matrix Multiplication over GF(3) this function
+	handles padding and calls  m3d_mul_naive_square for the multiplication portion.
+*/
 void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 {
 	
@@ -90,7 +99,7 @@ void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 	{
 		
 		m3d_create( c, a->nrows, b->ncols); 
-		/* arcr, acbr, bccc hold the padded matrix sizes*/
+		/** * arcr, acbr, bccc hold the padded matrix sizes*/
 		u_int32_t  arcr, acbr, bccc, g;
 		arcr = a->nrows;
 		acbr = a->ncols;
@@ -122,7 +131,6 @@ void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 		m3d_t  * padded_b  = m1ri_malloc(sizeof(m3d_t));
 		m3d_t * padded_c = m1ri_malloc(sizeof(m3d_t));;
 		
-
 		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
 		{
 			m3d_create(padded_a, arcr, acbr);
@@ -147,9 +155,9 @@ void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 }
 
 
-//m5d and m7d multiplication are commented out because many  of the functions are 
-//unwritten, untested, or unfinished
-
+/**
+	Recursive Matrix Multiplication over GF(5), on a square matrix.
+*/
 void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
 {
 
@@ -205,13 +213,16 @@ void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
     
 }
 
+/***
+	Classic O(N)^3 algorithm for Matrix Multiplication over GF(5)
+*/
 void m5d_classic_mul(m5d_t *c, m5d_t  *a, m5d_t  *b)
 {
 	
 	if(a->ncols == b->nrows);
 	{
 		m5d_create( c, a->nrows, b->ncols); 
-		/* arcr, acbr, bccc hold the padded matrix sizes*/
+		/** * arcr, acbr, bccc hold the padded matrix sizes*/
 		u_int32_t  arcr, acbr, bccc, g;
 		arcr = a->nrows;
 		acbr = a->ncols;
@@ -263,6 +274,10 @@ void m5d_classic_mul(m5d_t *c, m5d_t  *a, m5d_t  *b)
 	}
 	   
 }
+
+/**
+	Recursive Matrix Multiplication over GF(5), on a square matrix.
+*/
 
 void m7d_mul_naive_square(m7d_t *c, m7d_t *a, m7d_t *b)
 {
@@ -316,6 +331,9 @@ void m7d_mul_naive_square(m7d_t *c, m7d_t *a, m7d_t *b)
      
 }
 
+/***
+	Classic O(N)^3 algorithm for Matrix Multiplication over GF(7)
+*/
 
 void m7d_classic_mul(m7d_t *c, m7d_t  *a, m7d_t  *b)
 {
@@ -323,7 +341,7 @@ void m7d_classic_mul(m7d_t *c, m7d_t  *a, m7d_t  *b)
 	if(a->ncols == b->nrows);
 	{
 		m7d_create( c, a->nrows, b->ncols); 
-		/* arcr, acbr, bccc hold the padded matrix sizes*/
+		/** * arcr, acbr, bccc hold the padded matrix sizes*/
 		u_int32_t  arcr, acbr, bccc, g;
 		arcr = a->nrows;
 		acbr = a->ncols;

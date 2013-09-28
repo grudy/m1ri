@@ -1,5 +1,5 @@
 
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -211,12 +211,12 @@ void mul_4_m3d(vbg *R, vbg *A, vbg *B)
 }
 
 
-/*
+/** 
 Everything past here has functions that still need to be tuned for 
 their specific Galois field
 */  
 
-/****************************************************************************
+/** ***************************************************************************
 								GF(5)
 *****************************************************************************/
 
@@ -377,8 +377,8 @@ void m5d_mul_16(vfd *R, vfd *A, vfd *B)
 
 //8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
 void m5d_mul_8(vfd *R, vfd *A, vfd *B)
-
 {
+
     int i;
     vfd t1, t2, t3 ,  r1, r2, r3,a;
     vec v1, v2, v3;
@@ -438,7 +438,7 @@ void m5d_mul_4(vfd *R, vfd *A, vfd *B)
 }
 
 
-/****************************************************************************
+/** ***************************************************************************
 								GF(7)
 *****************************************************************************/
 
@@ -568,7 +568,10 @@ void m7d_mul_32(vtri *R, vtri *A, vtri *B)
     
 }
 
-//16 * 64,1024 bit, 128 byte matrix(slice) multiplication
+/**
+	16 * 64,1024 bit, 128 byte matrix(slice) multiplication
+
+*/
 void m7d_mul_16(vtri *R, vtri *A, vtri *B)
 {
     long i;
@@ -603,7 +606,9 @@ void m7d_mul_16(vtri *R, vtri *A, vtri *B)
     }
 }
 
-//8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
+/**
+8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
+*/
 void m7d_mul_8(vtri *R, vtri *A, vtri *B)
 
 {
@@ -634,7 +639,9 @@ void m7d_mul_8(vtri *R, vtri *A, vtri *B)
 }
 
 
-//4 * 64,256 bit, 32 byte matrix(slice) multiplication
+/**
+ 4 * 64,256 bit, 32 byte matrix(slice) multiplication
+*/
 void m7d_mul_4(vtri *R, vtri *A, vtri *B)
 {
     int i;

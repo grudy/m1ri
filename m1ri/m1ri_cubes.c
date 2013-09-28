@@ -1,5 +1,5 @@
 
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -24,86 +24,6 @@
  */
 
 #include "m1ri_cubes.h"
-
-/*This copies a matrix as a contingous matrix of in (slicesize ^2) * m1ri_word slices 
-   (This function has not been used, and not tested in a while)*/
-m3d_t  m3d_cubes(m3d_t * c, m3d_t  *a, rci_t slicesize )
-{
-	int l, i, f, x, y, z, lf, r, extracols, extrarows, colroundeddown;
-	extracols = a->width%slicesize;
-    colroundeddown = a->width/slicesize;
-    c->ncols = M1RI_DN(a->width, slicesize);
-    extrarows = a->nrows%(M1RI_RADIX * slicesize);
-    c->nrows = M1RI_DN(a->nrows, (M1RI_RADIX * slicesize));
-    c->width =  a->width;
-   	l = a->nrows / (M1RI_RADIX * slicesize);
-  	l  = l  * M1RI_RADIX * slicesize;
-    c->block = m3d_block_allocate(a->block,  a->nrows,   a->width);
-    z = 0;
-    r = 0 ;
-    c->rows = m1ri_malloc( a->nrows * a->width * sizeof(vbg *));
-    
-    for ( i = 0; i <  l;  i = i + (slicesize* M1RI_RADIX))
-	{
-        for( f = 0; f <colroundeddown ; f++)
-            {   
-                lf = f * slicesize; 
-                for( x = 0; x <(slicesize  * M1RI_RADIX ) ; x++)
-                {
-                    for (y = 0 ; y < slicesize; y++) 
-                    {   
-                    	c->block[z] = a->rows[i+ x][lf  + y];
-                    	z++;
-                    }
-                }
-      
-            }
-            
-            for( x = 0; x <(slicesize  * M1RI_RADIX ) ; x++)
-            {
-                for (y = 0 ; y < extracols; y++) {
-                    
-                  	c->block[z] = a->rows[i+ x][(f * slicesize) + y];
-                	z++;
-                    
-                }
-            }
-             
-        c->rows[r]  = c->block + (i * slicesize );
-        r++;    
-    }
-     
-    for( f = 0; f <colroundeddown ; f++)
-    {
-        for( x = 0; x <(extrarows   ) ; x++)
-        {
-            for (y = 0 ; y <  slicesize; y++)
-             { 
-                c->block[z] = a->rows[i+ x][(f * slicesize) + y];
-                z++;
-                
-            }
-            
-        }
-    }
-
-    for( x = 0; x <(extrarows  ) ; x++)
-    {
-        for (y = 0 ; y < extracols; y++) 
-        {    
-            c->block[z] = a->rows[i+ x][(f * slicesize) + y];
-            z++;
-        }
-    }
-    
-    c->flags = 0;
-	c->lblock = a->ncols%64;
-	c->fcol = 0;
-    c->svbg = 0;
-    return *c;
-    c->rows[r]  = c->block + (i * slicesize );  
-    
-}
 
 
  m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width)
@@ -233,114 +153,54 @@ m5d_t ** m5_rowslice_allocate(m5d_t * block, m5d_t ** rows, wi_t width, rci_t nr
     rows = m1ri_malloc( nrows * width * sizeof(m5d_t *));
     for ( i = 0; i <  nrows;  i++ )
     {
-        rows[i]  = block + i * width;
+        rows[i]  = block + (i * width);
     };
     return rows;
 }
-
 void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
 {
-    wi_t l, z, r,  colroundeddown;
+    wi_t l,  r,  colroundeddown;
     int  i,  f,extrarows ,  extracols;
     extracols = a->width%slicesize;
     colroundeddown = a->width/slicesize;
-    c->width = M1RI_DN(a->width, slicesize);
-    extrarows = a->nrows%(M1RI_RADIX * slicesize);
+    c->width = a->width;
+    extrarows = a->nrows%(  slicesize);
     c->nrows = M1RI_DN(a->nrows, (M1RI_RADIX * slicesize));
     c->ncols = M1RI_DN(a->width, slicesize);
     l = a->nrows / (M1RI_RADIX * slicesize);
     l = l * slicesize;
     c->slicesize = slicesize;
-    c->block = m5_blockslice_allocate(c->block,  c->nrows,   c->width);
+ 	c->block = m5_blockslice_allocate(c->block,  c->nrows,   c->width);
     c->row = m5_rowslice_allocate(c->block,  c->row,   c->width, c->nrows);
-    z = 0;
     r = 0 ;
-    
+     
     for ( i = 0; i <  l;  i = i + slicesize)
-    {
-   
-        for( f = 0; f <colroundeddown ; f++)
+    {       
+    	for( f = 0; f <colroundeddown ; f++)
         {
-            
-            c->block[z] =  m5d_window(a, ( i ) , (f * slicesize), slicesize, slicesize);
-            z++;    
+        	m5d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, slicesize);
         }
-	    c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),slicesize, extracols);
-        z++;
-   		c->row[r] =  c->block + (c->ncols * i );
+        
+        if(extracols > 0)
+        {
+        	m5d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, extracols);
+		}
         r++;
         
     }
-    for( f = 0; f <colroundeddown ; f++)
-    {
-        c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),extrarows, slicesize);
-        z++;
-    }
     
-    c->block[z] =  m5d_window(a, ( i ) , (f * slicesize),extrarows, extracols);
-    c->row[r] =   c->block + (c->ncols * i );
-}
+    if(extrarows >0 )
+    {
+		for( f = 0; f <colroundeddown ; f++)
+        {
+           m5d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, slicesize);
+        }
 
-m5d_t  m5d_cubes(m5d_t * c, m5d_t  *a, rci_t slicesize )
-{
-    
-    int l, i, f, x, y, z, lf, r, extracols, extrarows, colroundeddown;
-    extracols = a->width%slicesize;
-    colroundeddown = a->width/slicesize;
-    c->ncols = M1RI_DN(a->width, slicesize);
-    extrarows = a->nrows%(M1RI_RADIX * slicesize);
-    c->nrows = M1RI_DN(a->nrows, (M1RI_RADIX * slicesize));
-    c->width =  a->width;
-    l = a->nrows / (M1RI_RADIX * slicesize);
-    l  = l  * M1RI_RADIX * slicesize;
-    
-    c->block = m5d_block_allocate(a->block,  a->nrows,   a->width);
-    z = 0;
-    r = 0 ;
-    f = 0;
-    c->rows = m1ri_malloc( a->nrows * a->width * sizeof(vfd *));
-    for ( i = 0; i <  l;  i = i + (slicesize* M1RI_RADIX))
-    {
-        for( f = 0; f <colroundeddown ; f++)
-        {
-            
-            for( x = 0; x <(slicesize  * M1RI_RADIX ) ; x++)
-            {
-                for (y = 0 ; y < slicesize; y++) 
-                {
-                    lf = f * slicesize;
-                    c->block[z] = a->rows[i+ x][lf  + y];
-                    z++; 
-                }              
-            }
-        }
-        
-        for( x = 0; x <(slicesize  * M1RI_RADIX ) ; x++)
-        {
-            for (y = 0 ; y < extracols; y++)
-             {
-                
-                c->block[z] = a->rows[i+ x][(f * slicesize) + y];
-                z++;
-                
-            }
-        }
-        c->rows[r]  = c->block + (i * slicesize );
-        r++;   
+    	if(extracols > 0)
+    	{
+           m5d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, extracols);
+    	}
     }
-    
-    for( x = 0; x <(extrarows   ) ; x++)
-    {
-        for (y = 0 ; y <  slicesize; y++) 
-        {   
-            c->block[z] = a->rows[i+ x][(f * slicesize) + y];
-            z++;            
-        }
-    }
-    
-    c->flags = 0;
-	c->fcol = 0;
-    return *c;     
 }
 
 vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
@@ -395,7 +255,9 @@ void m5d_quarter(m5_slice * c , m5d_t * a)
     
 }
 
+/**
 
+*/
 m7d_t  * m7_blockslice_allocate(m7d_t * block, rci_t  nrows,  wi_t  width)
 {
     block  = m1ri_calloc(nrows * width ,  sizeof(m7d_t  ) );
@@ -408,69 +270,11 @@ m7d_t ** m7_rowslice_allocate(m7d_t * block, m7d_t ** rows, wi_t width, rci_t nr
     rows = m1ri_malloc( nrows * width * sizeof(m7d_t *));
     for ( i = 0; i <  nrows;  i++ )
     {
-        rows[i]  = block + i * width;
+        rows[i]  = block + (i * width);
     };
     return rows;
 }
 
-
-m7d_t  m7d_cubes(m7d_t * c, m7d_t  *a, rci_t slicesize )
-{
-    
-    int l, i, f, x, y, z, lf, r, extracols, extrarows, colroundeddown;
-    extracols = a->width%slicesize;
-    colroundeddown = a->width/slicesize;
-    c->ncols = M1RI_DN(a->width, slicesize);
-    extrarows = a->nrows%(M1RI_RADIX * slicesize);
-    c->nrows = M1RI_DN(a->nrows, (M1RI_RADIX * slicesize));
-    c->width =  a->width;
-    l = a->nrows / (M1RI_RADIX * slicesize);
-    l  = l  * M1RI_RADIX * slicesize;
-    c->block = m7d_block_allocate(a->block,  a->nrows,   a->width);
-    z = 0;
-    r = 0 ;
-    f = 0;
-    c->rows = m1ri_malloc( a->nrows * a->width * sizeof(vtri *));
-    for ( i = 0; i <  l;  i = i + (slicesize* M1RI_RADIX))
-    {
-        for( f = 0; f <colroundeddown ; f++)
-        {
-            
-            for( x = 0; x <(slicesize  * M1RI_RADIX ) ; x++)
-            {
-                for (y = 0 ; y < slicesize; y++) 
-                {
-                    lf = f * slicesize;
-                    c->block[z] = a->rows[i+ x][lf  + y];
-                    z++;   
-                }
-                
-            }
-        }
-        for( x = 0; x <(slicesize  * M1RI_RADIX ) ; x++)
-        {
-            for (y = 0 ; y < extracols; y++) {
-                c->block[z] = a->rows[i+ x][(f * slicesize) + y];
-                z++;       
-            }
-        }
-        c->rows[r]  = c->block + (i * slicesize );
-        r++;
-    }
-    
-    for( x = 0; x <(extrarows   ) ; x++)
-    {
-        for (y = 0 ; y <  slicesize; y++) 
-        {
-            c->block[z] = a->rows[i+ x][(f * slicesize) + y];
-            z++;            
-        }
-    }
-    
-    c->flags = 0;
-    c->fcol = 0;
-	return *c;
-}
 
 
 vtri *  m7d_transpose_vtri(vtri  **a, vtri  **b  )

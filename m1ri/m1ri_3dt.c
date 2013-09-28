@@ -1,5 +1,5 @@
 
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -162,7 +162,7 @@ m3d_t  m3d_rand(m3d_t * a)
 }
 
 
-/*
+/** 
  Make an Identity Matrix
  a = Identity matrix
  n = matrix size (row length and column width)
@@ -253,7 +253,7 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
     return *a;
 }
 
-/*
+/** 
  windows in M1RI_RADIX rows * M1RI_RADIX column incriments
  stvbg = the vbg or width offset from the base matrix
  strow = row offset in increments of 64
@@ -265,7 +265,7 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
 {
 
     m3d_t  submatrix;
-    /*c->width should not be compared twice */
+    /** c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {    
         return submatrix;
@@ -298,7 +298,7 @@ m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t siz
 }
 void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
-     /*c->width should not be compared twice */
+     /** c->width should not be compared twice */
     
     if((strow + sizerows) > c->width)
     {   
@@ -329,16 +329,16 @@ void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, 
     
 }
 
-/*
+/** 
  Concat b on the end of a, the result is c 
  [a] [b] ----->  [a b]   ===  C
- /*This function still needs work*/
+ /** This function still needs work*/
  
 m3d_t m3d_concat(m3d_t * c, m3d_t * a, m3d_t * b)
 {
     if (a->nrows != b->nrows)
     {
-        /*if concat hath failed*/
+        /** if concat hath failed*/
         return *c;  
     }
     
@@ -366,7 +366,7 @@ m3d_t m3d_concat(m3d_t * c, m3d_t * a, m3d_t * b)
     return  *c;
 }
 
-/*
+/** 
  Stacks a on b, resulting matrix is c
  [a]
  ===  C
@@ -377,7 +377,7 @@ m3d_t m3d_stack(m3d_t * c,  m3d_t * a, m3d_t * b)
 {
     if (a->ncols != b->ncols)
     {
-        /*If a stacked matrix cannot be created*/
+        /** If a stacked matrix cannot be created*/
         return *c;
     }
     
@@ -416,6 +416,7 @@ void m3d_copypadding(m3d_t  * r, m3d_t  const * x)
         
 }
 
+
 void m3d_putpadding(m3d_t  * r, m3d_t  const * x)
 {
 		int i, s;
@@ -429,6 +430,9 @@ void m3d_putpadding(m3d_t  * r, m3d_t  const * x)
 	
 }
 
+/**
+  Checks if an m3d_t is equal to another.
+*/
 int m3d_equal(m3d_t const *a, m3d_t const *b)
 {
     if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
@@ -451,7 +455,7 @@ int m3d_equal(m3d_t const *a, m3d_t const *b)
     return 1;
 }
 
-/* 
+/** 
  Releases a m3d_t into the wilderness.
  */
 

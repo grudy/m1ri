@@ -1,7 +1,7 @@
 #ifndef MISC_H
 #define MISC_H
 
-/**
+/** *
  * \brief Print error message and abort(). 
  * 
  * The function accepts additional

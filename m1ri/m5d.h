@@ -1,4 +1,4 @@
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -30,7 +30,7 @@
 
 #ifndef _VFDM5_
 #define _VFDM5_
-/*
+/** 
 The Representation for GF5
 (Boothby's Additive Method) 
 000 0
@@ -41,7 +41,7 @@ The Representation for GF5
 
 */
 
-/********************************************
+/** *******************************************
  Creates  a structure for GF(5) Matrices
  ********************************************/
 
@@ -57,7 +57,7 @@ typedef struct {
 
 
 
-/*
+/** 
 
 This is unused because of the current representation 
 static inline  vfd fold5( vec s3, vec s2, vec s1, vec s0)
@@ -71,7 +71,7 @@ static inline  vfd fold5( vec s3, vec s2, vec s1, vec s0)
 }
 */
 
-/*
+/** 
  GF(5) Matrix structure
  
  */
@@ -107,10 +107,10 @@ typedef struct m5d_t{
 void m5d_copypadding(m5d_t  * , m5d_t const * );
 void m5d_putpadding(m5d_t  * , m5d_t const * );
 
-/*
+/** 
  
 
-/*
+/** 
  Matrix Windows
  ______________
  
@@ -129,21 +129,21 @@ vec m5d_rs_bits(m5d_t *, rci_t  , rci_t  , int  );
 vec m5d_ru_bits(m5d_t *, rci_t  , rci_t  , int  );
 vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  );
 void * m5d_rowswap (m5d_t * , rci_t , rci_t  );
-/*
+/** 
  
 */
 //unfinished
 void *  m5d_write_elem( m5d_t * ,rci_t , rci_t , vec , vec , vec);
 
 
-/*
+/** 
  
  */
 
 
 
 vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width);
-/*
+/** 
  
  */
 
@@ -151,39 +151,36 @@ vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width);
 
 
 vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows);
-/*
+/** 
  
  */
 
 m5d_t m5d_create( m5d_t * , rci_t nrows, rci_t ncols);
-/*
+/** 
  
  */
 
 vfd * m5d_rand(m5d_t * a);
-/*
+/** 
  Make an Identity Matrix
  a = Identity matrix
  n = matrix size (row length and column width)
- 
- 
- */
+*/
 
 
 m5d_t  m5d_identity_set(m5d_t * );
-/*
- 
- */
 
-
+/** 
+		 
+*/
 m5d_t   m5d_identity(m5d_t  *, rci_t );
 
-/*
+/** 
  
  */
 
 
-/*
+/** 
  
  Releases a m5d_t into the wilderness.
  */
@@ -194,7 +191,7 @@ void m5d_free( m5d_t *  );
 
 void m5d_sub( vfd *, vfd *, vfd *);               //subtract vector x by by vector y.   The product is vector r.
 
-/********************************************
+/** *******************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
 void iadd_vfd(vfd *,vfd *);

@@ -1,4 +1,4 @@
-/* M1RI
+/** * M1RI
 TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
 RUSSIANS OVER LARGER FINITE FIELDS"
 
@@ -45,7 +45,7 @@ int main(int argc, const char * argv[])
     m3d_print(&rand_test);
     printf("\n\n\n\n\n");
      printf("Write Test: ");
-    /*
+    /** 
     write test
     */
      m3d_t write_test = m3d_create(&write_test, 10  , 10);
@@ -62,7 +62,7 @@ int main(int argc, const char * argv[])
     
     
     printf("\n\n\n\n\n");
-    /*
+    /** 
     
         Testing m3d_equal
      

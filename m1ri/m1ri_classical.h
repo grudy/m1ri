@@ -1,7 +1,7 @@
 #ifndef M1RIPROJECT_CLASSICAL_H
 #define M1RIPROJECT_CLASSICAL_H
 
-/*
+/** 
 //  m1ri_classical.h
 //  m1riproject
 TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <m1ri/m1ri_cubes.h>
 #include <m1ri/m1ri_small.h>
 
-/*
+/** 
   
 */
 void m3d_mul_naive_square(m3d_t *, m3d_t  * , m3d_t  *);

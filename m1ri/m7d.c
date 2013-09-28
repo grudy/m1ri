@@ -1,4 +1,4 @@
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -52,7 +52,7 @@ vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
     
     
 }
-/*
+/** 
  Read n bits from units
  x = rows
  y = columns
@@ -74,7 +74,7 @@ vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
 
 
 
-/*
+/** 
  Read n elements
  x = rows
  y = columns
@@ -103,7 +103,7 @@ vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n)
 
 
 
-/*
+/** 
  Swap rows in a matrix;
  */
 void m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
@@ -128,7 +128,7 @@ void m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
 }
 
 
-/*
+/** 
  
  */
 
@@ -209,7 +209,7 @@ void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
 }
 
 
-/*
+/** 
  
  */
 
@@ -222,7 +222,7 @@ vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width)
     return block;
 }
 
-/*
+/** 
  
  */
 
@@ -241,7 +241,7 @@ vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows)
     
 }
 
-/*
+/** 
  
  */
 
@@ -257,13 +257,15 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
     
 }
 
+/** Creates a window for m7d_t matrices
+   this could also be called a submtrix.   */
 
 m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t sizecols)
 {
     
     
     m7d_t  submatrix;
-     /*c->width should not be compared twice */
+     /** c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {
         return submatrix;
@@ -298,9 +300,11 @@ m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t si
     
 }
 
+/** Creates a window for m7d_t matrices
+   this could also be called a submtrix. */
 void   m7d_window_create(m7d_t *c, m7d_t * submatrix, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t sizecols)
 {
-     /*c->width should not be compared twice */
+     /** c->width should not be compared twice */
     
     if((strow + sizerows) > c->width)
     {   
@@ -328,9 +332,9 @@ void   m7d_window_create(m7d_t *c, m7d_t * submatrix, rci_t strow, rci_t stvtri,
     }   
 }
 
-/*
+/** 
  
- */
+*/
 vtri * m7d_allone(m7d_t * a)
 {
     int i;
@@ -346,14 +350,14 @@ vtri * m7d_allone(m7d_t * a)
     }
     return a->block;
 }
-
+/** Negates input of a vtri*/
 void vtri_negate(vtri * a)
 {
 	a->units = !a->units;
 	a->middle = !a->middle;
 	a->sign = !a->sign;
 }
-
+/** Fills a matrix over GF(7) with random Variables*/
 m7d_t  m7d_rand(m7d_t * a)
 {
     int i;
@@ -370,7 +374,7 @@ m7d_t  m7d_rand(m7d_t * a)
 
 
 
-/*
+/** 
  
  Releases a m7d_t into the wilderness.
  */
@@ -411,7 +415,7 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
 
 void m7d_vtri_sub(vtri * r ,vtri * x, vtri * y)
 {
-     /*todo: test function output*/
+     /** todo: test function output*/
     vec s;
     vec t;
     
@@ -433,7 +437,7 @@ void m7d_vtri_sub(vtri * r ,vtri * x, vtri * y)
 
 void m7d_sub_i(vtri  *r, vtri *y)
 {
-	/*
+	/** 
 	Subtraction function
 	*/
 
@@ -457,7 +461,7 @@ void iadd_vtri(vtri  *x, vtri *y)
     x->units  = s ^ r.units;
     x->middle  = x->middle ^ t ;
     x->sign  = x->sign ^ (  t & x->middle);
-    /*Cleanup*/
+    /** Cleanup*/
       
 
 }
@@ -529,7 +533,7 @@ vtri vtri_mul_6(vtri a)
      
 }
 
-/*Summing and multiplying result by two, for method of four russian*/
+/** Summing and multiplying result by two, for method of four russian*/
 void m7d_add_2r(vtri *x, vtri * y)
 {
  	vtri  r;
@@ -547,7 +551,7 @@ void m7d_add_2r(vtri *x, vtri * y)
     x->sign  = x->sign ^ (  t & x->middle);
 
 
-	/*Optimize later*/
+	/** Optimize later*/
 
     s = x->units;
     x->units = x->middle;
@@ -582,7 +586,7 @@ void m7d_add_4r(vtri *x, vtri * y)
 
 
 
-/*************
+/** ************
 sub_m7dr is a placeholder for now
 **********************/
 vtri sub_m7dr(vtri const x, vtri const y)

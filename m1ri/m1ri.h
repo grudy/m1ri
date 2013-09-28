@@ -1,4 +1,4 @@
-/* M1RI    
+/** * M1RI    
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
  
@@ -23,7 +23,9 @@ Links to every library header in m1ri
 
 #ifndef M1RIPROJECT_M1RI_H
 #define M1RIPROJECT_M1RI_H
-
+/**
+	Include file for M1RI
+*/
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>

@@ -5,7 +5,7 @@
 // TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
 // RUSSIANS OVER LARGER FINITE FIELDS"
 //
-/*Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
+/** Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
@@ -24,7 +24,9 @@
 
 #include <m1ri/m1ri_combine.h>
 
-
+/**
+	
+*/
 void *  m3d_combine3(vbg *table, vbg *input )
 {
     vbg t, a, b, c;
@@ -32,7 +34,6 @@ void *  m3d_combine3(vbg *table, vbg *input )
     a = input[0];
     b = input[1];
     c = input[2];
-    
     table[0] = t;
     table[1] = a;
     table[2] = b;
