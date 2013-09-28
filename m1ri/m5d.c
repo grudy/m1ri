@@ -1,4 +1,4 @@
-/*
+/** 
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
@@ -24,7 +24,7 @@
 
 #include "m5d.h"
 
-/*
+/** 
  Read n bits from a sign portion of an element
  x = rows
  y = columns
@@ -51,7 +51,7 @@ vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 
     return bits;
 }
-/*
+/** 
  Read n bits from units
  x = rows
  y = columns
@@ -69,7 +69,7 @@ vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 }
 
 
-/*
+/** 
  Read n elements
  x = rows
  y = columns
@@ -99,7 +99,7 @@ vfd m5d_read_elems(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 
 
 
-/*
+/** 
  Swap rows in a matrix;  Finish the else statement here
  */
 void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
@@ -120,7 +120,7 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
 }
 
 
-/*
+/** 
  
  */
 
@@ -141,7 +141,7 @@ void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u , vec m)
 }
 
 
-/*
+/** 
  
  */
 
@@ -155,7 +155,7 @@ vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width)
      
 }
 
-/*
+/** 
  
  */
 
@@ -174,7 +174,7 @@ vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows)
     return rows;
 }
 
-/*
+/** 
  
  */
 
@@ -193,11 +193,11 @@ m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
     
 }
 
-/*
+/** 
  
  */
 
-/*
+/** 
  windows in m1ri_word rows * m1ri_word column incriments
  stvfd = the vfd or width offset from the base matrix
  strow = row offset in increments of 64
@@ -209,7 +209,7 @@ m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t siz
 {
     int i;
     m5d_t  submatrix;
-     /*c->width should not be compared twice */
+     /** c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {    
         return submatrix;
@@ -241,21 +241,33 @@ m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t siz
 
 void   m5d_window_create(m5d_t *c, m5d_t * submatrix, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t sizecols)
 {
-	int i;
-	 /*c->width should not be compared twice */
-    submatrix->nrows =   M1RI_RADIX * sizecols;
+     /** c->width should not be compared twice */
+    
+    if((strow + sizerows) > c->width)
+    {   
+        return;
+    }
+    
+    if((stvfd + sizecols) > c->width)
+    {
+        return;    
+    }
+    int f = strow * M1RI_RADIX;
+    int i;
+    submatrix->nrows =   M1RI_RADIX * sizerows;
     submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
-    submatrix->width = 1 * sizecols;
-    submatrix->block = &c->block[(stvfd * stvfd)];
+    submatrix->width =  sizecols;
+    submatrix->block =      m1ri_calloc(sizecols * sizerows, sizeof(m5d_t));
+    submatrix->block = &c->block[(strow * stvfd)];
     submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vfd *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svfd = stvfd;
-    
-    for(  i =   strow; i < strow + (M1RI_RADIX * sizerows) ; i++)
-    {
-    	submatrix->rows[i - strow] = c->rows[i];    
+   
+    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
+    {    
+        submatrix->rows[i - f] = c->rows[i] + stvfd;
     }
     
 }
@@ -273,7 +285,7 @@ vfd * m5d_rand(m5d_t * a)
 }
 
 
-/*
+/** 
  Make an Identity Matrix
  a = Identity matrix
  n = matrix size (row length and column width)
@@ -324,7 +336,7 @@ m5d_t  m5d_identity_set(m5d_t * a)
     return *a;
 }
 
-/*
+/** 
  Creates an Identity Matrix over GF(5)
  */
 m5d_t   m5d_identity(m5d_t  *a, rci_t n)
@@ -335,7 +347,7 @@ m5d_t   m5d_identity(m5d_t  *a, rci_t n)
     return *a;   
 }
 
-/*
+/** 
   Releases a m5d_t into the wilderness.
  */
 
@@ -356,18 +368,18 @@ void add_vfd(vfd * r, vfd * a, vfd * b)
     g = f | b->middle;
     h = f ^ a->sign;
     i = h | e;
-	r->sign = i; /**/
+	r->sign = i; /** */
     j = i ^ b->units;
     k = j ^ a->middle;
     l = k | c;
     m = l ^ e;
     n = m ^ g;
-	r->middle = n; /**/
+	r->middle = n; /** */
     o = m | d;
     p = o ^ c;
     q = p^n;
-    /**/r->units = q;
-	/*
+    /** */r->units = q;
+	/** 
 	more optimized? 
     vec c, d, e, f,   j,  m;
     c = b->units ^ a->units;
@@ -379,11 +391,11 @@ void add_vfd(vfd * r, vfd * a, vfd * b)
     m = ((j ^ a->middle)| c) ^ e;
 	r->middle  = m ^ (f | b->middle);
     r->units = ((m | d) ^ c)^(r->middle)) ;
-    /**/// = q;
-    /*
+    /** */// = q;
+    /** 
 	*/
     
-   /* def add(a,b):
+   /** * def add(a,b):
     c = b[0] ^ a[0]
     d = b[1] ^ a[1]
     e = b[2] ^ a[2]
@@ -415,7 +427,7 @@ void m5d_add2(vfd * r, vfd * a, vfd * b)
     g = d ^ a->sign;
     h = g | f;
     i = h | c;
-	r->sign = i; /**/
+	r->sign = i; /** */
     j = h | e;
     k = h ^ a->sign;
     l = k | b->middle;
@@ -426,7 +438,7 @@ void m5d_add2(vfd * r, vfd * a, vfd * b)
     p = o ^ f;
     q = p ^ e;
 	r->units = q;
-    /*
+    /** 
 	def add2(a,b):
     c = b[0] ^ a[1]
     d = b[1] ^ a[0]
@@ -467,7 +479,7 @@ void m5d_add2_i(vfd * a, vfd * b)
     q = p ^ e;
 	a->units = q;
 	a->sign = i;
-    /*
+    /** 
 	def add2(a,b):
     c = b[0] ^ a[1]
     d = b[1] ^ a[0]
@@ -512,7 +524,7 @@ void m5d_sub( vfd *r, vfd *a, vfd *b)
     q = p ^ a->middle;
     r->units = q;
     
-    /*
+    /** 
     def sub(a,b):
     c = b[0] ^ a[0]
     d = b[1] ^ a[1]
@@ -534,7 +546,7 @@ void m5d_sub( vfd *r, vfd *a, vfd *b)
 
 }
 
-/********************************************
+/** *******************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
 void iadd_vfd(vfd *r,vfd *x)
@@ -547,17 +559,17 @@ void iadd_vfd(vfd *r,vfd *x)
     g = f | x->middle;
     h = f ^ r->sign;
     i = h | e;
-	r->sign = i;  /*/
+	r->sign = i;  /** */
     j = i ^ x->units;
     k = j ^ r->middle;
     l = k | c;
     m = l ^ e;
     n = m ^ g;
-	r->middle = n; /**/
+	r->middle = n; /** */
     o = m | d;
     p = o ^ c;
     q = p^n;
-    r->sign = q; /**/
+    r->sign = q; /** */
    
 }
 
@@ -586,7 +598,7 @@ void m5d_sub_i(vfd *r,vfd *x)
        
 }
 
-/*
+/** 
 	Scalar Multiplication
 */
 vfd m5d_mul2(vfd a)
@@ -598,7 +610,7 @@ vfd m5d_mul2(vfd a)
     
     return a;
 }
-/*
+/** 
 	Scalar Multiplication
 */
 vfd m5d_mul3(vfd a)
@@ -610,7 +622,7 @@ vfd m5d_mul3(vfd a)
     
     return a;
 }
-/*
+/** 
 	Scalar Multiplication
 */
 vfd m5d_mul4(vfd a)
@@ -632,14 +644,16 @@ void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
         {
             for(j = 0; j < (a->width ); j++)
             {   
-                add_vfd(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+                add_vfd(c->rows[i] + j, a->rows[i] + j, &b->rows[i] + j);
             }
         }
         
     }
     
 }
-
+/**
+  Checks if an m5d_t is equal to another. 
+*/
 int m5d_equal(m5d_t const *a, m5d_t const *b)
 {
     
@@ -700,8 +714,7 @@ void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
 
 m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b)
 {
-
-    /*todo: Test this functions */
+    /** todo: Test this functions */
         for(int i = 0; i < a->nrows; i++)
         {
             m5d_sub(c->rows[i], a->rows[i], b->rows[i]);
