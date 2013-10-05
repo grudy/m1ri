@@ -26,13 +26,13 @@
 #include "m1ri_cubes.h"
 
 
- m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width)
+static inline m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width)
 {
     block  = m1ri_calloc(nrows *  width  ,   sizeof(m3d_t  ) );
     return block;
 }
 
- m3d_t ** m3_rowslice_allocate(m3d_t * block, m3d_t ** rows, wi_t width, rci_t nrows)
+ static inline m3d_t ** m3_rowslice_allocate(m3d_t * block, m3d_t ** rows, wi_t width, rci_t nrows)
 {
 	int i;
     rows = m1ri_calloc( nrows , width  * sizeof(m3d_t *));
@@ -92,7 +92,7 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
 }
 
 
-vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
+static inline vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
 {
     int i, x;
     vbg temp;
