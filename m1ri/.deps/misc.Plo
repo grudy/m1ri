@@ -1,0 +1,37 @@
+m1ri/misc.lo: m1ri/misc.c /usr/include/stdio.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/Availability.h \
+ /usr/include/AvailabilityInternal.h /usr/include/_types.h \
+ /usr/include/sys/_types.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/secure/_stdio.h \
+ /usr/include/secure/_common.h \
+ /opt/local/lib/gcc48/gcc/x86_64-apple-darwin12/4.8.1/include/stdarg.h \
+ m1ri/misc.h
+
+/usr/include/stdio.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/sys/_symbol_aliasing.h:
+
+/usr/include/sys/_posix_availability.h:
+
+/usr/include/Availability.h:
+
+/usr/include/AvailabilityInternal.h:
+
+/usr/include/_types.h:
+
+/usr/include/sys/_types.h:
+
+/usr/include/machine/_types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/secure/_stdio.h:
+
+/usr/include/secure/_common.h:
+
+/opt/local/lib/gcc48/gcc/x86_64-apple-darwin12/4.8.1/include/stdarg.h:
+
+m1ri/misc.h:

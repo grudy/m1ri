@@ -28,8 +28,6 @@
 #define M1RIGF3_STRASSEN_H
 #include <m1ri/m1ri_3dt.h>
 #include <m1ri/m1riarith.h>
-#include <m1ri/m1ri_small.h>
-#include <m1ri/m1ri_cubes.h>
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>
 #include <m1ri/m1ri_io.h>
@@ -41,23 +39,23 @@ void  m3d_strassen(m3d_t *, m3d_t *, m3d_t*);
 /**
 	This handles the arithmetic of m3d_strassen
 */
-//void m3d_qrt_mul(m3d_t * ,m3d_t *, m3d_t *  );
-/**
-	Strassen  algorithm on an m5d_t
-*/
+
 void m5d_strassen(m5d_t * ,m5d_t *, m5d_t *);
 /**
 	This handles the arithmetic of m5d_strassen
-*/
-void m5d_qrt_mul(m5d_t * ,m5d_t *, m5d_t *  );
-/**
+
 	Strassen  algorithm on an m7d_t
 */
 void m7d_strassen(m7d_t * ,m7d_t *, m7d_t *);
-/**
-	This handles the arithmetic of m7d_strassen
-*/
-void m7d_qrt_mul(m7d_t * ,m7d_t *, m7d_t *  );
+
+
+
+void m3d_mul_naive_square(m3d_t *, m3d_t  * , m3d_t  *);
+void m3d_classic_mul(m3d_t *,  m3d_t  * , m3d_t  *);
+void m5d_mul_naive_square(m5d_t *, m5d_t  * , m5d_t  *);
+void m5d_classic_mul(m5d_t *,  m5d_t  * , m5d_t  *);
+void m7d_mul_naive_square(m7d_t *, m7d_t  * , m7d_t  *);
+void m7d_classic_mul(m7d_t *,  m7d_t  * , m7d_t  *);
 
 #endif
 

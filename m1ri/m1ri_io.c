@@ -30,7 +30,7 @@
  l_unused = space to the left of block unused in the matrix
  r_unused =  space to the right of block unused in the matrix
  */
-void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
+static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
 {
 	int x;
     bool out;
@@ -59,7 +59,7 @@ void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
 /**  
 	The function is  to print m3d_t
 */
-void m3d_print(m3d_t *a)
+ void m3d_print(m3d_t *a)
 {
     int i, m;
     printf("\n \n"); 
@@ -189,7 +189,7 @@ void m5d_print(m5d_t *a)
     printf("\n \n \n ");
 }
 
-void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
+static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
 {
     u_int64_t out[3];
     short value, x ;

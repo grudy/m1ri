@@ -40,6 +40,8 @@ typedef struct {
 } vtri;
 
 
+
+
 /** 
  GF(7) Matrix structure
  GF7
@@ -77,6 +79,10 @@ typedef struct {
     
     
 } m7d_t;
+
+
+
+
 
 
 /** 
@@ -174,6 +180,22 @@ vtri vtri_mul_4(vtri);
 vtri vtri_mul_5(vtri);
 vtri vtri_mul_6(vtri);
 
+
+
+/*Pointers to submatrices*/
+typedef struct
+{
+     
+    m7d_t * block;
+    m7d_t ** row;
+    wi_t slicesize;// (slicesize ^ 2) * 64
+    wi_t width;   ///width in slices horizaontally per row
+    rci_t nrows;
+    rci_t ncols;
+    
+}m7_slice;
+
+
 // negate  r0, r1, r2 ← a0, a1, a2
 
 /** *******************************************
@@ -189,4 +211,35 @@ void m7d_add_4r( vtri *, vtri *);
 m7d_t   m7d_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
 void   m7d_window_create(m7d_t *, m7d_t * , rci_t , rci_t , rci_t , rci_t);
 
+
+void  m7d_slices(m7_slice *  , m7d_t * , wi_t );
+
+/**
+A direct transpose, using no windows
+*/
+void  m7d_quarter(m7_slice *  , m7d_t * );
+//vbg * m7d_transpose_vbg(vbg  ** , vbg **);  static inline this
+
+m7d_t m7d_transpose_sliced(m7d_t * );
+m7d_t  * m7_blockslice_allocate(m7d_t * , rci_t  ,  wi_t  );
+m7d_t ** m7_rowslice_allocate(m7d_t * , m7d_t ** , wi_t , rci_t );
+
+
+/*These are for  the method of four Russians */
+
+/*
+void *  m7d_combine3(vtri *, vtri * );
+void m7d_combine4(vtri *, vtri * );
+void m7d_combine5(vtri *, vtri * );
+void m7d_combine6(vtri *, vtri * );
+void m7d_combine7(vtri *, vtri * );
+void m7d_combine8(vtri *, vtri *);
+*/
+
+
+void m7d_mul_64(vtri **, vtri **, vtri **);
+void m7d_mul_32(vtri *, vtri *, vtri *);
+void m7d_mul_16(vtri *, vtri *, vtri *);
+void m7d_mul_8(vtri *, vtri *, vtri *);
+void m7d_mul_4(vtri *R, vtri *A, vtri *B);
 #endif

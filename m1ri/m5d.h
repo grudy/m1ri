@@ -91,7 +91,7 @@ typedef struct m5d_t{
     u_int32_t fcol;  //column offset of first block
  
     u_int8_t flags;
-	vec  svfd;   //Identifies first vbg used in row
+	vec  svfd;   //Identifies first vfd used in row
  
     u_int32_t  lblock; //  first block pointed to in a window
     
@@ -100,6 +100,28 @@ typedef struct m5d_t{
 } m5d_t;
 
  
+ 
+typedef struct
+{
+	/** 
+	
+	 */
+    m5d_t * block;
+    /** 
+    (slicesize ^ 2) * 64
+    */
+    m5d_t ** row;
+    // (slicesize ^ 2) * 64
+    wi_t slicesize;
+    //width in slices horizaontally per row
+    wi_t width;   
+    rci_t nrows;
+    rci_t ncols;
+    
+}m5_slice;
+
+
+
 
 #endif
 
@@ -218,5 +240,39 @@ vfd m5d_mul2(vfd);
 vfd m5d_mul3(vfd);
 vfd m5d_mul4(vfd);
 
+/* These Functions are expanded upon Toms 
+ implementation of the method of four RUSSIANS
+ */
+void *  m5d_combine3(vfd *, vfd * );
+void m5d_combine4(vfd *, vfd * );
+void m5d_combine5(vfd *, vfd * );
+void m5d_combine6(vfd *, vfd * );
+void m5d_combine7(vfd *, vfd * );
+void m5d_combine8(vfd *, vfd *);
+
+/* ****************************************************************************
+								GF(5) base cases for multiplication
+**************************************************************************** */
+
+void m5d_mul_64(vfd **, vfd **, vfd **);
+void m5d_mul_32(vfd *, vfd *, vfd *);
+void m5d_mul_16(vfd *, vfd *, vfd *);
+void m5d_mul_8(vfd *, vfd *, vfd *);
+void m5d_mul_4(vfd *R, vfd *A, vfd *B);
+vfd * m5d_transpose_vfd(vfd  **, vfd **);
+
+
+
+
+/*	These functions work with lots of partitions*/
+ 
+/*Pointers to submatrices*/
+
+
+void  m5d_slices(m5_slice *  , m5d_t * , wi_t );
+void  m5d_quarter(m5_slice *  , m5d_t * );
+m5d_t m5d_transpose_sliced(m5d_t * );
+m5d_t  * m5_blockslice_allocate(m5d_t * , rci_t  ,  wi_t  );
+m5d_t ** m5_rowslice_allocate(m5d_t * , m5d_t ** , wi_t , rci_t );
 
 #endif

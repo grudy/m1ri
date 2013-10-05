@@ -26,7 +26,7 @@
 
 #include "m1ri_3dt.h"
 #include "m1riarith.h"
-#include "m1ri_classical.h"
+
 
 void * m3d_rowswap (m3d_t * M, rci_t row_a, rci_t  row_b)
 {
@@ -466,4 +466,123 @@ void m3d_free( m3d_t *  tofree)
     m1ri_free(tofree->block);
 }
 
+
+
+
+
+static inline m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width)
+{
+    block  = m1ri_calloc(nrows *  width  ,   sizeof(m3d_t  ) );
+    return block;
+}
+
+ static inline m3d_t ** m3_rowslice_allocate(m3d_t * block, m3d_t ** rows, wi_t width, rci_t nrows)
+{
+	int i;
+    rows = m1ri_calloc( nrows , width  * sizeof(m3d_t *));
+    for ( i = 0; i <  nrows;  i++ )
+    {
+        rows[i]  = block + (i * width);
+    };
+    return rows;
+}
+
+
+
+void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
+{
+    wi_t l,  r,  colroundeddown;
+    int  i,  f,extrarows ,  extracols;
+    extracols = a->width%slicesize;
+    colroundeddown = a->width/slicesize;
+    c->width = a->width;
+    extrarows = a->nrows%(  slicesize);
+    c->nrows = M1RI_DN(a->nrows, (M1RI_RADIX * slicesize));
+    c->ncols = M1RI_DN(a->width, slicesize);
+    l = a->nrows / (M1RI_RADIX * slicesize);
+    l = l * slicesize;
+    c->slicesize = slicesize;
+ 	c->block = m3_blockslice_allocate(c->block,  c->nrows,   c->width);
+    c->row = m3_rowslice_allocate(c->block,  c->row,   c->width, c->nrows);
+    r = 0 ;
+     
+    for ( i = 0; i <  l;  i = i + slicesize)
+    {       
+    	for( f = 0; f <colroundeddown ; f++)
+        {
+        	m3d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, slicesize);
+        }
+        
+        if(extracols > 0)
+        {
+        	m3d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, extracols);
+		}
+        r++;
+        
+    }
+    
+    if(extrarows >0 )
+    {
+		for( f = 0; f <colroundeddown ; f++)
+        {
+           m3d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, slicesize);
+        }
+
+    	if(extracols > 0)
+    	{
+           m3d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, extracols);
+    	}
+    }
+}
+
+
+static inline vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
+{
+    int i, x;
+    vbg temp;
+    for(i = 0; i <64; i ++)
+    {
+        for(x = 0; x < 64; x ++)
+        {
+          temp.units =  (a[x][0].units & (leftbit >> i) );
+          temp.sign =  (a[x][0].sign & (leftbit >> i) );
+          b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
+          b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
+        }
+    }
+    return *b;
+}
+
+m3d_t m3d_transpose_sliced(m3d_t * a)
+{
+    int x, y;
+    m3d_t c;
+    c = m3d_create(&c, a->ncols, a->nrows);
+    m3_slice * b, *d;
+    d = malloc(sizeof(m3_slice));
+    b = malloc(sizeof(m3_slice));
+    m3d_slices(b, a, 1);
+    m3d_slices(d, &c, 1);
+    for (x = 0; x < b->nrows; x++) {
+        for (y = 0; y < b->ncols; y ++) {
+         m3d_transpose_vbg(b->row[x][y].rows, d->row[y][x].rows);
+            
+        }
+    }
+    return c;
+  
+}
+
+void m3d_quarter(m3_slice * c , m3d_t * a)
+{
+	
+	//int arows, acols;
+	c->block = m3_blockslice_allocate(c->block,  2,   2);
+    c->row = m3_rowslice_allocate(c->block,  c->row,   2, 2);
+    m3d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/128, a->ncols/128);
+	m3d_window_create(a, &c->row[0][1], 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+    m3d_window_create(a, &c->row[1][0], a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	m3d_window_create(a, &c->row[1][1], a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+    
+}
 

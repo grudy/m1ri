@@ -66,6 +66,21 @@ typedef struct {
 } m3d_t;
 
 
+typedef struct
+{
+
+    m3d_t * block;
+    m3d_t ** row;
+    wi_t slicesize;// (slicesize ^ 2) * 64
+    wi_t width;   ///width in slices horizaontally per row
+    rci_t nrows;
+    rci_t ncols;
+    
+}m3_slice;
+
+
+
+
 /***
  Read n bits from a s portion of an element
  x = rows
@@ -185,6 +200,22 @@ int m3d_equal(m3d_t const  *, m3d_t const  *);
 void m3d_copypadding(m3d_t  * , m3d_t const * );
 void m3d_putpadding(m3d_t  * , m3d_t const * );
 void m3d_free( m3d_t *  );
+
+
+
+
+/* ****************************************************** 
+	These functions work with large amounts of 
+	partitions
+****************************************************** 
+*/
+void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
+
+//A direct transpose, using no windows
+
+void  m3d_quarter(m3_slice *  , m3d_t * );
+
+m3d_t m3d_transpose_sliced(m3d_t * );
 
 
 #endif
