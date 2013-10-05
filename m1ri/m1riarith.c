@@ -29,7 +29,7 @@
 
 
 
-void add_vbg(vbg * r, vbg const * x, vbg const * y)
+inline void add_vbg(vbg * r, vbg const * x, vbg const * y)
 
 {
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
