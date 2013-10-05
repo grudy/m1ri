@@ -18,30 +18,44 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
- m7d_tests.c
+ m1ri_hadamard.c
  */
 
+
 #include <m1ri/m1ri.h>
-#include "time.h"
+#include <time.h>
 int main(int argc, const char * argv[])
 {
-    
-    
-    m7d_t * a, * b, *c,  *d, *e, *f, *g, *h, *i;
-    a =  m1ri_malloc(sizeof(m7d_t));
-    b = m1ri_malloc(sizeof(m7d_t));
-    c = m1ri_malloc(sizeof(m7d_t));
-    d =  m1ri_malloc(sizeof(m7d_t));
-    e =  m1ri_malloc(sizeof(m7d_t));
-    f = m1ri_malloc(sizeof(m7d_t));
-    g = m1ri_malloc(sizeof(m7d_t));
-    h = m1ri_malloc(sizeof(m7d_t));
+    int isequal;
+    m7d_t * a, * b,  *d, *e, *f, *g, *h, *i, *j, *k;
+    a = m1ri_malloc(sizeof(m7d_t));
+    b  = m1ri_malloc(sizeof(m7d_t));
+    d = m1ri_malloc(sizeof(m7d_t));
+     e = m1ri_malloc(sizeof(m7d_t));
+     f =  m1ri_malloc(sizeof(m7d_t));
+     g  = m1ri_malloc(sizeof(m7d_t));
+     h = m1ri_malloc(sizeof(m7d_t));
     i = m1ri_malloc(sizeof(m7d_t));
+    j = m1ri_malloc(sizeof(m7d_t));
+	k = m1ri_malloc(sizeof(m7d_t));
+    
+    
     m7d_rand(a);
+    
     m7d_rand(b);
-    m7d_rand(c);
+    isequal = m7d_equal(a, b);
+    if(isequal)
+    {
+        printf("Equaltest: passed ");
+        
+    }
     
-    
+    if(!isequal)
+    {
+        printf("Equaltest: failed ");
+        return 1;
+        
+    }
     
     m7d_t test_m7d_output  = m7d_create( &test_m7d_output, 3   ,3);
     
@@ -49,12 +63,12 @@ int main(int argc, const char * argv[])
     
     m7d_print(&test_m7d_output);
     
-    m7d_write_elem(&test_m7d_output, 1, 1, 1, 0, 1);
+    m7d_write_elem(&test_m7d_output, 1, 1, 1, 1, 1);
     
     
     m7d_identity(d,64);
     m7d_identity(e,64);
-    int isequal = m7d_equal(d, e);
+    isequal = m7d_equal(d, e);
     
     if(isequal)
     {
@@ -70,18 +84,29 @@ int main(int argc, const char * argv[])
     }
     m7d_print(&test_m7d_output);
     
+    
     m7d_create(f, 256, 256);
     m7d_create(g, 256, 256);
-     m7d_create(h, 256, 256);
-	m7d_window_create(f, i, 0, 0, 64, 64);
+    m7d_create(h, 256, 256);
+    m7d_create(i, 256, 256);
+    m7d_create(j, 256, 256);
+    m7d_create(k, 256, 256);
+    
+    
     m7d_rand(f);
     m7d_rand(g);
-   	
-   	m7d_classic_mul(h, f, g);
-   //	 m7d_strassen(h, f, g);
-   	 m7d_print(g);
-   m7d_print(h);
+    m7d_rand(i);
+    m7d_rand(j);
     
+    
+   
+  	m7d_strassen(h, f, g);
+  	
+    m7d_print(h);
+	
+	m7d_classic_mul(k, i, j);
+	m7d_print(k);
+	
+	
     return 0;
 }
-

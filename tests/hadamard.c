@@ -40,7 +40,7 @@ int main(int argc, const char * argv[])
     
     plenitude = m3d_create(&bunches, 16384, 16384);
     bunches  = m3d_create(&plenitude,  16384, 16384);
-	 m3d_create(oodles, 16384, 16384);
+	m3d_create(oodles, 16384, 16384);
     plenitude  = m3d_rand(&plenitude);
     bunches  = m3d_rand(&bunches);
    oodles =  m3d_hadamard(&plenitude, &bunches);
