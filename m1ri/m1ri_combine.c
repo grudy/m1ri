@@ -100,7 +100,7 @@ void m3d_combine4(vbg *table, vbg *input )
 }
 
 
-void m3d_combine5(vbg *table, vbg *input )
+inline void m3d_combine5(vbg *table, vbg *input )
 {
 	int i;
     vbg e, *t4;
@@ -116,7 +116,7 @@ void m3d_combine5(vbg *table, vbg *input )
 }
 
 
-void m3d_combine6(vbg *table, vbg *input )
+inline void m3d_combine6(vbg *table, vbg *input )
 
 {
     vbg f, *t5;

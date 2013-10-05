@@ -29,7 +29,7 @@
 
 
 
-void add_vbg(vbg * r, vbg const * x, vbg const * y)
+inline void add_vbg(vbg * r, vbg const * x, vbg const * y)
 
 {
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
@@ -39,7 +39,7 @@ void add_vbg(vbg * r, vbg const * x, vbg const * y)
 /** 
 
 */
-vbg add_m3dr(vbg  x, vbg const y)
+inline vbg add_m3dr(vbg  x, vbg const y)
 { 
     vec t;
     x.sign  = y.units ^ x.sign;
@@ -49,7 +49,7 @@ vbg add_m3dr(vbg  x, vbg const y)
     return x; 
 }
 
-void sub_m3d( vbg *r, vbg const *x, vbg const *y)
+inline void sub_m3d( vbg *r, vbg const *x, vbg const *y)
 {
     r->units = ((x->units^y->units) | (x->sign^y->sign));
     r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
@@ -70,7 +70,7 @@ vbg sub_m3dr(vbg const x, vbg const y)
     return r;
 }
 
-void iadd_vbg(vbg *r,vbg  	 *x)
+inline void iadd_vbg(vbg *r,vbg  	 *x)
 {
     vec t;
     t = x->units ^ r->sign;
@@ -81,7 +81,7 @@ void iadd_vbg(vbg *r,vbg  	 *x)
     r->units = t | r->units;
 }
 
-void isub_m3d(vbg  *r,vbg  *x)
+inline void isub_m3d(vbg  *r,vbg  *x)
 {
     vec t;
     r->units = x->units ^ r->units;

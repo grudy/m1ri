@@ -201,7 +201,7 @@ void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
         
     	if((out[2]  ==  out[1]) & (out[1] == out[0]))
        	{
-       	printf("[ 0 ]", value);	
+       	printf("[ 0 ]");	
        	}
        
         else

@@ -689,7 +689,7 @@ void m5d_add_64(vfd **R, vfd   **A, vfd  **B)
 
 void m5d_copypadding(m5d_t  * r, m5d_t  const * x)
 {
-		int i, s;
+		int  s;
         for(int i = 0; i < x->nrows; i++)
         {
 			for( s = 0; s < x->width; s++)
@@ -712,7 +712,7 @@ void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
         
 }
 
-m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b)
+/*void*/ m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b)
 {
     /** todo: Test this functions */
         for(int i = 0; i < a->nrows; i++)
@@ -739,7 +739,7 @@ void m5d_sub_r(m5d_t * c ,m5d_t  * a , m5d_t * b)
     }
 }
 
-m5d_sub_d(m5d_t  * a , m5d_t * b)
+void m5d_sub_d(m5d_t  * a , m5d_t * b)
 {
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {

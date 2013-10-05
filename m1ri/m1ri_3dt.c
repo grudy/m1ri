@@ -332,13 +332,14 @@ void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, 
 /** 
  Concat b on the end of a, the result is c 
  [a] [b] ----->  [a b]   ===  C
- /** This function still needs work*/
+ */
+ /* This function still needs work*/
  
 m3d_t m3d_concat(m3d_t * c, m3d_t * a, m3d_t * b)
 {
     if (a->nrows != b->nrows)
     {
-        /** if concat hath failed*/
+        /* if concat hath failed*/
         return *c;  
     }
     
@@ -377,7 +378,7 @@ m3d_t m3d_stack(m3d_t * c,  m3d_t * a, m3d_t * b)
 {
     if (a->ncols != b->ncols)
     {
-        /** If a stacked matrix cannot be created*/
+        /* If a stacked matrix cannot be created*/
         return *c;
     }
     

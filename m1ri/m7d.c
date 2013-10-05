@@ -614,7 +614,7 @@ void m7d_sub( m7d_t *r, m7d_t  *x, m7d_t  *y)
     {
         for(n = 0; n < x->width; n++)
         {
-		    m7d_vtri_sub(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
+		    //m7d_vtri_sub(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
         }
     }
 
@@ -645,8 +645,8 @@ int m7d_equal(m7d_t const *a, m7d_t const *b)
 
 void m7d_copypadding(m7d_t  * r, m7d_t  const * x)
 {
-		int i, s;
-        for( i = 0; i < x->nrows; i++)
+		int s;
+        for(int i = 0; i < x->nrows; i++)
         {
         	for( s = 0; s < x->width; s++)
         	{

@@ -41,7 +41,7 @@ void  m3d_strassen(m3d_t *, m3d_t *, m3d_t*);
 /**
 	This handles the arithmetic of m3d_strassen
 */
-void m3d_qrt_mul(m3d_t * ,m3d_t *, m3d_t *  );
+//void m3d_qrt_mul(m3d_t * ,m3d_t *, m3d_t *  );
 /**
 	Strassen  algorithm on an m5d_t
 */

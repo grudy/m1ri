@@ -463,8 +463,9 @@ void m7d_mul_64(vtri **R, vtri **A, vtri **B)
     for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
     {
         a = A[i][0];
-        v2 = a.sign;
-    	v1 = (a.units ^ v2);
+ 		v2 = a.middle;
+        v3 = a.sign;
+        v1 = a.units;
         r1 = tables6[0][v1&63];
         v1 >>= 6;
         r2 = tables6[0][v2&63];

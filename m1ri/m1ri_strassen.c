@@ -29,7 +29,7 @@
 	Multiplies m3d_t matrices in squares.  
 	Not to be used directly, but called by m3d_strassen
 */
-void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
+static inline void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
 {
     m3d_t * x1;
     m3d_t * x2;
@@ -124,7 +124,7 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		lastb = 64 -  b->ncols%64;  
 		lastboth = 64 - a->nrows; 
 
-		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (bccc))
+		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (b->ncols))
 		{
 		m3d_t * padded_a  = m1ri_malloc(sizeof(m3d_t));
 		m3d_t  * padded_b  = m1ri_malloc(sizeof(m3d_t));
@@ -258,7 +258,7 @@ void  m5d_strassen(m5d_t *c, m5d_t  *a, m5d_t   *b)
 		lastboth = 64 - a->nrows; 
 	
 		
-		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (bccc))
+		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (b->ncols))
 		{
 		
 		m5d_t * padded_a  = m1ri_malloc(sizeof(m5d_t));
@@ -303,8 +303,8 @@ void m7d_qrt_mul(m7d_t * c,m7d_t *a, m7d_t * b )
     x1 = m1ri_malloc(sizeof(m7d_t));
     x2 = m1ri_malloc(sizeof(m7d_t));
     m7_slice  a_slice, b_slice, c_slice;
-    m7d_create(x1, c->nrows, c->ncols);
-    m7d_create(x2, c->nrows, c->ncols);
+    m7d_create(x1, c->nrows/2, c->ncols/2);
+    m7d_create(x2, c->nrows/2, c->ncols/2);
     m7d_quarter(&a_slice, a);
     m7d_quarter(&b_slice, b);
     m7d_quarter(&c_slice, c);
@@ -336,8 +336,8 @@ void m7d_qrt_mul(m7d_t * c,m7d_t *a, m7d_t * b )
         m7d_add_r(&c_slice.row[0][0], x1,&c_slice.row[0][0] );
         
     }
-    
-    else if((c_slice.row[0][0].ncols ) == M1RI_RADIX)
+   
+    else  if((c_slice.row[0][0].ncols ) == M1RI_RADIX)
     {
 		m7d_sub_64(x1->rows, a_slice.row[0][0].rows, a_slice.row[1][0].rows);  //1
         m7d_sub_64(x2->rows,b_slice.row[1][1].rows,b_slice.row[0][1].rows) ;  //2
@@ -376,9 +376,11 @@ void  m7d_strassen(m7d_t *c, m7d_t  *a, m7d_t   *b)
         m7d_create( c, a->nrows, b->ncols); 
       	// These hold the padded matrix sizes
 		u_int32_t  arcr, acbr, bccc;
-		a->nrows = arcr;
-		a->ncols = acbr;
-		b->ncols = bccc;
+		arcr = a->nrows;
+		acbr = a->ncols;
+		bccc = b->ncols;
+		
+
 
 		arcr =  powerof2(arcr);
 		acbr =  powerof2(acbr);
@@ -392,7 +394,7 @@ void  m7d_strassen(m7d_t *c, m7d_t  *a, m7d_t   *b)
 		
 		
 
-		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (bccc))
+		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (b->ncols))
 		{
 		m7d_t * padded_a  = m1ri_malloc(sizeof(m7d_t));
 		m7d_t  * padded_b  = m1ri_malloc(sizeof(m7d_t));
