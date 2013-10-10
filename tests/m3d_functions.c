@@ -23,6 +23,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 
 #include <m1ri/m1ri.h>
 #include "time.h"
+#include <omp.h>
 int main(int argc, const char * argv[])
 {
  
@@ -132,6 +133,14 @@ int main(int argc, const char * argv[])
     
     m3d_print(&c);
     
+//#pragma omp parallel
+	{ 
+    	//for(long long i = 0; i < 100000000; i++)
+    	//{
+    		//printf("Hello World\n");
+    
+    	//}
+	}
     
 
     

@@ -29,7 +29,7 @@
 
 
 
-inline void add_vbg(vbg * r, vbg const * x, vbg const * y)
+static inline void add_vbg(vbg * r, vbg const * x, vbg const * y)
 
 {
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
@@ -39,7 +39,7 @@ inline void add_vbg(vbg * r, vbg const * x, vbg const * y)
 /** 
 
 */
-inline vbg add_m3dr(vbg  x, vbg const y)
+static inline vbg add_m3dr(vbg  x, vbg const y)
 { 
     vec t;
     x.sign  = y.units ^ x.sign;
@@ -70,7 +70,7 @@ vbg sub_m3dr(vbg const x, vbg const y)
     return r;
 }
 
-inline void iadd_vbg(vbg *r,vbg  	 *x)
+static inline void iadd_vbg(vbg *r,vbg  *x)
 {
     vec t;
     t = x->units ^ r->sign;
@@ -81,7 +81,7 @@ inline void iadd_vbg(vbg *r,vbg  	 *x)
     r->units = t | r->units;
 }
 
-inline void isub_m3d(vbg  *r,vbg  *x)
+static inline void isub_m3d(vbg  *r,vbg  *x)
 {
     vec t;
     r->units = x->units ^ r->units;
@@ -235,7 +235,7 @@ void *  m3d_combine3(vbg *table, vbg *input )
 }
 
 
-void m3d_combine4(vbg *table, vbg *input )
+static inline void m3d_combine4(vbg *table, vbg *input )
 {
     vbg t, a, b, c , d;
     t.sign = t.units = 0;
@@ -283,7 +283,7 @@ void m3d_combine4(vbg *table, vbg *input )
 }
 
 
-inline void m3d_combine5(vbg *table, vbg *input )
+static inline void m3d_combine5(vbg *table, vbg *input )
 {
 	int i;
     vbg e, *t4;
@@ -299,7 +299,7 @@ inline void m3d_combine5(vbg *table, vbg *input )
 }
 
 
-inline void m3d_combine6(vbg *table, vbg *input )
+static inline void m3d_combine6(vbg *table, vbg *input )
 
 {
     vbg f, *t5;
@@ -313,7 +313,7 @@ inline void m3d_combine6(vbg *table, vbg *input )
     
 }
 
-void m3d_combine7(vbg *table, vbg *input )
+static inline void m3d_combine7(vbg *table, vbg *input )
 
 {
     

@@ -29,33 +29,99 @@
 	Multiplies m3d_t matrices in squares.  
 	Not to be used directly, but called by m3d_strassen
 */
+
+
+/**
+	Recursive Matrix Multiplication over GF(3), on a square matrix.
+*/
+static inline void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
+{
+	
+	m3d_t  x1, x2; 
+  	m3_slice *  a_slice, *  b_slice, *  c_slice;
+	a_slice =  m1ri_malloc(sizeof(m3_slice));
+	b_slice =   m1ri_malloc(sizeof(m3_slice));
+	c_slice = m1ri_malloc(sizeof(m3_slice));
+   	m3d_quarter(a_slice, a);
+   //m3d_print(a_slice->row[0][0]);
+    m3d_quarter(b_slice, b);
+    m3d_quarter(c_slice, c);
+   
+    if((c_slice->row[0][0].ncols) > M1RI_RADIX)
+    {
+     
+    	m3d_create(&x1, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    
+     	m3d_create(&x2, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    	   
+    	m3d_mul_naive_square(&x1, &a_slice->row[0][0], &b_slice->row[0][0]);
+    	m3d_mul_naive_square(&x2, &a_slice->row[0][1], &b_slice->row[1][0]);
+	    m3d_add_r(&c_slice->row[0][0], &x1, &x2) ; 
+		m3d_mul_naive_square(&x1, &a_slice->row[0][0], &b_slice->row[0][1]);
+       	m3d_mul_naive_square(&x2, &a_slice->row[0][1], &b_slice->row[1][1]);
+    	m3d_add_r(&c_slice->row[0][1], &x1, &x2) ;
+	    m3d_mul_naive_square(&x1, &a_slice->row[1][0], &b_slice->row[0][0]);
+      	m3d_mul_naive_square(&x2, &a_slice->row[1][1], &b_slice->row[1][0]);
+       	m3d_add_r(&c_slice->row[1][0], &x1, &x2); 
+	    m3d_mul_naive_square(&x1, &a_slice->row[1][0], &b_slice->row[0][1]);
+		m3d_mul_naive_square(&x2, &a_slice->row[1][1], &b_slice->row[1][1]); 
+ 	    m3d_add_r(&c_slice->row[1][1], &x1, &x2) ;
+	
+    }
+   
+    else if((c_slice->row[0][0].ncols ) <= M1RI_RADIX)
+    {
+    	m3d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
+		m3d_create(&x2, M1RI_RADIX, M1RI_RADIX);
+   	 	m3d_mul_64(x1.rows, a_slice->row[0][0].rows, b_slice->row[0][0].rows);
+    	m3d_mul_64(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][0].rows);
+  	    m3d_add_64(c_slice->row[0][0].rows, x1.rows, x2.rows) ;
+        m3d_mul_64(x1.rows,  a_slice->row[0][0].rows, b_slice->row[0][1].rows );
+        m3d_mul_64(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][1].rows);
+		m3d_add_64(c_slice->row[0][1].rows, x1.rows, x2.rows) ; 
+       	m3d_mul_64(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][0].rows);
+       	m3d_mul_64(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][0].rows);
+     	m3d_add_64(c_slice->row[1][0].rows, x1.rows, x2.rows); 
+        m3d_mul_64(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][1].rows);
+        m3d_mul_64(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][1].rows); 
+		m3d_add_64(c_slice->row[1][1].rows, x1.rows, x2.rows); 
+	
+    }
+
+}
+
+
 static inline void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
 {
-    m3d_t * x1;
-    m3d_t * x2;
-    x1 = m1ri_malloc(sizeof(m3d_t));
-    x2 = m1ri_malloc(sizeof(m3d_t));
-    m3_slice  a_slice, b_slice, c_slice;
-    m3d_create(x1, c->nrows/2, c->ncols/2);
-    m3d_create(x2, c->nrows/2, c->ncols/2);
-    m3d_quarter(&a_slice, a);
-    m3d_quarter(&b_slice, b);
-    m3d_quarter(&c_slice, c);
-    
-    if((c_slice.row[0][0].ncols) > M1RI_RADIX)
+  		m3d_t * x1;
+    	m3d_t * x2;
+    	x1 = m1ri_malloc(sizeof(m3d_t));
+    	x2 = m1ri_malloc(sizeof(m3d_t));
+    	m3_slice  a_slice, b_slice, c_slice;
+    	m3d_create(x1, c->nrows/2, c->ncols/2);
+    	m3d_create(x2, c->nrows/2, c->ncols/2);
+    	m3d_quarter(&a_slice, a);
+   		m3d_quarter(&b_slice, b);
+   		m3d_quarter(&c_slice, c);
+   		
+
+	if((c->ncols) > (M1RI_RADIX << 1))
     {
-       
+     
+      #pragma omp parallel sections
+       {
+        #pragma omp parallel
         m3d_sub(x1, &a_slice.row[0][0], &a_slice.row[1][0]);  //1
         m3d_sub(x2,&b_slice.row[1][1],&b_slice.row[0][1]);  //2
         m3d_qrt_mul(&c_slice.row[1][0], x1, x2);  //3
         m3d_add_r(x1,&a_slice.row[1][0],&a_slice.row[1][1]);  //4
         m3d_sub(x2,&b_slice.row[0][1],&b_slice.row[0][0]);  //5
         m3d_qrt_mul(&c_slice.row[1][1], x1, x2);    //6
+        #pragma omp parallel
         m3d_sub(x1,x1,&a_slice.row[0][0]);//7
         m3d_sub(x2,&b_slice.row[1][1],x2);  //8
         m3d_qrt_mul(&c_slice.row[0][1],x1,x2); //9
         m3d_sub(x1,&a_slice.row[0][1],x1);    //10
         m3d_qrt_mul(&c_slice.row[0][0],x1,&b_slice.row[1][1]);   //11
+        #pragma omp parallel
         m3d_qrt_mul(x1, &a_slice.row[1][1], &b_slice.row[1][1]);  //12
         m3d_add_r(&c_slice.row[0][1],x1 , &c_slice.row[0][1]);   //13
         m3d_add_r(&c_slice.row[1][0],&c_slice.row[0][1] , &c_slice.row[1][0]);   //14
@@ -63,15 +129,20 @@ static inline void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
         m3d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);    //16
         m3d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);  //17
         m3d_sub(x2, x2, &b_slice.row[1][0]);            //18
+        #pragma omp parallel
         m3d_qrt_mul(&c_slice.row[1][0], &a_slice.row[1][1], x2);            //19
         m3d_sub(&c_slice.row[1][0], &c_slice.row[1][0], &c_slice.row[0][0]);  //20
         m3d_qrt_mul(&c_slice.row[0][0], &a_slice.row[0][1], &b_slice.row[1][0]);
         m3d_add_r(&c_slice.row[0][0], x1,&c_slice.row[0][0] );
-        
+        m1ri_free(x1);
+    	m1ri_free(x2);
+       }	
     }
     
-    else if((c_slice.row[0][0].ncols ) == M1RI_RADIX)
+    else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
+		//m3d_mul_naive_square(c, a, b);
+		
 		m3d_sub_64(x1->rows, a_slice.row[0][0].rows, a_slice.row[1][0].rows);  //1
         m3d_sub_64(x2->rows,b_slice.row[1][1].rows,b_slice.row[0][1].rows) ;  //2
         m3d_mul_64(c_slice.row[1][0].rows, x1->rows, x2->rows);  //3
@@ -94,10 +165,10 @@ static inline void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
         m3d_sub_64(c_slice.row[1][0].rows, c_slice.row[1][0].rows,c_slice.row[0][0].rows);  //20
         m3d_mul_64(c_slice.row[0][0].rows, a_slice.row[0][1].rows,b_slice.row[1][0].rows);
         m3d_add_64(c_slice.row[0][0].rows, x1->rows,c_slice.row[0][0].rows) ; 
+        
     }
     
-    m1ri_free(x1);
-    m1ri_free(x2);
+  
 }
 
 /**
@@ -427,62 +498,7 @@ void  m7d_strassen(m7d_t *c, m7d_t  *a, m7d_t   *b)
 }
 
 
-/**
-	Recursive Matrix Multiplication over GF(3), on a square matrix.
-*/
-void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
-{
-	
-	m3d_t  x1, x2; 
-  	m3_slice *  a_slice, *  b_slice, *  c_slice;
-	a_slice =  m1ri_malloc(sizeof(m3_slice));
-	b_slice =   m1ri_malloc(sizeof(m3_slice));
-	c_slice = m1ri_malloc(sizeof(m3_slice));
-   	m3d_quarter(a_slice, a);
-   //m3d_print(a_slice->row[0][0]);
-    m3d_quarter(b_slice, b);
-    m3d_quarter(c_slice, c);
-   
-    if((c_slice->row[0][0].ncols) > M1RI_RADIX)
-    {
-     
-    	m3d_create(&x1, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    
-     	m3d_create(&x2, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    	   
-    	m3d_mul_naive_square(&x1, &a_slice->row[0][0], &b_slice->row[0][0]);
-    	m3d_mul_naive_square(&x2, &a_slice->row[0][1], &b_slice->row[1][0]);
-	    m3d_add_r(&c_slice->row[0][0], &x1, &x2) ; 
-		m3d_mul_naive_square(&x1, &a_slice->row[0][0], &b_slice->row[0][1]);
-       	m3d_mul_naive_square(&x2, &a_slice->row[0][1], &b_slice->row[1][1]);
-    	m3d_add_r(&c_slice->row[0][1], &x1, &x2) ;
-	    m3d_mul_naive_square(&x1, &a_slice->row[1][0], &b_slice->row[0][0]);
-      	m3d_mul_naive_square(&x2, &a_slice->row[1][1], &b_slice->row[1][0]);
-       	m3d_add_r(&c_slice->row[1][0], &x1, &x2); 
-	    m3d_mul_naive_square(&x1, &a_slice->row[1][0], &b_slice->row[0][1]);
-		m3d_mul_naive_square(&x2, &a_slice->row[1][1], &b_slice->row[1][1]); 
- 	    m3d_add_r(&c_slice->row[1][1], &x1, &x2) ;
-	
-    }
-   
-    else if((c_slice->row[0][0].ncols ) <= M1RI_RADIX)
-    {
-    	m3d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
-		m3d_create(&x2, M1RI_RADIX, M1RI_RADIX);
-   	 	m3d_mul_64(x1.rows, a_slice->row[0][0].rows, b_slice->row[0][0].rows);
-    	m3d_mul_64(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][0].rows);
-  	    m3d_add_64(c_slice->row[0][0].rows, x1.rows, x2.rows) ;
-        m3d_mul_64(x1.rows,  a_slice->row[0][0].rows, b_slice->row[0][1].rows );
-        m3d_mul_64(x2.rows, a_slice->row[0][1].rows, b_slice->row[1][1].rows);
-		m3d_add_64(c_slice->row[0][1].rows, x1.rows, x2.rows) ; 
-       	m3d_mul_64(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][0].rows);
-       	m3d_mul_64(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][0].rows);
-     	m3d_add_64(c_slice->row[1][0].rows, x1.rows, x2.rows); 
-        m3d_mul_64(x1.rows, a_slice->row[1][0].rows, b_slice->row[0][1].rows);
-        m3d_mul_64(x2.rows, a_slice->row[1][1].rows, b_slice->row[1][1].rows); 
-		m3d_add_64(c_slice->row[1][1].rows, x1.rows, x2.rows); 
-	
-    }
 
-}
 
 
 /***
@@ -501,7 +517,8 @@ void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 		arcr = a->nrows;
 		acbr = a->ncols;
 		bccc  = b->ncols;
-		
+	
+    
 		arcr =  powerof2(arcr);
 		acbr =  powerof2(acbr);
 		bccc =  powerof2(bccc);
@@ -555,7 +572,7 @@ void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 /**
 	Recursive Matrix Multiplication over GF(5), on a square matrix.
 */
-void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
+static inline void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
 {
 
   	m5_slice *  a_slice, *  b_slice, *  c_slice;
@@ -676,7 +693,7 @@ void m5d_classic_mul(m5d_t *c, m5d_t  *a, m5d_t  *b)
 	Recursive Matrix Multiplication over GF(5), on a square matrix.
 */
 
-void m7d_mul_naive_square(m7d_t *c, m7d_t *a, m7d_t *b)
+static inline void m7d_mul_naive_square(m7d_t *c, m7d_t *a, m7d_t *b)
 {
 	m7d_t  x1, x2;
  	m7_slice *  a_slice, *  b_slice, *  c_slice;

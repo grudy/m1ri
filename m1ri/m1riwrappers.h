@@ -25,6 +25,13 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  m1riwrappers.h
  */
 
+#ifdef HAVE_CONFIG_H
+
+#include <m1ri/m1ri_config.h>
+
+#include "config.h"
+#endif
+
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -34,7 +41,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #include <mm_malloc.h>
 #include <assert.h>
 
-#include "misc.h"
+#include <m1ri/misc.h>
 
 #define M1RI_FN(a, b, c, d) ((a)^(b))&((c)^(d)) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
 #define M1RI_ST(a, b , c) ((a)^(b)^(c)) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
@@ -43,6 +50,9 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define M1RI_MIN(a, b)  ((a > b)? b: a)
 
 typedef u_int64_t vec;
+
+
+
 
 #define M1RI_RADIX 64
 

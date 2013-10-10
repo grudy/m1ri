@@ -261,42 +261,41 @@ m3d_t   m3d_identity(m3d_t  *a, rci_t n)
  sizerow  = rows * 64
  */
 
-m3d_t   m3d_window(m3d_t *c, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
+void   m3d_window(m3d_t *c,m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
 
-    m3d_t  submatrix;
+    
     /** c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {    
-        return submatrix;
+        return ;
     }
     
     if((stvbg + sizecols) > c->width)
     {
-        return submatrix;
+        return ;
     }
     int i, f;
 	f = strow * M1RI_RADIX;
-    submatrix.nrows =   M1RI_RADIX * sizerows;
-    submatrix.ncols =  M1RI_RADIX * sizecols;
-    submatrix.flags = iswindowed;
-    submatrix.width =  sizecols;
-    submatrix.rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vbg *));
-    submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
-    submatrix.fcol   = 0;
-    submatrix.svbg = stvbg;
+    submatrix->nrows =   M1RI_RADIX * sizerows;
+    submatrix->ncols =  M1RI_RADIX * sizecols;
+    submatrix->flags = iswindowed;
+    submatrix->width =  sizecols;
+    submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vbg *));
+    submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
+    submatrix->fcol   = 0;
+    submatrix->svbg = stvbg;
     
     
     
     for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
     {
-        submatrix.rows[i - f] = c->rows[i] + stvbg;   
+        submatrix->rows[i - f] = c->rows[i] + stvbg;   
     }
     
-    return submatrix;
     
 }
-void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
+static inline void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, rci_t sizerows, rci_t sizecols)
 {
      /** c->width should not be compared twice */
     
@@ -309,8 +308,8 @@ void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, 
     {
         return;    
     }
-    int f = strow * M1RI_RADIX;
-    int i;
+    int f = strow << 6;
+    
     submatrix->nrows =   M1RI_RADIX * sizerows;
     submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
@@ -322,7 +321,7 @@ void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow, rci_t stvbg, 
     submatrix->fcol   = 0;
     submatrix->svbg = stvbg;
    
-    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
+    for( int i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
     {    
         submatrix->rows[i - f] = c->rows[i] + stvbg;
     }

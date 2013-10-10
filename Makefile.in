@@ -88,8 +88,9 @@ subdir = .
 DIST_COMMON = INSTALL NEWS README AUTHORS ChangeLog \
 	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
-	$(top_srcdir)/m1ri/config.h.in $(srcdir)/m1ri.pc.in depcomp \
-	$(pkgincludesub_HEADERS) test-driver COPYING compile \
+	$(top_srcdir)/m1ri/config.h.in \
+	$(top_srcdir)/m1ri/m1ri_config.h.in $(srcdir)/m1ri.pc.in \
+	depcomp $(pkgincludesub_HEADERS) test-driver COPYING compile \
 	config.guess config.sub install-sh missing ltmain.sh
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -102,7 +103,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/m1ri/config.h
-CONFIG_CLEAN_FILES = m1ri.pc
+CONFIG_CLEAN_FILES = m1ri/m1ri_config.h m1ri.pc
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -132,6 +133,7 @@ am__uninstall_files_from_dir = { \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" \
+	"$(DESTDIR)$(pkgincludesubdir)" \
 	"$(DESTDIR)$(pkgincludesubdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libm1ri_la_LIBADD =
@@ -224,7 +226,7 @@ am__can_run_installinfo = \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
 DATA = $(pkgconfig_DATA)
-HEADERS = $(pkgincludesub_HEADERS)
+HEADERS = $(nodist_pkgincludesub_HEADERS) $(pkgincludesub_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -478,6 +480,7 @@ LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+M1RI_HAVE_OPENMP = @M1RI_HAVE_OPENMP@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
@@ -485,6 +488,7 @@ NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
+OPENMP_CFLAGS = @OPENMP_CFLAGS@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
@@ -566,8 +570,10 @@ libm1ri_la_SOURCES = m1ri/m1ri_3dt.c\
 	m1ri/m1ri_io.c \
 	m1ri/misc.c
 
+BUILT_SOURCES = m1ri/m1ri_config.h
 pkgincludesubdir = $(includedir)/m1ri
 pkgincludesub_HEADERS = m1ri/m1ri.h
+nodist_pkgincludesub_HEADERS = m1ri/m1ri_config.h
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = m1ri.pc
 libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
@@ -586,7 +592,8 @@ m5d_tests__CFLAGS = $(AM_CFLAGS)
 m7d_tests_SOURCES = tests/m7d_tests.c 
 m7d_tests_LDFLAGS = -lm1ri -lm
 m7d_tests__CFLAGS = $(AM_CFLAGS)
-all: all-am
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .log .o .obj .test .test$(EXEEXT) .trs
@@ -639,6 +646,8 @@ $(top_srcdir)/m1ri/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f m1ri/config.h m1ri/stamp-h1
+m1ri/m1ri_config.h: $(top_builddir)/config.status $(top_srcdir)/m1ri/m1ri_config.h.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 m1ri.pc: $(top_builddir)/config.status $(srcdir)/m1ri.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
@@ -815,6 +824,27 @@ uninstall-pkgconfigDATA:
 	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(pkgconfigdir)'; $(am__uninstall_files_from_dir)
+install-nodist_pkgincludesubHEADERS: $(nodist_pkgincludesub_HEADERS)
+	@$(NORMAL_INSTALL)
+	@list='$(nodist_pkgincludesub_HEADERS)'; test -n "$(pkgincludesubdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgincludesubdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(pkgincludesubdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(pkgincludesubdir)'"; \
+	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(pkgincludesubdir)" || exit $$?; \
+	done
+
+uninstall-nodist_pkgincludesubHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(nodist_pkgincludesub_HEADERS)'; test -n "$(pkgincludesubdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(pkgincludesubdir)'; $(am__uninstall_files_from_dir)
 install-pkgincludesubHEADERS: $(pkgincludesub_HEADERS)
 	@$(NORMAL_INSTALL)
 	@list='$(pkgincludesub_HEADERS)'; test -n "$(pkgincludesubdir)" || list=; \
@@ -1252,13 +1282,15 @@ distcleancheck: distclean
 check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
 	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
-check: check-am
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(pkgincludesubdir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(pkgincludesubdir)" "$(DESTDIR)$(pkgincludesubdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -1295,6 +1327,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-checkPROGRAMS clean-generic clean-libLTLIBRARIES \
@@ -1319,7 +1352,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-pkgconfigDATA install-pkgincludesubHEADERS
+install-data-am: install-nodist_pkgincludesubHEADERS \
+	install-pkgconfigDATA install-pkgincludesubHEADERS
 
 install-dvi: install-dvi-am
 
@@ -1367,10 +1401,11 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgconfigDATA \
+uninstall-am: uninstall-libLTLIBRARIES \
+	uninstall-nodist_pkgincludesubHEADERS uninstall-pkgconfigDATA \
 	uninstall-pkgincludesubHEADERS
 
-.MAKE: check-am install-am install-strip
+.MAKE: all check check-am install install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--refresh check check-TESTS \
 	check-am clean clean-checkPROGRAMS clean-cscope clean-generic \
@@ -1383,14 +1418,16 @@ uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgconfigDATA \
 	info-am install install-am install-data install-data-am \
 	install-dvi install-dvi-am install-exec install-exec-am \
 	install-html install-html-am install-info install-info-am \
-	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
+	install-libLTLIBRARIES install-man \
+	install-nodist_pkgincludesubHEADERS install-pdf install-pdf-am \
 	install-pkgconfigDATA install-pkgincludesubHEADERS install-ps \
 	install-ps-am install-strip installcheck installcheck-am \
 	installdirs maintainer-clean maintainer-clean-generic \
 	mostlyclean mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am recheck tags tags-am \
 	uninstall uninstall-am uninstall-libLTLIBRARIES \
-	uninstall-pkgconfigDATA uninstall-pkgincludesubHEADERS
+	uninstall-nodist_pkgincludesubHEADERS uninstall-pkgconfigDATA \
+	uninstall-pkgincludesubHEADERS
 
 	m1ri/m5d.h\
 	m1ri/m1ri_3dt.h\

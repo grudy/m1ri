@@ -170,13 +170,13 @@ m3d_t   m3d_identity(m3d_t  *, rci_t );
  sizecol  = cols * 64
  sizerow  = rows * 64
  */
-m3d_t  m3d_window(m3d_t  *, rci_t , rci_t , rci_t , rci_t );
+void  m3d_window(m3d_t  *,m3d_t *, rci_t , rci_t , rci_t , rci_t );
 
 
 /** 
  Same as m3d_window but the second argument is made into the window
  */
-void   m3d_window_create(m3d_t *, m3d_t * , rci_t , rci_t , rci_t , rci_t );
+//void   m3d_window_create(m3d_t *, m3d_t * , rci_t , rci_t , rci_t , rci_t );
 /** 
  Concat b on the end of a, the result is c
    [a] [b] ----->  [a b]   ===  C

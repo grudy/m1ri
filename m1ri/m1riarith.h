@@ -28,12 +28,9 @@
 
 #include <m1ri/m1ri_3dt.h>
 
-
-void add_vbg(vbg * r, vbg const * x, vbg const * y);
-
 void vbg_negation(vbg * );
 
-vbg add_m3dr(vbg  , vbg );
+
 /**
 	
 */
@@ -46,9 +43,9 @@ vbg sub_m3dr(vbg , vbg );               //multiply matrix x by by matrix y.   Th
 /** *******************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-void iadd_vbg(vbg *,vbg  *);
+//void iadd_vbg(vbg *,vbg  *);
 
-void isub_m3d(vbg *,vbg  *);
+//void isub_m3d(vbg *,vbg  *);
 
 
 
