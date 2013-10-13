@@ -31,7 +31,7 @@
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>
 #include <m1ri/m1ri_io.h>
-#include <omp.h>
+
 /**
   Strassen  algorithm on an m3d_t	
 */

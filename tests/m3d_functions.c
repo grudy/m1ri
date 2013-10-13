@@ -28,24 +28,20 @@ int main(int argc, const char * argv[])
 {
  
     m3d_t id_test;
-    id_test =  m3d_create(&id_test,6     , 6);
-     m3d_identity_set(&id_test);
+  	id_test =  m3d_create(&id_test,6     , 6);
+  	m3d_identity_set(&id_test);
     
    m3d_print(&id_test);
-  
    m3d_t rand_test;
-     rand_test =  m3d_create(&rand_test,    5  , 5);
-  rand_test =  m3d_rand(&rand_test);
+   rand_test =  m3d_create(&rand_test,    5  , 5);
+   rand_test =  m3d_rand(&rand_test);
    printf("%d", id_test.width);
 
-      m3d_print(&rand_test);
-  
+	m3d_print(&rand_test);
     
-    
-   
     m3d_print(&rand_test);
     printf("\n\n\n\n\n");
-     printf("Write Test: ");
+    printf("Write Test: ");
     /** 
     write test
     */
@@ -53,14 +49,10 @@ int main(int argc, const char * argv[])
     printf("Before write  \n");
     m3d_print(&write_test);
     m3d_write_elem(&write_test , 4, 4, 1, 0);
-    
-    
+     
     printf("after write \n");
     
     m3d_print(&write_test);
-    
-  
-    
     
     printf("\n\n\n\n\n");
     /** 
@@ -107,10 +99,7 @@ int main(int argc, const char * argv[])
     printf("After the swap");
     printf("-------------  \n");
     m3d_print(&col_swap_test);
-    
-    
-    
-    
+  
     m3d_t *a = m1ri_malloc(sizeof(m3d_t));
     
     m3d_t *b = m1ri_malloc(sizeof(m3d_t));
@@ -133,16 +122,6 @@ int main(int argc, const char * argv[])
     
     m3d_print(&c);
     
-//#pragma omp parallel
-	{ 
-    	//for(long long i = 0; i < 100000000; i++)
-    	//{
-    		//printf("Hello World\n");
-    
-    	//}
-	}
-    
-
     
     
     return 0;

@@ -27,6 +27,7 @@
 
 #include <m1ri/m1ri.h>
 #include "time.h"
+#include <omp.h>
 int main(int argc, const char * argv[])
 {
  	 m3d_t *a, *b, *c, *d, *e, *f;
@@ -49,8 +50,16 @@ int main(int argc, const char * argv[])
 	m3d_classic_mul(c, a, b);
 	m3d_print(c);
 	
+	#pragma omp parallel
+	{ 
+    	for(long long i = 0; i < 1; i++)
+    	{
+    		printf("Hello World\n");
+    
+    	}
+	}
 	m3d_strassen(f, d, e);
-	printf("f");
+	
     m3d_print(f);
     return 0;
     

@@ -9,6 +9,7 @@ AC_CONFIG_HEADERS([m1ri/config.h])
 # Checks for programs.
 AC_PROG_AWK
 AC_PROG_CC_C99
+AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
@@ -27,20 +28,7 @@ AC_CHECK_HEADERS([stdint.h stdlib.h string.h])
 AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
 AC_TYPE_SIZE_T
-# OpenMP support
-AC_ARG_ENABLE([openmp],
-        AS_HELP_STRING( [--enable-openmp],[add support for OpenMP multicore support.]))
 
-AS_IF([test "x$enable_openmp" = "xyes"], [
-   AC_OPENMP()
-])
-AC_SUBST(OPENMP_CFLAGS)
-if test -n "$OPENMP_CFLAGS"; then
-  M1RI_HAVE_OPENMP=1
-else
-  M1RI_HAVE_OPENMP=0
-fi
-AC_SUBST(M1RI_HAVE_OPENMP)
 
 # Checks for library functions.
 AC_FUNC_MALLOC
