@@ -106,7 +106,6 @@ static inline void m3d_qrt_mul(m3d_t * c,m3d_t *a, m3d_t * b )
 	if((c->ncols) > (M1RI_RADIX << 1))
     {
      
-      #pragma omp parallel sections
        {
         m3d_sub(x1, &a_slice.row[0][0], &a_slice.row[1][0]);  //1
         m3d_sub(x2,&b_slice.row[1][1],&b_slice.row[0][1]);  //2

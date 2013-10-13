@@ -28,7 +28,7 @@ AC_CHECK_HEADERS([stdint.h stdlib.h string.h])
 AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
 AC_TYPE_SIZE_T
-
+AC_OPENMP
 
 # Checks for library functions.
 AC_FUNC_MALLOC

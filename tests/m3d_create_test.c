@@ -52,11 +52,9 @@ int main(int argc, const char * argv[])
 	
 	#pragma omp parallel
 	{ 
-    	for(long long i = 0; i < 1; i++)
-    	{
+    
     		printf("Hello World\n");
     
-    	}
 	}
 	m3d_strassen(f, d, e);
 	

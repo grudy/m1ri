@@ -53,7 +53,7 @@ int main(int argc, const char * argv[])
     
     printf("Time: %9f seconds \n", time_test_m1ri );
     
-    isequal = m3d_equal(&oodles, &plenitude);
+    isequal = m3d_equal(oodles, &plenitude);
     
     if(!isequal)
     {
