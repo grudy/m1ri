@@ -21,4 +21,13 @@ autom4te.cache/traces.2
 
 configure
 
+autom4te.cache
+config.log
+
 configure
+
+Makefile.in
+
+aclocal.m4
+
+.deps
