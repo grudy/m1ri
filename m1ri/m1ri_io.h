@@ -30,7 +30,7 @@
 /** 
 	Prints an m3d_t matrix
 */
-void m3d_print(m3d_t *);
+void m3d_print(m3d_t * restrict);
 
 /** 
 	Prints an m5d_t matrix

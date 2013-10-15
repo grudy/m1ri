@@ -29,7 +29,7 @@
 
 
 
-static inline void add_vbg(vbg * r, vbg const * x, vbg const * y)
+static inline void add_vbg(vbg * restrict  r, vbg const * restrict  x, vbg const * y)
 
 {
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
@@ -70,7 +70,7 @@ vbg sub_m3dr(vbg const x, vbg const y)
     return r;
 }
 
-static inline void iadd_vbg(vbg *r,vbg  *x)
+static inline void iadd_vbg(vbg *r,vbg  const * restrict x)
 {
     vec t;
     t = x->units ^ r->sign;
@@ -108,7 +108,7 @@ vbg vbg_mul_i(vbg const x, vbg const y)
     return r;   
 }
 
-m3d_t * m3d_hadamard(m3d_t const *a, m3d_t const *b)
+m3d_t * m3d_hadamard(m3d_t const * restrict a, m3d_t const * restrict b)
 {
     
     m3d_t  * c = malloc(sizeof(m3d_t));
@@ -159,7 +159,7 @@ void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
 	r = (x * y) 
 */
 
-void m3d_sub( m3d_t *r, m3d_t  *x, m3d_t  *y)
+void m3d_sub( m3d_t *r, const  m3d_t  *x, const m3d_t  *y)
 {
     int n , i;
     for(i = 0; i < x->nrows; i++)
@@ -195,7 +195,7 @@ m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
 	Adds two m3d_t's
 	If this isn't possible it does nothing
 */
-void m3d_add_r(m3d_t * c, m3d_t  *a, m3d_t  *b)
+void m3d_add_r(m3d_t * c, m3d_t  * restrict a, m3d_t  * restrict b)
 {
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
@@ -235,7 +235,7 @@ void *  m3d_combine3(vbg *table, vbg *input )
 }
 
 
-static inline void m3d_combine4(vbg *table, vbg *input )
+void m3d_combine4(vbg *table, vbg *input )
 {
     vbg t, a, b, c , d;
     t.sign = t.units = 0;
@@ -283,7 +283,7 @@ static inline void m3d_combine4(vbg *table, vbg *input )
 }
 
 
-static inline void m3d_combine5(vbg *table, vbg *input )
+void m3d_combine5(vbg *table, vbg *input )
 {
 	int i;
     vbg e, *t4;
@@ -299,7 +299,7 @@ static inline void m3d_combine5(vbg *table, vbg *input )
 }
 
 
-static inline void m3d_combine6(vbg *table, vbg *input )
+void m3d_combine6(vbg *table, vbg *input )
 
 {
     vbg f, *t5;
@@ -313,7 +313,7 @@ static inline void m3d_combine6(vbg *table, vbg *input )
     
 }
 
-static inline void m3d_combine7(vbg *table, vbg *input )
+ void m3d_combine7(vbg *table, vbg *input )
 
 {
     
@@ -330,7 +330,7 @@ static inline void m3d_combine7(vbg *table, vbg *input )
 }
 
 
-static inline void m3d_combine8(vbg *table, vbg *input)
+void m3d_combine8(vbg *table, vbg *input)
 
 {
     vbg h, *t7;
@@ -346,7 +346,7 @@ static inline void m3d_combine8(vbg *table, vbg *input)
 }
 
 
-void m3d_mul_64(vbg **R, vbg **A, vbg **B)
+void m3d_mul_64(vbg **R, vbg ** restrict A, vbg ** restrict B)
 {
     int i;
     vbg t1, t2, r1, r2, a;

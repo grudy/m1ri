@@ -59,7 +59,7 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
 /**  
 	The function is  to print m3d_t
 */
- void m3d_print(m3d_t *a)
+ void m3d_print(m3d_t * restrict a)
 {
     int i, m;
     printf("\n \n"); 
