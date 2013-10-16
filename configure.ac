@@ -28,7 +28,22 @@ AC_CHECK_HEADERS([stdint.h stdlib.h string.h])
 AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
 AC_TYPE_SIZE_T
-AC_OPENMP
+
+# OpenMP support
+AC_ARG_ENABLE([openmp],
+        AS_HELP_STRING( [--enable-openmp],[add support for OpenMP multicore support.]))
+
+AS_IF([test "x$enable_openmp" = "xyes"], [
+   AX_OPENMP()
+])
+AC_SUBST(OPENMP_CFLAGS)
+if test -n "$OPENMP_CFLAGS"; then
+  M4RI_HAVE_OPENMP=1
+else
+  M4RI_HAVE_OPENMP=0
+fi
+AC_SUBST(M4RI_HAVE_OPENMP)
+
 
 # Checks for library functions.
 AC_FUNC_MALLOC
