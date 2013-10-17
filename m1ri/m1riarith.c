@@ -26,7 +26,9 @@
 #include "m1riarith.h"
 #include "m5d.h"
 #include "m7d.h"
-
+#if __M1RI_HAVE_OPENMP
+#include <omp.h>
+#endif
 
 
 static inline void add_vbg(vbg * restrict  r, vbg const * restrict  x, vbg const * y)

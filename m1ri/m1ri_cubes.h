@@ -50,6 +50,10 @@ typedef struct
 	A holding structure for m5d_t windows
 	
 */
+m3_slice_free(m3_slice)
+{
+  
+}
 
 typedef struct
 {

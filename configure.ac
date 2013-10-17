@@ -15,7 +15,7 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 
 AM_INIT_AUTOMAKE([subdir-objects])
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIR([m1])
 LT_INIT
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lm':
@@ -38,12 +38,12 @@ AS_IF([test "x$enable_openmp" = "xyes"], [
 ])
 AC_SUBST(OPENMP_CFLAGS)
 if test -n "$OPENMP_CFLAGS"; then
-  M4RI_HAVE_OPENMP=1
+  m1RI_HAVE_OPENMP=1
 else
-  M4RI_HAVE_OPENMP=0
+  m1RI_HAVE_OPENMP=0
 fi
-AC_SUBST(M4RI_HAVE_OPENMP)
-
+AC_SUBST(m1RI_HAVE_OPENMP)
+s
 
 # Checks for library functions.
 AC_FUNC_MALLOC
