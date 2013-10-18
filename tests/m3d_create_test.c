@@ -66,8 +66,8 @@ int main(int argc, const char * argv[])
     a = m1ri_malloc(sizeof(m3d_t)); 
     b = m1ri_malloc(sizeof(m3d_t)); 
     c = m1ri_malloc(sizeof(m3d_t)); 
-    m3d_create(a, 8192, 8192);
-    m3d_create(b, 8192, 8192);
+    m3d_create(a, 16384, 16384);
+    m3d_create(b, 16384, 16384);
     m3d_rand(a);
     m3d_rand(b);
     time_t before;

@@ -20,6 +20,10 @@
  m1ri_strassen.c
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "m1ri_strassen.h"
 #include <math.h>
 #include <stdlib.h>
@@ -27,6 +31,7 @@
 #if __M1RI_HAVE_OPENMP
 #include <omp.h>
 #endif
+
 /**
 	Multiplies m3d_t matrices in squares.  
 	Not to be used directly, but called by m3d_strassen
@@ -70,8 +75,7 @@ static inline void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
     }
    
     else if((c_slice->row[0][0].ncols ) <= M1RI_RADIX)
-    { 
-
+    {
     	m3d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
 		m3d_create(&x2, M1RI_RADIX, M1RI_RADIX);
    	 	m3d_mul_64(x1.rows, a_slice->row[0][0].rows, b_slice->row[0][0].rows);
@@ -110,8 +114,6 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *  restrict a, m3d_t *  restrict b )
     {
      
        {
-       
-       
         m3d_sub(x1, &a_slice.row[0][0], &a_slice.row[1][0]);  //1
         m3d_sub(x2,&b_slice.row[1][1],&b_slice.row[0][1]);  //2
         m3d_qrt_mul(&c_slice.row[1][0], x1, x2);  //3
@@ -134,7 +136,6 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *  restrict a, m3d_t *  restrict b )
         m3d_sub(&c_slice.row[1][0], &c_slice.row[1][0], &c_slice.row[0][0]);  //20
         m3d_qrt_mul(&c_slice.row[0][0], &a_slice.row[0][1], &b_slice.row[1][0]);
         m3d_add_r(&c_slice.row[0][0], x1,&c_slice.row[0][0] );
-        
         m3d_free(x1);
     	m3d_free(x2);
        }	
@@ -143,17 +144,27 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *  restrict a, m3d_t *  restrict b )
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
 		//m3d_mul_naive_square(c, a, b);
-
+			
+#pragma omp parallel sections num_threads(4)
+  {
+#pragma omp section
+    {
 		m3d_sub_64(x1->rows, a_slice.row[0][0].rows, a_slice.row[1][0].rows);  //1
         m3d_sub_64(x2->rows,b_slice.row[1][1].rows,b_slice.row[0][1].rows) ;  //2
         m3d_mul_64(c_slice.row[1][0].rows, x1->rows, x2->rows);  //3
         m3d_add_64(x1->rows,a_slice.row[1][0].rows,a_slice.row[1][1].rows) ;  //4
         m3d_sub_64(x2->rows,b_slice.row[0][1].rows,b_slice.row[0][0].rows) ;  //5
-        m3d_mul_64(c_slice.row[1][1].rows, x1->rows, x2->rows);    //6
+    }
+#pragma omp section
+    {
+     	m3d_mul_64(c_slice.row[1][1].rows, x1->rows, x2->rows);    //6
         m3d_sub_64(x1->rows,x1->rows,a_slice.row[0][0].rows) ;//7
         m3d_sub_64(x2->rows,b_slice.row[1][1].rows,x2->rows);  //8
         m3d_mul_64(c_slice.row[0][1].rows,x1->rows,x2->rows); //9
         m3d_sub_64(x1->rows,a_slice.row[0][1].rows,x1->rows);    //10
+    }
+#pragma omp section
+    {
         m3d_mul_64(c_slice.row[0][0].rows,x1->rows,b_slice.row[1][1].rows);   //11
         m3d_mul_64(x1->rows, a_slice.row[1][1].rows, b_slice.row[1][1].rows);  //12
         m3d_add_64(c_slice.row[0][1].rows,x1->rows , c_slice.row[0][1].rows) ;   //13
@@ -161,16 +172,22 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *  restrict a, m3d_t *  restrict b )
         m3d_add_64(c_slice.row[0][1].rows,c_slice.row[0][1].rows , c_slice.row[1][1].rows) ;   //15
         m3d_add_64(c_slice.row[1][1].rows,c_slice.row[1][0].rows , c_slice.row[1][1].rows) ;    //16
         m3d_add_64(c_slice.row[1][1].rows,c_slice.row[1][0].rows , c_slice.row[1][1].rows) ;  //17
-        m3d_sub_64(x2->rows, x2->rows, b_slice.row[1][0].rows) ;            //18
+    }
+#pragma omp section
+    {
+    	m3d_sub_64(x2->rows, x2->rows, b_slice.row[1][0].rows) ;            //18
         m3d_mul_64(c_slice.row[1][0].rows, a_slice.row[1][1].rows, x2->rows);            //19
         m3d_sub_64(c_slice.row[1][0].rows, c_slice.row[1][0].rows,c_slice.row[0][0].rows);  //20
         m3d_mul_64(c_slice.row[0][0].rows, a_slice.row[0][1].rows,b_slice.row[1][0].rows);
         m3d_add_64(c_slice.row[0][0].rows, x1->rows,c_slice.row[0][0].rows) ; 
-        m1ri_free(x1);
-    	m1ri_free(x2);
-     
-     
-      	
+    }
+  }
+
+   
+
+
+        m3d_free(x1);
+    	m3d_free(x2);
     }
     
   
