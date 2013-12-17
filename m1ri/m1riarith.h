@@ -34,7 +34,7 @@ void vbg_negation(vbg * );
 /**
 	
 */
-void sub_m3d( vbg *, vbg const * restrict , vbg const * restrict);               //multiply matrix x by by matrix y.   The product is matrix r.
+void sub_m3d( vbg *, vbg const *  , vbg const * );               //multiply matrix x by by matrix y.   The product is matrix r.
 
 
 vbg sub_m3dr(vbg , vbg );               //multiply matrix x by by matrix y.   The product is matrix r.
@@ -65,20 +65,20 @@ void m3d_add_r(m3d_t * , m3d_t  *, m3d_t  *);
 /** 
     Hadamard multiplication
 */
-m3d_t * m3d_hadamard(m3d_t const * restrict, m3d_t const * restrict);
+m3d_t * m3d_hadamard(m3d_t const * , m3d_t const * );
 
 /** * * * * * * * * * * * * * * * * * * * *
  Subtract a 1 kilobyte Matrix from another
  1 kilobyte Matrixhgg
  * * * * * * * * * * * * * * * * * * * * */
 
-void m3d_sub_64(vbg ** , vbg  ** restrict, vbg  ** restrict);
+void m3d_sub_64(vbg ** , vbg  ** , vbg  ** );
 
 /** * * * * * * * * * * * * * * * * * * * * * *
  Add a 1 kilobyte Matrix from another
  1 kilobyte Matrix
  * * * * * * * * * * * * * * * * * * * * * * */
-void m3d_add_64(vbg **, vbg   ** restrict , vbg    ** restrict );
+void m3d_add_64(vbg **, vbg   **  , vbg    **  );
 
 m3d_t m3d_add(m3d_t  *, m3d_t  *);
 
@@ -100,7 +100,7 @@ void m3d_combine8(vbg *, vbg *);
 								GF(3)
 *****************************************************************************/
 //64 * 64,4096 bit, 512 byte matrix(slice) multiplication
-void m3d_mul_64(vbg **, vbg ** restrict, vbg ** restrict);
+void m3d_mul_64(vbg **, vbg ** , vbg ** );
 
 //32 * 64,2048 bit, 256 byte matrix(slice) multiplication
 void mul_32_m3d(vbg *, vbg *, vbg *);

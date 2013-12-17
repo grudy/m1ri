@@ -31,7 +31,7 @@
 #endif
 
 
-static inline void add_vbg(vbg * restrict  r, vbg const * restrict  x, vbg const * y)
+static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 {
     r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
@@ -72,7 +72,7 @@ vbg sub_m3dr(vbg const x, vbg const y)
     return r;
 }
 
-static inline void iadd_vbg(vbg *r,vbg  const * restrict x)
+static inline void iadd_vbg(vbg *r,vbg  const *  x)
 {
     vec t;
     t = x->units ^ r->sign;
@@ -110,7 +110,7 @@ vbg vbg_mul_i(vbg const x, vbg const y)
     return r;   
 }
 
-m3d_t * m3d_hadamard(m3d_t const * restrict a, m3d_t const * restrict b)
+m3d_t * m3d_hadamard(m3d_t const *  a, m3d_t const *  b)
 {
     
     m3d_t  * c = malloc(sizeof(m3d_t));
@@ -197,7 +197,7 @@ m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
 	Adds two m3d_t's
 	If this isn't possible it does nothing
 */
-void m3d_add_r(m3d_t * c, m3d_t  * restrict a, m3d_t  * restrict b)
+void m3d_add_r(m3d_t * c, m3d_t  *  a, m3d_t  *  b)
 {
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
@@ -348,7 +348,7 @@ void m3d_combine8(vbg *table, vbg *input)
 }
 
 
-void m3d_mul_64(vbg **R, vbg ** restrict A, vbg ** restrict B)
+void m3d_mul_64(vbg **R, vbg **  A, vbg **  B)
 {
     int i;
     vbg t1, t2, r1, r2, a;

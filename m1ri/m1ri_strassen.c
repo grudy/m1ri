@@ -96,7 +96,7 @@ static inline void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
 }
 
 /*Look at what inlining this function does performance-wise*/
-void m3d_qrt_mul(m3d_t * c,m3d_t *  restrict a, m3d_t *  restrict b )
+void m3d_qrt_mul(m3d_t * c,m3d_t *   a, m3d_t *   b )
 {
   		m3d_t * x1;
     	m3d_t * x2;
