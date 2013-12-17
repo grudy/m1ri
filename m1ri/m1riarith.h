@@ -69,7 +69,7 @@ m3d_t * m3d_hadamard(m3d_t const * restrict, m3d_t const * restrict);
 
 /** * * * * * * * * * * * * * * * * * * * *
  Subtract a 1 kilobyte Matrix from another
- 1 kilobyte Matrix
+ 1 kilobyte Matrixhgg
  * * * * * * * * * * * * * * * * * * * * */
 
 void m3d_sub_64(vbg ** , vbg  ** restrict, vbg  ** restrict);
@@ -85,10 +85,15 @@ m3d_t m3d_add(m3d_t  *, m3d_t  *);
 
 /*
 void * m3d_combine3(vbg *, vbg * );
+
 void m3d_combine4(vbg *, vbg * );
+
 void m3d_combine5(vbg *, vbg * );
+
 void m3d_combine6(vbg *, vbg * );
+
 void m3d_combine7(vbg *, vbg * );
+
 void m3d_combine8(vbg *, vbg *);
 */
 /** ***************************************************************************

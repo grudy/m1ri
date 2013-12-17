@@ -93,23 +93,23 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
         if(a->width  ==  1)
         {
             
-         if(a->ncols%64 != 0)
-         {
+            if(a->ncols%64 != 0)
+            {
              
          print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, (64 - (a->ncols + a->fcol)%64) );
              
              
          }
-        if(a->ncols%64 == 0)
-        {
+          if(a->ncols%64 == 0)
+          {
              print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, 0 );
-        }
+           }
       
-        }
-     printf("\n");
-        }
+          }
+        printf("\n");
+          }
       
-//}
+
 
     printf("\n \n \n ");
     

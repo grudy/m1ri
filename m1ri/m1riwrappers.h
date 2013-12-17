@@ -51,7 +51,9 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 
 typedef u_int64_t vec;
 
-#define M1RI_RADIX 64
+//#define M1RI_RADIX 64
+static const int M1RI_RADIX = 64; 
+
 
 static  const u_int64_t leftbit  = (1ULL)<<(M1RI_RADIX-1);
 static  const u_int64_t rightbit = 1;
@@ -59,7 +61,7 @@ static  const u_int64_t rightbit = 1;
 static u_int64_t const ibits = 0x8040201008040201;
 typedef int rci_t;
 typedef int wi_t;
-typedef unsigned int vbit;
+//typedef unsigned int vbit;
 
 
 /*

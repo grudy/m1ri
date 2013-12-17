@@ -23,7 +23,6 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 
 #include <m1ri/m1ri.h>
 #include "time.h"
-#include <omp.h>
 int main(int argc, const char * argv[])
 {
  

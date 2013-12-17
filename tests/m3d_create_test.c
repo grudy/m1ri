@@ -27,7 +27,6 @@
 
 #include <m1ri/m1ri.h>
 #include "time.h"
-#include <omp.h>
 int main(int argc, const char * argv[])
 {
  	 /*m3d_t *a, *b, *c, *d, *e, *f;
