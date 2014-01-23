@@ -19,6 +19,8 @@
  
  m1ri_strassen.c
  */
+ 
+ 
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,9 +102,13 @@ void m3d_qrt_mul(m3d_t * c,m3d_t *   a, m3d_t *   b )
 {
   		m3d_t * x1;
     	m3d_t * x2;
+    	
     	x1 = m1ri_malloc(sizeof(m3d_t));
     	x2 = m1ri_malloc(sizeof(m3d_t));
     	m3_slice  a_slice, b_slice, c_slice;
+    	
+    	
+    	
     	m3d_create(x1, c->nrows/2, c->ncols/2);
     	m3d_create(x2, c->nrows/2, c->ncols/2);
     	m3d_quarter(&a_slice, a);

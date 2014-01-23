@@ -352,6 +352,7 @@ void m7d_specs(m7d_t * a)
     {
         printf("Is not windowed   \n");
     }
+    
     printf("Number of columns: %d \n", a->ncols );
     printf("Number of rows   : %d \n", a->nrows );
     printf("Width------------: %d \n", a->width );
