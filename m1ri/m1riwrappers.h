@@ -52,11 +52,9 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 typedef u_int64_t vec;
 
 #define M1RI_RADIX 64
-<<<<<<< HEAD
 //static const int M1RI_RADIX = 64; 
-=======
+//=======
 
->>>>>>> 60206159be0dfe6ce271d96e97dc8c18341d94ca
 
 
 static  const u_int64_t leftbit  = (1ULL)<<(M1RI_RADIX-1);
