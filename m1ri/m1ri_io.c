@@ -30,6 +30,11 @@
  l_unused = space to the left of block unused in the matrix
  r_unused =  space to the right of block unused in the matrix
  */
+ 
+ 
+ /*
+ 
+ 
 static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
 {
 	int x;
@@ -56,6 +61,54 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
   
     
 }
+
+*/
+
+///print_m3d_block_buffered original title
+
+static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
+{
+	int i = 0;
+    bool out;
+    char buffer[512];
+    for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
+    {
+    
+    	buffer[i++] = '[';
+    	buffer[i++] = ' ';
+        out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
+        
+        if((out == 0) && (b & (leftbit  >> x)))
+        {
+        	
+        	buffer[i++] = '1'; 
+              // printf("[ 1 ]");
+        }
+        
+        else if((out == 1) && (b & (leftbit  >> x)))
+        {
+        	buffer[i++] = '2'; 
+            //printf("[ 2 ]");
+        }
+        
+		else
+        {   
+           buffer[i++] = '0';
+        }
+        
+        buffer[i++] = ' ';
+        buffer[i++] = ']';
+    }
+    buffer[i] = '\0';
+    printf("%s", buffer);
+    
+}
+
+
+
+
+
+
 /**  
 	The function is  to print m3d_t
 */

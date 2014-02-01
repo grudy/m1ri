@@ -61,6 +61,8 @@ int main(int argc, const char * argv[])
     return 0;
     
     */
+    
+    /*
        m3d_t * a, * b, *c;
     a = m1ri_malloc(sizeof(m3d_t)); 
     b = m1ri_malloc(sizeof(m3d_t)); 
@@ -76,7 +78,24 @@ int main(int argc, const char * argv[])
     time(&after);
     double time_test_m1ri = difftime( after, before);
     printf("Time: %9f seconds ", time_test_m1ri );
+     */
      
+
+ 
+    time_t before;
+    time(&before);
+    
+    m3d_t * a;
+    a = m1ri_malloc(sizeof(m3d_t)); 
+	m3d_create(a, 8192, 8192);
+    m3d_rand(a);
+    m3d_print(a);
+    time_t after;
+    time(&after);
+    double time_test_m1ri = difftime( after, before);
+    printf("Time: %9f seconds ", time_test_m1ri );
+    
+    
      return 0;
     
     
