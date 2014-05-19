@@ -27,7 +27,8 @@
 #define M1RIPROJECT_M1RIELARITH_H
 
 #include <m1ri/m1ri_3dt.h>
-
+#include <m5d.h>
+#include <m7d.h>
 void vbg_negation(vbg * );
 
 
@@ -66,6 +67,20 @@ void m3d_add_r(m3d_t * , m3d_t  *, m3d_t  *);
     Hadamard multiplication
 */
 m3d_t * m3d_hadamard(m3d_t const * , m3d_t const * );
+
+//testing parallel 
+
+
+
+
+
+
+
+m3d_t * m3d_hadamard_v2(m3d_t const * , m3d_t const * );
+
+m5d_t * m5d_hadamard(m5d_t const * , m5d_t const * );
+
+m7d_t * m7d_hadamard(m7d_t const * , m7d_t const *  );
 
 /** * * * * * * * * * * * * * * * * * * * *
  Subtract a 1 kilobyte Matrix from another

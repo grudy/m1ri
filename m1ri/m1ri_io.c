@@ -32,9 +32,8 @@
  */
  
  
+
  /*
- 
- 
 static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
 {
 	int x;
@@ -104,6 +103,42 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
     
 }
 
+static inline void print_m3d_block_more_buffered(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused, char buffer[], int * i)
+{
+	 
+    bool out;
+    
+    for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
+    {
+    
+    	buffer[*i++] = '[';
+    	buffer[*i++] = ' ';
+        out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
+        
+        if((out == 0) && (b & (leftbit  >> x)))
+        {
+        	
+        	buffer[*i++] = '1'; 
+              // printf("[ 1 ]");
+        }
+        
+        else if((out == 1) && (b & (leftbit  >> x)))
+        {
+        	buffer[*i++] = '2'; 
+            //printf("[ 2 ]");
+        }
+        
+		else
+        {   
+           buffer[*i++] = '0';
+        }
+        
+        buffer[*i++] = ' ';
+        buffer[*i++] = ']';
+    }
+   
+    
+}
 
 
 
@@ -116,7 +151,45 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
 {
     int i, m;
     printf("\n \n"); 
-       
+    
+    //testing for io improvement 
+    if(a->width >=  16)
+    {
+    
+    int  * j = m1ri_malloc(sizeof(int));
+    char buffer[8192];
+    for( i  = 0; i < a->nrows ; i++)
+    {
+        
+      
+         print_m3d_block(a->rows[i][0].units, a->rows[i][0].sign, a->fcol, 0 );
+             
+             m = 1;
+             while(m < (a->width -1))
+             {
+                 print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, 0);
+                 ++m;
+             }
+             
+             if(a->ncols%64 == 0)
+             {
+                 print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, 0 );
+                 
+             }
+             
+             if(a->ncols%64 != 0)
+             {
+              print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, (64 - a->ncols%64) );
+             }
+         
+    
+      
+        printf("\n");
+          }
+      }
+    
+    else
+    {   
     for( i  = 0; i < a->nrows ; i++)
     {
         
@@ -161,7 +234,7 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
           }
         printf("\n");
           }
-      
+     } 
 
 
     printf("\n \n \n ");

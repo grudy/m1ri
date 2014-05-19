@@ -119,19 +119,124 @@ m3d_t * m3d_hadamard(m3d_t const *  a, m3d_t const *  b)
     {
         *c = m3d_create(c, a->nrows , b->ncols);
         int i, j;
-        
-        for( i = 0; i < a->nrows; i++)
-        {
+        if(a->ncols < 256)
+        { 
+          for( i = 0; i < a->nrows; i++)
+          {
             for(j = 0; j < (a->width ); j++)
             {  
                 c->rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
             }  
-        }
+          }
 
-    }
+        }
+        
+        
+     }   
     
     return c;
 }
+/*
+m3d_t * m3d_hadamard_v2(m3d_t const *  a, m3d_t const *  b)
+{
+    
+    m3d_t  * c = malloc(sizeof(m3d_t));
+     *c = m3d_create(c, a->nrows , b->ncols);
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+       
+        int i, j;
+        if(a->ncols < 256)
+        { 
+          for( i = 0; i < a->nrows; i++)
+          {
+            for(j = 0; j < (a->width ); j++)
+            {  
+                c->rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
+            }  
+          }
+
+        }
+        
+      else
+      {
+          
+        
+        
+      }
+    
+    return c;
+}
+
+*/
+
+static inline void vfd_elem(vfd * c, vfd const * a, vfd const * b)
+{
+  c->units = a->units & b->units;
+  
+  //c->middle = 
+
+
+}
+m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
+{
+    m5d_t  * c = malloc(sizeof(m5d_t));
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+       
+        int i, j;
+        if(a->ncols < 256)
+        { 
+          for( i = 0; i < a->nrows; i++)
+          {
+            for(j = 0; j < (a->width ); j++)
+            {  
+               vfd_elem(c->rows[i] + j, a->rows[i]  + j, b->rows[i] + j);
+            }  
+          }
+
+        }
+     }   
+        
+    
+    return c;
+
+}
+
+
+static inline void vtri_elem(vtri * c, vtri const * a, vtri const * b)
+{
+
+  
+  //c->middle = 
+
+
+}
+m7d_t * m7d_hadamard(m7d_t const * a, m7d_t const * b )
+{
+    m7d_t  * c = malloc(sizeof(m7d_t));
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+       
+        int i, j;
+        if(a->ncols < 256)
+        { 
+          for( i = 0; i < a->nrows; i++)
+          {
+            for(j = 0; j < (a->width ); j++)
+            {  
+               vtri_elem(c->rows[i] + j, a->rows[i]  + j, b->rows[i] + j);
+            }  
+          }
+
+        }
+     }   
+        
+    
+    return c;
+
+}
+
 
 
 void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
@@ -197,6 +302,7 @@ m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
 	Adds two m3d_t's
 	If this isn't possible it does nothing
 */
+
 void m3d_add_r(m3d_t * c, m3d_t  *  a, m3d_t  *  b)
 {
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
@@ -212,6 +318,14 @@ void m3d_add_r(m3d_t * c, m3d_t  *  a, m3d_t  *  b)
     }  
 }
 
+
+
+
+
+/*
+  Matrix Multiplication Lookup tables
+
+*/
 void *  m3d_combine3(vbg *table, vbg *input )
 {
     vbg t, a, b, c;

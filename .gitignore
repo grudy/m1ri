@@ -87,3 +87,5 @@ tests/.dirstamp
 m3d_create_test
 
 m1ri/stamp-h1
+
+.libs/arithmatic_test

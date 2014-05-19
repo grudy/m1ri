@@ -31,7 +31,12 @@ pkgconfig_DATA = m1ri.pc
 
 libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
 
-check_PROGRAMS =  hadamard m3d_create_test m3d_functions m5d_tests m7d_tests 
+check_PROGRAMS =  arithmatic_test hadamard m3d_create_test m3d_functions m5d_tests m7d_tests 
+
+arithmatic_test_SOURCES=tests/arithmatic_test.c 
+arithmatic_test_LDFLAGS=-lm1ri -lm
+arithmatic_test__CFLAGS=$(AM_CFLAGS)
+
 hadamard_SOURCES=tests/hadamard.c 
 hadamard_LDFLAGS=-lm1ri -lm
 hadamard__CFLAGS=$(AM_CFLAGS)

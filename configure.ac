@@ -44,6 +44,28 @@ else
 fi
 AC_SUBST(m1RI_HAVE_OPENMP)
 
+# SSE2 support
+AC_ARG_ENABLE([sse2],
+        AS_HELP_STRING([--disable-sse2], [don't use SSE2 instruction set.]),
+	, [if test "$m4ri_wrapword" = "yes"; then enable_sse2="no"; else enable_sse2="yes"; fi])
+
+AS_IF([test "x$enable_sse2" != "xno"], [
+   if test "$m4ri_wrapword" = "yes"; then
+      AC_MSG_ERROR([SSE2 cannot be supported when wrapping word in a C++ class.])
+   fi
+   case $host_cpu in i[[3456]]86*|x86_64*)
+          AX_CPU_VENDOR()
+          if test "x$ax_cv_cpu_vendor" = "xIntel"; then
+             AX_EXT() # SSE2 is slower on the Opteron
+          fi
+   esac
+])
+if test x"$ax_cv_have_sse2_ext" = x"yes"; then
+  M4RI_HAVE_SSE2=1
+else
+  M4RI_HAVE_SSE2=0
+fi
+AC_SUBST(M4RI_HAVE_SSE2)
 
 # Checks for library functions.
 AC_FUNC_MALLOC
