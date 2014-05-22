@@ -32,7 +32,36 @@ int main(int argc, const char * argv[])
   	 m3d
   
   */
-
+  
+    m3d_t * a, * b, *c, *d;
+    a = m1ri_malloc(sizeof(m3d_t)); 
+    b = m1ri_malloc(sizeof(m3d_t)); 
+    c = m1ri_malloc(sizeof(m3d_t)); 
+    m3d_create(a, 256, 256);
+    m3d_create(b, 256, 256);
+    m3d_rand(a);
+    m3d_rand(b);
+    m3d_add_r(c, a, b);
+    m3d_sub(d, c, b);
+    if(m3d_equal(d, c))
+    {
+      printf("Error in m3d addition and subtraction");
+      return 1; 
+    
+    }
+    
+  
+  /*
+     Subtraction
+  */
+  
+  /*
+    
+  
+  */
+  
+  
+  
 
 }
 

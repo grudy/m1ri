@@ -31,32 +31,32 @@ pkgconfig_DATA = m1ri.pc
 
 libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
 
-check_PROGRAMS =  arithmatic_test hadamard m3d_create_test m3d_functions m5d_tests m7d_tests 
+check_PROGRAMS =  test_arithmetic test_hadamard test_create_m3d test_m3d test_m5d test_m7d 
 
-arithmatic_test_SOURCES=tests/arithmatic_test.c 
-arithmatic_test_LDFLAGS=-lm1ri -lm
-arithmatic_test__CFLAGS=$(AM_CFLAGS)
+test_arithmetic_SOURCES=tests/test_arithmetic.c 
+test_arithmetic_LDFLAGS=-lm1ri -lm
+test_arithmetic__CFLAGS=$(AM_CFLAGS)
 
-hadamard_SOURCES=tests/hadamard.c 
-hadamard_LDFLAGS=-lm1ri -lm
-hadamard__CFLAGS=$(AM_CFLAGS)
+test_hadamard_SOURCES=tests/test_hadamard.c 
+test_hadamard_LDFLAGS=-lm1ri -lm
+test_hadamard__CFLAGS=$(AM_CFLAGS)
 
-m3d_create_test_SOURCES=tests/m3d_create_test.c 
-m3d_create_test_LDFLAGS=-lm1ri -lm
-m3d_create_test__CFLAGS=$(AM_CFLAGS)
+test_create_m3d_SOURCES=tests/test_create_m3d.c 
+test_create_m3d_LDFLAGS=-lm1ri -lm
+test_create_m3d__CFLAGS=$(AM_CFLAGS)
 
-m3d_functions_SOURCES=tests/m3d_functions.c 
-m3d_functions_LDFLAGS=-lm1ri -lm
-m3d_functions__CFLAGS=$(AM_CFLAGS)
+test_m3d_SOURCES=tests/test_m3d.c 
+test_m3d_LDFLAGS=-lm1ri -lm
+test_m3d__CFLAGS=$(AM_CFLAGS)
 
-m5d_tests_SOURCES=tests/m5d_tests.c 
-m5d_tests_LDFLAGS=-lm1ri -lm
-m5d_tests__CFLAGS=$(AM_CFLAGS)
+test_m5d_SOURCES=tests/test_m5d.c 
+test_m5d_LDFLAGS=-lm1ri -lm
+test_m5d__CFLAGS=$(AM_CFLAGS)
 
-m7d_tests_SOURCES=tests/m7d_tests.c 
-m7d_tests_LDFLAGS=-lm1ri -lm
-m7d_tests__CFLAGS=$(AM_CFLAGS)
+test_m7d_SOURCES=tests/test_m7d.c 
+test_m7d_LDFLAGS=-lm1ri -lm
+test_m7d__CFLAGS=$(AM_CFLAGS)
 
-TESTS =  hadamard m3d_create_test m3d_functions m5d_tests m7d_tests 
+TESTS =  test_hadamard test_create_m3d test_m3d test_m5d test_m7d 
 
 clean-local:

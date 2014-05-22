@@ -51,16 +51,23 @@ static inline vbg add_m3dr(vbg  x, vbg const y)
     return x; 
 }
 
+
+
 inline void sub_m3d( vbg *r, vbg const *x, vbg const *y)
 {
     r->units = ((x->units^y->units) | (x->sign^y->sign));
     r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
 }
 
+
+
+
 void vbg_negation(vbg *r)
 {
      r->sign = r->sign ^ r->units;
 }
+
+
 
 vbg sub_m3dr(vbg const x, vbg const y)
 
@@ -172,8 +179,10 @@ m3d_t * m3d_hadamard_v2(m3d_t const *  a, m3d_t const *  b)
 
 static inline void vfd_elem(vfd * c, vfd const * a, vfd const * b)
 {
-  c->units = a->units & b->units;
-  
+  c->sign = a->sign & b->sign;
+  c->middle = c->sign & ((a->middle & a->units & b->middle & b->units) | ((!a->middle ) & (!a->units) & b->middle & b->units) | ( a->middle  & a->units & (!b->middle) & (!b->units)) | (a->units & (!a->middle) & b->units & (!b->middle))); 
+  c->units = ((!(a->units) & b->units & b->middle) | (a->middle & !(b->units) & b->middle) | ((!a->middle) & (b->units) & !(b->middle)) | (a->units & (!b->units) & (!b->middle))); 	
+  //c->
   //c->middle = 
 
 
@@ -203,15 +212,28 @@ m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
 
 }
 
+/*
 
+Logic Friday results 
+c->units = a->units a->mid b->units' b->mid' b->sign + a->units a->mid' a->sign' b->units b->mid  + a->units' a->mid a->sign' b->units b->sign + a->units' a->mid' a->sign b->mid  + a->units a->sign' b->units b->mid'  + a->units' a->mid b->units' b->sign + a->sign b->units' b->mid b->sign' + a->units b->units b->mid' b->sign';
+c->mid = a->units a->mid' a->sign' b->mid b->sign + a->mid a->sign b->units b->mid' b->sign' + a->units a->mid' a->sign' b->units b->mid  + a->units' a->mid a->sign' b->units b->sign + a->mid' a->sign b->units' b->sign + a->units' a->sign b->mid' b->sign + a->mid a->sign' b->units b->sign' + a->units b->units' b->mid b->sign';
+c->sign = a->mid' a->sign b->units  + a->units a->mid' a->sign' b->mid b->sign + a->mid a->sign b->units b->mid' b->sign' + a->units a->mid b->units' b->mid' b->sign + a->mid a->sign' b->units' b->mid  + a->units a->mid' b->mid' b->sign + a->units' a->mid b->mid b->sign';
+
+*/
 static inline void vtri_elem(vtri * c, vtri const * a, vtri const * b)
 {
 
-  
+  //c->sign = 
   //c->middle = 
+  //c->units = 
+
 
 
 }
+
+
+
+
 m7d_t * m7d_hadamard(m7d_t const * a, m7d_t const * b )
 {
     m7d_t  * c = malloc(sizeof(m7d_t));
@@ -263,20 +285,23 @@ void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
 /**
 	Subtracts m3d_t a  of arbitrary 
 	length and height.
-	r = (x * y) 
+	r = (x - y) 
 */
 
 void m3d_sub( m3d_t *r, const  m3d_t  *x, const m3d_t  *y)
 {
     int n , i;
-    for(i = 0; i < x->nrows; i++)
-    {
-        for(n = 0; n < x->width; n++)
-        {
+  if((x->nrows == y->nrows) && ( x->ncols == y->ncols))
+   { 
+      m3d_create(r, x->nrows, x->ncols);
+      for(i = 0; i < x->nrows; i++)
+      {
+          for(n = 0; n < x->width; n++)
+          {
 		    sub_m3d(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
-        }
-    }
-
+          }
+      }
+   }
 }
 
 m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
@@ -308,6 +333,7 @@ void m3d_add_r(m3d_t * c, m3d_t  *  a, m3d_t  *  b)
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
     	int i, j;
+    	 m3d_create(c, a->nrows , b->ncols);
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
