@@ -34,8 +34,20 @@
 static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 {
-    r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
-    r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
+    //r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
+    //r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
+
+
+
+ 	r->units = y->sign ^ x->units;
+    r->sign = y->units ^ x->sign;
+    r->sign = r->sign & r->units;
+    r->units = r->units ^ x->sign;
+    r->units = (y->units ^ x->units) | r->units;
+
+
+
+
 }
 
 /** 
@@ -55,8 +67,17 @@ static inline vbg add_m3dr(vbg  x, vbg const y)
 
 inline void sub_m3d( vbg *r, vbg const *x, vbg const *y)
 {
-    r->units = ((x->units^y->units) | (x->sign^y->sign));
-    r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
+   // r->units = ((x->units^y->units) | (x->sign^y->sign));
+   // r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
+    r->sign = y->units ^ x->units;
+    r->units = y->sign ^ x->sign;
+    r->units = r->units | r->sign;
+    r->sign = r->sign ^ y->sign;
+    r->sign = (y->units ^ x->sign) & r->sign;   
+   
+   
+   
+   
 }
 
 
@@ -291,6 +312,7 @@ void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
 void m3d_sub( m3d_t *r, const  m3d_t  *x, const m3d_t  *y)
 {
     int n , i;
+    
   if((x->nrows == y->nrows) && ( x->ncols == y->ncols))
    { 
       m3d_create(r, x->nrows, x->ncols);

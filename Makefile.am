@@ -57,6 +57,6 @@ test_m7d_SOURCES=tests/test_m7d.c
 test_m7d_LDFLAGS=-lm1ri -lm
 test_m7d__CFLAGS=$(AM_CFLAGS)
 
-TESTS =  test_hadamard test_create_m3d test_m3d test_m5d test_m7d 
+TESTS =  test_arithmetic test_hadamard test_create_m3d test_m3d test_m5d test_m7d 
 
 clean-local:

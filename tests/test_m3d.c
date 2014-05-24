@@ -23,7 +23,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 
 #include <m1ri/m1ri.h>
 #include "time.h"
-int main(int argc, const char * argv[])
+ int main(int argc, const char * argv[])
 {
  
     m3d_t id_test;

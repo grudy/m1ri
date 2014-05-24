@@ -89,3 +89,27 @@ m3d_create_test
 m1ri/stamp-h1
 
 .libs/arithmatic_test
+
+.libs/test_arithmetic
+
+.libs/test_create_m3d
+
+.libs/test_hadamard
+
+.libs/test_m3d
+
+.libs/test_m5d
+
+.libs/test_m7d
+
+test_arithmetic
+
+test_create_m3d
+
+test_hadamard
+
+test_m3d
+
+test_m5d
+
+test_m7d

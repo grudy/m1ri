@@ -37,30 +37,35 @@ int main(int argc, const char * argv[])
     a = m1ri_malloc(sizeof(m3d_t)); 
     b = m1ri_malloc(sizeof(m3d_t)); 
     c = m1ri_malloc(sizeof(m3d_t)); 
-    m3d_create(a, 256, 256);
-    m3d_create(b, 256, 256);
+    d = m1ri_malloc(sizeof(m3d_t)); 
+    m3d_create(a, 4, 4);
+    m3d_create(b, 4, 4);
     m3d_rand(a);
     m3d_rand(b);
     m3d_add_r(c, a, b);
-    m3d_sub(d, c, b);
-    if(m3d_equal(d, c))
+    m3d_sub(d,  c, b);
+    printf("Matrix a\n");
+    m3d_print(a);
+    printf("Matrix b\n");
+    m3d_print(b);
+    printf("Matrix c\n");
+    m3d_print(c);
+    printf("Matrix d\n");
+    m3d_print(d); 
+	if(!(m3d_equal(d, a)))
     {
-      printf("Error in m3d addition and subtraction");
-      return 1; 
+     	{
+          printf("Error in m3d addition and subtraction");
+          return 1; 
+    
+         }
     
     }
-    
-  
-  /*
-     Subtraction
-  */
-  
-  /*
-    
-  
-  */
+	printf("m3d addition and subtraction test passed");
+	
   
   
+  return 0;
   
 
 }
