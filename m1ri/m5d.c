@@ -500,8 +500,7 @@ void m5d_add2_i(vfd * a, vfd * b)
 
 }
 
-void m5d_sub( vfd *r, vfd *a, vfd *b)
-
+void vfd_sub( vfd *r, vfd *a, vfd *b)
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
     c = b->units ^ a->units;
@@ -573,7 +572,7 @@ void iadd_vfd(vfd *r,vfd *x)
 }
 
  //matrix r = (matrix r - matrix x)
-void m5d_sub_i(vfd *r,vfd *x) 
+void fb_i(vfd *r,vfd *x) 
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
     c = x->units ^ r->units;
@@ -632,22 +631,54 @@ vfd m5d_mul4(vfd a)
     
     return a; 
 }
+ //matrix r = (matrix r - matrix x)
+void m5d_sub_i(vfd *r,vfd *x) 
+{
+    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    c = x->units ^ r->units;
+    d = x->middle ^ r->middle;
+    e = c ^ x->sign;
+    f = e ^ x->middle;
+    g = f ^ r->sign;
+    h = g | d;
+    i = h | c;
+    r->sign = i;
+    j = i ^ c;
+    k = j & r->sign;
+    l = k | x->middle;
+    m = l ^ g;
+    n = m ^ r->middle;
+    r->middle = n;
+    o = m | d;
+    p = o ^ c;
+    q = p ^ r->middle;
+    r->units = q;
+       
+}
 
 void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
 {
+	         
 
+
+    
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
         int i, j;
+         m5d_create(c, b->nrows, b->ncols);
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {   
-                add_vfd(c->rows[i] + j, a->rows[i] + j, b->rows[i] + j);
+                //add_vfd(c->rows[i + j] , a->rows[i + j], b->rows[i + j]);
+               add_vfd(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+               
+               
             }
         }
         
     }
+    
     
 }
 /**
@@ -716,22 +747,23 @@ void m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b)
     /** todo: Test this functions */
         for(int i = 0; i < a->nrows; i++)
         {
-            m5d_sub(c->rows[i], a->rows[i], b->rows[i]);
+            vfd_sub(c->rows[i], a->rows[i], b->rows[i]);
         }  
 }
 
 
 
-void m5d_sub_r(m5d_t * c ,m5d_t  * a , m5d_t * b)
+void m5d_sub(m5d_t * c ,m5d_t  * a , m5d_t * b)
 {
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
         int i, j;
+        m5d_create(c, b->nrows, b->ncols);
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {   
-                m5d_sub(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+                vfd_sub(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
             }
         }
         

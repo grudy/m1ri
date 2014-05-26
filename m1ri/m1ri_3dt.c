@@ -471,14 +471,23 @@ void m3d_free( m3d_t *  tofree)
 
 
 
-
+/**
+   Allocates blocks for an m3d_slice
+*/
 static inline m3d_t  * m3_blockslice_allocate(m3d_t * block, rci_t  nrows,  wi_t  width)
 {
     block  = m1ri_calloc(nrows *  width  ,   sizeof(m3d_t  ) );
     return block;
 }
 
- static inline m3d_t ** m3_rowslice_allocate(m3d_t * block, m3d_t ** rows, wi_t width, rci_t nrows)
+
+
+/**
+   Allocates rows for an m3d_slice
+   
+   
+*/
+static inline m3d_t ** m3_rowslice_allocate(m3d_t * block, m3d_t ** rows, wi_t width, rci_t nrows)
 {
 	int i;
     rows = m1ri_calloc( nrows , width  * sizeof(m3d_t *));
@@ -574,7 +583,9 @@ m3d_t m3d_transpose_sliced(m3d_t * a)
     return c;
   
 }
-
+/**
+  Allocates a m3_slice to consist of four equally sized windows
+*/
 void m3d_quarter(m3_slice * c , m3d_t * a)
 {
 	

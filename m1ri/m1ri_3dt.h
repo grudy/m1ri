@@ -209,6 +209,7 @@ void m3d_free( m3d_t *  );
 	partitions
 ****************************************************** 
 */
+
 void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
 
 //A direct transpose, using no windows

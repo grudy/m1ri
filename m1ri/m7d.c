@@ -393,6 +393,12 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
 
 {
     
+    
+    /*
+    s3s2s1s0 ← add(a2a1a0, b2b1b0)
+    r2r1r0 ← add(s2s1s0, s3)
+
+    */
     vec s;
     vec t;
     
@@ -687,11 +693,13 @@ void m7d_add_r(m7d_t *c, m7d_t *a, m7d_t *b)
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
         int i, j;
-     
+     	m7d_create(c, b->nrows, b->ncols);
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {
+                
+                //
                 add_vtri(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);    
             }
         }

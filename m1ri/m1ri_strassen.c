@@ -263,14 +263,14 @@ static inline void m5d_qrt_mul(m5d_t * c,m5d_t *a, m5d_t * b )
     m5d_quarter(&c_slice, c);
     if((c_slice.row[0][0].ncols) > M1RI_RADIX)
     {
-        m5d_sub_r(x1, &a_slice.row[0][0], &a_slice.row[1][0]);  //1
-        m5d_sub_r(x2,&b_slice.row[1][1],&b_slice.row[0][1]);  //2
+        m5d_sub(x1, &a_slice.row[0][0], &a_slice.row[1][0]);  //1
+        m5d_sub(x2,&b_slice.row[1][1],&b_slice.row[0][1]);  //2
         m5d_qrt_mul(&c_slice.row[1][0], x1, x2);  //3
         m5d_add_r(x1,&a_slice.row[1][0],&a_slice.row[1][1]);  //4
-        m5d_sub_r(x2,&b_slice.row[0][1],&b_slice.row[0][0]);  //5
+        m5d_sub(x2,&b_slice.row[0][1],&b_slice.row[0][0]);  //5
         m5d_qrt_mul(&c_slice.row[1][1], x1, x2);    //6
-        m5d_sub_r(x1,x1,&a_slice.row[0][0]);//7
-        m5d_sub_r(x2,&b_slice.row[1][1],x2);  //8
+        m5d_sub(x1,x1,&a_slice.row[0][0]);//7
+        m5d_sub(x2,&b_slice.row[1][1],x2);  //8
     	m5d_qrt_mul(&c_slice.row[0][1],x1,x2); //9
 		m5d_sub_d(x1,&a_slice.row[0][1]);    //10  //todo is this the correct order????
         m5d_qrt_mul(&c_slice.row[0][0],x1,&b_slice.row[1][1]);   //11
@@ -280,9 +280,9 @@ static inline void m5d_qrt_mul(m5d_t * c,m5d_t *a, m5d_t * b )
         m5d_add_r(&c_slice.row[0][1],&c_slice.row[0][1] , &c_slice.row[1][1]);   //15
         m5d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);    //16
         m5d_add_r(&c_slice.row[1][1],&c_slice.row[1][0] , &c_slice.row[1][1]);  //15
-        m5d_sub_r(x2, x2, &b_slice.row[1][0]);            //18
+        m5d_sub(x2, x2, &b_slice.row[1][0]);            //18
         m5d_qrt_mul(&c_slice.row[1][0], &a_slice.row[1][1], x2);            //19
-        m5d_sub_r(&c_slice.row[1][0], &c_slice.row[1][0], &c_slice.row[0][0]);  //20
+        m5d_sub(&c_slice.row[1][0], &c_slice.row[1][0], &c_slice.row[0][0]);  //20
         m5d_qrt_mul(&c_slice.row[0][0], &a_slice.row[0][1], &b_slice.row[1][0]);
         m5d_add_r(&c_slice.row[0][0], x1,&c_slice.row[0][0] );
         
@@ -621,6 +621,7 @@ static inline void m5d_mul_naive_square(m5d_t *c, m5d_t *a, m5d_t *b)
 		m5d_mul_naive_square(&x1, &a_slice->row[1][0], &b_slice->row[0][1]);
 		m5d_mul_naive_square(&x2, &a_slice->row[1][1], &b_slice->row[1][1]); 
 		m5d_add_r(&c_slice->row[1][1], &x1, &x2) ;
+		
 	
     }
    

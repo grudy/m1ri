@@ -26,6 +26,7 @@
 #include <time.h>
 int main(int argc, const char * argv[])
 {
+	
     int isequal;
     m5d_t * a, * b,  *d, *e, *f, *g, *h, *i, *j, *k;
     a = m1ri_malloc(sizeof(m5d_t));
@@ -44,6 +45,8 @@ int main(int argc, const char * argv[])
     
     m5d_rand(b);
     isequal = m5d_equal(a, b);
+    
+    
     if(isequal)
     {
         printf("Equaltest: passed ");
@@ -101,12 +104,23 @@ int main(int argc, const char * argv[])
     
    
   	m5d_strassen(h, f, g);
-  	
+  	/*
     m5d_print(h);
 	
 	m5d_classic_mul(k, i, j);
 	m5d_print(k);
-	
+	m5d_free(a);
+	m5d_free(a);
+	m5d_free(b);
+	m5d_free(d);
+	m5d_free(e);
+	m5d_free(f);
+	m5d_free(g);
+	m5d_free(h);
+	m5d_free(i);
+	m5d_free(j);
+	m5d_free(k);
+	*/
 	
     return 0;
 }

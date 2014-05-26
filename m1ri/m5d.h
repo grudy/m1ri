@@ -182,7 +182,7 @@ m5d_t m5d_create( m5d_t * , rci_t nrows, rci_t ncols);
  
  */
 
-vfd * m5d_rand(m5d_t * a);
+vfd * m5d_rand(m5d_t * );
 /** 
  Make an Identity Matrix
  a = Identity matrix
@@ -211,7 +211,7 @@ void m5d_free( m5d_t *  );
 
 
 
-void m5d_sub( vfd *, vfd *, vfd *);               //subtract vector x by by vector y.   The product is vector r.
+void vfd_sub( vfd *, vfd *, vfd *);               //subtract vector x by by vector y.   The product is vector r.
 
 /** *******************************************
  matrix r = (direct sum matrix r + matrix x)
@@ -219,7 +219,7 @@ void m5d_sub( vfd *, vfd *, vfd *);               //subtract vector x by by vect
 void iadd_vfd(vfd *,vfd *);
 
 void m5d_add_r(m5d_t *, m5d_t *, m5d_t *);
-void m5d_sub_r(m5d_t *, m5d_t *, m5d_t *);
+void m5d_sub(m5d_t *, m5d_t *, m5d_t *);
 void m5d_sub_d(m5d_t  * a , m5d_t * b);
 void add_vfd(vfd *, vfd * , vfd *);
 void sub_vfd(vfd *, vfd * , vfd *);
