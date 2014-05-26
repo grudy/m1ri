@@ -353,6 +353,8 @@ m5d_t   m5d_identity(m5d_t  *a, rci_t n)
 
 void m5d_free( m5d_t *  tofree)
 { 
+
+
     m1ri_free(tofree->rows);
     m1ri_free(tofree->block);   
 }

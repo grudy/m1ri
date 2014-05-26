@@ -29,53 +29,133 @@ int main(int argc, const char * argv[])
     
     
     
-    
-    time_t before;
-    time(&before);
-    int isequal;
-    
-    m3d_t bunches;
-    m3d_t plenitude;
-    m3d_t *  oodles = malloc(sizeof(m3d_t));
-    
-    
-    
-    
-    plenitude = m3d_create(&bunches, 16384, 16384);
-    bunches  = m3d_create(&plenitude,  16384, 16384);
-	m3d_create(oodles, 16384, 16384);
-    plenitude  = m3d_rand(&plenitude);
-    bunches  = m3d_rand(&bunches);
-   oodles =  m3d_hadamard(&plenitude, &bunches);
-    
-    
-    
-    
-    time_t after;
-    time(&after);
-    double time_test_m1ri = difftime( after, before);
-    
-    printf("Time: %9f seconds \n", time_test_m1ri );
-    
-    isequal = m3d_equal(oodles, &plenitude);
-    
-    if(!isequal)
-    {
-        printf("Hadamard: passed ");
-        
-    }
-    
-    if(isequal)
-    {
-        printf("Hadamard: failed ");
-        return 1;
-        
-    }
-    
-    return 0;
-	m3d_free(oodles);
+     //A*(B+C) == A*B + A*C
+     
+     //m3d
+    m3d_t * a_m3d,  * b_m3d,  * c_m3d, * t1_m3d,* t2_m3d, *t3_m3d, * r1_m3d, *  r2_m3d;
+    a_m3d = malloc(sizeof(m3d_t));
+    b_m3d = malloc(sizeof(m3d_t));
+    c_m3d = malloc(sizeof(m3d_t));
+    t1_m3d = malloc(sizeof(m3d_t));
+	t2_m3d = malloc(sizeof(m3d_t));
+	t3_m3d = malloc(sizeof(m3d_t));
+	r1_m3d = malloc(sizeof(m3d_t));
+	r2_m3d = malloc(sizeof(m3d_t));
+	m3d_create(a_m3d, 4, 4);
+	m3d_create(b_m3d, 4, 4);
+	m3d_create(c_m3d, 4, 4);
 
+	
+	m3d_rand(a_m3d);
+	m3d_rand(b_m3d);
+	m3d_rand(c_m3d);
+	 /*
+	     a_m3d * (b_m3d  + c_m3d)   == (a_m3d * b_m3d) + (a_m3d *  c_m3d);
+	 */
+	 
+	 m3d_add_r(t1_m3d, b_m3d, c_m3d);
+	 r1_m3d = m3d_hadamard(a_m3d, t1_m3d);
+	 printf("\n\t\tM3D \n********************************************\n");
+	 printf("\n a_m3d\n");
+	 m3d_print(a_m3d);
+	 printf("\n b_m3d\n");
+	 m3d_print(b_m3d);
+	 printf("\n c_m3d\n");
+	 m3d_print(c_m3d);
+	 printf("\n t1_m3d\n");
+	 m3d_print(t1_m3d);
+	 printf("\n r1_m3d\n");
+	 m3d_print(r1_m3d);
+	 t2_m3d = m3d_hadamard(a_m3d , b_m3d);
+	 t3_m3d = m3d_hadamard(a_m3d ,  c_m3d);
+	 m3d_add_r(r2_m3d, t2_m3d, t3_m3d);
+	 if(!(m3d_equal(r1_m3d, r2_m3d)))
+	 {
+	 	printf("Hadamard m3d test failed");
+	    return 1;
+	 
+	 }   
+	 printf("Hadamard m3d test passed"); 
+	m3d_free(a_m3d);
+    m3d_free(b_m3d);
+    m3d_free(c_m3d);
+    m3d_free(t1_m3d);
+    m3d_free(t2_m3d);
+    m3d_free(t3_m3d);
+	m3d_free(r1_m3d);
+    m3d_free(r2_m3d);
+    
+       
+    
+     //A*(B+C) == A*B + A*C
+     
+     //m5d
+     /*
+     
+    m5d_t * a_m5d,  * b_m5d,  * c_m5d, * t1_m5d,* t2_m5d, *t3_m5d, * r1_m5d, *  r2_m5d;
+    a_m5d = malloc(sizeof(m5d_t));
+    b_m5d = malloc(sizeof(m5d_t));
+    c_m5d = malloc(sizeof(m5d_t));
+    t1_m5d = malloc(sizeof(m5d_t));
+	t2_m5d = malloc(sizeof(m5d_t));
+	t3_m5d = malloc(sizeof(m5d_t));
+	r1_m5d = malloc(sizeof(m5d_t));
+	r2_m5d = malloc(sizeof(m5d_t));
+	m5d_create(a_m5d, 4, 4);
+	m5d_create(b_m5d, 4, 4);
+	m5d_create(c_m5d, 4, 4);
 
+	
+	m5d_rand(a_m5d);
+	m5d_rand(b_m5d);
+	m5d_rand(c_m5d);
+//	 /*
+//	     a_m5d * (b_m5d  + c_m5d)   == (a_m5d * b_m5d) + (a_m5d *  c_m5d);
+//	 * /
+	 
+	 
+	 
+	 m5d_add_r(t1_m5d, b_m5d, c_m5d);
+	 r1_m5d = m5d_hadamard(a_m5d, t1_m5d);
+	 
+	 printf("\n\t\tm5d \n********************************************\n");
+	 printf("\n a_m5d\n");
+	 m5d_print(a_m5d);
+	 printf("\n b_m5d\n");
+	 m5d_print(b_m5d);
+	 printf("\n c_m5d\n");
+	 m5d_print(c_m5d);
+	 printf("\n t1_m5d\n");
+	 m5d_print(t1_m5d);
+	 printf("\n r1_m5d\n");
+	 m5d_print(r1_m5d);
+	 t2_m5d = m5d_hadamard(a_m5d , b_m5d);
+	 t3_m5d = m5d_hadamard(a_m5d ,  c_m5d);
+	 m5d_add_r(r2_m5d, t2_m5d, t3_m5d);
+	 
+	 /*
+	 if((m5d_equal(r1_m5d, r2_m5d)))
+	 {
+	 	printf("Hadamard m5d test failed");
+	    return 1;
+	 
+	 }   
+	 
+	 
+	 
+	 
+	 printf("Hadamard m5d test passed"); 
+	m5d_free(a_m5d);
+    m5d_free(b_m5d);
+    m5d_free(c_m5d);
+    
+    m5d_free(t1_m5d);
+    m5d_free(t2_m5d);
+    m5d_free(t3_m5d);
+	m5d_free(r1_m5d);
+    m5d_free(r2_m5d);
+    */
+	return 0;
 }
 
 

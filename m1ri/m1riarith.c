@@ -215,6 +215,7 @@ m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
     {
        
         int i, j;
+        m5d_create(c, a->nrows , b->ncols);
         if(a->ncols < 256)
         { 
           for( i = 0; i < a->nrows; i++)
