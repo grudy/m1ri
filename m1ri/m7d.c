@@ -252,7 +252,7 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
     a->width = M1RI_DN(ncols, M1RI_RADIX);
     a->block = m7d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m7d_row_alloc(a->block, a->rows, a->width, a->nrows);
-    a->flags = iswindowed;
+    a->flags = notwindowed;
     return *a;
     
 }

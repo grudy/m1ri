@@ -385,7 +385,7 @@ void m7d_print(m7d_t *a)
         
         if(a->width  ==  1)
         {
-            
+            printf("%d a->ncols", a->ncols);
             if(a->ncols%64 != 0)
             {
                 
@@ -471,10 +471,10 @@ void m5d_fullinfo(m5d_t * a)
 
 void m7d_specs(m7d_t * a)
 {
-    if (a->flags & iswindowed) {
+    if ((a->flags == iswindowed)) {
         printf("Is Windowed   \n");
     }
-    else if ((a->flags & iswindowed) == 0)
+    else if (a->flags  == notwindowed)
     {
         printf("Is not windowed   \n");
     }

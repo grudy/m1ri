@@ -123,8 +123,7 @@ int main(int argc, const char * argv[])
   m5d_free(f);
   m5d_free(g);
   m5d_free(h);
-  // 
-  /*
+
   
     printf("\n\n\****************************************\n \t\t\t\t\tm7d\n");
      m7d_t * i, * j, *k,  * m;
@@ -136,13 +135,14 @@ int main(int argc, const char * argv[])
     k = m1ri_malloc(sizeof(m7d_t)); 
     m = m1ri_malloc(sizeof(m7d_t)); 
   
-    m7d_create(i, 64, 64);
+    m7d_create(i, 128, 128);
    
-    m7d_create(j, 64, 64);
+    m7d_create(j, 128, 128);
 
     m7d_rand(i);
     m7d_rand(j);
-    
+    m7d_specs(i);
+     m7d_print(i);
      //m7d_add_r(k,  i, j);
      //m7d_sub(m,   k,  j);
 
@@ -161,7 +161,7 @@ int main(int argc, const char * argv[])
     {
      	{
           printf("Error in m7d addition and subtraction");
-         // return 1; 
+          //return 1; 
     
          }
     
@@ -173,7 +173,7 @@ int main(int argc, const char * argv[])
   m7d_free(j);
   m7d_free(k);
   m7d_free(m);
-  */
+  
   
   return 0;
   

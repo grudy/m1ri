@@ -120,6 +120,7 @@ static inline void m1ri_free(void * val) {
  For testing if windowed
  */
 static u_int8_t const iswindowed = 0x1; 
+static u_int8_t const notwindowed = 0x2;
 
 static inline u_int64_t  m1ri_rand() {
   assert(RAND_MAX >= ((1ULL<<25)-1));
