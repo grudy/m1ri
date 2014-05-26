@@ -141,7 +141,7 @@ int main(int argc, const char * argv[])
 	 
 	 }   
 	 
-	 
+	 d
 	 
 	 
 	 printf("Hadamard m5d test passed"); 

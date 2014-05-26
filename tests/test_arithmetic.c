@@ -107,7 +107,7 @@ int main(int argc, const char * argv[])
     m5d_print(h); 
 	
 	
-	if((m5d_equal(h, e)))
+	if(!(m5d_equal(h, e)))
     {
      	{
           printf("Error in m5d addition and subtraction\n");

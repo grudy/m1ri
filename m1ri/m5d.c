@@ -508,31 +508,29 @@ void vfd_sub( vfd *r, vfd *a, vfd *b)
     c = b->units ^ a->units;
     d = b->middle ^ a->middle;
     e = c ^ b->sign;
-    f = e ^ b->middle;
+    f = e | b->units;
     g = f ^ a->sign;
     h = g | d;
-    i = h | c;
-    r->sign = i;
-    j = i ^ c;
+    r->sign = h | c;
+    j = r->sign ^ c;
     k = j & a->sign;
     l = k | b->middle;
     m = l ^ g;
-    n = m ^ a->middle;
-    r->middle = n;
+    r->middle = m ^ a->middle;
     o = m | d;
     p = o ^ c;
-    q = p ^ a->middle;
-    r->units = q;
+    r->units = p ^ a->middle;
+
     
     /** 
-    def sub(a,b):
+def sub(a,b):
     c = b[0] ^ a[0]
     d = b[1] ^ a[1]
     e = c ^ b[2]
     f = e | b[0]
     g = f ^ a[2]
     h = g | d
-    i = h | c
+    i = h | c  last
     j = i ^ c
     k = j & a[2]
     l = k | b[1]
