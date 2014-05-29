@@ -76,7 +76,7 @@ int main(int argc, const char * argv[])
    /*
   	 m5d
   */
-  printf("\n\n\****************************************\n \t\t\t\t\tm5d\n");
+  printf("\n \n ****************************************\n \t\t\t\t\tm5d\n");
   
     m5d_t * e, * f, *g, * h;
   
@@ -125,26 +125,26 @@ int main(int argc, const char * argv[])
   m5d_free(h);
 
   
-    printf("\n\n\****************************************\n \t\t\t\t\tm7d\n");
+    printf("\n\n****************************************\n \t\t\t\t\tm7d\n");
      m7d_t * i, * j, *k,  * m;
   
-  
+
 
     i = m1ri_malloc(sizeof(m7d_t)); 
     j = m1ri_malloc(sizeof(m7d_t)); 
     k = m1ri_malloc(sizeof(m7d_t)); 
     m = m1ri_malloc(sizeof(m7d_t)); 
   
-    m7d_create(i, 128, 128);
+    m7d_create(i, 4, 4);
    
-    m7d_create(j, 128, 128);
+    m7d_create(j, 4, 4);
 
     m7d_rand(i);
     m7d_rand(j);
-    m7d_specs(i);
-     m7d_print(i);
-     //m7d_add_r(k,  i, j);
-     //m7d_sub(m,   k,  j);
+   // m7d_specs(i);
+
+     m7d_add_r(k,  i, j);
+     m7d_sub(m,   k,  j);
 
 
     printf("Matrix i\n");
@@ -153,22 +153,29 @@ int main(int argc, const char * argv[])
     m7d_print(j);
     printf("Matrix k\n");
     m7d_print(k);
-    printf("Matrix m\n");
+	printf("Matrix m\n");
     m7d_print(m); 
 	
 	
 	if(!(m7d_equal(i, m)))
     {
      	{
-          printf("Error in m7d addition and subtraction");
-          //return 1; 
+     	    m7d_free(i);
+  			m7d_free(j);
+  			m7d_free(k);
+  			m7d_free(m);
+  	
+     	
+     	
+          printf("Error in m7d addition and subtraction\n");
+          return 1; 
     
          }
     
     }
-    
+    //
 	printf("m7d addition and subtraction test passed");
-    
+  
   m7d_free(i);
   m7d_free(j);
   m7d_free(k);

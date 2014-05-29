@@ -317,9 +317,10 @@ void m5d_print(m5d_t *a)
 
 static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
 {
+	
     u_int64_t out[3];
-    short value, x ;
-    for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
+    short value;//, x ;
+    for( int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         out[0] =  a & (leftbit >>  x);
         out[1] =   b & (leftbit >>  x);
@@ -327,7 +328,7 @@ static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_i
         
     	if((out[2]  ==  out[1]) & (out[1] == out[0]))
        	{
-       	printf("[ 0 ]");	
+       	printf("[0]");	
        	}
        
         else
@@ -345,9 +346,10 @@ static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_i
         {
             value = value + 4;           
         }
-        printf("[ %d ]", value);
+        printf("[%d]", value);
 		}
      
+    
     }
     
 }
@@ -385,15 +387,15 @@ void m7d_print(m7d_t *a)
         
         if(a->width  ==  1)
         {
-            printf("%d a->ncols", a->ncols);
+
             if(a->ncols%64 != 0)
             {
                 
-                print_m7d_block(a->rows[i][0].units,a->rows[i][0].middle, a->rows[i][0].sign, a->fcol, (64 - a->ncols%64) );
+                print_m7d_block(a->rows[i][0].units,a->rows[i][0].middle, a->rows[i][0].sign, 0, (64 - a->ncols%64) );
             }
             if(a->ncols%64 == 0)
             {
-                print_m7d_block(a->rows[i][0].units, a->rows[i][0].middle,  a->rows[i][0].sign, a->fcol, 0 );
+                print_m7d_block(a->rows[i][0].units, a->rows[i][0].middle,  a->rows[i][0].sign, 0 , 0 );
             }
             
         }

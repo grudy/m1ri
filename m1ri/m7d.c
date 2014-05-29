@@ -253,6 +253,8 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
     a->block = m7d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m7d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = notwindowed;
+    
+    
     return *a;
     
 }
@@ -361,13 +363,18 @@ void vtri_negate(vtri * a)
 m7d_t  m7d_rand(m7d_t * a)
 {
     int i;
+    
     for( i = 0; i < (a->nrows * a->width); i++)
     {
         
         a->block[i].sign = m1ri_rand();
         a->block[i].middle = m1ri_rand() ;
         a->block[i].units = m1ri_rand();
-   
+        vec temp = (~(a->block[i].sign) & ~(a->block[i].middle) & ~(a->block[i].units));
+   		a->block[i].sign   = a->block[i].sign | temp;
+   		a->block[i].middle = a->block[i].middle | temp;
+   		a->block[i].units  =  a->block[i].units | temp;
+   		
     }
     return *a;
 }
@@ -402,40 +409,35 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
     vec s;
     vec t;
     
-    r->sign = x->units ^ y->units;
+    r->units = x->units ^ y->units;
 
     s = (x->units & y->units);
     r->middle = s^ x->middle ^ y->middle;
     t = ((s) & (x->middle | y->middle)) | (x->middle & y->middle);
     r->sign = x->sign ^ y->sign ^ t;
-    s = x->sign | y->sign | t;
+    //to here I know is right
     
-    t = (r->units & s );
+    
+    s = ((t) & (x->sign | y->sign)) | (x->sign & y->sign);
+    
+    t = s & r->units;
     r->units = s ^ r->units;
+    s= t & r->middle;
+    r->middle = r->middle ^ t;
+    r->sign = r->sign | s;
+
     
-   r->middle = r->middle ^ t ;
-    
-   r->sign = r->sign ^ ( t & r->middle);
     
 }
 
 void m7d_vtri_sub(vtri * r ,vtri * x, vtri * y)
 {
-     /** todo: test function output*/
-    vec s;
-    vec t;
-    
-    r->sign = x->units ^ !y->units;
-
-    s = (x->units & !y->units);
-    r->middle = s^ x->middle ^ !y->middle;
-    t = (((s) & (x->middle | !y->middle)) | (x->middle & !y->middle) );
-    r->sign = x->sign ^ !y->sign ^ t;
-    s = x->sign | !y->sign | t;
-    t = (r->units & s );
-    r->units = s ^ r->units;
-    r->middle = r->middle ^ t ;
-    r->sign = r->sign ^ ( t & r->middle);
+   vtri temp;
+   temp.units = ~y->units;
+   temp.middle = ~y->middle;
+   temp.sign = ~y->sign;
+   add_vtri(r, x, &temp);
+   
     
 
 }
@@ -607,6 +609,7 @@ vtri sub_m7dr(vtri const x, vtri const y)
 void m7d_sub_64(vtri **R, vtri  **A, vtri  **B)
 {
     int i;
+    
     for (i= 0; i < M1RI_RADIX; i++ )
     {
         R[i][0] = sub_m7dr(A[i][0], B[i][0]);
@@ -615,28 +618,37 @@ void m7d_sub_64(vtri **R, vtri  **A, vtri  **B)
 }
 void m7d_sub( m7d_t *r, m7d_t  *x, m7d_t  *y)
 {
-    int n , i;
-    for(i = 0; i < x->nrows; i++)
-    {
-        for(n = 0; n < x->width; n++)
-        {
-		    //m7d_vtri_sub(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
-        }
+	int n , i;
+  	if((x->nrows == y->nrows) && ( x->ncols == y->ncols))
+  	{
+  	
+  	  m7d_create(r, x->nrows , y->ncols);
+  	  for(i = 0; i < x->nrows; i++)
+    	{
+        
+        	for(n = 0; n < x->width; n++)
+        	{
+		    	m7d_vtri_sub(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
+        	}
+    	}
     }
-
 }
 
 int m7d_equal(m7d_t const *a, m7d_t const *b)
 {
+	u_int64_t temp = (a->ncols%64 == 0)? 0:  ((leftbit >> ((a->ncols%64 ) - 1)) -1) ;
+	temp = ~temp;
     if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
     {
         return 0;
     }
-    int i, j;
-    for( i = 0; i < a->nrows; i++)
+   
+  
+    
+    for(int i = 0; i < a->nrows; i++)
     {
         
-        for(j = 0; j < b->width; j++)
+        for(int j = 0; j < (b->width -1); j++)
         {
             if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].units != b->rows[i][j].units ) || (a->rows[i][j].middle != b->rows[i][j].middle ))
             {
@@ -645,6 +657,26 @@ int m7d_equal(m7d_t const *a, m7d_t const *b)
             
         }
     }
+	
+	for(int i = 0; i < a->nrows; i++)
+    {
+        
+        for(int j =  b->width - 1; j < b->width; j++)
+        {
+            if(((a->rows[i][j].sign & temp )!= (b->rows[i][j].sign & temp)) ||
+             ((a->rows[i][j].units & temp) != (b->rows[i][j].units & temp)) ||
+              ((a->rows[i][j].middle & temp) != (b->rows[i][j].middle & temp)))
+            {
+        
+                return 0;
+            
+          
+			}            
+        }
+    }
+	
+     
+       
     return 1;
 }
 
