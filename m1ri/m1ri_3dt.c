@@ -336,17 +336,17 @@ static inline void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow,
  */
  /* This function still needs work*/
  
-m3d_t m3d_concat(m3d_t * c, m3d_t * a, m3d_t * b)
+ void m3d_concat(m3d_t * c, m3d_t * a, m3d_t * b)
 {
     if (a->nrows != b->nrows)
     {
         /* if concat hath failed*/
-        return *c;  
+        return;  
     }
     
     if(a->nrows == b->nrows)
     {
-    	*c = m3d_create(c, a->nrows , a->ncols + b->ncols);
+    	m3d_create(c, a->nrows , a->ncols + b->ncols);
         int x, y;
         x =  0;
         
@@ -354,7 +354,7 @@ m3d_t m3d_concat(m3d_t * c, m3d_t * a, m3d_t * b)
             
             for(y = 0; y < a->width; y++)
             {
-            	c->rows[x] = a->rows[x];
+            	//c->rows[x] = a->rows[x];
             }
             
             for(y = a->width; y  < c->width; y++)
@@ -362,10 +362,11 @@ m3d_t m3d_concat(m3d_t * c, m3d_t * a, m3d_t * b)
                 
             }
             x++;
+            
         }
         
     }
-    return  *c;
+    return ;
 }
 
 /** 
@@ -598,4 +599,9 @@ void m3d_quarter(m3_slice * c , m3d_t * a)
 	m3d_window_create(a, &c->row[1][1], a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
     
 }
+
+
+
+
+
 

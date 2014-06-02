@@ -155,6 +155,68 @@ int main(int argc, const char * argv[])
 	m5d_free(r1_m5d);
     m5d_free(r2_m5d);
     */
+    
+      //A*(B+C) == A*B + A*C
+     
+     //m7d
+    m7d_t * a_m7d,  * b_m7d,  * c_m7d, * t1_m7d,* t2_m7d, *t3_m7d, * r1_m7d, *  r2_m7d;
+    a_m7d = malloc(sizeof(m7d_t));
+    b_m7d = malloc(sizeof(m7d_t));
+    c_m7d = malloc(sizeof(m7d_t));
+    t1_m7d = malloc(sizeof(m7d_t));
+	t2_m7d = malloc(sizeof(m7d_t));
+	t3_m7d = malloc(sizeof(m7d_t));
+	r1_m7d = malloc(sizeof(m7d_t));
+	r2_m7d = malloc(sizeof(m7d_t));
+	m7d_create(a_m7d, 4, 4);
+	m7d_create(b_m7d, 4, 4);
+	m7d_create(c_m7d, 4, 4);
+
+	
+	m7d_rand(a_m7d);
+	m7d_rand(b_m7d);
+	m7d_rand(c_m7d);
+	 /*
+	     a_m7d * (b_m7d  + c_m7d)   == (a_m7d * b_m7d) + (a_m7d *  c_m7d);
+	 */
+	 
+	 m7d_add_r(t1_m7d, b_m7d, c_m7d);
+	 r1_m7d = m7d_hadamard(a_m7d, t1_m7d);
+	
+	 m7d_print(r2_m7d);
+	 t2_m7d = m7d_hadamard(a_m7d , b_m7d);
+	 t3_m7d = m7d_hadamard(a_m7d ,  c_m7d);
+	 m7d_add_r(r2_m7d, t2_m7d, t3_m7d);
+	  printf("\n\t\tm7d \n********************************************\n");
+	 printf("\n a_m7d\n");
+	 m7d_print(a_m7d);
+	 printf("\n b_m7d\n");
+	 m7d_print(b_m7d);
+	 printf("\n c_m7d\n");
+	 m7d_print(c_m7d);
+	 printf("\n t1_m7d\n");
+	 m7d_print(t1_m7d);
+	 printf("\n r1_m7d\n");
+	 m7d_print(r1_m7d);
+	 printf("\n r2_m7d\n");
+	 m7d_print(r2_m7d);
+	 if(!(m7d_equal(r1_m7d, r2_m7d)))
+	 {
+	 	printf("Hadamard m7d test failed");
+	    return 1;
+	 
+	 }   
+	 printf("Hadamard m7d test passed"); 
+	m7d_free(a_m7d);
+    m7d_free(b_m7d);
+    m7d_free(c_m7d);
+    m7d_free(t1_m7d);
+    m7d_free(t2_m7d);
+    m7d_free(t3_m7d);
+	m7d_free(r1_m7d);
+    m7d_free(r2_m7d);
+    
+    
 	return 0;
 }
 

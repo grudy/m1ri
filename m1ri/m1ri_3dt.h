@@ -181,7 +181,7 @@ void  m3d_window(m3d_t  *,m3d_t *, rci_t , rci_t , rci_t , rci_t );
  Concat b on the end of a, the result is c
    [a] [b] ----->  [a b]   ===  C
 */
-m3d_t m3d_concat(m3d_t * , m3d_t * , m3d_t * );
+void m3d_concat(m3d_t * , m3d_t * , m3d_t * );
 
 /** 
     Stacks a on b, resulting matrix is c

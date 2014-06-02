@@ -25,6 +25,8 @@
 #include "m7d.h"
 
 
+
+
 vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) {
     
     

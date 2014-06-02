@@ -245,10 +245,13 @@ c->sign = a->mid' a->sign b->units  + a->units a->mid' a->sign' b->mid b->sign +
 static inline void vtri_elem(vtri * c, vtri const * a, vtri const * b)
 {
 
+
+  //temp = vec[6];
+  //vec[0] = 
   //c->sign = 
   //c->middle = 
   //c->units = 
-
+  		
 
 
 }
@@ -263,6 +266,7 @@ m7d_t * m7d_hadamard(m7d_t const * a, m7d_t const * b )
     {
        
         int i, j;
+        m7d_create(c, a->nrows, a->ncols);
         if(a->ncols < 256)
         { 
           for( i = 0; i < a->nrows; i++)
