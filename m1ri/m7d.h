@@ -240,4 +240,8 @@ void m7d_mul_32(vtri *, vtri *, vtri *);
 void m7d_mul_16(vtri *, vtri *, vtri *);
 void m7d_mul_8(vtri *, vtri *, vtri *);
 void m7d_mul_4(vtri *R, vtri *A, vtri *B);
+
+
+m7d_t * m7d_hadamard(m7d_t const * , m7d_t const *  );
+
 #endif

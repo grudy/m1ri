@@ -48,9 +48,13 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   m3d_concat(ab, &s->row[0][0], &s->row[1][0]);
   m3d_concat(cd, &s->row[0][1], &s->row[1][1]);
 
-  m3d_specs(&s->row[0][0]);
-  m3d_specs(o);
-  if(m3d_equal(o, abcd))
+  //m3d_specs(&s->row[0][0]);
+  m3d_stack(abcd, ab, cd);
+  //m3d_specs(o);
+  //m3d_specs(abcd);
+  m3d_print(abcd);
+  m3d_print(o);
+  if(!m3d_equal(o, abcd))
   {
      printf("\nfail\n");
   

@@ -354,7 +354,7 @@ static inline void   m3d_window_create(m3d_t *c, m3d_t * submatrix, rci_t strow,
             
             for(y = 0; y < a->width; y++)
             {
-            	//c->rows[x] = a->rows[x];
+            	c->rows[x] = a->rows[x];
             }
             
             for(y = a->width; y  < c->width; y++)

@@ -1228,3 +1228,86 @@ void m7d_quarter(m7_slice * c , m7d_t * a)
     
 }
 
+
+
+
+/*
+
+Logic Friday results 
+c->units = a->units a->mid b->units' b->mid' b->sign + a->units a->mid' a->sign' b->units b->mid  + a->units' a->mid a->sign' b->units b->sign + a->units' a->mid' a->sign b->mid  + a->units a->sign' b->units b->mid'  + a->units' a->mid b->units' b->sign + a->sign b->units' b->mid b->sign' + a->units b->units b->mid' b->sign';
+c->mid = a->units a->mid' a->sign' b->mid b->sign + a->mid a->sign b->units b->mid' b->sign' + a->units a->mid' a->sign' b->units b->mid  + a->units' a->mid a->sign' b->units b->sign + a->mid' a->sign b->units' b->sign + a->units' a->sign b->mid' b->sign + a->mid a->sign' b->units b->sign' + a->units b->units' b->mid b->sign';
+c->sign = a->mid' a->sign b->units  + a->units a->mid' a->sign' b->mid b->sign + a->mid a->sign b->units b->mid' b->sign' + a->units a->mid b->units' b->mid' b->sign + a->mid a->sign' b->units' b->mid  + a->units a->mid' b->mid' b->sign + a->units' a->mid b->mid b->sign';
+
+*/
+
+/**
+  Inline elementwise multiplication of a single set of 64 bits
+*/
+static inline void vtri_elem(vtri * c, vtri const * a, vtri const * b)
+{
+
+  vtri one, two, three, four;
+  one.units = a->units & b->units;
+  two.units = a->sign & b->middle;
+  three.units = a->middle & b->sign;
+  one.middle = a->middle & b->units;
+  two.middle = a->units & b->middle;
+  three.middle =  a->sign & b->sign;
+  one.sign = a->units & b->sign;
+  two.sign = a->sign & b->units;
+  three.sign = a->middle & b->middle;        
+  //three.middle = 
+  
+vec temp = (~(one.sign) & ~(one.middle) & ~(one.units));
+   		one.sign   = one.sign | temp;
+   		one.middle = one.middle | temp;
+   		one.units  =  one.units | temp;
+   		
+   		
+temp = (~(two.sign) & ~(two.middle) & ~(two.units));
+   		two.sign   = two.sign | temp;
+   		two.middle = two.middle | temp;
+   		two.units  =  two.units | temp;
+   		
+   		
+ temp = (~(three.sign) & ~(three.middle) & ~(three.units));
+   		three.sign   = three.sign | temp;
+   		three.middle = three.middle | temp;
+   		three.units  =  three.units | temp;
+   		
+  add_vtri(&four, &one, &two); 		
+  add_vtri(c, &four, &three); 		  		
+   		  		
+
+
+}
+
+
+
+
+m7d_t * m7d_hadamard(m7d_t const * a, m7d_t const * b )
+{
+    m7d_t  * c = malloc(sizeof(m7d_t));
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+       
+        int i, j;
+        m7d_create(c, a->nrows, a->ncols);
+        if(a->ncols < 256)
+        { 
+          for( i = 0; i < a->nrows; i++)
+          {
+            for(j = 0; j < (a->width ); j++)
+            {  
+               vtri_elem(c->rows[i] + j, a->rows[i]  + j, b->rows[i] + j);
+            }  
+          }
+
+        }
+     }   
+        
+    
+    return c;
+
+}
+

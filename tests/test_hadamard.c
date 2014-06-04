@@ -90,7 +90,7 @@ int main(int argc, const char * argv[])
      //A*(B+C) == A*B + A*C
      
      //m5d
-     /*
+     
      
     m5d_t * a_m5d,  * b_m5d,  * c_m5d, * t1_m5d,* t2_m5d, *t3_m5d, * r1_m5d, *  r2_m5d;
     a_m5d = malloc(sizeof(m5d_t));
@@ -123,25 +123,34 @@ int main(int argc, const char * argv[])
 	 m5d_print(a_m5d);
 	 printf("\n b_m5d\n");
 	 m5d_print(b_m5d);
-	 printf("\n c_m5d\n");
+	 
+	
+	 t2_m5d = m5d_hadamard(a_m5d , b_m5d);
+	  printf("\n t2_m5d\n");
+	 m5d_print(t2_m5d);
+	 
+	 
+	  printf("\n c_m5d\n");
 	 m5d_print(c_m5d);
 	 printf("\n t1_m5d\n");
 	 m5d_print(t1_m5d);
 	 printf("\n r1_m5d\n");
 	 m5d_print(r1_m5d);
-	 t2_m5d = m5d_hadamard(a_m5d , b_m5d);
+	 
 	 t3_m5d = m5d_hadamard(a_m5d ,  c_m5d);
 	 m5d_add_r(r2_m5d, t2_m5d, t3_m5d);
-	 
-	 /*
-	 if((m5d_equal(r1_m5d, r2_m5d)))
+	  
+	 printf("\n r2_m5d\n");
+	  m5d_print(r2_m5d);
+	  
+	 if(!(m5d_equal(r1_m5d, r2_m5d)))
 	 {
 	 	printf("Hadamard m5d test failed");
 	    return 1;
 	 
 	 }   
 	 
-	 d
+	 
 	 
 	 
 	 printf("Hadamard m5d test passed"); 
@@ -154,8 +163,7 @@ int main(int argc, const char * argv[])
     m5d_free(t3_m5d);
 	m5d_free(r1_m5d);
     m5d_free(r2_m5d);
-    */
-    
+      
       //A*(B+C) == A*B + A*C
      
      //m7d

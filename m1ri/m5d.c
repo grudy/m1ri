@@ -1258,4 +1258,80 @@ void m5d_quarter(m5_slice * c , m5d_t * a)
     
 }
  
+ 
+ /**
+   Orders the elements computed in vfd_elem for the final part (addition)
+ 
+ */
+static inline void vfd_elem_order(vfd * a)
+ {
+   vec temp1, temp2;
+   temp1 = a->units & ~(a->sign);
+   temp2 = a->middle & ~(a->sign);
+   a->middle = a->middle & a->sign;
+   a->sign = temp1 | temp2 | a->sign;
+   a->middle = a->middle | (temp1 & ~(temp2));
+    a->units  = (temp1 & temp2) | (a->units & ~(temp1));
+   
+ }
+ 
+ 
+static inline void vfd_elem(vfd * c, vfd const * a, vfd const * b)
+{
+  vfd one, two ,three, four;
+  vfd tempone, temptwo;
+  one.units = one.sign = one.middle = a->units & b->units;
+  
+  two.middle =  a->middle & b->middle;
+  two.sign = a->middle & b->sign;
+  two.units = a->middle & b->units;
+  
+  three.middle =  a->sign & b->middle;
+  three.sign = a->sign & b->sign;
+  three.units = a->sign & b->units;
+  
+  four.sign = four.middle = a->units & b->middle;
+  
+  four.units = a->units & b->sign;
+  vfd_elem_order(&one);
+  vfd_elem_order(&two);
+  vfd_elem_order(&three);
+  vfd_elem_order(&four);
+    
+    
+  add_vfd(&tempone, &one, &two);
+  add_vfd(&temptwo, &three, &four);
+  add_vfd(c, &tempone, &temptwo);
+  
+  
+  
+  	  
+}
+m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
+{
+    m5d_t  * c = malloc(sizeof(m5d_t));
+    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    {
+       
+        int i, j;
+        m5d_create(c, a->nrows , b->ncols);
+        if(a->ncols < 256)
+        { 
+          for( i = 0; i < a->nrows; i++)
+          {
+            for(j = 0; j < (a->width ); j++)
+            {  
+               vfd_elem(c->rows[i] + j, a->rows[i]  + j, b->rows[i] + j);
+            }  
+          }
+
+        }
+     }   
+        
+    
+    return c;
+
+}
+ 
+ 
 

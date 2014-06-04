@@ -122,6 +122,8 @@ static inline void m1ri_free(void * val) {
 static u_int8_t const iswindowed = 0x1; 
 static u_int8_t const notwindowed = 0x2;
 
+
+
 static inline u_int64_t  m1ri_rand() {
   assert(RAND_MAX >= ((1ULL<<25)-1));
   u_int64_t randomword = random();
@@ -129,7 +131,6 @@ static inline u_int64_t  m1ri_rand() {
   randomword ^= (u_int64_t)random() << 50;
   return randomword;
 }
-
 
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
                {
