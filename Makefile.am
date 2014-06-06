@@ -9,8 +9,8 @@ libm1ri_la_SOURCES = m1ri/m1ri_3dt.c\
 	m1ri/m7d.c\
 	m1ri/m5d.c\
 	m1ri/m1ri_io.c \
-	m1ri/misc.c
-
+	m1ri/misc.c\
+	m1ri/m1ri_permutations.c
 BUILT_SOURCES = m1ri/m1ri_config.h
 
 pkgincludesubdir = $(includedir)/m1ri
@@ -22,7 +22,8 @@ pkgincludesub_HEADERS =  m1ri/m1ri.h
 	m1ri/m1riwrappers.h\
 	m1ri/m1riarith.h\
 	m1ri/m1ri_io.h \
-	m1ri/misc.h
+	m1ri/misc.h\
+	m1ri/m1ri_permutations.h
 
 nodist_pkgincludesub_HEADERS = m1ri/m1ri_config.h
 

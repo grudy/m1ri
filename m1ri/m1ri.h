@@ -39,4 +39,5 @@ Links to every library header in m1ri
 #include <m1ri/m1ri_strassen.h>
 #include <m1ri/m7d.h>
 #include <m1ri/m5d.h>
+#include <m1ri_permutations.h>
 #endif
