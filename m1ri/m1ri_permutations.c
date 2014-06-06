@@ -215,15 +215,29 @@ m7p_t * m7p_copy(m7p_t *P, const m7p_t *Q)
 
 void m3p_set_ui(m3p_t *P, unsigned int value)
 {
-  
+  assert(value == 1);
+  for(int i = 0; i < P->length; i++)
+  {
+     P->values[i] = i;
+  }
 }
 void m5p_set_ui(m5p_t *P, unsigned int value)
-{
-
+{ 
+   assert(value == 1);
+  for(int i = 0; i < P->length; i++)
+  {
+     P->values[i] = i;
+  }
 }
 void m7p_set_ui(m7p_t *P, unsigned int value)
 {
-
+  assert(value == 1);
+  for(int i = 0; i < P->length; i++)
+  {
+     P->values[i] = i;
+  }
+  
+  
 }
 
 /**

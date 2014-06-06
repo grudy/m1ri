@@ -28,5 +28,8 @@ M1RI_HEADERS = ../src/m1ri/m5d.h\
 	../src/m1riarith.h\
 	../src//m1ri_classical.h\
 	../src/m1ri_io.h
-
+	../src/m1ri_io.h
+	
+	
 distclean: clean
+	@MAINTAINER_MODE_TRUE@ rm -f Makefile
