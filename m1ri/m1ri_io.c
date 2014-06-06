@@ -500,3 +500,30 @@ void m7d_fullinfo(m7d_t * a)
   
 }
 
+
+
+
+
+/**
+ * Print  permutation matrices
+ *
+ *
+ */
+
+void m3p_print(m3p_t const *P)
+{
+
+  
+
+}
+void m5p_print(m3p_t const *P)
+{
+
+}
+
+void m7p_print(m3p_t const *P)
+{
+
+}
+
+

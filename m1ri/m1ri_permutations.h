@@ -87,10 +87,10 @@ typedef struct m7p_t {
  * \param length Length of the permutation.
  */
 
-m3p_t *m3p_init(rci_t length);
+m3p_t *m3p_init(rci_t );
 
-m5p_t *m5p_init(rci_t length);
-m7p_t *m7p_init(rci_t length);
+m5p_t *m5p_init(rci_t );
+m7p_t *m7p_init(rci_t );
 
 /**
  * Free a permutation.
@@ -159,9 +159,9 @@ void m7p_set_ui(m7p_t *, unsigned int );
  * \param P Permutation.
  */
 
-void m3d_apply_p_left(m3d_t , m3p_t const *);
-void m5d_apply_p_left(m5d_t , m5p_t const *);
-void m7d_apply_p_left(m7d_t , m7p_t const *);
+void m3d_apply_p_left(m3d_t *, m3p_t const *);
+void m5d_apply_p_left(m5d_t *, m5p_t const *);
+void m7d_apply_p_left(m7d_t *, m7p_t const *);
 
 /**
  * Apply the permutation P to A from the left but transpose P before.
@@ -172,9 +172,9 @@ void m7d_apply_p_left(m7d_t , m7p_t const *);
  * \param P Permutation.
  */
 
-void m3d_apply_p_left_trans(m3d_t , m3p_t const *);
-void m5d_apply_p_left_trans(m5d_t , m5p_t const *);
-void m7d_apply_p_left_trans(m7d_t , m7p_t const *);
+void m3d_apply_p_left_trans(m3d_t *, m3p_t const *);
+void m5d_apply_p_left_trans(m5d_t *, m5p_t const *);
+void m7d_apply_p_left_trans(m7d_t *, m7p_t const *);
 
 /**
  * Apply the permutation P to A from the right.
@@ -185,9 +185,9 @@ void m7d_apply_p_left_trans(m7d_t , m7p_t const *);
  * \param P Permutation.
  */
 
-void m3d_apply_p_right(m3d_t , m3p_t const *);
-void m5d_apply_p_right(m5d_t , m5p_t const *);
-void m7d_apply_p_right(m7d_t , m7p_t const *);
+void m3d_apply_p_right(m3d_t *, m3p_t const *);
+void m5d_apply_p_right(m5d_t *, m5p_t const *);
+void m7d_apply_p_right(m7d_t *, m7p_t const *);
 
 /**
  * Apply the permutation P to A from the right but transpose P before.
@@ -198,18 +198,18 @@ void m7d_apply_p_right(m7d_t , m7p_t const *);
  * \param P Permutation.
  */
 
-void m3d_apply_p_right_trans(m3d_t , m3p_t const *);
-void m5d_apply_p_right_trans(m5d_t , m5p_t const *);
-void m7d_apply_p_right_trans(m7d_t , m7p_t const *);
+void m3d_apply_p_right_trans(m3d_t *, m3p_t const *);
+void m5d_apply_p_right_trans(m5d_t *, m5p_t const *);
+void m7d_apply_p_right_trans(m7d_t *, m7p_t const *);
 
 
 /**
  * Apply the permutation P to A from the right starting at start_row.
  */
 
-void m3d_apply_p_right_even_capped(m3d_t , m3p_t const *, rci_t , rci_t );
-void m5d_apply_p_right_even_capped(m5d_t , m5p_t const *, rci_t , rci_t );
-void m7d_apply_p_right_even_capped(m7d_t , m7p_t const *, rci_t , rci_t );
+void m3d_apply_p_right_even_capped(m3d_t *, m3p_t const *, rci_t , rci_t );
+void m5d_apply_p_right_even_capped(m5d_t *, m5p_t const *, rci_t , rci_t );
+void m7d_apply_p_right_even_capped(m7d_t *, m7p_t const *, rci_t , rci_t );
 
 /**
  * Apply the permutation P^T to A from the right starting at start_row.
@@ -224,9 +224,9 @@ void m7d_apply_p_right_even_capped(m7d_t , m7p_t const *, rci_t , rci_t );
  * \wordoffset
  */
 
-void m3d_apply_p_right_trans_even_capped(m3d_t , m3p_t const *, rci_t , rci_t );
-void m5d_apply_p_right_trans_even_capped(m5d_t , m5p_t const *, rci_t , rci_t );
-void m7d_apply_p_right_trans_even_capped(m7d_t , m7p_t const *, rci_t , rci_t );
+void m3d_apply_p_right_trans_even_capped(m3d_t *, m3p_t const *, rci_t , rci_t );
+void m5d_apply_p_right_trans_even_capped(m5d_t *, m5p_t const *, rci_t , rci_t );
+void m7d_apply_p_right_trans_even_capped(m7d_t *, m7p_t const *, rci_t , rci_t );
 
 
 /**
@@ -238,9 +238,9 @@ void m7d_apply_p_right_trans_even_capped(m7d_t , m7p_t const *, rci_t , rci_t );
  * \param P Permutation.
  */
 
-void m3d_apply_p_right_trans(m3d_t , m3p_t const *);
-void m5d_apply_p_right_trans(m5d_t , m5p_t const *);
-void m7d_apply_p_right_trans(m7d_t , m7p_t const *);
+void m3d_apply_p_right_trans(m3d_t *, m3p_t const *);
+void m5d_apply_p_right_trans(m5d_t *, m5p_t const *);
+void m7d_apply_p_right_trans(m7d_t *, m7p_t const *);
 
 
 
@@ -254,21 +254,11 @@ void m7d_apply_p_right_trans(m7d_t , m7p_t const *);
  * \param A Matrix.
  * \param Q Permutation.
  */
-void  m3d_apply_p_right_trans_tri(m3d_t , m3p_t const *);
-void  m5d_apply_p_right_trans_tri(m3d_t , m3p_t const *);
-void  m7d_apply_p_right_trans_tri(m3d_t , m3p_t const *);
+void  m3d_apply_p_right_trans_tri(m3d_t *, m3p_t const *);
+void  m5d_apply_p_right_trans_tri(m3d_t *, m3p_t const *);
+void  m7d_apply_p_right_trans_tri(m3d_t *, m3p_t const *);
 
 
-
-/**
- * Print  permutation matrices
- *
- *
- */
-
-void m3p_print(m3p_t const *);
-void m5p_print(m3p_t const *)
-void m7p_print(m3p_t const *)
 
 
 /**
@@ -281,9 +271,9 @@ void m7p_print(m3p_t const *)
  * \param r2 Rank of right matrix.
  */
 
-void _m3d_compress_l(m3d_t , rci_t r1, rci_t n1, rci_t r2);
-void _m5d_compress_l(m3d_t , rci_t r1, rci_t n1, rci_t r2);
-void _m7d_compress_l(m3d_t , rci_t r1, rci_t n1, rci_t r2);
+void _m3d_compress_l(m3d_t *, rci_t r1, rci_t n1, rci_t r2);
+void _m5d_compress_l(m3d_t *, rci_t r1, rci_t n1, rci_t r2);
+void _m7d_compress_l(m3d_t *, rci_t r1, rci_t n1, rci_t r2);
 
 
    
@@ -294,4 +284,4 @@ void _m7d_compress_l(m3d_t , rci_t r1, rci_t n1, rci_t r2);
  
 
  
-#endif M1RI_PERMUTATIONS
+#endif 

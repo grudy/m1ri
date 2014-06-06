@@ -25,8 +25,8 @@
 #include <stdio.h>
 #include <m1ri/m1ri_3dt.h>
 #include <m1ri/m7d.h>
-#include "m5d.h"
-
+#include <m1ri/m5d.h>
+#include <m1ri/m1ri_permutations.h>
 /** 
 	Prints an m3d_t matrix
 */
@@ -52,6 +52,19 @@ void m5d_fullinfo(m5d_t *);
 void m7d_specs(m7d_t *);
 
 void m7d_info(m7d_t *);
+
+
+
+/**
+ * Print  permutation matrices
+ *
+ *
+ */
+
+void m3p_print(m3p_t const *);
+void m5p_print(m3p_t const *);
+void m7p_print(m3p_t const *);
+
 
 
 #endif
