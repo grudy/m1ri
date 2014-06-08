@@ -252,14 +252,24 @@ void m7p_set_ui(m7p_t *P, unsigned int value)
 void m3d_apply_p_left(m3d_t *A, m3p_t const *P)
 {
   
+  for(int i = 0; i < P->length; i++)
+  {
+     m3d_rowswap(A, i, P->values[i]);
+  }
 }
 void m5d_apply_p_left(m5d_t *A, m5p_t const *P)
 {
-
+   for(int i = 0; i < P->length; i++)
+  {
+     m5d_rowswap(A, i, P->values[i]);
+  }
 }
 void m7d_apply_p_left(m7d_t *A, m7p_t const *P)
 {
-
+  for(int i = 0; i < P->length; i++)
+  {
+     m7d_rowswap(A, i, P->values[i]);
+  }
 }
 
 /**

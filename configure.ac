@@ -65,6 +65,61 @@ if test x"$ax_cv_have_sse2_ext" = x"yes"; then
 else
   m1ri_HAVE_SSE2=0
 fi
+# PNG
+
+have_libpng="no"
+AC_ARG_ENABLE([png],
+   [AC_HELP_STRING([--disable-png], [disable PNG support @<:@default=enabled@:>@])],
+   [
+    if test "x${enableval}" = "xyes" ; then
+       want_png="yes"
+    else
+       want_png="no"
+    fi
+   ],
+   [want_png="yes"])
+
+AC_MSG_CHECKING([whether to build with PNG support])
+AC_MSG_RESULT([${want_png}])
+
+if test "x${want_png}" = "xyes" ; then
+   PKG_CHECK_MODULES([PNG], [libpng],
+      [have_libpng="yes"; LIBPNG_LIBADD=`pkg-config --libs libpng`],
+      [have_libpng="no"])
+   if ! test "x${have_libpng}" = "xyes" ; then
+      AC_CHECK_LIB([png],
+         [png_create_write_struct],
+         [have_libpng="yes"; LIBPNG_LIBADD="-lpng"],
+         [AC_CHECK_LIB([png14],
+            [png_create_write_struct],
+            [have_libpng="yes"; LIBPNG_LIBADD="-lpng14"],
+            [AC_CHECK_LIB([png12],
+               [png_create_write_struct],
+               [have_libpng="yes"; LIBPNG_LIBADD="-lpng12"],
+               [AC_CHECK_LIB([png10],
+                  [png_create_write_struct],
+                  [have_libpng="yes"; LIBPNG_LIBADD="-lpng10"],
+                  [have_libpng="no"])
+               ])
+            ])
+        ])
+   fi
+   if test "x${have_libpng}" = "xno" ; then
+      AC_MSG_WARN([Can not find a usuable PNG library. Make sure that CPPFLAGS and LDFLAGS are correctly set.])
+   fi
+fi
+
+if test "x${have_libpng}" = "xyes" ; then
+   M1RI_HAVE_LIBPNG=1
+   AC_SUBST(M1RI_HAVE_LIBPNG)
+   AC_SUBST(LIBPNG_LIBADD)
+else
+   M1RI_HAVE_LIBPNG=0
+   AC_SUBST(M1RI_HAVE_LIBPNG)
+fi
+
+
+
 AC_SUBST(m1ri_HAVE_SSE2)
 
 # Checks for library functions.

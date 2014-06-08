@@ -27,6 +27,11 @@
 #include <m1ri/m7d.h>
 #include <m1ri/m5d.h>
 #include <m1ri/m1ri_permutations.h>
+
+#if __M1RI_HAVE_LIBPNG
+#include <png.h>
+#endif //__M1RI_HAVE_LIBPNG
+
 /** 
 	Prints an m3d_t matrix
 */
@@ -64,6 +69,9 @@ void m7d_info(m7d_t *);
 void m3p_print(m3p_t const *);
 void m5p_print(m3p_t const *);
 void m7p_print(m3p_t const *);
+
+
+//ifdef
 
 
 
