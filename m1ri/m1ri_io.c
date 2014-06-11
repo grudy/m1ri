@@ -22,6 +22,9 @@
  
  */
 #include "m1ri_io.h"
+#if __M1RI_HAVE_LIBPNG
+#include <png.h>
+#endif //__M4RI_HAVE_LIBPNG
 /** 
  
  Print a block of an m3d
@@ -526,4 +529,133 @@ void m7p_print(m3p_t const *P)
 
 }
 
+ m3d_t m3d_read_textfile(const char * fn)
+ {
+             FILE *in_file  = fopen("name_of_file", "r"); // read only 
+             
+ 
+ }
+ m5d_t m5d_read_textfile(const char * fn)
+ {
+             FILE *in_file  = fopen("name_of_file", "r"); // read only 
+             
+ }
+ 
+ m7d_t m7d_read_textfile (const char * fn)
+{
+            FILE *in_file  = fopen("name_of_file", "r"); // read only 
+            
 
+}
+
+
+#if __M1RI_HAVE_LIBPNG
+#define PNGSIGSIZE 8
+int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char *comment, int verbose) {
+  FILE *fh = fopen(fn, "wb");
+
+  if (!fh) {
+    if(verbose)
+      printf("Could not open file '%s' for writing\n",fn);
+    return 1;
+  }
+
+  png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+  if (!png_ptr) {
+    if(verbose)
+      printf("failed to initialise PNG write struct.\n");
+    fclose(fh);
+    return 3;
+  }
+  png_set_user_limits(png_ptr, 0x7fffffffL,  0x7fffffffL);
+
+  png_infop info_ptr = png_create_info_struct(png_ptr);
+
+  if (!info_ptr) {
+    if (verbose)
+      printf("failed to initialise PNG info struct\n");
+    png_destroy_write_struct(&png_ptr, &info_ptr);
+    fclose(fh);
+    return 3;
+  }
+
+  if (setjmp(png_jmpbuf(png_ptr))) {
+    if (verbose)
+      printf("error writing PNG file\n");
+    png_destroy_write_struct(&png_ptr, &info_ptr);
+    fclose(fh);
+    return 1;
+  }
+
+  png_init_io(png_ptr, fh);
+  png_set_compression_level(png_ptr, compression_level);
+
+  png_set_IHDR(png_ptr, info_ptr, A->ncols, A->nrows, 1, \
+               PNG_COLOR_TYPE_GRAY, \
+               PNG_INTERLACE_NONE, \
+               PNG_COMPRESSION_TYPE_DEFAULT, \
+               PNG_FILTER_TYPE_DEFAULT);
+
+  png_text txt_ptr[3];
+
+  char pdate[21];
+  time_t ptime=time(NULL);
+  struct tm *ltime=localtime(&ptime);
+  sprintf(pdate,"%04d/%02d/%02d %02d:%02d:%02d",ltime->tm_year+1900,ltime->tm_mon+1,ltime->tm_mday,ltime->tm_hour,ltime->tm_min,ltime->tm_sec);
+
+  txt_ptr[0].key="Software";
+  txt_ptr[0].text="m1ri";
+  txt_ptr[0].compression=PNG_TEXT_COMPRESSION_NONE;
+  txt_ptr[1].key="Date";
+  txt_ptr[1].text=pdate;
+  txt_ptr[1].compression=PNG_TEXT_COMPRESSION_NONE;
+  txt_ptr[2].key="Comment";
+  txt_ptr[2].text=(char*)comment;
+  txt_ptr[2].compression=PNG_TEXT_COMPRESSION_NONE;
+
+  png_set_text(png_ptr, info_ptr, txt_ptr, 3);
+
+  png_write_info(png_ptr, info_ptr);
+
+  png_set_packswap(png_ptr);
+  png_set_invert_mono(png_ptr);
+  
+  png_bytep row = m1ri_calloc(sizeof(char),A->ncols/8+8);
+
+  wi_t j=0;
+  vec tmp = 0;
+  for(rci_t i=0; i<A->nrows; i++) {
+    vec *rowptr = A->rows[i];
+    for(j=0; j<A->width-1; j++) {
+      tmp = rowptr[j];
+      row[8*j+0] = (png_byte)((tmp>> 0) & 0xff);
+      row[8*j+1] = (png_byte)((tmp>> 8) & 0xff);
+      row[8*j+2] = (png_byte)((tmp>>16) & 0xff);
+      row[8*j+3] = (png_byte)((tmp>>24) & 0xff);
+      row[8*j+4] = (png_byte)((tmp>>32) & 0xff);
+      row[8*j+5] = (png_byte)((tmp>>40) & 0xff);
+      row[8*j+6] = (png_byte)((tmp>>48) & 0xff);
+      row[8*j+7] = (png_byte)((tmp>>56) & 0xff);
+    }
+    tmp = rowptr[j];
+    switch( (A->ncols/8 + ((A->ncols%8) ? 1 : 0)) %8 ) {
+    case 0: row[8*j+7] = (png_byte)((tmp>>56) & 0xff);
+    case 7: row[8*j+6] = (png_byte)((tmp>>48) & 0xff);
+    case 6: row[8*j+5] = (png_byte)((tmp>>40) & 0xff); 
+    case 5: row[8*j+4] = (png_byte)((tmp>>32) & 0xff); 
+    case 4: row[8*j+3] = (png_byte)((tmp>>24) & 0xff);
+    case 3: row[8*j+2] = (png_byte)((tmp>>16) & 0xff);
+    case 2: row[8*j+1] = (png_byte)((tmp>> 8) & 0xff);
+    case 1: row[8*j+0] = (png_byte)((tmp>> 0) & 0xff);
+    };
+    png_write_row(png_ptr, row);
+  }
+  m1ri_free(row);
+
+  png_write_end(png_ptr, info_ptr);
+  png_destroy_write_struct(&png_ptr, &info_ptr);
+  fclose(fh);
+  return 0;
+}
+#endif 

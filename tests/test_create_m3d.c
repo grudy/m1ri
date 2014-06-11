@@ -26,76 +26,26 @@
 
 
 #include <m1ri/m1ri.h>
-#include "time.h"
+
 int main(int argc, const char * argv[])
 {
- 	 /*m3d_t *a, *b, *c, *d, *e, *f;
-    a = malloc(sizeof(m3d_t));
-    b = malloc(sizeof(m3d_t));
-    c =  malloc(sizeof(m3d_t));
-    d = malloc(sizeof(m3d_t));
-    e = malloc(sizeof(m3d_t));
-    f = malloc(sizeof(m3d_t));
- 	m3d_create(a, 256, 256);
- 	m3d_create(b, 256, 256);
-    m3d_create(d, 256, 256);
- 	m3d_create(e, 256, 256);
-    
-    m3d_rand(a);
-    m3d_rand(b);
-    m3d_rand(d);
-    m3d_rand(e);
-	
-	m3d_classic_mul(c, a, b);
-	m3d_print(c);
-	
-	#pragma omp parallel
-	{ 
-    
-    		printf("Hello World\n");
-    
-	}
-	m3d_strassen(f, d, e);
-	
-    m3d_print(f);
-    return 0;
-    
-    */
-    
-    /*
-    m3d_t * a, * b, *c;
-    a = m1ri_malloc(sizeof(m3d_t)); 
-    b = m1ri_malloc(sizeof(m3d_t)); 
-    c = m1ri_malloc(sizeof(m3d_t)); 
-    m3d_create(a, 256, 256);
-    m3d_create(b, 256, 256);
-    m3d_rand(a);
-    m3d_rand(b);
-    time_t before;
-    time(&before);
-    m3d_strassen(c, a, b);
-    time_t after;
-    time(&after);
-    double time_test_m1ri = difftime( after, before);
-    printf("Time: %9f seconds ", time_test_m1ri );
-     
- 	*/    
-
+ 	
  
-    time_t before;
-    time(&before);
-    
     m3d_t * a;
     a = m1ri_malloc(sizeof(m3d_t)); 
 	m3d_create(a, 256, 256);
     m3d_rand(a);
-    m3d_print(a);
-    time_t after;
-    time(&after);
-    double time_test_m1ri = difftime( after, before);
-    printf("Time: %9f seconds ", time_test_m1ri );
-    
-    
+    //m3d_print(a);
+    int compression = 1;
+    char * name = "m3d_testmatrix.png";
+    char * comment = "comment";
+    m3d_to_png( a,  name,  compression,  comment ,  verbose);
+    //printf("d");
+    m3d_free(a);
+    #if __M1RI_HAVE_LIBPNG
+    printf("hi")
+    #endif 
+
      return 0;
     
     

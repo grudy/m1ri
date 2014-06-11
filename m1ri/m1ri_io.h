@@ -58,6 +58,10 @@ void m7d_specs(m7d_t *);
 
 void m7d_info(m7d_t *);
 
+ m3d_t m3d_read_textfile(const char * fn);
+ m5d_t m5d_read_textfile(const char * fn);
+
+ m7d_t m7d_read_textfile (const char * fn);
 
 
 /**
@@ -70,8 +74,10 @@ void m3p_print(m3p_t const *);
 void m5p_print(m3p_t const *);
 void m7p_print(m3p_t const *);
 
+#if __M1RI_HAVE_LIBPNG
+int m3d_to_png(const m3d_t *, const char *, int , const char *, int );
+#endif 
 
-//ifdef
 
 
 
