@@ -70,9 +70,15 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
      printf("\nfail\n");
   
   }
+  m3d_t * v = m1ri_malloc(sizeof(m3d_t));
+  m3d_create(v , 4, 128);
   
-  
-    
+  m3d_rand(v);
+  m3d_print(v);
+  m3d_colswap(v, 2, 69);
+    m3d_print(v);
+
+  m3d_free(v);  
   m3d_free(o);
   m3d_free(ab);
   m3d_free(cd);

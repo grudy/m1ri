@@ -101,7 +101,6 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
          dif_b = col_b%M1RI_RADIX;
          a_place =  leftbit >>  dif_a ;
          b_place =  leftbit >> dif_b ;
-
         for( i = 0; i > M->nrows; i++)
         {
         	tempa.sign = (M->rows[i][block_a].sign) & a_place;
@@ -116,8 +115,42 @@ void * m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
         }
     }
     
-    return M;
+    return;
 }
+
+void * m3d_colswap_capped_row(m3d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
+{
+  if((M->ncols >= (col_a ) && (M->nrows >= col_b)))
+    {
+        int i;
+        vec block_a, block_b, dif_a, dif_b, a_place, b_place; 
+        vbg tempa, tempb;
+         block_a = col_a/M1RI_RADIX;
+         block_b = col_b/M1RI_RADIX;
+         dif_a = col_a%M1RI_RADIX;
+         dif_b = col_b%M1RI_RADIX;
+         a_place =  leftbit >>  dif_a ;
+         b_place =  leftbit >> dif_b ;
+
+        for( i = start_row; i > M->nrows; i++)
+        {
+        	tempa.sign = (M->rows[i][block_a].sign) & a_place;
+            tempa.units = (M->rows[i][block_a].units) & a_place;
+            tempb.units = (M->rows[i][block_b].units) & b_place;
+            tempb.sign = (M->rows[i][block_b].sign) & b_place;
+            M->rows[i][block_b].units = (tempa.sign == 0)? (~(leftbit >> dif_b) &  (M->rows[i][block_b].units))  : ((leftbit >> dif_b) | (M->rows[i][block_b].units));
+            M->rows[i][block_b].sign = (tempa.sign == 0)? (~(leftbit >> dif_b) &  (M->rows[i][block_b].sign))  : ((leftbit >> dif_b) | (M->rows[i][block_b].sign));
+            
+            M->rows[i][block_a].units = (tempb.sign == 0)? (~(leftbit >> dif_a) &  (M->rows[i][block_a].sign))  : ((leftbit >> dif_a) | (M->rows[i][block_a].sign));
+            M->rows[i][block_a].sign = (tempb.units == 0)? (~(leftbit >> dif_a) &  (M->rows[i][block_a].units))  : ((leftbit >> dif_a) | (M->rows[i][block_a].units));
+        }
+    }
+    
+
+
+}
+
+
 void  m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
 {
     wi_t  block = (y  ) / M1RI_RADIX;
@@ -632,7 +665,7 @@ void m3d_copy(m3d_t * a, m3d_t const *b)
     {
     
       a->rows[i][j] = b->rows[i][j];
-    
+ 
     }
     
      a->lblock = b->lblock; //  first block pointed to in a window

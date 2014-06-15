@@ -591,7 +591,7 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
   png_init_io(png_ptr, fh);
   png_set_compression_level(png_ptr, compression_level);
 
-  png_set_IHDR(png_ptr, info_ptr, A->ncols, A->nrows, 1, \
+  png_set_IHDR(png_ptr, info_ptr, A->ncols, A->nrows, 2, \
                PNG_COLOR_TYPE_GRAY, \
                PNG_INTERLACE_NONE, \
                PNG_COMPRESSION_TYPE_DEFAULT, \
@@ -619,35 +619,40 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
   png_write_info(png_ptr, info_ptr);
 
   png_set_packswap(png_ptr);
-  png_set_invert_mono(png_ptr);
+  //png_set_invert_mono(png_ptr);
   
-  png_bytep row = m1ri_calloc(sizeof(char),A->ncols/8+8);
+  png_bytep row = m1ri_calloc(sizeof(u_int16_t),A->ncols/8+8);
 
   wi_t j=0;
-  vec tmp = 0;
-  for(rci_t i=0; i<A->nrows; i++) {
-    vec *rowptr = A->rows[i];
+  vbg  tmp;
+  tmp.units = 0;
+  tmp.sign = 0;  // = 0;
+		  for(rci_t i=0; i<A->nrows; i++) {
+			vbg *rowptr = A->rows[i];
     for(j=0; j<A->width-1; j++) {
-      tmp = rowptr[j];
-      row[8*j+0] = (png_byte)((tmp>> 0) & 0xff);
-      row[8*j+1] = (png_byte)((tmp>> 8) & 0xff);
-      row[8*j+2] = (png_byte)((tmp>>16) & 0xff);
-      row[8*j+3] = (png_byte)((tmp>>24) & 0xff);
-      row[8*j+4] = (png_byte)((tmp>>32) & 0xff);
-      row[8*j+5] = (png_byte)((tmp>>40) & 0xff);
-      row[8*j+6] = (png_byte)((tmp>>48) & 0xff);
-      row[8*j+7] = (png_byte)((tmp>>56) & 0xff);
+      tmp.units = rowptr[j].units;
+      row[8*j+0] = (png_byte)((tmp.units>> 0) & 0xff);
+      row[8*j+1] = (png_byte)((tmp.units>> 8) & 0xff);
+      row[8*j+2] = (png_byte)((tmp.units>>16) & 0xff);
+      row[8*j+3] = (png_byte)((tmp.units>>24) & 0xff);
+      row[8*j+4] = (png_byte)((tmp.units>>32) & 0xff);
+      row[8*j+5] = (png_byte)((tmp.units>>40) & 0xff);
+      row[8*j+6] = (png_byte)((tmp.units>>48) & 0xff);
+      row[8*j+7] = (png_byte)((tmp.units>>56) & 0xff);
+      ////////////////////////////////////////////
     }
-    tmp = rowptr[j];
+    tmp.units = rowptr[j].units;
     switch( (A->ncols/8 + ((A->ncols%8) ? 1 : 0)) %8 ) {
-    case 0: row[8*j+7] = (png_byte)((tmp>>56) & 0xff);
-    case 7: row[8*j+6] = (png_byte)((tmp>>48) & 0xff);
-    case 6: row[8*j+5] = (png_byte)((tmp>>40) & 0xff); 
-    case 5: row[8*j+4] = (png_byte)((tmp>>32) & 0xff); 
-    case 4: row[8*j+3] = (png_byte)((tmp>>24) & 0xff);
-    case 3: row[8*j+2] = (png_byte)((tmp>>16) & 0xff);
-    case 2: row[8*j+1] = (png_byte)((tmp>> 8) & 0xff);
-    case 1: row[8*j+0] = (png_byte)((tmp>> 0) & 0xff);
+    case 0: row[8*j+7] = (png_byte)((tmp.units>>56) & 0xff);
+    case 7: row[8*j+6] = (png_byte)((tmp.units>>48) & 0xff);
+    case 6: row[8*j+5] = (png_byte)((tmp.units>>40) & 0xff); 
+    case 5: row[8*j+4] = (png_byte)((tmp.units>>32) & 0xff); 
+    case 4: row[8*j+3] = (png_byte)((tmp.units>>24) & 0xff);
+    case 3: row[8*j+2] = (png_byte)((tmp.units>>16) & 0xff);
+    case 2: row[8*j+1] = (png_byte)((tmp.units>> 8) & 0xff);
+    case 1: row[8*j+0] = (png_byte)((tmp.units>> 0) & 0xff);
+          ////////////////////////////////////////////
+
     };
     png_write_row(png_ptr, row);
   }

@@ -1333,5 +1333,26 @@ m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
 
 }
  
- 
+ void m5d_copy(m5d_t * a, m5d_t const *b)
+{
+  m5d_create(a, b->ncols, b->nrows);
+  for(int i = 0; i < a->nrows; i++)
+  {
+    for(int j = 0; j < b->ncols; j++)
+    {
+    
+      a->rows[i][j] = b->rows[i][j];
+    
+    }
+    
+     a->lblock = b->lblock; //  first block pointed to in a window
+     a->fcol = b->fcol;  ///column offset of first block
+     a->flags = b->flags;
+  
+  }
+  
+  
+
+
+}
 

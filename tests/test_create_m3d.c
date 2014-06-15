@@ -33,13 +33,13 @@ int main(int argc, const char * argv[])
  
     m3d_t * a;
     a = m1ri_malloc(sizeof(m3d_t)); 
-	m3d_create(a, 256, 256);
+	m3d_create(a, 64, 64);
     m3d_rand(a);
     //m3d_print(a);
     int compression = 1;
     char * name = "m3d_testmatrix.png";
     char * comment = "comment";
-    //m3d_to_png( a,  name,  compression,  comment ,  verbose);
+    m3d_to_png( a,  name,  compression,  comment ,  0);
     //printf("d");
     //m3d_free(a);
     //#if __M1RI_HAVE_LIBPNG

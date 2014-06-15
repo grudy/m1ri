@@ -31,6 +31,10 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = m1ri.pc
 
 libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
+libm1ri_la_LIBADD = $(LIBPNG_LIBADD)
+
+
+libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
 
 check_PROGRAMS =  test_arithmetic test_hadamard test_create_m3d test_m3d test_m5d test_m7d 
 

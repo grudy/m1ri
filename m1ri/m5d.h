@@ -278,6 +278,7 @@ m5d_t m5d_transpose_sliced(m5d_t * );
 m5d_t  * m5_blockslice_allocate(m5d_t * , rci_t  ,  wi_t  );
 m5d_t ** m5_rowslice_allocate(m5d_t * , m5d_t ** , wi_t , rci_t );
 m5d_t * m5d_hadamard(m5d_t const * , m5d_t const *  );
-
+void m5d_copy(m5d_t *, m5d_t const *);
+void * m5d_colswap_capped_row(m5d_t *, rci_t , rci_t, rci_t );
 
 #endif
