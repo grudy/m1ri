@@ -2,7 +2,7 @@
 #define M1RI_M1RI_CONFIG_H
 
 // Defines determined during configuration of M1RI.
-#define __M1RI_HAVE_OPENMP		@M1RI_HAVE_OPENMP@
+//#define __M1RI_HAVE_OPENMP		@M1RI_HAVE_OPENMP@
 
 #define __M1RI_CC                       "@CC@"
 #define __M1RI_CFLAGS                   "@SIMD_CFLAGS@ @OPENMP_CFLAGS@ @CFLAGS@"

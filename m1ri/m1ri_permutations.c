@@ -269,6 +269,7 @@ void m7d_apply_p_left(m7d_t *A, m7p_t const *P)
   for(int i = 0; i < P->length; i++)
   {
      m7d_rowswap(A, i, P->values[i]);
+     
   }
 }
 
@@ -283,6 +284,8 @@ void m7d_apply_p_left(m7d_t *A, m7p_t const *P)
 
 void m3d_apply_p_left_trans(m3d_t *A, m3p_t const *P)
 {
+  
+  
 
 }
 void m5d_apply_p_left_trans(m5d_t *A, m5p_t const *P)
@@ -326,6 +329,14 @@ void m7d_apply_p_right(m7d_t *A, m7p_t const *P)
 void m3d_apply_p_right_even_capped(m3d_t *A, m3p_t const *P, rci_t start_row, rci_t start_col)
 {
 
+  int s = start_col%64;
+   
+  for(int i = start_row; i < P->length; i++)
+  {
+    
+  }
+  
+  
 }
 void m5d_apply_p_right_even_capped(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t start_col)
 {
@@ -374,10 +385,20 @@ void m7d_apply_p_right_trans_even_capped(m7d_t *A, m7p_t const *P, rci_t start_r
 
 void m3d_apply_p_right_trans(m3d_t *A, m3p_t const *P)
 {
-
+  for(int i = 0; i < P->length; i++)
+  {
+    
+  
+  }
 }
 void m5d_apply_p_right_trans(m5d_t *A, m5p_t const *P)
-{
+{   
+   for(int i = 0; i < P->length; i++)
+  {
+    
+  
+  }
+  
 
 }
 void m7d_apply_p_right_trans(m7d_t *A, m7p_t const *P)

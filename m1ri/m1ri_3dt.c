@@ -600,6 +600,27 @@ void m3d_quarter(m3_slice * c , m3d_t * a)
     
 }
 
+void  m3d_transpose(m3d_t   * a)
+{
+  int x, y;
+
+    m3d_create(c, a->ncols, a->nrows);
+    m3_slice * b, *d;
+    d = malloc(sizeof(m3_slice));
+    b = malloc(sizeof(m3_slice));
+    m3d_slices(b, a, 1);
+    m3d_slices(d, c, 1);
+    for (x = 0; x < b->nrows; x++) {
+        for (y = 0; y < b->ncols; y ++) {
+         m3d_transpose_vbg(b->row[x][y].rows, d->row[y][x].rows);
+            
+        }
+    }
+
+
+
+}
+
 
 
 

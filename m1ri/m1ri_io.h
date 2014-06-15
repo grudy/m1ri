@@ -28,13 +28,9 @@
 #include <m1ri/m5d.h>
 #include <m1ri/m1ri_permutations.h>
 
-#if __M1RI_HAVE_LIBPNG
-#include <png.h>
-#endif //__M1RI_HAVE_LIBPNG
 
-/** 
-	Prints an m3d_t matrix
-*/
+//	Prints an m3d_t matrix
+
 void m3d_print(m3d_t * );
 
 /** 
