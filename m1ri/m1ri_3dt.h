@@ -218,5 +218,6 @@ void  m3d_quarter(m3_slice *  , m3d_t * );
 
 m3d_t m3d_transpose_sliced(m3d_t * );
 
+void m3d_copy(m3d_t *, m3d_t const *);
 
 #endif

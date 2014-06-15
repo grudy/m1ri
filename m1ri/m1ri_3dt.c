@@ -602,8 +602,10 @@ void m3d_quarter(m3_slice * c , m3d_t * a)
 
 void  m3d_transpose(m3d_t   * a)
 {
-  int x, y;
 
+   
+  int x, y;
+     m3d_t * c;
     m3d_create(c, a->ncols, a->nrows);
     m3_slice * b, *d;
     d = malloc(sizeof(m3_slice));
@@ -618,10 +620,31 @@ void  m3d_transpose(m3d_t   * a)
     }
 
 
-
+   
 }
 
+void m3d_copy(m3d_t * a, m3d_t const *b)
+{
+  m3d_create(a, b->ncols, b->nrows);
+  for(int i = 0; i < a->nrows; i++)
+  {
+    for(int j = 0; j < b->ncols; j++)
+    {
+    
+      a->rows[i][j] = b->rows[i][j];
+    
+    }
+    
+     a->lblock = b->lblock; //  first block pointed to in a window
+     a->fcol = b->fcol;  ///column offset of first block
+     a->flags = b->flags;
+  
+  }
+  
+  
 
+
+}
 
 
 
