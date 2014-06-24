@@ -284,17 +284,32 @@ void m7d_apply_p_left(m7d_t *A, m7p_t const *P)
 
 void m3d_apply_p_left_trans(m3d_t *A, m3p_t const *P)
 {
+  for(int i = P->length - 1;i >= P->length; i--)
+  {
+    m3d_rowswap(A, i , P->values[i]);
   
+  }
   
 
 }
 void m5d_apply_p_left_trans(m5d_t *A, m5p_t const *P)
-{
+{  
+  for(int i = P->length - 1;i >= P->length; i--)
+  {
+    m5d_rowswap(A, i , P->values[i]);
+  
+  }
+  
+
 
 }
 void m7d_apply_p_left_trans(m7d_t *A, m7p_t const *P)
 {
-
+   for(int i = P->length - 1;i >= P->length; i--)
+  {
+    m7d_rowswap(A, i , P->values[i]);
+  
+  }
 }
 
 /**
@@ -308,14 +323,36 @@ void m7d_apply_p_left_trans(m7d_t *A, m7p_t const *P)
 
 void m3d_apply_p_right(m3d_t *A, m3p_t const *P)
 {
-
+  
+   
+  for(rci_t i = (P->length - 1); i >= 0; i--)
+  {
+    
+      m3d_colswap( A, i, P->values[i]);
+     
+     
+  }
 }
 void m5d_apply_p_right(m5d_t *A, m5p_t const *P)
 {
-
+    for(rci_t i = (P->length - 1); i >= 0; i--)
+  {
+    
+       m5d_colswap( A, i, P->values[i]);
+     
+     
+  }
 }
 void m7d_apply_p_right(m7d_t *A, m7p_t const *P)
 {
+
+  for(rci_t i = (P->length - 1); i >= 0; i--)
+  {
+    
+      m7d_colswap( A, i, P->values[i]);
+     
+     
+  }
 
 }
 
@@ -331,11 +368,11 @@ void m3d_apply_p_right_even_capped(m3d_t *A, m3p_t const *P, rci_t start_row, rc
 
   int s = start_col%64;
    
-  for(rci_t i = start_col; i < P->length; i++)
+  for(rci_t i = start_row; i >= 0; i--)
   {
      if(P->values[i] >= start_col)
      {
-     //  m5d_colswap_capped_row( A, i, P->values[i], start_row  );
+       m3d_colswap_capped_row( A, i, P->values[i], start_row  );
      
      }   
   }
@@ -343,12 +380,33 @@ void m3d_apply_p_right_even_capped(m3d_t *A, m3p_t const *P, rci_t start_row, rc
   
 }
 void m5d_apply_p_right_even_capped(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t start_col)
-{
+{  
+
+   int s = start_col%64;
+   
+  for(rci_t i = start_row; i >= 0; i--)
+  {
+     if(P->values[i] >= start_col)
+     {
+       m5d_colswap_capped_row( A, i, P->values[i], start_row  );
+     
+     }   
+  }
   
 }
 void m7d_apply_p_right_even_capped(m7d_t *A, m7p_t const *P, rci_t start_row, rci_t start_col)
 {
-
+   int s = start_col%64;
+   
+  for(rci_t i = start_row; i >= 0; i--)
+  {
+     if(P->values[i] >= start_col)
+     {
+      m7d_colswap_capped_row( A, i, P->values[i], start_row  );
+     
+     }   
+  }
+  
 }
 
 /**
@@ -366,15 +424,42 @@ void m7d_apply_p_right_even_capped(m7d_t *A, m7p_t const *P, rci_t start_row, rc
 
 void m3d_apply_p_right_trans_even_capped(m3d_t *A, m3p_t const *P, rci_t start_row, rci_t start_col)
 {
-
+  int s = start_col%64;
+   
+  for(rci_t i = start_row; i >= 0; i--)
+  {
+     if(P->values[i] >= start_col)
+     {
+      m3d_colswap_capped_row( A, i, P->values[i], start_row  );
+     
+     }   
+  }
 }
 void m5d_apply_p_right_trans_even_capped(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t start_col)
 {
-
+   int s = start_col%64;
+   
+  for(rci_t i = start_row; i >= 0; i--)
+  {
+     if(P->values[i] >= start_col)
+     {
+      m5d_colswap_capped_row( A, i, P->values[i], start_row  );
+     
+     }   
+  }
 }
 void m7d_apply_p_right_trans_even_capped(m7d_t *A, m7p_t const *P, rci_t start_row, rci_t start_col)
 {
-
+   int s = start_col%64;
+   
+  for(rci_t i = start_row; i >= 0; i--)
+  {
+     if(P->values[i] >= start_col)
+     {
+      m7d_colswap_capped_row( A, i, P->values[i], start_row  );
+     
+     }   
+  }
 }
 
 
@@ -424,7 +509,7 @@ void m7d_apply_p_right_trans(m7d_t *A, m7p_t const *P)
  */
 void  m3d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 {
-
+        
 }
 void  m5d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 {
@@ -450,13 +535,13 @@ void  m7d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 
 void _m3d_compress_l(m3d_t *A, rci_t r1, rci_t n1, rci_t r2)
 {
-
+  
 }
-void _m5d_compress_l(m3d_t *A, rci_t r1, rci_t n1, rci_t r2)
+void _m5d_compress_l(m5d_t *A, rci_t r1, rci_t n1, rci_t r2)
 {
 
 }
-void _m7d_compress_l(m3d_t *A, rci_t r1, rci_t n1, rci_t r2)
+void _m7d_compress_l(m7d_t *A, rci_t r1, rci_t n1, rci_t r2)
 {
 
 }

@@ -621,28 +621,64 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
   png_set_packswap(png_ptr);
   //png_set_invert_mono(png_ptr);
   
-  png_bytep row = m1ri_calloc(sizeof(u_int16_t),A->ncols/8+8);
+		  png_bytep row = m1ri_calloc(sizeof(u_int8_t),A->ncols/4+16);
 
-  wi_t j=0;
-  vbg  tmp;
-  tmp.units = 0;
-  tmp.sign = 0;  // = 0;
-		  for(rci_t i=0; i<A->nrows; i++) {
-			vbg *rowptr = A->rows[i];
-    for(j=0; j<A->width-1; j++) {
-      tmp.units = rowptr[j].units;
-      row[8*j+0] = (png_byte)((tmp.units>> 0) & 0xff);
-      row[8*j+1] = (png_byte)((tmp.units>> 8) & 0xff);
-      row[8*j+2] = (png_byte)((tmp.units>>16) & 0xff);
-      row[8*j+3] = (png_byte)((tmp.units>>24) & 0xff);
-      row[8*j+4] = (png_byte)((tmp.units>>32) & 0xff);
-      row[8*j+5] = (png_byte)((tmp.units>>40) & 0xff);
-      row[8*j+6] = (png_byte)((tmp.units>>48) & 0xff);
-      row[8*j+7] = (png_byte)((tmp.units>>56) & 0xff);
-      ////////////////////////////////////////////
-    }
-    tmp.units = rowptr[j].units;
-    switch( (A->ncols/8 + ((A->ncols%8) ? 1 : 0)) %8 ) {
+		  wi_t j=0;
+		  vbg  tmp;
+		  u_int64_t p_row[2];//  Packed Row 
+		  tmp.units = 0;
+		  tmp.sign = 0;  // = 0;
+  		  u_int64_t ep_bit[64];
+  
+  
+		  for(int q  = 0; q < 64 ; q++)
+		  {
+			ep_bit[q] = leftbit >> q;
+  
+		  } 
+  
+		  
+		   for(rci_t i=0; i<A->nrows; i++) 
+			{
+			  vbg *rowptr = A->rows[i];
+			  for(j=0; j<A->width-1; j++) {
+	
+	
+			  tmp.units = rowptr[j].units;
+			  tmp.sign = rowptr[j].sign;
+	  
+
+			  p_row[0] = p_row[0] | (eq_bit[63] & tmp.units);
+			  p_row[0] = p_row[0] | ((eq_bit[63] & temp.sign) >> 1);
+			  
+			  
+			  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+			  row[8*j+0] = (png_byte)((tmp.units>> 0) & 0xff);
+			  row[8*j+1] = (png_byte)((tmp.units>> 8) & 0xff);
+			  row[8*j+2] = (png_byte)((tmp.units>>16) & 0xff);
+			  row[8*j+3] = (png_byte)((tmp.units>>24) & 0xff);
+			  row[8*j+4] = (png_byte)((tmp.units>>32) & 0xff);
+			  row[8*j+5] = (png_byte)((tmp.units>>40) & 0xff);
+			  row[8*j+6] = (png_byte)((tmp.units>>48) & 0xff);
+			  row[8*j+7] = (png_byte)((tmp.units>>56) & 0xff);
+	  
+	  
+	  
+			  ////////////////////////////////////////////
+			}
+  
+	
+			tmp.units = rowptr[j].units;
+			switch( (A->ncols/8 + ((A->ncols%8) ? 1 : 0)) %8 ) {
     case 0: row[8*j+7] = (png_byte)((tmp.units>>56) & 0xff);
     case 7: row[8*j+6] = (png_byte)((tmp.units>>48) & 0xff);
     case 6: row[8*j+5] = (png_byte)((tmp.units>>40) & 0xff); 
@@ -651,6 +687,22 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
     case 3: row[8*j+2] = (png_byte)((tmp.units>>16) & 0xff);
     case 2: row[8*j+1] = (png_byte)((tmp.units>> 8) & 0xff);
     case 1: row[8*j+0] = (png_byte)((tmp.units>> 0) & 0xff);
+    
+    
+    
+    
+       
+       /*
+           row[8*j+0] = (png_byte)((tmp.units>> 0) & 0xff);
+      row[8*j+1] = (png_byte)((tmp.units>> 8) & 0xff);
+      row[8*j+2] = (png_byte)((tmp.units>>16) & 0xff);
+      row[8*j+3] = (png_byte)((tmp.units>>24) & 0xff);
+      row[8*j+4] = (png_byte)((tmp.units>>32) & 0xff);
+      row[8*j+5] = (png_byte)((tmp.units>>40) & 0xff);
+      row[8*j+6] = (png_byte)((tmp.units>>48) & 0xff);
+      row[8*j+7] = (png_byte)((tmp.units>>56) & 0xff);
+      
+      */
           ////////////////////////////////////////////
 
     };
@@ -663,4 +715,13 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
   fclose(fh);
   return 0;
 }
+
+
+
+
+
+
+
+
+
 #endif 

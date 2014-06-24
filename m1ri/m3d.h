@@ -22,7 +22,7 @@
  
  
  Matrix Represenations and basic operations over GF(3)
- m1ri_3dt.h
+ m3d.h
  */
 
 #ifndef M1RIGF3_M1RIGF3_H
@@ -121,7 +121,7 @@ Naive column swapping
 /** 
 	 Swap columns in a m3d_t matrix
 */
-void * m3d_colswap(m3d_t *, rci_t , rci_t );
+void  m3d_colswap(m3d_t *, rci_t , rci_t );
 
 /**
 	Write an element to a certain point into a  
@@ -219,6 +219,6 @@ void  m3d_quarter(m3_slice *  , m3d_t * );
 m3d_t m3d_transpose_sliced(m3d_t * );
 
 void m3d_copy(m3d_t *, m3d_t const *);
-void * m3d_colswap_capped_row(m3d_t *, rci_t , rci_t, rci_t );
+void  m3d_colswap_capped_row(m3d_t *, rci_t , rci_t, rci_t );
 
 #endif

@@ -16,10 +16,11 @@ TESTS = \
 	test_m7d.c
     test_arithmetic.c\
     test_permutations.c\
+    
 
 pkgincludesubdir = $(includedir)/m1ri
 M1RI_HEADERS = ../src/m1ri/m5d.h\
-	../src/m1ri/m1ri_3dt.h\
+	../src/m1ri/m3d.h\
 	../src/m7d.h\
 	../src/m1ri_combine.h\
 	 ../src/m1ri_small.h\
@@ -29,6 +30,7 @@ M1RI_HEADERS = ../src/m1ri/m5d.h\
 	../src/m1riarith.h\
 	../src//m1ri_classical.h\
 	../src/m1ri_io.h\
-	../src/m1ri_permutations.h
+	../src/m1ri_permutations.h\
+	../src/m1ri_decom.h
 
 distclean: clean

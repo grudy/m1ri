@@ -34,10 +34,11 @@ Links to every library header in m1ri
 #include <stdio.h>
 #include <mm_malloc.h>
 #include <m1ri/m1riwrappers.h>
-#include <m1ri/m1ri_3dt.h>
+#include <m1ri/m3d.h>
 #include <m1ri/m1ri_io.h>
 #include <m1ri/m1ri_strassen.h>
 #include <m1ri/m7d.h>
 #include <m1ri/m5d.h>
 #include <m1ri/m1ri_permutations.h>
+#include <m1ri/m1ri_decom.h>
 #endif

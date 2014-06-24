@@ -19,20 +19,12 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
- m3d_decom.h
- */
+ m3d_decom.c
  
-#ifndef M1RIPROJECT_M3D_DECOM_H
-#define M1RIPROJECT_M3D_DECOM_h
+ */
 
-#include <stdlib.h>
-#include <m1ri/m1riwrappers.h>
+#include "m1ri.h"
 
 
 
 
-
-
-
-
-#endif

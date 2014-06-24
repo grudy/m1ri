@@ -26,7 +26,7 @@
 
 #ifndef M1RIGF3_STRASSEN_H
 #define M1RIGF3_STRASSEN_H
-#include <m1ri/m1ri_3dt.h>
+#include <m1ri/m3d.h>
 #include <m1ri/m1riarith.h>
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>

@@ -244,5 +244,6 @@ void m7d_mul_4(vtri *R, vtri *A, vtri *B);
 
 m7d_t * m7d_hadamard(m7d_t const * , m7d_t const *  );
 void m7d_copy(m7d_t *, m7d_t const *);
-void * m7d_colswap_capped_row(m7d_t *, rci_t , rci_t, rci_t );
+void m7d_colswap(m7d_t *, rci_t , rci_t);
+void m7d_colswap_capped_row(m7d_t *, rci_t , rci_t, rci_t );
 #endif

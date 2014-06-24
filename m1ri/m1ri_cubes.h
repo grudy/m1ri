@@ -27,7 +27,7 @@
 
 #ifndef M1RIPROJECT_M1RI_CUBES_H
 #define M1RIPROJECT_M1RI_CUBES_H
-#include <m1ri/m1ri_3dt.h>
+#include <m1ri/m3d.h>
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>
 

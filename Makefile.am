@@ -3,27 +3,30 @@ ACLOCAL_AMFLAGS = -I m4
 AM_CFLAGS=${SIMD_CFLAGS} ${OPENMP_CFLAGS} ${DEBUG_FLAGS}
 lib_LTLIBRARIES = libm1ri.la
 
-libm1ri_la_SOURCES = m1ri/m1ri_3dt.c\
+libm1ri_la_SOURCES = m1ri/m3d.c\
 	m1ri/m1riarith.c\
 	m1ri/m1ri_strassen.c\
 	m1ri/m7d.c\
 	m1ri/m5d.c\
 	m1ri/m1ri_io.c \
 	m1ri/misc.c\
-	m1ri/m1ri_permutations.c
+	m1ri/m1ri_permutations.c\
+	m1ri/m1ri_decom.c
+	
 BUILT_SOURCES = m1ri/m1ri_config.h
 
 pkgincludesubdir = $(includedir)/m1ri
 pkgincludesub_HEADERS =  m1ri/m1ri.h
 	m1ri/m5d.h\
-	m1ri/m1ri_3dt.h\
+	m1ri/m3d.h\
 	m1ri/m7d.h\
 	m1ri/m1ri_strassen.h\
 	m1ri/m1riwrappers.h\
 	m1ri/m1riarith.h\
 	m1ri/m1ri_io.h \
 	m1ri/misc.h\
-	m1ri/m1ri_permutations.h
+	m1ri/m1ri_permutations.h\
+	m1ri/m1ri_decom.h
 
 nodist_pkgincludesub_HEADERS = m1ri/m1ri_config.h
 
@@ -34,7 +37,6 @@ libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
 libm1ri_la_LIBADD = $(LIBPNG_LIBADD)
 
 
-libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
 
 check_PROGRAMS =  test_arithmetic test_hadamard test_create_m3d test_m3d test_m5d test_m7d 
 

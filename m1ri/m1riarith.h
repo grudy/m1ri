@@ -26,7 +26,7 @@
 #ifndef M1RIPROJECT_M1RIELARITH_H
 #define M1RIPROJECT_M1RIELARITH_H
 
-#include <m1ri/m1ri_3dt.h>
+#include <m1ri/m3d.h>
 #include <m5d.h>
 #include <m7d.h>
 

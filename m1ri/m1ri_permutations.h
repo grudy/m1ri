@@ -29,7 +29,7 @@
 #define M1RI_PERMUTATIONS
 
 #include <m1ri/m1riwrappers.h>
-#include <m1ri/m1ri_3dt.h>
+#include <m1ri/m3d.h>
 #include <m1ri/m5d.h>
 #include <m1ri/m7d.h>
 
@@ -272,8 +272,8 @@ void  m7d_apply_p_right_trans_tri(m3d_t *, m3p_t const *);
  */
 
 void _m3d_compress_l(m3d_t *, rci_t r1, rci_t n1, rci_t r2);
-void _m5d_compress_l(m3d_t *, rci_t r1, rci_t n1, rci_t r2);
-void _m7d_compress_l(m3d_t *, rci_t r1, rci_t n1, rci_t r2);
+void _m5d_compress_l(m5d_t *, rci_t r1, rci_t n1, rci_t r2);
+void _m7d_compress_l(m7d_t *, rci_t r1, rci_t n1, rci_t r2);
 
 
    

@@ -18,7 +18,7 @@ TESTS = \
 
 pkgincludesubdir = $(includedir)/m1ri
 M1RI_HEADERS = ../src/m1ri/m5d.h\
-	../src/m1ri/m1ri_3dt.h\
+	../src/m1ri/m3d.h\
 	../src/m7d.h\
 	../src/m1ri_combine.h\
 	 ../src/m1ri_small.h\
