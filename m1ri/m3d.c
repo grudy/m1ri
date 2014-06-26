@@ -447,8 +447,9 @@ m3d_t m3d_stack(m3d_t * c,  m3d_t * a, m3d_t * b)
     
     if(a->ncols == b->ncols)
     {
-        *c = m3d_create(c, (a->nrows + b->nrows), a->ncols);
+        m3d_create(c, a->ncols,  (a->nrows + b->nrows));
         int x =  0;
+        int y = 0;
         while (x < a->nrows)
         {
             c->rows[x] = a->rows[x];
@@ -457,28 +458,18 @@ m3d_t m3d_stack(m3d_t * c,  m3d_t * a, m3d_t * b)
         while(x < (a->nrows + b->nrows))
         {
         
-            c->rows[x] = a->rows[x - a->nrows];    
+            c->rows[x] = b->rows[y];
+            y++;    
             x++;
         }
+        
+        
         
     }
     
     return *c;
 }
 
-void m3d_copypadding(m3d_t  * r, m3d_t  const * x)
-{
-		int i, s;
-        for( i = 0; i < x->nrows; i++)
-        {
-        	 for( s = 0; s < x->width; s++)
-        	 {
-            r->rows[i][s] = x->rows[i][s];
-            }
-            
-        }
-        
-}
 
 
 void m3d_putpadding(m3d_t  * r, m3d_t  const * x)
@@ -589,7 +580,7 @@ void  m3d_slices(m3_slice *  c, m3d_t * a, wi_t slicesize)
         if(extracols > 0)
         {
         	m3d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, extracols);
-		}
+}
         r++;
         
     }

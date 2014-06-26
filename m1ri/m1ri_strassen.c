@@ -58,9 +58,10 @@ static inline void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
    
     if((c_slice->row[0][0].ncols) > M1RI_RADIX)
     {
-     
+       
     	m3d_create(&x1, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    
-     	m3d_create(&x2, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);			    	   
+     	m3d_create(&x2, c_slice->row[0][0].nrows, c_slice->row[0][0].ncols);	
+     		    	   
     	m3d_mul_naive_square(&x1, &a_slice->row[0][0], &b_slice->row[0][0]);
     	m3d_mul_naive_square(&x2, &a_slice->row[0][1], &b_slice->row[1][0]);
 	    m3d_add_r(&c_slice->row[0][0], &x1, &x2) ; 
@@ -73,10 +74,12 @@ static inline void m3d_mul_naive_square(m3d_t *c, m3d_t *a, m3d_t *b)
 	    m3d_mul_naive_square(&x1, &a_slice->row[1][0], &b_slice->row[0][1]);
 		m3d_mul_naive_square(&x2, &a_slice->row[1][1], &b_slice->row[1][1]); 
  	    m3d_add_r(&c_slice->row[1][1], &x1, &x2) ;
+ 	    m3d_print(&x1);	
+ 	    m3d_print(&x2);	
 	
     }
    
-    else if((c_slice->row[0][0].ncols ) <= M1RI_RADIX)
+    else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
     	m3d_create(&x1, M1RI_RADIX,M1RI_RADIX);			    
 		m3d_create(&x2, M1RI_RADIX, M1RI_RADIX);
@@ -221,9 +224,9 @@ void  m3d_strassen(m3d_t *c, m3d_t  *a, m3d_t   *b)
 		m3d_create(padded_a, arcr, acbr);
 		m3d_create(padded_b, acbr, bccc);
 		m3d_create(padded_c, arcr, bccc);
-		m3d_copypadding(padded_a, a);
-		m3d_copypadding(padded_b, b);
-		m3d_copypadding(padded_c, c);
+		m3d_copy(padded_a, a);
+		m3d_copy(padded_b, b);
+		m3d_copy(padded_c, c);
 		
 		
 		m3d_qrt_mul(padded_c, padded_a, padded_b); 
@@ -356,9 +359,9 @@ void  m5d_strassen(m5d_t *c, m5d_t  *a, m5d_t   *b)
 		m5d_create(padded_a, arcr, acbr);
 		m5d_create(padded_b, acbr, bccc);
 		m5d_create(padded_c, arcr, bccc);
-		m5d_copypadding(padded_a, a);
-		m5d_copypadding(padded_b, b);
-		m5d_copypadding(padded_c, c);
+		m5d_copy(padded_a, a);
+		m5d_copy(padded_b, b);
+		m5d_copy(padded_c, c);
 		
 		
 		m5d_qrt_mul(padded_c, padded_a, padded_b); 
@@ -491,9 +494,9 @@ void  m7d_strassen(m7d_t *c, m7d_t  *a, m7d_t   *b)
 		m7d_create(padded_a, arcr, acbr);
 		m7d_create(padded_b, acbr, bccc);
 		m7d_create(padded_c, arcr, bccc);
-		m7d_copypadding(padded_a, a);
-		m7d_copypadding(padded_b, b);
-		m7d_copypadding(padded_c, c);
+		m7d_copy(padded_a, a);
+		m7d_copy(padded_b, b);
+		m7d_copy(padded_c, c);
 		
 		
 		m7d_qrt_mul(padded_c, padded_a, padded_b); 
@@ -568,8 +571,8 @@ void m3d_classic_mul(m3d_t *c, m3d_t  *a, m3d_t  *b)
 			m3d_create(padded_a, arcr, acbr);
 			m3d_create(padded_b, acbr, bccc);
 			m3d_create(padded_c, arcr, bccc);
-			m3d_copypadding(padded_a, a);
-			m3d_copypadding(padded_b, b);
+			m3d_copy(padded_a, a);
+			m3d_copy(padded_b, b);
 			m3d_mul_naive_square(padded_c, padded_a, padded_b); 
 			m3d_putpadding(c, padded_c);
 			m3d_free(padded_a);
@@ -690,8 +693,8 @@ void m5d_classic_mul(m5d_t *c, m5d_t  *a, m5d_t  *b)
 			m5d_create(padded_a, arcr, acbr);
 			m5d_create(padded_b, acbr, bccc);
 			m5d_create(padded_c, arcr, bccc);
-			m5d_copypadding(padded_a, a);
-			m5d_copypadding(padded_b, b);
+			m5d_copy(padded_a, a);
+			m5d_copy(padded_b, b);
 			m5d_mul_naive_square(padded_c, padded_a, padded_b); 
 			m5d_putpadding(c, padded_c);
 			m5d_free(padded_a);
@@ -808,8 +811,8 @@ if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
 	m7d_create(padded_a, arcr, acbr);
 	m7d_create(padded_b, acbr, bccc);
 	m7d_create(padded_c, arcr, bccc);
-	m7d_copypadding(padded_a, a);
-	m7d_copypadding(padded_b, b);
+	m7d_copy(padded_a, a);
+	m7d_copy(padded_b, b);
 	m7d_mul_naive_square(padded_c, padded_a, padded_b);
 	m7d_putpadding(c, padded_c);
 	m7d_free(padded_a);

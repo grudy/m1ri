@@ -648,8 +648,8 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
 			  tmp.sign = rowptr[j].sign;
 	  
 
-			  p_row[0] = p_row[0] | (eq_bit[63] & tmp.units);
-			  p_row[0] = p_row[0] | ((eq_bit[63] & temp.sign) >> 1);
+			  p_row[0] = p_row[0] | (ep_bit[63] & tmp.units);
+			  p_row[0] = p_row[0] | ((ep_bit[63] & tmp.sign) >> 1);
 			  
 			  
 			  

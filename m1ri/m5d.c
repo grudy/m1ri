@@ -717,7 +717,10 @@ void m5d_add_64(vfd **R, vfd   **A, vfd  **B)
 
 }
 
-void m5d_copypadding(m5d_t  * r, m5d_t  const * x)
+
+
+/*
+void m5d_copy(m5d_t  * r, m5d_t  const * x)
 {
 		int  s;
         for(int i = 0; i < x->nrows; i++)
@@ -728,7 +731,7 @@ void m5d_copypadding(m5d_t  * r, m5d_t  const * x)
             }   
         }
 }
-
+*/
 void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
 {
 		int i, s;
@@ -1206,7 +1209,7 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
     }
 }
 
-vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
+inline vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
 {
     int i, x;
     vfd temp;
@@ -1461,3 +1464,26 @@ void m5d_colswap_capped_row(m5d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
 
 }
 
+
+void  m5d_transpose(m5d_t   * a)
+{
+
+   
+  int x, y;
+     m5d_t * c;
+    m5d_create(c, a->ncols, a->nrows);
+    m5_slice * b, *d;
+    d = malloc(sizeof(m5_slice));
+    b = malloc(sizeof(m5_slice));
+    m5d_slices(b, a, 1);
+    m5d_slices(d, c, 1);
+    for (x = 0; x < b->nrows; x++) {
+        for (y = 0; y < b->ncols; y ++) {
+         m5d_transpose_vfd(b->row[x][y].rows, d->row[y][x].rows);
+            
+        }
+    }
+
+
+   
+}

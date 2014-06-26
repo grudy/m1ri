@@ -126,7 +126,7 @@ typedef struct
 #endif
 
 
-void m5d_copypadding(m5d_t  * , m5d_t const * );
+void m5d_copy(m5d_t  * , m5d_t const * );
 void m5d_putpadding(m5d_t  * , m5d_t const * );
 
 /** 
@@ -262,13 +262,12 @@ void m5d_mul_32(vfd *, vfd *, vfd *);
 void m5d_mul_16(vfd *, vfd *, vfd *);
 void m5d_mul_8(vfd *, vfd *, vfd *);
 void m5d_mul_4(vfd *R, vfd *A, vfd *B);
-vfd * m5d_transpose_vfd(vfd  **, vfd **);
+//vfd * m5d_transpose_vfd(vfd  **, vfd **);
+void  m5d_transpose(m5d_t   * a);
 
 
 
-
-/*	These functions work with lots of partitions*/
- 
+/*	These functions work with lots of partitions*/ 
 /*Pointers to submatrices*/
 
 
@@ -278,7 +277,7 @@ m5d_t m5d_transpose_sliced(m5d_t * );
 m5d_t  * m5_blockslice_allocate(m5d_t * , rci_t  ,  wi_t  );
 m5d_t ** m5_rowslice_allocate(m5d_t * , m5d_t ** , wi_t , rci_t );
 m5d_t * m5d_hadamard(m5d_t const * , m5d_t const *  );
-void m5d_copy(m5d_t *, m5d_t const *);
+//void m5d_copy(m5d_t *, m5d_t const *);
 
 void  m5d_colswap(m5d_t *, rci_t , rci_t );
 void m5d_colswap_capped_row(m5d_t *, rci_t , rci_t, rci_t );

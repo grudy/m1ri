@@ -683,19 +683,7 @@ int m7d_equal(m7d_t const *a, m7d_t const *b)
 }
 
 
-void m7d_copypadding(m7d_t  * r, m7d_t  const * x)
-{
-		int s;
-        for(int i = 0; i < x->nrows; i++)
-        {
-        	for( s = 0; s < x->width; s++)
-        	{
-            	r->rows[i][s] = x->rows[i][s];
-            }
-            
-        }
 
-}
 
 void m7d_putpadding(m7d_t  * r, m7d_t  const * x)
 {
@@ -1443,3 +1431,27 @@ void m7d_colswap_capped_row(m7d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
 
 }
 
+
+
+void  m7d_transpose(m7d_t   * a)
+{
+
+   
+  int x, y;
+     m7d_t * c;
+    m7d_create(c, a->ncols, a->nrows);
+    m7_slice * b, *d;
+    d = malloc(sizeof(m7_slice));
+    b = malloc(sizeof(m7_slice));
+    m7d_slices(b, a, 1);
+    m7d_slices(d, c, 1);
+    for (x = 0; x < b->nrows; x++) {
+        for (y = 0; y < b->ncols; y ++) {
+         m7d_transpose_vtri(b->row[x][y].rows, d->row[y][x].rows);
+            
+        }
+    }
+
+
+   
+}

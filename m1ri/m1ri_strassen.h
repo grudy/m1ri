@@ -35,11 +35,20 @@
 /**
   Strassen  algorithm on an m3d_t	
 */
+
+
+/**
+	Recursive Matrix Multiplication over GF(3), on a square matrix.
+*/
 void  m3d_strassen(m3d_t *, m3d_t *, m3d_t*);
 /**
 	This handles the arithmetic of m3d_strassen
 */
 
+
+/**
+	Recursive Matrix Multiplication over GF(5), on a square matrix.
+*/
 void m5d_strassen(m5d_t * ,m5d_t *, m5d_t *);
 /**
 	This handles the arithmetic of m5d_strassen
@@ -51,6 +60,11 @@ void m7d_strassen(m7d_t * ,m7d_t *, m7d_t *);
 
 
 //void m3d_mul_naive_square(m3d_t *, m3d_t  * , m3d_t  *);
+
+
+/**
+
+*/
 void m3d_classic_mul(m3d_t *,  m3d_t  * , m3d_t  *);
 //void m5d_mul_naive_square(m5d_t *, m5d_t  * , m5d_t  *);
 void m5d_classic_mul(m5d_t *,  m5d_t  * , m5d_t  *);

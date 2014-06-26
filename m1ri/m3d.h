@@ -197,7 +197,7 @@ m3d_t m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
  */
 
 int m3d_equal(m3d_t const  *, m3d_t const  *);
-void m3d_copypadding(m3d_t  * , m3d_t const * );
+void m3d_copy(m3d_t  * , m3d_t const * );
 void m3d_putpadding(m3d_t  * , m3d_t const * );
 void m3d_free( m3d_t *  );
 

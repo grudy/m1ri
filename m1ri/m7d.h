@@ -109,7 +109,7 @@ void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
 /** 
  
  */
-void m7d_copypadding(m7d_t  * , m7d_t const * );
+void m7d_copy(m7d_t  * , m7d_t const * );
 void m7d_putpadding(m7d_t  * , m7d_t const * );
 void m7d_add_64(vtri ** , vtri **, vtri **);
 //unfinished
@@ -216,7 +216,7 @@ void  m7d_slices(m7_slice *  , m7d_t * , wi_t );
 A direct transpose, using no windows
 */
 void  m7d_quarter(m7_slice *  , m7d_t * );
-//vbg * m7d_transpose_vbg(vbg  ** , vbg **);  static inline this
+
 
 m7d_t m7d_transpose_sliced(m7d_t * );
 m7d_t  * m7_blockslice_allocate(m7d_t * , rci_t  ,  wi_t  );
@@ -239,11 +239,10 @@ void m7d_mul_64(vtri **, vtri **, vtri **);
 void m7d_mul_32(vtri *, vtri *, vtri *);
 void m7d_mul_16(vtri *, vtri *, vtri *);
 void m7d_mul_8(vtri *, vtri *, vtri *);
-void m7d_mul_4(vtri *R, vtri *A, vtri *B);
+void m7d_mul_4(vtri *, vtri *, vtri *);
 
-
+void  m7d_transpose(m7d_t   * );
 m7d_t * m7d_hadamard(m7d_t const * , m7d_t const *  );
-void m7d_copy(m7d_t *, m7d_t const *);
 void m7d_colswap(m7d_t *, rci_t , rci_t);
 void m7d_colswap_capped_row(m7d_t *, rci_t , rci_t, rci_t );
 #endif

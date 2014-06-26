@@ -31,7 +31,9 @@
 #include <m7d.h>
 
 
-
+/**
+  Negates the  input vbg
+*/
 void vbg_negation(vbg * );
 
 
@@ -41,7 +43,7 @@ void vbg_negation(vbg * );
 void sub_m3d( vbg *, vbg const *  , vbg const * );               //multiply matrix x by by matrix y.   The product is matrix r.
 
 
-vbg sub_m3dr(vbg , vbg );               //multiply matrix x by by matrix y.   The product is matrix r.
+vbg sub_m3dr(vbg , vbg );               //
 
 
 /** *******************************************
@@ -71,14 +73,12 @@ void m3d_add_r(m3d_t * , m3d_t  *, m3d_t  *);
 */
 m3d_t * m3d_hadamard(m3d_t const * , m3d_t const * );
 
-//testing parallel 
 
 
 
 
 
 
-m3d_t * m3d_hadamard_v2(m3d_t const * , m3d_t const * );
 
 
 /** * * * * * * * * * * * * * * * * * * * *

@@ -48,10 +48,14 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   
   m3d_specs(&s->row[0][0]);
   m3d_print(&s->row[0][0]);
-  m3d_print(&s->row[0][0]);
-  m3d_print(&s->row[0][0]);
-  m3d_concat(ab, &s->row[0][0], &s->row[1][0]);
-  m3d_concat(cd, &s->row[0][1], &s->row[1][1]);
+  m3d_print(&s->row[0][1]);
+  m3d_print(&s->row[1][0]);
+  m3d_print(&s->row[1][1]);
+  printf("\n\n s done \n");
+//  m3d_concat(ab, &s->row[0][0], &s->row[1][0]);
+ // m3d_concat(cd, &s->row[0][1], &s->row[1][1]);
+   m3d_concat(ab, &s->row[0][0], &s->row[0][1]);
+  m3d_concat(cd, &s->row[1][0], &s->row[1][1]);
 
   //m3d_specs(&s->row[0][0]);
   m3d_stack(abcd, ab, cd);
@@ -63,11 +67,11 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   m3d_print(cd);
   printf("\n abcd \n");
   m3d_print(abcd);
-  printf("ab\n");
+  printf("\no\n");
   m3d_print(o);
   if(!m3d_equal(o, abcd))
   {
-     printf("\nfail\n");
+     printf("\n o and abcd not equal \n");
   
   }
   m3d_t * v = m1ri_malloc(sizeof(m3d_t));
@@ -77,8 +81,65 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   m3d_print(v);
 
   m3d_colswap(v, 1, 2);
-    m3d_print(v);
+  m3d_print(v);
 
+
+  /*
+    Multiplication (classic) Test
+    (wo*w1)w2 = wo*(w1*w2);
+    w3 = wo*w1;
+    w4 = w1*w2;
+    w5 = w3*w2;
+    w6 = w0*w4;
+  */ 
+  /*
+  m3d_t * w0, *w1,* w2,* w3, *w4,* w5,* w6;
+  w0 = m1ri_malloc(sizeof(m3d_t));
+  w1 = m1ri_malloc(sizeof(m3d_t));
+  w2 = m1ri_malloc(sizeof(m3d_t));
+  w3 = m1ri_malloc(sizeof(m3d_t));
+  w4 = m1ri_malloc(sizeof(m3d_t));
+  w5 = m1ri_malloc(sizeof(m3d_t));
+  w6 = m1ri_malloc(sizeof(m3d_t));
+  
+
+  m3d_create(w0 , 512, 512);
+  m3d_create(w1 , 512, 512);
+  m3d_create(w2 , 512, 512);
+  m3d_rand(w0);
+  m3d_rand(w1);
+  m3d_rand(w2);
+  
+  m3d_classic_mul(w3, w0, w1);
+  m3d_classic_mul(w4, w1, w2);
+  m3d_classic_mul(w5, w3, w2);
+  m3d_classic_mul(w6, w0, w4);
+  if(!(m3d_equal(w5, w6)))
+	 {
+	 	printf("Classic Multiplication m3d test failed");
+	    //return 1;
+	 
+	 }   
+  
+  
+  printf("Classic Multiplication m3d test passed"); 
+  
+  
+  
+  m3d_print(w5);
+  m3d_print(w6);
+  */
+
+
+  
+  
+  m3d_free(w0);
+  m3d_free(w1);
+  m3d_free(w2);
+  m3d_free(w3);
+  m3d_free(w4);
+  m3d_free(w5);
+  m3d_free(w6);
   m3d_free(v);  
   m3d_free(o);
   m3d_free(ab);

@@ -275,7 +275,7 @@ void m3d_add_r(m3d_t * c, m3d_t  *  a, m3d_t  *  b)
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
     	int i, j;
-    	 m3d_create(c, a->nrows , b->ncols);
+    	m3d_create(c, a->nrows , b->ncols);
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)

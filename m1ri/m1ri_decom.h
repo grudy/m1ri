@@ -29,7 +29,54 @@
 #include <m1ri/m1riwrappers.h>
 
 
+/**
+Solves L X = B with X and B matrices and L upper triangular
 
+
+   X replaces B
+*/
+void m3d_upper_triangular(m3d_t * L, m3d_t B);
+void m5d_upper_triangular(m5d_t * L, m5d_t B);
+void m7d_upper_triangular(m7d_t * L, m7d_t * B);
+ 
+ 
+ 
+ /**
+   Solves U X = B with X and B matrices and U upper left triangular
+   X replaces B
+ */
+
+void m3d_upper_left_triangular(m3d_t const *U, m3d_t *B  );
+void m5d_upper_left_triangular(m5d_t const *U, m5d_t *B );
+void m7d_upper_left_triangular(m7d_t const *U, m7d_t *B);
+
+ 
+ /**
+   Solves U X = B with X and B matrices and U lower triangular
+   X replaces B
+ */
+
+
+void m3d_lower_triangular(m3d_t const *U, m3d_t *B);
+void m5d_lower_triangular(m5d_t const *U, m5d_t *B);
+void m7d_lower_triangular(m7d_t const *U, m7d_t *B);
+ 
+  /**
+   Solves U X = B with X and B matrices and U  lower right triangular
+   X replaces B
+ */
+void m3d_lower_right_triangular(m3d_t const *U, m3d_t *B );
+void m5d_lower_right_triangular(m5d_t const *U, m5d_t *B); 
+void m7d_lower_right_triangular(m7d_t const *U, m7d_t *B);
+ 
+ 
+ /**
+   Invert triangular matrix a
+ */
+ void m3d_inverse_triangular(m3d_t * a);
+ void m5d_inverse_triangular(m5d_t * a);
+ void m7d_inverse_triangular(m7d_t * a);
+ 
 
 
 
