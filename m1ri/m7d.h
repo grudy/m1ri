@@ -110,7 +110,7 @@ void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
  
  */
 void m7d_copy(m7d_t  * , m7d_t const * );
-void m7d_putpadding(m7d_t  * , m7d_t const * );
+void m7d_copy_cutoff(m7d_t  * , m7d_t const * );
 void m7d_add_64(vtri ** , vtri **, vtri **);
 //unfinished
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s,  vec m , vec u );
@@ -128,7 +128,7 @@ vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows);
  
  */
 
-m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols);
+m7d_t  * m7d_create(rci_t nrows, rci_t ncols);
 /** 
  
  */
@@ -143,12 +143,11 @@ m7d_t m7d_rand(m7d_t * a);
  */
 
 
-m7d_t  m7d_identity_set(m7d_t * a);
+void  m7d_set_ui(m7d_t *, rci_t);
 /** 
  
  */
 
-m7d_t   m7d_identity(m7d_t  *a, rci_t n);
 
 /** 
  Releases a m7d_t into the wilderness.
@@ -168,7 +167,7 @@ void iadd_vtri(vtri  *, vtri *);
 
 void m7d_sub_i(vtri  *, vtri *);
 
-void m7d_sub(m7d_t * , m7d_t * , m7d_t *);
+m7d_t * m7d_sub( m7d_t * , m7d_t *);
 void m7d_vtri_sub(vtri *, vtri *, vtri *  );
 void m7d_sub_64(vtri **, vtri   **, vtri  **);
 //Scalar  multiplication
@@ -203,11 +202,11 @@ vtri sub_m7dr(vtri const x, vtri const y);
 /** 
 	GF(7) Addition on a single M1RI word.
 */
-void m7d_add_r(m7d_t *, m7d_t *, m7d_t *);
+m7d_t * m7d_add( m7d_t *, m7d_t *);
 void m7d_add_2r(vtri *, vtri *);
 void m7d_add_4r( vtri *, vtri *);
-m7d_t   m7d_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
-void   m7d_window_create(m7d_t *, m7d_t * , rci_t , rci_t , rci_t , rci_t);
+m7d_t  *  m7d_init_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
+
 
 
 void  m7d_slices(m7_slice *  , m7d_t * , wi_t );
@@ -218,9 +217,9 @@ A direct transpose, using no windows
 void  m7d_quarter(m7_slice *  , m7d_t * );
 
 
-m7d_t m7d_transpose_sliced(m7d_t * );
-m7d_t  * m7_blockslice_allocate(m7d_t * , rci_t  ,  wi_t  );
-m7d_t ** m7_rowslice_allocate(m7d_t * , m7d_t ** , wi_t , rci_t );
+m7d_t * m7d_transpose_sliced(m7d_t * );
+m7d_t  * m7_blockslice_allocate( rci_t  ,  wi_t  );
+m7d_t ** m7_rowslice_allocate(m7d_t * ,  wi_t , rci_t );
 
 
 /*These are for  the method of four Russians */
@@ -245,4 +244,5 @@ void  m7d_transpose(m7d_t   * );
 m7d_t * m7d_hadamard(m7d_t const * , m7d_t const *  );
 void m7d_colswap(m7d_t *, rci_t , rci_t);
 void m7d_colswap_capped_row(m7d_t *, rci_t , rci_t, rci_t );
+int m7d_cmp(m7d_t *A, m7d_t *B);
 #endif
