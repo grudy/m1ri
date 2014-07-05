@@ -65,7 +65,15 @@ typedef struct {
     
 } m3d_t;
 
-
+/**
+ * \brief 
+ *
+ * \param c Preallocated sum matrix, may be NULL for automatic creation.
+ * \param a Matrix
+ * \param b Matrix
+ *
+ * \wordoffset
+ */
 typedef struct
 {
 
@@ -80,7 +88,15 @@ typedef struct
 
 
 
-
+/**
+ * \brief 
+ *
+ * \param c 
+ * \param a 
+ * \param b 
+ *
+ * \wordoffset
+ */
 /***
  Read n bits from a s portion of an element
  x = rows
@@ -200,6 +216,8 @@ m3d_t  * m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
  */
 
 int m3d_equal(m3d_t const  *, m3d_t const  *);
+
+
 void m3d_copy(m3d_t  * , m3d_t const * );
 void m3d_copy_cutoff(m3d_t  * , m3d_t const * );
 void m3d_free( m3d_t *  );

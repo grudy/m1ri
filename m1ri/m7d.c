@@ -134,9 +134,12 @@ void m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
  
  */
 
-void m7dset_ui(m7d_t * a)
+void m7d_set_ui(m7d_t * a, rci_t value )
 
 {
+    
+    
+    
     if(a->ncols == a->nrows)
     {
         int k,i,  j,l;
@@ -189,11 +192,12 @@ void m7dset_ui(m7d_t * a)
 
 
 
-void    m7d_set_ui(m7d_t  *a, rci_t n)
+m7d_t *   m7d_identity( rci_t n)
 {
+	m7d_t  *a = m7d_create(n, n);
     a = m7d_create( n, n);
-    m7dset_ui(a);
-    
+    m7d_set_ui(a, 1);
+    return a;
 }
 
 
@@ -1173,16 +1177,16 @@ m7d_t * m7d_transpose_sliced(m7d_t * a)
     return c;
 }
 
-void m7d_quarter(m7_slice * c , m7d_t * a)
+m7_slice *  m7d_quarter(const m7d_t * a)
 {
-	//int arows, acols;
+	m7_slice * c = m1ri_malloc(sizeof(m7_slice));
 	c->block = m7_blockslice_allocate( 2,   2);
     c->row = m7_rowslice_allocate(c->block,   2, 2);
     c->row[0] = m7d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
 	c->row[1] = m7d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
     c->row[2] = m7d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
 	c->row[3] = m7d_init_window(a,  a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
-    
+    return c;
 }
 
 

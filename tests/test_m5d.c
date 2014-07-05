@@ -92,15 +92,38 @@ int main(int argc, const char * argv[])
     m5d_rand(g);
     m5d_rand(i);
     m5d_rand(j);
-    
-    
-   
-  	//m5d_strassen(h, f, g);
-  	
-    //m5d_print(h);
-	
-	m5d_classic_mul(k, i, j);
+    k = m5d_classic_mul(k, i, j);
 	m5d_print(k);
+    
+	m5d_t * y0, *y1,* y2,* y3, *y4,* y5,* y6;
+	y0 = m5d_create(512, 512);
+	y1 = m5d_create(512, 512);
+	y2 = m5d_create(512, 512);
+    m5d_rand(y0);
+  	m5d_rand(y1);
+  	m5d_rand(y2);
+  	
+	y3 = m5d_strassen(y3, y0, y1);
+   	m5d_print(y3);
+   	/*
+   	y4 = m5d_strassen(y4, y1, y2);
+  	y5 = m5d_strassen(y5, y3, y2);
+  	y6 = m5d_strassen(y6, y0, y4);
+    m5d_print(y6);
+	*/
+	
+	/*  
+	m5d_free(y0);
+	m5d_free(y1);
+	m5d_free(y2);
+	m5d_free(y3);
+	m5d_free(y4);
+	m5d_free(y5);
+	m5d_free(y6);   
+	*/
+
+	m5d_classic_mul(k, i, j);
+	//m5d_print(k);
 	
 
 	m5d_free(a);

@@ -142,8 +142,13 @@ m7d_t m7d_rand(m7d_t * a);
  
  */
 
+void  m7d_set_ui(m7d_t *, rci_t );
 
-void  m7d_set_ui(m7d_t *, rci_t);
+/** 
+		 
+*/
+m7d_t  *  m7d_identity(rci_t );
+
 /** 
  
  */
@@ -214,7 +219,7 @@ void  m7d_slices(m7_slice *  , m7d_t * , wi_t );
 /**
 A direct transpose, using no windows
 */
-void  m7d_quarter(m7_slice *  , m7d_t * );
+m7_slice * m7d_quarter(const m7d_t * );
 
 
 m7d_t * m7d_transpose_sliced(m7d_t * );

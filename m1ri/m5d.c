@@ -205,38 +205,38 @@ m5d_t  * m5d_create( rci_t nrows, rci_t ncols)
  sizerow  = rows * M1RI_RADIX
  */
 
-m5d_t *    m5d_init_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t sizecols)
+m5d_t *    m5d_init_window(const m5d_t *c,const rci_t strow, const rci_t stvfd, const rci_t sizerows, const  rci_t sizecols)
 {
-    int i;
-    m5d_t *  submatrix;
-     /** c->width should not be compared twice */
+   
+    m5d_t * submatrix = m1ri_malloc(sizeof(m5d_t));
+    /** c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {    
-        return submatrix;
+        return  0;
     }
     
-    if((stvfd + sizecols) > c->width)
-    {   
-        return submatrix;
+    if((stvfd + sizecols) > c->ncols)
+    {
+        return  0;
     }
-    
+    int i, f;
+	f = strow * M1RI_RADIX;
     submatrix->nrows =   M1RI_RADIX * sizerows;
     submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
     submatrix->width =  sizecols;
-    submatrix->block = &c->block[(stvfd * stvfd)];
     submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vfd *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svfd = stvfd;
-
-    for(  i =   strow; i < (strow + (M1RI_RADIX * sizerows)) ; i++)
+    
+    
+    
+    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
     {
-        submatrix->rows[i - strow] = c->rows[i];
+        submatrix->rows[i - f] = c->rows[i] + stvfd;   
     }
-    
     return submatrix;
-    
 }
 
 vfd * m5d_rand(m5d_t * a)
@@ -258,7 +258,7 @@ vfd * m5d_rand(m5d_t * a)
  n = matrix size (row length and column width)
 */
 
-void  * m5d_set_ui(m5d_t * a, rci_t value)
+void   m5d_set_ui(m5d_t * a, rci_t value)
 
 {
     if(a->ncols == a->nrows)
@@ -300,7 +300,6 @@ void  * m5d_set_ui(m5d_t * a, rci_t value)
         }
     }
     
-    return a;
 }
 
 /** 
@@ -713,13 +712,14 @@ void m5d_copy_cutoff(m5d_t  * r, m5d_t  const * x)
         
 }
 
-void m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b)
+void m5d_sub_64(vfd **c ,vfd **  a , vfd **b)
 {
-    /** todo: Test this functions */
-        for(int i = 0; i < a->nrows; i++)
-        {
-            vfd_sub(c->rows[i], a->rows[i], b->rows[i]);
-        }  
+    int i;
+    for (i= 0; i < M1RI_RADIX; i++ )
+    {
+    
+        vfd_sub( c[i], a[i], b[i]);
+    }
 }
 
 
@@ -1120,7 +1120,7 @@ void m5d_mul_4(vfd *R, vfd *A, vfd *B)
 m5d_t  * m5_blockslice_allocate(rci_t  nrows,  wi_t  width)
 {
 	
-    m5d_t * block  = m1ri_calloc(nrows * width ,  sizeof(m5d_t  ) );
+    m5d_t * block  = m1ri_calloc(nrows * width ,  sizeof(m5d_t * ) );
     return block;
 }
 
@@ -1133,6 +1133,8 @@ m5d_t ** m5_rowslice_allocate(m5d_t * block,  wi_t width, rci_t nrows)
         rows[i]  = block + (i * width);
     };
     return rows;
+    
+    
 }
 void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
 {
@@ -1219,18 +1221,24 @@ m5d_t *  m5d_transpose_sliced(m5d_t * a)
     }
     return c;
 }
-void m5d_quarter(m5_slice * c , m5d_t * a)
+m5_slice * m5d_quarter(const m5d_t * a)
 {
-
-	//int arows, acols;
-	c->block = m5_blockslice_allocate(  2,   2);
-    c->row = m5_rowslice_allocate(c->block,   2, 2);
-    c->row[0] = m5d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
-	c->row[0] = m5d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
-    c->row[1] = m5d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
-	c->row[1] = m5d_init_window(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+	 m5_slice * c = m1ri_malloc(sizeof(m5_slice));
+	 int arows, acols;
+	 
+	 c->block = m5_blockslice_allocate(  2,   2);
+     
+     c->row = m5_rowslice_allocate(c->block, 2, 2);
+     
+     c->row[0] = m5d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
+	 
+	 c->row[1] = m5d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+     c->row[2] = m5d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	 c->row[3] = m5d_init_window(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
     
+    return c;
 }
+
  
  
  /**

@@ -95,47 +95,69 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   w0 = m3d_create(512, 512);
   w1 = m3d_create(512, 512);
   w2 = m3d_create(512, 512);
+  
   m3d_rand(w0);
   m3d_rand(w1);
   m3d_rand(w2);
   
-  m3d_classic_mul(w3, w0, w1);
-  /*
-  m3d_classic_mul(w4, w1, w2);
-  m3d_classic_mul(w5, w3, w2);
-  m3d_classic_mul(w6, w0, w4);
+  w3 = m3d_classic_mul(w3, w0, w1);
+  w4 = m3d_classic_mul(w4, w1, w2);
+  w5 = m3d_classic_mul(w5, w3, w2);
+  w6 = m3d_classic_mul(w6, w0, w4);
+   	
+
+  /* 	
   if(!(m3d_equal(w5, w6)))
 	 {
 	 	printf("Classic Multiplication m3d test failed");
-	    //return 1;
+	//return 1;
 	 
 	 }   
   
   
   printf("Classic Multiplication m3d test passed"); 
-  
-  
-  
-  m3d_print(w5);
-  m3d_print(w6);
-  
-
-  
-  
-  m3d_free(w0);
-  m3d_free(w1);
-  m3d_free(w2);
-  m3d_free(w3);
-  m3d_free(w4);
-  m3d_free(w5);
-  m3d_free(w6);
   */
-  m3d_free(v);  
-  m3d_free(o);
-  m3d_free(ab);
-  m3d_free(cd);
-  m3d_free(abcd);
-  m1ri_free(s);  
+  
+	m3d_t * y0, *y1,* y2,* y3, *y4,* y5,* y6;
+	y0 = m3d_create(512, 512);
+	y1 = m3d_create(512, 512);
+	y2 = m3d_create(512, 512);
+  
+	m3d_rand(y0);
+	m3d_rand(y1);
+	m3d_rand(y2);
+  
+	y3 = m3d_strassen(y3, y0, y1);
+  
+	y4 = m3d_strassen(y4, y1, y2);
+	y5 = m3d_strassen(y5, y3, y2);
+	y6 = m3d_strassen(y6, y0, y4);
+ 
+  
+	m3d_free(w0);
+	m3d_free(w1);
+	m3d_free(w2);
+	m3d_free(w3);
+	m3d_free(w4);
+	m3d_free(w5);
+	m3d_free(w6);
+	
+	m3d_free(y0);
+	m3d_free(y1);
+	m3d_free(y2);
+	m3d_free(y3);
+	m3d_free(y4);
+	m3d_free(y5);
+	m3d_free(y6);
+	
+	m3d_free(v);	
+	m3d_free(o);
+	m3d_free(ab);
+	m3d_free(cd);
+	m3d_free(abcd);
+	m1ri_free(s);	
+  
+  
     return 0;
 }
 

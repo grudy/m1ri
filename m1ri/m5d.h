@@ -190,7 +190,7 @@ vfd * m5d_rand(m5d_t * );
 */
 
 
-void *  m5d_set_ui(m5d_t *, rci_t );
+void   m5d_set_ui(m5d_t *, rci_t );
 
 /** 
 		 
@@ -228,9 +228,9 @@ void m5d_add2(vfd * , vfd * , vfd * );
 void m5d_add2_i(vfd * , vfd * );
 int m5d_equal(m5d_t const *, m5d_t const *);
 void m5d_add_64(vfd **, vfd **  , vfd ** );
-m5d_t   * m5d_init_window(m5d_t *, rci_t , rci_t , rci_t , rci_t );
+m5d_t   * m5d_init_window(const m5d_t *, const rci_t , const  rci_t ,const rci_t , const rci_t );
 
-void m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b);
+void m5d_sub_64(vfd **c ,vfd  ** a , vfd **b);
 
 
         
@@ -271,7 +271,7 @@ void  m5d_transpose(m5d_t   * a);
 
 
 void  m5d_slices(m5_slice *  , m5d_t * , wi_t );
-void  m5d_quarter(m5_slice *  , m5d_t * );
+m5_slice *  m5d_quarter(const m5d_t * );
 m5d_t *  m5d_transpose_sliced(m5d_t * );
 m5d_t  * m5_blockslice_allocate( rci_t  ,  wi_t  );
 m5d_t ** m5_rowslice_allocate(m5d_t * ,  wi_t , rci_t );
