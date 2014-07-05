@@ -128,10 +128,9 @@ void  m3d_colswap(m3d_t *, rci_t , rci_t );
 */
 void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
 
-static inline void  * m3d_block_allocate(rci_t  nrows,  wi_t  width)
+static inline void  * m3d_block_allocate(vbg * block, rci_t  nrows,  wi_t  width)
 {
-	
-    m3d_t * block = m1ri_calloc(nrows * width ,  sizeof(vbg) );
+    block  = m1ri_calloc(nrows * width ,  sizeof(vbg) );
     return block;
 }
 
@@ -139,10 +138,9 @@ static inline void  * m3d_block_allocate(rci_t  nrows,  wi_t  width)
  	Allocate vbg pointers for rows in a m3d_t
  */
 
-static inline vbg ** m3d_row_alloc(vbg * block, wi_t width, rci_t nrows)
+static inline vbg ** m3d_row_alloc(vbg * block, vbg ** rows, wi_t width, rci_t nrows)
 {
 	int i;
-	vbg ** rows;
     rows = m1ri_malloc( nrows * width * sizeof(vbg *));
     for ( i = 0; i <  nrows;  i++ )
     {
@@ -152,7 +150,7 @@ static inline vbg ** m3d_row_alloc(vbg * block, wi_t width, rci_t nrows)
 }
 
 
-m3d_t *  m3d_create(  rci_t nrows, rci_t );
+m3d_t m3d_create( m3d_t *  , rci_t nrows, rci_t );
 m3d_t m3d_rand(m3d_t * );
 
 /** 
@@ -161,9 +159,9 @@ m3d_t m3d_rand(m3d_t * );
  n = matrix size (row length and column width)
   
 */
-void m3d_set_ui(m3d_t *A,unsigned int );
+m3d_t    m3d_identity_set(m3d_t * );
 
-m3d_t  *  m3d_identity(m3d_t  *, rci_t );
+m3d_t   m3d_identity(m3d_t  *, rci_t );
 
 /** 
  windows in m1ri_word rows * m1ri_word column incriments
@@ -172,19 +170,18 @@ m3d_t  *  m3d_identity(m3d_t  *, rci_t );
  sizecol  = cols * 64
  sizerow  = rows * 64
  */
-m3d_t *    m3d_init_window(const m3d_t  *, rci_t , rci_t , rci_t , rci_t );
-//m3d_t *m3d_init_window(const m3d_t *A, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc);
+void  m3d_window(m3d_t  *,m3d_t *, rci_t , rci_t , rci_t , rci_t );
 
 
 /** 
  Same as m3d_window but the second argument is made into the window
  */
-//void   m3d_init_window(m3d_t *, m3d_t * , rci_t , rci_t , rci_t , rci_t );
+//void   m3d_window_create(m3d_t *, m3d_t * , rci_t , rci_t , rci_t , rci_t );
 /** 
  Concat b on the end of a, the result is c
    [a] [b] ----->  [a b]   ===  C
 */
-m3d_t *  m3d_concat( m3d_t * , m3d_t * );
+void m3d_concat(m3d_t * , m3d_t * , m3d_t * );
 
 /** 
     Stacks a on b, resulting matrix is c
@@ -193,7 +190,7 @@ m3d_t *  m3d_concat( m3d_t * , m3d_t * );
     [b]
  
 */
-m3d_t  * m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
+m3d_t m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
  
 /** 
  Releases a m3d_t into the wilderness.
@@ -201,7 +198,7 @@ m3d_t  * m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
 
 int m3d_equal(m3d_t const  *, m3d_t const  *);
 void m3d_copy(m3d_t  * , m3d_t const * );
-void m3d_copy_cutoff(m3d_t  * , m3d_t const * );
+void m3d_putpadding(m3d_t  * , m3d_t const * );
 void m3d_free( m3d_t *  );
 
 
@@ -213,16 +210,15 @@ void m3d_free( m3d_t *  );
 ****************************************************** 
 */
 
-void  m3d_slices(m3_slice *  ,const m3d_t * , wi_t );
+void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
 
 //A direct transpose, using no windows
 
-m3_slice *  m3d_quarter( const m3d_t * );
+void  m3d_quarter(m3_slice *  , m3d_t * );
 
 m3d_t m3d_transpose_sliced(m3d_t * );
 
 void m3d_copy(m3d_t *, m3d_t const *);
 void  m3d_colswap_capped_row(m3d_t *, rci_t , rci_t, rci_t );
-int m3d_cmp(m3d_t *A, m3d_t *B);
 
 #endif

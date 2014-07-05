@@ -33,10 +33,17 @@ int main(int argc, const char * argv[])
      
      //m3d
     m3d_t * a_m3d,  * b_m3d,  * c_m3d, * t1_m3d,* t2_m3d, *t3_m3d, * r1_m3d, *  r2_m3d;
- 
-	a_m3d = m3d_create( 4, 4);
-	b_m3d = m3d_create(4, 4);
-	c_m3d = m3d_create(4, 4);
+    a_m3d = malloc(sizeof(m3d_t));
+    b_m3d = malloc(sizeof(m3d_t));
+    c_m3d = malloc(sizeof(m3d_t));
+    t1_m3d = malloc(sizeof(m3d_t));
+	t2_m3d = malloc(sizeof(m3d_t));
+	t3_m3d = malloc(sizeof(m3d_t));
+	r1_m3d = malloc(sizeof(m3d_t));
+	r2_m3d = malloc(sizeof(m3d_t));
+	m3d_create(a_m3d, 4, 4);
+	m3d_create(b_m3d, 4, 4);
+	m3d_create(c_m3d, 4, 4);
 
 	
 	m3d_rand(a_m3d);
@@ -46,7 +53,7 @@ int main(int argc, const char * argv[])
 	     a_m3d * (b_m3d  + c_m3d)   == (a_m3d * b_m3d) + (a_m3d *  c_m3d);
 	 */
 	 
-	 t1_m3d = m3d_add( b_m3d, c_m3d);
+	 m3d_add_r(t1_m3d, b_m3d, c_m3d);
 	 r1_m3d = m3d_hadamard(a_m3d, t1_m3d);
 	 printf("\n\t\tM3D \n********************************************\n");
 	 printf("\n a_m3d\n");
@@ -61,7 +68,7 @@ int main(int argc, const char * argv[])
 	 m3d_print(r1_m3d);
 	 t2_m3d = m3d_hadamard(a_m3d , b_m3d);
 	 t3_m3d = m3d_hadamard(a_m3d ,  c_m3d);
-	 r2_m3d = m3d_add( t2_m3d, t3_m3d);
+	 m3d_add_r(r2_m3d, t2_m3d, t3_m3d);
 	 if(!(m3d_equal(r1_m3d, r2_m3d)))
 	 {
 	 	printf("Hadamard m3d test failed");
@@ -86,15 +93,17 @@ int main(int argc, const char * argv[])
      
      
     m5d_t * a_m5d,  * b_m5d,  * c_m5d, * t1_m5d,* t2_m5d, *t3_m5d, * r1_m5d, *  r2_m5d;
-  
+    a_m5d = malloc(sizeof(m5d_t));
+    b_m5d = malloc(sizeof(m5d_t));
+    c_m5d = malloc(sizeof(m5d_t));
     t1_m5d = malloc(sizeof(m5d_t));
 	t2_m5d = malloc(sizeof(m5d_t));
 	t3_m5d = malloc(sizeof(m5d_t));
 	r1_m5d = malloc(sizeof(m5d_t));
 	r2_m5d = malloc(sizeof(m5d_t));
-	a_m5d = m5d_create( 4, 4);
-	b_m5d = m5d_create( 4, 4);
-	c_m5d = m5d_create( 4, 4);
+	m5d_create(a_m5d, 4, 4);
+	m5d_create(b_m5d, 4, 4);
+	m5d_create(c_m5d, 4, 4);
 
 	
 	m5d_rand(a_m5d);
@@ -106,7 +115,7 @@ int main(int argc, const char * argv[])
 	 
 	 
 	 
-	 t1_m5d = m5d_add( b_m5d, c_m5d);
+	 m5d_add_r(t1_m5d, b_m5d, c_m5d);
 	 r1_m5d = m5d_hadamard(a_m5d, t1_m5d);
 	 
 	 printf("\n\t\tm5d \n********************************************\n");
@@ -129,7 +138,7 @@ int main(int argc, const char * argv[])
 	 m5d_print(r1_m5d);
 	 
 	 t3_m5d = m5d_hadamard(a_m5d ,  c_m5d);
-	 r2_m5d = m5d_add( t2_m5d, t3_m5d);
+	 m5d_add_r(r2_m5d, t2_m5d, t3_m5d);
 	  
 	 printf("\n r2_m5d\n");
 	  m5d_print(r2_m5d);
@@ -167,9 +176,9 @@ int main(int argc, const char * argv[])
 	t3_m7d = malloc(sizeof(m7d_t));
 	r1_m7d = malloc(sizeof(m7d_t));
 	r2_m7d = malloc(sizeof(m7d_t));
-	a_m7d = m7d_create(4, 4);
-	b_m7d = m7d_create( 4, 4);
-	c_m7d = m7d_create( 4, 4);
+	m7d_create(a_m7d, 4, 4);
+	m7d_create(b_m7d, 4, 4);
+	m7d_create(c_m7d, 4, 4);
 
 	
 	m7d_rand(a_m7d);
@@ -179,13 +188,13 @@ int main(int argc, const char * argv[])
 	     a_m7d * (b_m7d  + c_m7d)   == (a_m7d * b_m7d) + (a_m7d *  c_m7d);
 	 */
 	 
-	 t1_m7d = m7d_add( b_m7d, c_m7d);
+	 m7d_add_r(t1_m7d, b_m7d, c_m7d);
 	 r1_m7d = m7d_hadamard(a_m7d, t1_m7d);
 	
 	 m7d_print(r2_m7d);
 	 t2_m7d = m7d_hadamard(a_m7d , b_m7d);
 	 t3_m7d = m7d_hadamard(a_m7d ,  c_m7d);
-	 r2_m7d = m7d_add( t2_m7d, t3_m7d);
+	 m7d_add_r(r2_m7d, t2_m7d, t3_m7d);
 	  printf("\n\t\tm7d \n********************************************\n");
 	 printf("\n a_m7d\n");
 	 m7d_print(a_m7d);
