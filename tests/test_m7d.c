@@ -57,17 +57,17 @@ int main(int argc, const char * argv[])
         
     }
     
-    m7d_t test_m7d_output  = m7d_create( &test_m7d_output, 3   ,3);
+    m7d_t * test_m7d_output  = m7d_create( 3   ,3);
     
-    m7d_rand(&test_m7d_output);
+    m7d_rand(test_m7d_output);
     
-    m7d_print(&test_m7d_output);
+    m7d_print(test_m7d_output);
     
-    m7d_write_elem(&test_m7d_output, 1, 1, 1, 1, 1);
+    m7d_write_elem(test_m7d_output, 1, 1, 1, 1, 1);
     
     
-    m7d_identity(d,64);
-    m7d_identity(e,64);
+    m7d_set_ui(d,64);
+    m7d_set_ui(e,64);
     isequal = m7d_equal(d, e);
     
     if(isequal)
@@ -82,15 +82,15 @@ int main(int argc, const char * argv[])
         return 1;
         
     }
-    m7d_print(&test_m7d_output);
+    m7d_print(test_m7d_output);
     
     
-    m7d_create(f, 256, 256);
-    m7d_create(g, 256, 256);
-    m7d_create(h, 256, 256);
-    m7d_create(i, 256, 256);
-    m7d_create(j, 256, 256);
-    m7d_create(k, 256, 256);
+    f  = m7d_create(256, 256);
+    g  = m7d_create(256, 256);
+    h  = m7d_create( 256, 256);
+    i  = m7d_create( 256, 256);
+    j  = m7d_create(256, 256);
+    k  = m7d_create(256, 256);
     
     
     m7d_rand(f);

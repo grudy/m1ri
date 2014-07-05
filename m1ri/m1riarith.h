@@ -61,13 +61,13 @@ void  vbg_mul( vbg *, vbg  *, vbg  *);             //multiply matrix x by y assi
 	m3d_t subtraction
 	
 */
-void m3d_sub( m3d_t *, m3d_t const *,const  m3d_t  *);
+m3d_t * m3d_sub( m3d_t const *,const  m3d_t  *);
 
 /**
 	Return the value of the matrix multiplied
 */
 vbg vbg_mul_i(vbg const , vbg const);
-void m3d_add_r(m3d_t * , m3d_t  *, m3d_t  *);
+
 /** 
     Hadamard multiplication
 */
@@ -94,7 +94,7 @@ void m3d_sub_64(vbg ** , vbg  ** , vbg  ** );
  * * * * * * * * * * * * * * * * * * * * * * */
 void m3d_add_64(vbg **, vbg   **  , vbg    **  );
 
-m3d_t m3d_add(m3d_t  *, m3d_t  *);
+m3d_t  * m3d_add(m3d_t  *, m3d_t  *);
 
 
 /*

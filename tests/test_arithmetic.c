@@ -34,18 +34,17 @@ int main(int argc, const char * argv[])
   */
   
     m3d_t * a, * b, *c, *d;
-    a = m1ri_malloc(sizeof(m3d_t)); 
-    b = m1ri_malloc(sizeof(m3d_t)); 
+  
     c = m1ri_malloc(sizeof(m3d_t)); 
     d = m1ri_malloc(sizeof(m3d_t)); 
-    m3d_create(a, 4, 4);
-    m3d_create(b, 4, 4);
+    a = m3d_create(4, 4);
+    b = m3d_create( 4, 4);
     m3d_rand(a);
     m3d_rand(b);
     
-    m3d_add_r(c, a, b);
+    c = m3d_add(a, b);
     
-    m3d_sub(d,  c, b);
+    d = m3d_sub( c, b);
     printf("Matrix a\n");
     m3d_print(a);
     printf("Matrix b\n");
@@ -65,17 +64,17 @@ int main(int argc, const char * argv[])
     
     }
 	printf("m3d addition and subtraction test passed\n");
-    
+   
   m3d_free(a);
   m3d_free(b);
   m3d_free(c);
   m3d_free(d);
   
-  
+  /*
   
    /*
   	 m5d
-  */
+  * /
   printf("\n \n ****************************************\n \t\t\t\t\tm5d\n");
   
     m5d_t * e, * f, *g, * h;
@@ -87,14 +86,14 @@ int main(int argc, const char * argv[])
     g = m1ri_malloc(sizeof(m5d_t)); 
     h = m1ri_malloc(sizeof(m5d_t)); 
     
-    m5d_create(e, 4, 4);
-    m5d_create(f, 4, 4);
+    e = m5d_create( 4, 4);
+    f = m5d_create( 4, 4);
 
     m5d_rand(e);
     m5d_rand(f);
     
-     m5d_add_r(g, e, f);
-     m5d_sub(h,  g, f);
+     g = m5d_add( e, f);
+     h = m5d_sub(  g, f);
 
 
     printf("Matrix e\n");
@@ -129,22 +128,19 @@ int main(int argc, const char * argv[])
      m7d_t * i, * j, *k,  * m;
   
 
-
-    i = m1ri_malloc(sizeof(m7d_t)); 
-    j = m1ri_malloc(sizeof(m7d_t)); 
     k = m1ri_malloc(sizeof(m7d_t)); 
     m = m1ri_malloc(sizeof(m7d_t)); 
   
-    m7d_create(i, 4, 4);
+    i = m7d_create( 4, 4);
    
-    m7d_create(j, 4, 4);
+    j = m7d_create( 4, 4);
 
     m7d_rand(i);
     m7d_rand(j);
    // m7d_specs(i);
 
-     m7d_add_r(k,  i, j);
-     m7d_sub(m,   k,  j);
+     k = m7d_add(  i, j);
+     m = m7d_sub(  k,  j);
 
 
     printf("Matrix i\n");
@@ -181,7 +177,7 @@ int main(int argc, const char * argv[])
   m7d_free(k);
   m7d_free(m);
   
-  
+  */
   return 0;
   
 

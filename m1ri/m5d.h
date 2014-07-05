@@ -127,7 +127,7 @@ typedef struct
 
 
 void m5d_copy(m5d_t  * , m5d_t const * );
-void m5d_putpadding(m5d_t  * , m5d_t const * );
+void m5d_copy_cutoff(m5d_t  * , m5d_t const * );
 
 /** 
  
@@ -177,7 +177,7 @@ vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows);
  
  */
 
-m5d_t m5d_create( m5d_t * , rci_t nrows, rci_t ncols);
+m5d_t * m5d_create( rci_t nrows, rci_t ncols);
 /** 
  
  */
@@ -190,12 +190,12 @@ vfd * m5d_rand(m5d_t * );
 */
 
 
-m5d_t  m5d_identity_set(m5d_t * );
+void *  m5d_set_ui(m5d_t *, rci_t );
 
 /** 
 		 
 */
-m5d_t   m5d_identity(m5d_t  *, rci_t );
+m5d_t  *  m5d_identity(rci_t );
 
 /** 
  
@@ -218,8 +218,8 @@ void vfd_sub( vfd *, vfd *, vfd *);               //subtract vector x by by vect
  ********************************************/
 void iadd_vfd(vfd *,vfd *);
 
-void m5d_add_r(m5d_t *, m5d_t *, m5d_t *);
-void m5d_sub(m5d_t *, m5d_t *, m5d_t *);
+m5d_t * m5d_add(m5d_t *, m5d_t *);
+m5d_t * m5d_sub(m5d_t *, m5d_t *);
 void m5d_sub_d(m5d_t  * a , m5d_t * b);
 void add_vfd(vfd *, vfd * , vfd *);
 void sub_vfd(vfd *, vfd * , vfd *);
@@ -228,8 +228,7 @@ void m5d_add2(vfd * , vfd * , vfd * );
 void m5d_add2_i(vfd * , vfd * );
 int m5d_equal(m5d_t const *, m5d_t const *);
 void m5d_add_64(vfd **, vfd **  , vfd ** );
-m5d_t   m5d_window(m5d_t *, rci_t , rci_t , rci_t , rci_t );
-void   m5d_window_create(m5d_t *, m5d_t * , rci_t , rci_t , rci_t , rci_t );
+m5d_t   * m5d_init_window(m5d_t *, rci_t , rci_t , rci_t , rci_t );
 
 void m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b);
 
@@ -273,13 +272,15 @@ void  m5d_transpose(m5d_t   * a);
 
 void  m5d_slices(m5_slice *  , m5d_t * , wi_t );
 void  m5d_quarter(m5_slice *  , m5d_t * );
-m5d_t m5d_transpose_sliced(m5d_t * );
-m5d_t  * m5_blockslice_allocate(m5d_t * , rci_t  ,  wi_t  );
-m5d_t ** m5_rowslice_allocate(m5d_t * , m5d_t ** , wi_t , rci_t );
+m5d_t *  m5d_transpose_sliced(m5d_t * );
+m5d_t  * m5_blockslice_allocate( rci_t  ,  wi_t  );
+m5d_t ** m5_rowslice_allocate(m5d_t * ,  wi_t , rci_t );
 m5d_t * m5d_hadamard(m5d_t const * , m5d_t const *  );
 //void m5d_copy(m5d_t *, m5d_t const *);
 
 void  m5d_colswap(m5d_t *, rci_t , rci_t );
 void m5d_colswap_capped_row(m5d_t *, rci_t , rci_t, rci_t );
+
+int m5d_cmp(m5d_t *A, m5d_t *B);
 
 #endif

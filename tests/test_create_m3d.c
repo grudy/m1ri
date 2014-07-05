@@ -31,9 +31,7 @@ int main(int argc, const char * argv[])
 {
  	
  
-    m3d_t * a;
-    a = m1ri_malloc(sizeof(m3d_t)); 
-	m3d_create(a, 64, 64);
+    m3d_t * a = m3d_create( 64, 64);
     m3d_rand(a);
     //m3d_print(a);
     int compression = 1;
