@@ -125,7 +125,7 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
  */
 
 
-//unfinished
+/* unfinished */
 void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u , vec m)
 {
       
@@ -359,7 +359,7 @@ void add_vfd(vfd * r, vfd * a, vfd * b)
     m = ((j ^ a->middle)| c) ^ e;
 	r->middle  = m ^ (f | b->middle);
     r->units = ((m | d) ^ c)^(r->middle)) ;
-    /** */// = q;
+     = q; */
     /** 
 	*/
     
@@ -538,7 +538,7 @@ void iadd_vfd(vfd *r,vfd *x)
    
 }
 
- //matrix r = (matrix r - matrix x)
+ /* matrix r = (matrix r - matrix x) */
 void fb_i(vfd *r,vfd *x) 
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
@@ -598,7 +598,7 @@ vfd m5d_mul4(vfd a)
     
     return a; 
 }
- //matrix r = (matrix r - matrix x)
+ /* matrix r = (matrix r - matrix x) */
 void m5d_sub_i(vfd *r,vfd *x) 
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
@@ -637,7 +637,7 @@ m5d_t * m5d_add( m5d_t  *a, m5d_t  *b)
         {
             for(j = 0; j < (a->width ); j++)
             {   
-                //add_vfd(c->rows[i + j] , a->rows[i + j], b->rows[i + j]);
+                /* add_vfd(c->rows[i + j] , a->rows[i + j], b->rows[i + j]); */
                add_vfd(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
                
                
@@ -921,7 +921,7 @@ void m5d_mul_64(vfd **R, vfd **A, vfd **B)
     }
   
     
-    for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
+    for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
     {
         a = A[i][0];
         
@@ -968,7 +968,7 @@ void m5d_mul_64(vfd **R, vfd **A, vfd **B)
     }   
 }
 
-//32 * 64,2048 bit, 256 byte matrix(slice) multiplication
+/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
 void m5d_mul_32(vfd *R, vfd *A, vfd *B)
 {
     long i;
@@ -1010,7 +1010,7 @@ void m5d_mul_32(vfd *R, vfd *A, vfd *B)
         t1 = tables4[2][v1&15]; iadd_vfd(&r1, &t1);
         t2 = tables4[2][v2&15]; iadd_vfd(&r2, &t2);
         t3 = tables4[2][v3&15]; iadd_vfd(&r3, &t3);
-        // m5d_sub_i(&r1, &r2);
+        /*  m5d_sub_i(&r1, &r2); */
         iadd_vfd(&r1, &r2);
         m5d_add2_i(&r1, &r3);
         
@@ -1019,7 +1019,7 @@ void m5d_mul_32(vfd *R, vfd *A, vfd *B)
     
 }
 
-//16 * 64,1024 bit, 128 byte matrix(slice) multiplication
+/* 16 * 64,1024 bit, 128 byte matrix(slice) multiplication */
 void m5d_mul_16(vfd *R, vfd *A, vfd *B)
 {
     long i;
@@ -1055,7 +1055,7 @@ void m5d_mul_16(vfd *R, vfd *A, vfd *B)
     }
 }
 
-//8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
+/* 8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication */
 void m5d_mul_8(vfd *R, vfd *A, vfd *B)
 {
 
@@ -1078,7 +1078,7 @@ void m5d_mul_8(vfd *R, vfd *A, vfd *B)
    	 	t1 = tables4[1][v1&15]; iadd_vfd(&r1, &t1);
     	t2 = tables4[1][v2&15]; iadd_vfd(&r2, &t2);
     	t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3);
-    	// m5d_sub_i((&r1, &r2);
+    	/*  m5d_sub_i((&r1, &r2); */
     	
     	iadd_vfd(&r1, &r2);
 		m5d_add2_i(&r1, &r3);
@@ -1087,7 +1087,7 @@ void m5d_mul_8(vfd *R, vfd *A, vfd *B)
     }
 }
 
-//4 * 64,256 bit, 32 byte matrix(slice) multiplication
+/* 4 * 64,256 bit, 32 byte matrix(slice) multiplication */
 void m5d_mul_4(vfd *R, vfd *A, vfd *B)
 {
     int i;
@@ -1327,8 +1327,8 @@ m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
     
     }
     
-     a->lblock = b->lblock; //  first block pointed to in a window
-     a->fcol = b->fcol;  ///column offset of first block
+     a->lblock = b->lblock; /*   first block pointed to in a window */
+     a->fcol = b->fcol;  /* /column offset of first block */
      a->flags = b->flags;
   
   }

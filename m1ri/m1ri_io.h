@@ -29,18 +29,18 @@
 #include <m1ri/m1ri_permutations.h>
 
 
-//	Prints an m3d_t matrix
+/* 	Prints an m3d_t matrix */
 
-void m3d_print(m3d_t * );
+void m3d_print(const m3d_t * );
 
 /** 
 	Prints an m5d_t matrix
 */
-void m5d_print(m5d_t *);
+void m5d_print(const m5d_t *);
 /** 
 	Prints an m7d_t matrix
 */
-void m7d_print(m7d_t * );
+void m7d_print(const m7d_t * );
 
 void m3d_specs(m3d_t *);
 

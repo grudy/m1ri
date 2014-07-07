@@ -187,15 +187,14 @@ m3d_t  *  m3d_identity(m3d_t  *, rci_t );
  strow = row offset in increments of 64
  sizecol  = cols * 64
  sizerow  = rows * 64
- */
+*/
+ 
 m3d_t *    m3d_init_window(const m3d_t  *, rci_t , rci_t , rci_t , rci_t );
 //m3d_t *m3d_init_window(const m3d_t *A, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc);
 
 
-/** 
- Same as m3d_window but the second argument is made into the window
- */
-//void   m3d_init_window(m3d_t *, m3d_t * , rci_t , rci_t , rci_t , rci_t );
+
+
 /** 
  Concat b on the end of a, the result is c
    [a] [b] ----->  [a b]   ===  C
@@ -218,28 +217,58 @@ m3d_t  * m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
 int m3d_equal(m3d_t const  *, m3d_t const  *);
 
 
-void m3d_copy(m3d_t  * , m3d_t const * );
+
 void m3d_copy_cutoff(m3d_t  * , m3d_t const * );
+
+
+/**
+ * \brief Releases a m3d_t into the wilderness.  
+ * \param a GF(3) matrix
+ *
+ * \Frees allocated memory in matrix
+ */
 void m3d_free( m3d_t *  );
 
 
 
 
-/* ****************************************************** 
-	These functions work with large amounts of 
-	partitions
-****************************************************** 
-*/
 
+/**
+ * \brief Data structure  for holding m3d_t matrix windows  
+ * \param c Previously malloced structure for holding windows   
+ * \param a GF(3) matrix
+ * \param slicesize n*n size of slices(matrix windows), where n is a multiple of 64
+ * \
+ * \
+ */
 void  m3d_slices(m3_slice *  ,const m3d_t * , wi_t );
 
-//A direct transpose, using no windows
 
+
+/**
+ * \brief Creates 4 equally sized windows  
+ * \param a Matrix over GF(3) 
+ * \
+ * \Returns a structure holding windows to four quadrants of  matrix a
+ *
+ * \[0][1]
+ * \[2][2] 
+ */
+ 
 m3_slice *  m3d_quarter( const m3d_t * );
 
-m3d_t m3d_transpose_sliced(m3d_t * );
 
-void m3d_copy(m3d_t *, m3d_t const *);
+/**
+ * \brief Creates 4 equally sized windows  
+ * \param a Matrix over GF(3) 
+ * \
+ * \ 
+ */
+m3d_t  * m3d_transpose_sliced(m3d_t * );
+
+
+m3d_t * m3d_copy(m3d_t *, m3d_t const *);
+
 void  m3d_colswap_capped_row(m3d_t *, rci_t , rci_t, rci_t );
 int m3d_cmp(m3d_t *A, m3d_t *B);
 

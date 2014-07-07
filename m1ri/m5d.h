@@ -78,22 +78,22 @@ static inline  vfd fold5( vec s3, vec s2, vec s1, vec s0)
 
 typedef struct m5d_t{
     
-    rci_t nrows; //< number of rows
+    rci_t nrows; /* < number of rows */
     
-    rci_t ncols; //< number of columns
+    rci_t ncols; /* < number of columns */
     
-    wi_t width; //< the number vfd's needed to hold columns
+    wi_t width; /* < the number vfd's needed to hold columns */
 
-    vfd * block;  //< block containing the data contiguous in memory
+    vfd * block;  /* < block containing the data contiguous in memory */
     
-    vfd ** rows;  // < pointers to rows of the matrix
-    u_int32_t  fblock; //  first block pointed to in a window
-    u_int32_t fcol;  //column offset of first block
+    vfd ** rows;  /*  < pointers to rows of the matrix */
+    u_int32_t  fblock; /*   first block pointed to in a window */
+    u_int32_t fcol;  /* column offset of first block */
  
     u_int8_t flags;
-	vec  svfd;   //Identifies first vfd used in row
+	vec  svfd;   /* Identifies first vfd used in row */
  
-    u_int32_t  lblock; //  first block pointed to in a window
+    u_int32_t  lblock; /*   first block pointed to in a window */
     
     
     
@@ -111,9 +111,9 @@ typedef struct
     (slicesize ^ 2) * 64
     */
     m5d_t ** row;
-    // (slicesize ^ 2) * 64
+    /*  (slicesize ^ 2) * 64 */
     wi_t slicesize;
-    //width in slices horizaontally per row
+    /* width in slices horizaontally per row */
     wi_t width;   
     rci_t nrows;
     rci_t ncols;
@@ -154,7 +154,7 @@ void * m5d_rowswap (m5d_t * , rci_t , rci_t  );
 /** 
  
 */
-//unfinished
+/* unfinished */
 void *  m5d_write_elem( m5d_t * ,rci_t , rci_t , vec , vec , vec);
 
 
@@ -211,7 +211,7 @@ void m5d_free( m5d_t *  );
 
 
 
-void vfd_sub( vfd *, vfd *, vfd *);               //subtract vector x by by vector y.   The product is vector r.
+void vfd_sub( vfd *, vfd *, vfd *);               /* subtract vector x by by vector y.   The product is vector r. */
 
 /** *******************************************
  matrix r = (direct sum matrix r + matrix x)
@@ -261,7 +261,7 @@ void m5d_mul_32(vfd *, vfd *, vfd *);
 void m5d_mul_16(vfd *, vfd *, vfd *);
 void m5d_mul_8(vfd *, vfd *, vfd *);
 void m5d_mul_4(vfd *R, vfd *A, vfd *B);
-//vfd * m5d_transpose_vfd(vfd  **, vfd **);
+/* vfd * m5d_transpose_vfd(vfd  **, vfd **); */
 void  m5d_transpose(m5d_t   * a);
 
 
@@ -276,7 +276,7 @@ m5d_t *  m5d_transpose_sliced(m5d_t * );
 m5d_t  * m5_blockslice_allocate( rci_t  ,  wi_t  );
 m5d_t ** m5_rowslice_allocate(m5d_t * ,  wi_t , rci_t );
 m5d_t * m5d_hadamard(m5d_t const * , m5d_t const *  );
-//void m5d_copy(m5d_t *, m5d_t const *);
+/* void m5d_copy(m5d_t *, m5d_t const *); */
 
 void  m5d_colswap(m5d_t *, rci_t , rci_t );
 void m5d_colswap_capped_row(m5d_t *, rci_t , rci_t, rci_t );

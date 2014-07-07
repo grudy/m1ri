@@ -58,23 +58,23 @@ typedef struct {
 
 typedef struct {
     
-    rci_t nrows; //< number of rows
+    rci_t nrows; /* < number of rows */
     
-    rci_t ncols; //< number of columns
+    rci_t ncols; /* < number of columns */
     
-    wi_t width; //< the number of vbg's needed to hold columns
+    wi_t width; /* < the number of vbg's needed to hold columns */
     
-    vtri * block;  //< block containing the data contiguous in memory
+    vtri * block;  /* < block containing the data contiguous in memory */
     
-    vtri ** rows;  // < pointers to rows of the matrix
+    vtri ** rows;  /*  < pointers to rows of the matrix */
     
-    vec  svtri;   //Identifies first vbg used in row
+    vec  svtri;   /* Identifies first vbg used in row */
     
-    // wi_t rowstride;  //vbg's in block to traverse to  get to first
+    /*  wi_t rowstride;  //vbg's in block to traverse to  get to first */
     
-    u_int32_t  lblock; //  first block pointed to in a window
-    u_int32_t fcol;  //column offset of first block
-    u_int8_t flags;    //IsWindowed, NotWindowed
+    u_int32_t  lblock; /*   first block pointed to in a window */
+    u_int32_t fcol;  /* column offset of first block */
+    u_int8_t flags;    /* IsWindowed, NotWindowed */
 
     
     
@@ -93,15 +93,15 @@ typedef struct {
 
  */
 
-//Read 'middle' bits
+/* Read 'middle' bits */
 vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) ;
 
 
-// Read n 'sign' bits
+/*  Read n 'sign' bits */
 vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-// Read  n 'unit' bits
+/*  Read  n 'unit' bits */
 vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-// Read   n elements
+/*  Read   n elements */
 vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n);
 
 void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
@@ -112,7 +112,7 @@ void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
 void m7d_copy(m7d_t  * , m7d_t const * );
 void m7d_copy_cutoff(m7d_t  * , m7d_t const * );
 void m7d_add_64(vtri ** , vtri **, vtri **);
-//unfinished
+/* unfinished */
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s,  vec m , vec u );
 /** 
  
@@ -175,7 +175,7 @@ void m7d_sub_i(vtri  *, vtri *);
 m7d_t * m7d_sub( m7d_t * , m7d_t *);
 void m7d_vtri_sub(vtri *, vtri *, vtri *  );
 void m7d_sub_64(vtri **, vtri   **, vtri  **);
-//Scalar  multiplication
+/* Scalar  multiplication */
 vtri vtri_mul_2(vtri);
 vtri vtri_mul_3(vtri);
 vtri vtri_mul_4(vtri);
@@ -190,19 +190,21 @@ typedef struct
      
     m7d_t * block;
     m7d_t ** row;
-    wi_t slicesize;// (slicesize ^ 2) * 64
-    wi_t width;   ///width in slices horizaontally per row
+    wi_t slicesize;/*  (slicesize ^ 2) * 64 */
+    wi_t width;   /* /width in slices horizaontally per row */
     rci_t nrows;
     rci_t ncols;
     
 }m7_slice;
 
 
-// negate  r0, r1, r2 ← a0, a1, a2
 
-/** *******************************************
- matrix r = (difference matrix r - matrix x)                //Or x will the function be  r  = x- r???
+/*********************************************
+ matrix r = (difference matrix r - matrix x)               
  ********************************************/
+ 
+ 
+ 
 vtri sub_m7dr(vtri const x, vtri const y);
 /** 
 	GF(7) Addition on a single M1RI word.
@@ -210,8 +212,8 @@ vtri sub_m7dr(vtri const x, vtri const y);
 m7d_t * m7d_add( m7d_t *, m7d_t *);
 void m7d_add_2r(vtri *, vtri *);
 void m7d_add_4r( vtri *, vtri *);
-m7d_t  *  m7d_init_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
 
+m7d_t   * m7d_init_window(const m7d_t *, const rci_t , const  rci_t ,const rci_t , const rci_t );
 
 
 void  m7d_slices(m7_slice *  , m7d_t * , wi_t );

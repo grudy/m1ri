@@ -123,7 +123,7 @@ int main(int argc, const char * argv[])
 	*/
 
 	m5d_classic_mul(k, i, j);
-	//m5d_print(k);
+	/* m5d_print(k); */
 	
 
 	m5d_free(a);
@@ -132,7 +132,7 @@ int main(int argc, const char * argv[])
 	m5d_free(e);
 	m5d_free(f);
 	m5d_free(g);
-//	m5d_free(h);
+/* 	m5d_free(h); */
 	m5d_free(i);
 	m5d_free(j);
 	m5d_free(k);

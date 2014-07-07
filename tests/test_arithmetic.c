@@ -74,7 +74,7 @@ int main(int argc, const char * argv[])
   
    /*
   	 m5d
-  * /
+  */
   printf("\n \n ****************************************\n \t\t\t\t\tm5d\n");
   
     m5d_t * e, * f, *g, * h;
@@ -137,7 +137,7 @@ int main(int argc, const char * argv[])
 
     m7d_rand(i);
     m7d_rand(j);
-   // m7d_specs(i);
+   /*  m7d_specs(i); */
 
      k = m7d_add(  i, j);
      m = m7d_sub(  k,  j);
@@ -169,7 +169,7 @@ int main(int argc, const char * argv[])
          }
     
     }
-    //
+    /*  */
 	printf("m7d addition and subtraction test passed");
   
   m7d_free(i);
@@ -177,7 +177,7 @@ int main(int argc, const char * argv[])
   m7d_free(k);
   m7d_free(m);
   
-  */
+  
   return 0;
   
 

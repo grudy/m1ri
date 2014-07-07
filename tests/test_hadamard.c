@@ -29,9 +29,9 @@ int main(int argc, const char * argv[])
     
     
     
-     //A*(B+C) == A*B + A*C
+     /* A*(B+C) == A*B + A*C */
      
-     //m3d
+     /* m3d */
     m3d_t * a_m3d,  * b_m3d,  * c_m3d, * t1_m3d,* t2_m3d, *t3_m3d, * r1_m3d, *  r2_m3d;
  
 	a_m3d = m3d_create( 4, 4);
@@ -80,9 +80,9 @@ int main(int argc, const char * argv[])
     
        
     
-     //A*(B+C) == A*B + A*C
+     /* A*(B+C) == A*B + A*C */
      
-     //m5d
+     /* m5d */
      
      
     m5d_t * a_m5d,  * b_m5d,  * c_m5d, * t1_m5d,* t2_m5d, *t3_m5d, * r1_m5d, *  r2_m5d;
@@ -100,9 +100,9 @@ int main(int argc, const char * argv[])
 	m5d_rand(a_m5d);
 	m5d_rand(b_m5d);
 	m5d_rand(c_m5d);
-//	 /*
-//	     a_m5d * (b_m5d  + c_m5d)   == (a_m5d * b_m5d) + (a_m5d *  c_m5d);
-//	 * /
+/* 	 /* */
+/* 	     a_m5d * (b_m5d  + c_m5d)   == (a_m5d * b_m5d) + (a_m5d *  c_m5d); */
+/* 	 * / */
 	 
 	 
 	 
@@ -155,9 +155,9 @@ int main(int argc, const char * argv[])
 	m5d_free(r1_m5d);
     m5d_free(r2_m5d);
       
-      //A*(B+C) == A*B + A*C
+      /* A*(B+C) == A*B + A*C */
      
-     //m7d
+     /* m7d */
     m7d_t * a_m7d,  * b_m7d,  * c_m7d, * t1_m7d,* t2_m7d, *t3_m7d, * r1_m7d, *  r2_m7d;
     a_m7d = malloc(sizeof(m7d_t));
     b_m7d = malloc(sizeof(m7d_t));

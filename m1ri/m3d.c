@@ -503,10 +503,10 @@ int m3d_equal(m3d_t const *a, m3d_t const *b)
  Releases a m3d_t into the wilderness.
  */
 
-void m3d_free( m3d_t *  tofree)
+void m3d_free( m3d_t *  a)
 { 		
-    m1ri_free(tofree->rows);
-    m1ri_free(tofree->block);
+    m1ri_free(a->rows);
+    m1ri_free(a->block);
 }
 
 
@@ -606,7 +606,7 @@ static inline vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
     return *b;
 }
 
-m3d_t  m3d_transpose_sliced(m3d_t * a)
+m3d_t * m3d_transpose_sliced(m3d_t * a)
 {
     int x, y;
     m3d_t * c;
@@ -622,7 +622,7 @@ m3d_t  m3d_transpose_sliced(m3d_t * a)
             
         }
     }
-    return *c;
+    return c;
   
 }
 /**
@@ -631,7 +631,6 @@ m3d_t  m3d_transpose_sliced(m3d_t * a)
 m3_slice * m3d_quarter(const m3d_t * a)
 {
 	 m3_slice * c = m1ri_malloc(sizeof(m3_slice));
-	//int arows, acols;
 	 c->block = m3_blockslice_allocate(  2,   2);
      c->row = m3_rowslice_allocate(c->block, 2, 2);
      c->row[0] = m3d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
@@ -664,7 +663,7 @@ void  m3d_transpose(m3d_t   * a)
    
 }
 
-void m3d_copy(m3d_t * a, m3d_t const *b)
+m3d_t *  m3d_copy(m3d_t * a, m3d_t const *b)
 {
   a = m3d_create( b->ncols, b->nrows);
   for(int i = 0; i < a->nrows; i++)

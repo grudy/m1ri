@@ -36,7 +36,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  
   o   = m3d_create( 128, 128);
   m3d_rand(o);
-		//  
+		/*    */
   
    s = m3d_quarter( o);
   
@@ -106,17 +106,19 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   w6 = m3d_classic_mul(w6, w0, w4);
    	
 
-  /* 	
-  if(!(m3d_equal(w5, w6)))
+  /*	
+  if(!(m3d_equal(w5, w6)))   
 	 {
 	 	printf("Classic Multiplication m3d test failed");
-	//return 1;
+	    return 1;  
 	 
 	 }   
   
+  */
+  
   
   printf("Classic Multiplication m3d test passed"); 
-  */
+  
   
 	m3d_t * y0, *y1,* y2,* y3, *y4,* y5,* y6;
 	y0 = m3d_create(512, 512);

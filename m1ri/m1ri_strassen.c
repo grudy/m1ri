@@ -50,7 +50,7 @@ static inline void m3d_mul_naive_square(m3d_t *c, const m3d_t *a, const m3d_t *b
   	m3_slice *  a_slice, *  b_slice, *  c_slice;
 
    	a_slice = m3d_quarter( a);
-   //m3d_print(a_slice->row[0][0]);
+   /* m3d_print(a_slice->row[0][0]); */
     b_slice = m3d_quarter( b);
     c_slice = m3d_quarter(c);
    
@@ -118,26 +118,26 @@ void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     {
      
        {
-        x1 = m3d_sub( a_slice->row[0], a_slice->row[2]);  //1
-        x2 = m3d_sub(b_slice->row[1],b_slice->row[1]);  //2
-        m3d_qrt_mul(c_slice->row[2], x1, x2);  //3
-        x1 = m3d_add(a_slice->row[2],a_slice->row[1]);  //4
-        x2 = m3d_sub(b_slice->row[1],b_slice->row[0]);  //5
-        m3d_qrt_mul(c_slice->row[3], x1, x2);    //6
-        x1 = m3d_sub(x1,a_slice->row[0]);//7
-        x2 = m3d_sub(b_slice->row[1],x2);  //8
-        m3d_qrt_mul(c_slice->row[1],x1,x2); //9
-        x1 = m3d_sub(a_slice->row[1],x1);    //10
-        m3d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   //11
-        m3d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  //12
-        c_slice->row[1] = m3d_add(x1 , c_slice->row[1]);   //13
-        c_slice->row[2] = m3d_add(c_slice->row[1] , c_slice->row[2]);   //14
-        c_slice->row[1] = m3d_add(c_slice->row[1] , c_slice->row[3]);   //15
-        c_slice->row[3] = m3d_add(c_slice->row[2] , c_slice->row[3]);    //16
-        c_slice->row[3] = m3d_add(c_slice->row[2] , c_slice->row[3]);  //17
-        x2 = m3d_sub(x2, b_slice->row[2]);            //18
-        m3d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            //19
-        c_slice->row[2] = m3d_sub( c_slice->row[2], c_slice->row[0]);  //20
+        x1 = m3d_sub( a_slice->row[0], a_slice->row[2]);  /* 1 */
+        x2 = m3d_sub(b_slice->row[1],b_slice->row[1]);  /* 2 */
+        m3d_qrt_mul(c_slice->row[2], x1, x2);  /* 3 */
+        x1 = m3d_add(a_slice->row[2],a_slice->row[1]);  /* 4 */
+        x2 = m3d_sub(b_slice->row[1],b_slice->row[0]);  /* 5 */
+        m3d_qrt_mul(c_slice->row[3], x1, x2);    /* 6 */
+        x1 = m3d_sub(x1,a_slice->row[0]);/* 7 */
+        x2 = m3d_sub(b_slice->row[1],x2);  /* 8 */
+        m3d_qrt_mul(c_slice->row[1],x1,x2); /* 9 */
+        x1 = m3d_sub(a_slice->row[1],x1);    /* 10 */
+        m3d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   /* 11 */
+        m3d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  /* 12 */
+        c_slice->row[1] = m3d_add(x1 , c_slice->row[1]);   /* 13 */
+        c_slice->row[2] = m3d_add(c_slice->row[1] , c_slice->row[2]);   /* 14 */
+        c_slice->row[1] = m3d_add(c_slice->row[1] , c_slice->row[3]);   /* 15 */
+        c_slice->row[3] = m3d_add(c_slice->row[2] , c_slice->row[3]);    /* 16 */
+        c_slice->row[3] = m3d_add(c_slice->row[2] , c_slice->row[3]);  /* 17 */
+        x2 = m3d_sub(x2, b_slice->row[2]);            /* 18 */
+        m3d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            /* 19 */
+        c_slice->row[2] = m3d_sub( c_slice->row[2], c_slice->row[0]);  /* 20 */
         m3d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]);
         c_slice->row[0] = m3d_add(x1,c_slice->row[0] );
         m3d_free(x1);
@@ -148,29 +148,29 @@ void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
 
-		m3d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows);  //1
-        m3d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ;  //2
-        m3d_mul_64(c_slice->row[2]->rows, x1->rows, x2->rows);  //3
-        m3d_add_64(x1->rows,a_slice->row[2]->rows,a_slice->row[3]->rows) ;  //4
-        m3d_sub_64(x2->rows,b_slice->row[1]->rows,b_slice->row[0]->rows) ;  //5
+		m3d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows);  /* 1 */
+        m3d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ;  /* 2 */
+        m3d_mul_64(c_slice->row[2]->rows, x1->rows, x2->rows);  /* 3 */
+        m3d_add_64(x1->rows,a_slice->row[2]->rows,a_slice->row[3]->rows) ;  /* 4 */
+        m3d_sub_64(x2->rows,b_slice->row[1]->rows,b_slice->row[0]->rows) ;  /* 5 */
 
-     	m3d_mul_64(c_slice->row[3]->rows, x1->rows, x2->rows);    //6
-        m3d_sub_64(x1->rows,x1->rows,a_slice->row[0]->rows) ;//7
-        m3d_sub_64(x2->rows,b_slice->row[3]->rows,x2->rows);  //8
-        m3d_mul_64(c_slice->row[1]->rows,x1->rows,x2->rows); //9
-        m3d_sub_64(x1->rows,a_slice->row[1]->rows,x1->rows);    //10
+     	m3d_mul_64(c_slice->row[3]->rows, x1->rows, x2->rows);    /* 6 */
+        m3d_sub_64(x1->rows,x1->rows,a_slice->row[0]->rows) ;/* 7 */
+        m3d_sub_64(x2->rows,b_slice->row[3]->rows,x2->rows);  /* 8 */
+        m3d_mul_64(c_slice->row[1]->rows,x1->rows,x2->rows); /* 9 */
+        m3d_sub_64(x1->rows,a_slice->row[1]->rows,x1->rows);    /* 10 */
 
-        m3d_mul_64(c_slice->row[0]->rows,x1->rows,b_slice->row[3]->rows);   //11
-        m3d_mul_64(x1->rows, a_slice->row[3]->rows, b_slice->row[3]->rows);  //12
-        m3d_add_64(c_slice->row[1]->rows,x1->rows , c_slice->row[1]->rows) ;   //13
-        m3d_add_64(c_slice->row[2]->rows,c_slice->row[1]->rows , c_slice->row[2]->rows) ;   //14
-        m3d_add_64(c_slice->row[1]->rows,c_slice->row[1]->rows , c_slice->row[3]->rows) ;   //15
-        m3d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;    //16
-        m3d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;  //17
+        m3d_mul_64(c_slice->row[0]->rows,x1->rows,b_slice->row[3]->rows);   /* 11 */
+        m3d_mul_64(x1->rows, a_slice->row[3]->rows, b_slice->row[3]->rows);  /* 12 */
+        m3d_add_64(c_slice->row[1]->rows,x1->rows , c_slice->row[1]->rows) ;   /* 13 */
+        m3d_add_64(c_slice->row[2]->rows,c_slice->row[1]->rows , c_slice->row[2]->rows) ;   /* 14 */
+        m3d_add_64(c_slice->row[1]->rows,c_slice->row[1]->rows , c_slice->row[3]->rows) ;   /* 15 */
+        m3d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;    /* 16 */
+        m3d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;  /* 17 */
 
-    	m3d_sub_64(x2->rows, x2->rows, b_slice->row[2]->rows) ;            //18
-        m3d_mul_64(c_slice->row[2]->rows, a_slice->row[3]->rows, x2->rows);            //19
-        m3d_sub_64(c_slice->row[2]->rows, c_slice->row[2]->rows,c_slice->row[0]->rows);  //20
+    	m3d_sub_64(x2->rows, x2->rows, b_slice->row[2]->rows) ;            /* 18 */
+        m3d_mul_64(c_slice->row[2]->rows, a_slice->row[3]->rows, x2->rows);            /* 19 */
+        m3d_sub_64(c_slice->row[2]->rows, c_slice->row[2]->rows,c_slice->row[0]->rows);  /* 20 */
         m3d_mul_64(c_slice->row[0]->rows, a_slice->row[1]->rows,b_slice->row[2]->rows);
         m3d_add_64(c_slice->row[0]->rows, x1->rows,c_slice->row[0]->rows) ; 
  
@@ -206,7 +206,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
     if(a->ncols == b->nrows)
     {
  
-      	// These hold the padded matrix sizes
+      	/*  These hold the padded matrix sizes */
 	u_int32_t  arcr, acbr, bccc;
 	arcr = a->nrows;
 	acbr = a->ncols;
@@ -279,26 +279,26 @@ void m5d_qrt_mul(m5d_t * c,const m5d_t *   a, const m5d_t *   b )
     {
      
        {
-        x1 = m5d_sub( a_slice->row[0], a_slice->row[2]);  //1
-        x2 = m5d_sub(b_slice->row[1],b_slice->row[1]);  //2
-        m5d_qrt_mul(c_slice->row[2], x1, x2);  //3
-        x1 = m5d_add(a_slice->row[2],a_slice->row[1]);  //4
-        x2 = m5d_sub(b_slice->row[1],b_slice->row[0]);  //5
-        m5d_qrt_mul(c_slice->row[3], x1, x2);    //6
-        x1 = m5d_sub(x1,a_slice->row[0]);//7
-        x2 = m5d_sub(b_slice->row[1],x2);  //8
-        m5d_qrt_mul(c_slice->row[1],x1,x2); //9
-        x1 = m5d_sub(a_slice->row[1],x1);    //10
-        m5d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   //11
-        m5d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  //12
-        c_slice->row[1] = m5d_add(x1 , c_slice->row[1]);   //13
-        c_slice->row[2] = m5d_add(c_slice->row[1] , c_slice->row[2]);   //14
-        c_slice->row[1] = m5d_add(c_slice->row[1] , c_slice->row[3]);   //15
-        c_slice->row[3] = m5d_add(c_slice->row[2] , c_slice->row[3]);    //16
-        c_slice->row[3] = m5d_add(c_slice->row[2] , c_slice->row[3]);  //17
-        x2 = m5d_sub(x2, b_slice->row[2]);            //18
-        m5d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            //19
-        c_slice->row[2] = m5d_sub( c_slice->row[2], c_slice->row[0]);  //20
+        x1 = m5d_sub( a_slice->row[0], a_slice->row[2]);  /* 1 */
+        x2 = m5d_sub(b_slice->row[1],b_slice->row[1]);  /* 2 */
+        m5d_qrt_mul(c_slice->row[2], x1, x2);  /* 3 */
+        x1 = m5d_add(a_slice->row[2],a_slice->row[1]);  /* 4 */
+        x2 = m5d_sub(b_slice->row[1],b_slice->row[0]);  /* 5 */
+        m5d_qrt_mul(c_slice->row[3], x1, x2);    /* 6 */
+        x1 = m5d_sub(x1,a_slice->row[0]);/* 7 */
+        x2 = m5d_sub(b_slice->row[1],x2);  /* 8 */
+        m5d_qrt_mul(c_slice->row[1],x1,x2); /* 9 */
+        x1 = m5d_sub(a_slice->row[1],x1);    /* 10 */
+        m5d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   /* 11 */
+        m5d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  /* 12 */
+        c_slice->row[1] = m5d_add(x1 , c_slice->row[1]);   /* 13 */
+        c_slice->row[2] = m5d_add(c_slice->row[1] , c_slice->row[2]);   /* 14 */
+        c_slice->row[1] = m5d_add(c_slice->row[1] , c_slice->row[3]);   /* 15 */
+        c_slice->row[3] = m5d_add(c_slice->row[2] , c_slice->row[3]);    /* 16 */
+        c_slice->row[3] = m5d_add(c_slice->row[2] , c_slice->row[3]);  /* 17 */
+        x2 = m5d_sub(x2, b_slice->row[2]);            /* 18 */
+        m5d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            /* 19 */
+        c_slice->row[2] = m5d_sub( c_slice->row[2], c_slice->row[0]);  /* 20 */
         m5d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]);
         c_slice->row[0] = m5d_add(x1,c_slice->row[0] );
         m5d_free(x1);
@@ -309,29 +309,29 @@ void m5d_qrt_mul(m5d_t * c,const m5d_t *   a, const m5d_t *   b )
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
 
-		m5d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows);  //1
-        m5d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ;  //2
-        m5d_mul_64(c_slice->row[2]->rows, x1->rows, x2->rows);  //3
-        m5d_add_64(x1->rows,a_slice->row[2]->rows,a_slice->row[3]->rows) ;  //4
-        m5d_sub_64(x2->rows,b_slice->row[1]->rows,b_slice->row[0]->rows) ;  //5
+		m5d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows);  /* 1 */
+        m5d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ;  /* 2 */
+        m5d_mul_64(c_slice->row[2]->rows, x1->rows, x2->rows);  /* 3 */
+        m5d_add_64(x1->rows,a_slice->row[2]->rows,a_slice->row[3]->rows) ;  /* 4 */
+        m5d_sub_64(x2->rows,b_slice->row[1]->rows,b_slice->row[0]->rows) ;  /* 5 */
 
-     	m5d_mul_64(c_slice->row[3]->rows, x1->rows, x2->rows);    //6
-        m5d_sub_64(x1->rows,x1->rows,a_slice->row[0]->rows) ;//7
-        m5d_sub_64(x2->rows,b_slice->row[3]->rows,x2->rows);  //8
-        m5d_mul_64(c_slice->row[1]->rows,x1->rows,x2->rows); //9
-        m5d_sub_64(x1->rows,a_slice->row[1]->rows,x1->rows);    //10
+     	m5d_mul_64(c_slice->row[3]->rows, x1->rows, x2->rows);    /* 6 */
+        m5d_sub_64(x1->rows,x1->rows,a_slice->row[0]->rows) ;/* 7 */
+        m5d_sub_64(x2->rows,b_slice->row[3]->rows,x2->rows);  /* 8 */
+        m5d_mul_64(c_slice->row[1]->rows,x1->rows,x2->rows); /* 9 */
+        m5d_sub_64(x1->rows,a_slice->row[1]->rows,x1->rows);    /* 10 */
 
-        m5d_mul_64(c_slice->row[0]->rows,x1->rows,b_slice->row[3]->rows);   //11
-        m5d_mul_64(x1->rows, a_slice->row[3]->rows, b_slice->row[3]->rows);  //12
-        m5d_add_64(c_slice->row[1]->rows,x1->rows , c_slice->row[1]->rows) ;   //13
-        m5d_add_64(c_slice->row[2]->rows,c_slice->row[1]->rows , c_slice->row[2]->rows) ;   //14
-        m5d_add_64(c_slice->row[1]->rows,c_slice->row[1]->rows , c_slice->row[3]->rows) ;   //15
-        m5d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;    //16
-        m5d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;  //17
+        m5d_mul_64(c_slice->row[0]->rows,x1->rows,b_slice->row[3]->rows);   /* 11 */
+        m5d_mul_64(x1->rows, a_slice->row[3]->rows, b_slice->row[3]->rows);  /* 12 */
+        m5d_add_64(c_slice->row[1]->rows,x1->rows , c_slice->row[1]->rows) ;   /* 13 */
+        m5d_add_64(c_slice->row[2]->rows,c_slice->row[1]->rows , c_slice->row[2]->rows) ;   /* 14 */
+        m5d_add_64(c_slice->row[1]->rows,c_slice->row[1]->rows , c_slice->row[3]->rows) ;   /* 15 */
+        m5d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;    /* 16 */
+        m5d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;  /* 17 */
 
-    	m5d_sub_64(x2->rows, x2->rows, b_slice->row[2]->rows) ;            //18
-        m5d_mul_64(c_slice->row[2]->rows, a_slice->row[3]->rows, x2->rows);            //19
-        m5d_sub_64(c_slice->row[2]->rows, c_slice->row[2]->rows,c_slice->row[0]->rows);  //20
+    	m5d_sub_64(x2->rows, x2->rows, b_slice->row[2]->rows) ;            /* 18 */
+        m5d_mul_64(c_slice->row[2]->rows, a_slice->row[3]->rows, x2->rows);            /* 19 */
+        m5d_sub_64(c_slice->row[2]->rows, c_slice->row[2]->rows,c_slice->row[0]->rows);  /* 20 */
         m5d_mul_64(c_slice->row[0]->rows, a_slice->row[1]->rows,b_slice->row[2]->rows);
         m5d_add_64(c_slice->row[0]->rows, x1->rows,c_slice->row[0]->rows) ; 
  
@@ -371,7 +371,7 @@ m5d_t *  m5d_strassen(m5d_t *c, m5d_t const  *a, const  m5d_t   *b)
     if(a->ncols == b->nrows)
     {
  
-      	// These hold the padded matrix sizes
+      	/*  These hold the padded matrix sizes */
 	u_int32_t  arcr, acbr, bccc;
 	arcr = a->nrows;
 	acbr = a->ncols;
@@ -446,26 +446,26 @@ m7_slice  * a_slice, * b_slice,*  c_slice;
     {
      
        {
-        x1 = m7d_sub( a_slice->row[0], a_slice->row[2]);  //1
-        x2 = m7d_sub(b_slice->row[1],b_slice->row[1]);  //2
-        m7d_qrt_mul(c_slice->row[2], x1, x2);  //3
-        x1 = m7d_add(a_slice->row[2],a_slice->row[1]);  //4
-        x2 = m7d_sub(b_slice->row[1],b_slice->row[0]);  //5
-        m7d_qrt_mul(c_slice->row[3], x1, x2);    //6
-        x1 = m7d_sub(x1,a_slice->row[0]);//7
-        x2 = m7d_sub(b_slice->row[1],x2);  //8
-        m7d_qrt_mul(c_slice->row[1],x1,x2); //9
-        x1 = m7d_sub(a_slice->row[1],x1);    //10
-        m7d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   //11
-        m7d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  //12
-        c_slice->row[1] = m7d_add(x1 , c_slice->row[1]);   //13
-        c_slice->row[2] = m7d_add(c_slice->row[1] , c_slice->row[2]);   //14
-        c_slice->row[1] = m7d_add(c_slice->row[1] , c_slice->row[3]);   //15
-        c_slice->row[3] = m7d_add(c_slice->row[2] , c_slice->row[3]);    //16
-        c_slice->row[3] = m7d_add(c_slice->row[2] , c_slice->row[3]);  //17
-        x2 = m7d_sub(x2, b_slice->row[2]);            //18
-        m7d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            //19
-        c_slice->row[2] = m7d_sub( c_slice->row[2], c_slice->row[0]);  //20
+        x1 = m7d_sub( a_slice->row[0], a_slice->row[2]);  /* 1 */
+        x2 = m7d_sub(b_slice->row[1],b_slice->row[1]);  /* 2 */
+        m7d_qrt_mul(c_slice->row[2], x1, x2);  /* 3 */
+        x1 = m7d_add(a_slice->row[2],a_slice->row[1]);  /* 4 */
+        x2 = m7d_sub(b_slice->row[1],b_slice->row[0]);  /* 5 */
+        m7d_qrt_mul(c_slice->row[3], x1, x2);    /* 6 */
+        x1 = m7d_sub(x1,a_slice->row[0]);/* 7 */
+        x2 = m7d_sub(b_slice->row[1],x2);  /* 8 */
+        m7d_qrt_mul(c_slice->row[1],x1,x2); /* 9 */
+        x1 = m7d_sub(a_slice->row[1],x1);    /* 10 */
+        m7d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   /* 11 */
+        m7d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  /* 12 */
+        c_slice->row[1] = m7d_add(x1 , c_slice->row[1]);   /* 13 */
+        c_slice->row[2] = m7d_add(c_slice->row[1] , c_slice->row[2]);   /* 14 */
+        c_slice->row[1] = m7d_add(c_slice->row[1] , c_slice->row[3]);   /* 15 */
+        c_slice->row[3] = m7d_add(c_slice->row[2] , c_slice->row[3]);    /* 16 */
+        c_slice->row[3] = m7d_add(c_slice->row[2] , c_slice->row[3]);  /* 17 */
+        x2 = m7d_sub(x2, b_slice->row[2]);            /* 18 */
+        m7d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            /* 19 */
+        c_slice->row[2] = m7d_sub( c_slice->row[2], c_slice->row[0]);  /* 20 */
         m7d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]);
         c_slice->row[0] = m7d_add(x1,c_slice->row[0] );
         m7d_free(x1);
@@ -477,29 +477,29 @@ m7_slice  * a_slice, * b_slice,*  c_slice;
     {
 
 	
-		m7d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows);  //1
-        m7d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ;  //2
-        m7d_mul_64(c_slice->row[2]->rows, x1->rows, x2->rows);  //3
-        m7d_add_64(x1->rows,a_slice->row[2]->rows,a_slice->row[3]->rows) ;  //4
-        m7d_sub_64(x2->rows,b_slice->row[1]->rows,b_slice->row[0]->rows) ;  //5
+		m7d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows);  /* 1 */
+        m7d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ;  /* 2 */
+        m7d_mul_64(c_slice->row[2]->rows, x1->rows, x2->rows);  /* 3 */
+        m7d_add_64(x1->rows,a_slice->row[2]->rows,a_slice->row[3]->rows) ;  /* 4 */
+        m7d_sub_64(x2->rows,b_slice->row[1]->rows,b_slice->row[0]->rows) ;  /* 5 */
 
-     	m7d_mul_64(c_slice->row[3]->rows, x1->rows, x2->rows);    //6
-        m7d_sub_64(x1->rows,x1->rows,a_slice->row[0]->rows) ;//7
-        m7d_sub_64(x2->rows,b_slice->row[3]->rows,x2->rows);  //8
-        m7d_mul_64(c_slice->row[1]->rows,x1->rows,x2->rows); //9
-        m7d_sub_64(x1->rows,a_slice->row[1]->rows,x1->rows);    //10
+     	m7d_mul_64(c_slice->row[3]->rows, x1->rows, x2->rows);    /* 6 */
+        m7d_sub_64(x1->rows,x1->rows,a_slice->row[0]->rows) ;/* 7 */
+        m7d_sub_64(x2->rows,b_slice->row[3]->rows,x2->rows);  /* 8 */
+        m7d_mul_64(c_slice->row[1]->rows,x1->rows,x2->rows); /* 9 */
+        m7d_sub_64(x1->rows,a_slice->row[1]->rows,x1->rows);    /* 10 */
 
-        m7d_mul_64(c_slice->row[0]->rows,x1->rows,b_slice->row[3]->rows);   //11
-        m7d_mul_64(x1->rows, a_slice->row[3]->rows, b_slice->row[3]->rows);  //12
-        m7d_add_64(c_slice->row[1]->rows,x1->rows , c_slice->row[1]->rows) ;   //13
-        m7d_add_64(c_slice->row[2]->rows,c_slice->row[1]->rows , c_slice->row[2]->rows) ;   //14
-        m7d_add_64(c_slice->row[1]->rows,c_slice->row[1]->rows , c_slice->row[3]->rows) ;   //15
-        m7d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;    //16
-        m7d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;  //17
+        m7d_mul_64(c_slice->row[0]->rows,x1->rows,b_slice->row[3]->rows);   /* 11 */
+        m7d_mul_64(x1->rows, a_slice->row[3]->rows, b_slice->row[3]->rows);  /* 12 */
+        m7d_add_64(c_slice->row[1]->rows,x1->rows , c_slice->row[1]->rows) ;   /* 13 */
+        m7d_add_64(c_slice->row[2]->rows,c_slice->row[1]->rows , c_slice->row[2]->rows) ;   /* 14 */
+        m7d_add_64(c_slice->row[1]->rows,c_slice->row[1]->rows , c_slice->row[3]->rows) ;   /* 15 */
+        m7d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;    /* 16 */
+        m7d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;  /* 17 */
 
-    	m7d_sub_64(x2->rows, x2->rows, b_slice->row[2]->rows) ;            //18
-        m7d_mul_64(c_slice->row[2]->rows, a_slice->row[3]->rows, x2->rows);            //19
-        m7d_sub_64(c_slice->row[2]->rows, c_slice->row[2]->rows,c_slice->row[0]->rows);  //20
+    	m7d_sub_64(x2->rows, x2->rows, b_slice->row[2]->rows) ;            /* 18 */
+        m7d_mul_64(c_slice->row[2]->rows, a_slice->row[3]->rows, x2->rows);            /* 19 */
+        m7d_sub_64(c_slice->row[2]->rows, c_slice->row[2]->rows,c_slice->row[0]->rows);  /* 20 */
         m7d_mul_64(c_slice->row[0]->rows, a_slice->row[1]->rows,b_slice->row[2]->rows);
         m7d_add_64(c_slice->row[0]->rows, x1->rows,c_slice->row[0]->rows) ; 
  
@@ -539,7 +539,7 @@ m7d_t *  m7d_strassen(m7d_t *c,const m7d_t  *a,const m7d_t   *b)
     if(a->ncols == b->nrows)
     {
  
-      	// These hold the padded matrix sizes
+      	/*  These hold the padded matrix sizes */
 	u_int32_t  arcr, acbr, bccc;
 	arcr = a->nrows;
 	acbr = a->ncols;
@@ -821,7 +821,7 @@ static inline void m7d_mul_naive_square(m7d_t *c, const m7d_t *a, const m7d_t *b
   	m7_slice *  a_slice, *  b_slice, *  c_slice;
 
    	a_slice = m7d_quarter( a);
-   //m7d_print(a_slice->row[0][0]);
+   /* m7d_print(a_slice->row[0][0]); */
     b_slice = m7d_quarter( b);
     c_slice = m7d_quarter(c);
    
