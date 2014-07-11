@@ -65,7 +65,15 @@ typedef struct {
     
 } m3d_t;
 
-
+/**
+ * \brief 
+ *
+ * \param c Preallocated sum matrix, may be NULL for automatic creation.
+ * \param a Matrix
+ * \param b Matrix
+ *
+ * \wordoffset
+ */
 typedef struct
 {
 
@@ -80,7 +88,15 @@ typedef struct
 
 
 
-
+/**
+ * \brief 
+ *
+ * \param c 
+ * \param a 
+ * \param b 
+ *
+ * \wordoffset
+ */
 /***
  Read n bits from a s portion of an element
  x = rows
@@ -128,9 +144,10 @@ void  m3d_colswap(m3d_t *, rci_t , rci_t );
 */
 void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
 
-static inline void  * m3d_block_allocate(vbg * block, rci_t  nrows,  wi_t  width)
+static inline void  * m3d_block_allocate(rci_t  nrows,  wi_t  width)
 {
-    block  = m1ri_calloc(nrows * width ,  sizeof(vbg) );
+	
+    m3d_t * block = m1ri_calloc(nrows * width ,  sizeof(vbg) );
     return block;
 }
 
@@ -138,9 +155,10 @@ static inline void  * m3d_block_allocate(vbg * block, rci_t  nrows,  wi_t  width
  	Allocate vbg pointers for rows in a m3d_t
  */
 
-static inline vbg ** m3d_row_alloc(vbg * block, vbg ** rows, wi_t width, rci_t nrows)
+static inline vbg ** m3d_row_alloc(vbg * block, wi_t width, rci_t nrows)
 {
 	int i;
+	vbg ** rows;
     rows = m1ri_malloc( nrows * width * sizeof(vbg *));
     for ( i = 0; i <  nrows;  i++ )
     {
@@ -150,7 +168,7 @@ static inline vbg ** m3d_row_alloc(vbg * block, vbg ** rows, wi_t width, rci_t n
 }
 
 
-m3d_t m3d_create( m3d_t *  , rci_t nrows, rci_t );
+m3d_t *  m3d_create(  rci_t nrows, rci_t );
 m3d_t m3d_rand(m3d_t * );
 
 /** 
@@ -159,9 +177,9 @@ m3d_t m3d_rand(m3d_t * );
  n = matrix size (row length and column width)
   
 */
-m3d_t    m3d_identity_set(m3d_t * );
+void m3d_set_ui(m3d_t *A,unsigned int );
 
-m3d_t   m3d_identity(m3d_t  *, rci_t );
+m3d_t  *  m3d_identity(m3d_t  *, rci_t );
 
 /** 
  windows in m1ri_word rows * m1ri_word column incriments
@@ -169,19 +187,19 @@ m3d_t   m3d_identity(m3d_t  *, rci_t );
  strow = row offset in increments of 64
  sizecol  = cols * 64
  sizerow  = rows * 64
- */
-void  m3d_window(m3d_t  *,m3d_t *, rci_t , rci_t , rci_t , rci_t );
+*/
+ 
+m3d_t *    m3d_init_window(const m3d_t  *, rci_t , rci_t , rci_t , rci_t );
+//m3d_t *m3d_init_window(const m3d_t *A, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc);
 
 
-/** 
- Same as m3d_window but the second argument is made into the window
- */
-//void   m3d_window_create(m3d_t *, m3d_t * , rci_t , rci_t , rci_t , rci_t );
+
+
 /** 
  Concat b on the end of a, the result is c
    [a] [b] ----->  [a b]   ===  C
 */
-void m3d_concat(m3d_t * , m3d_t * , m3d_t * );
+m3d_t *  m3d_concat( m3d_t * , m3d_t * );
 
 /** 
     Stacks a on b, resulting matrix is c
@@ -190,35 +208,68 @@ void m3d_concat(m3d_t * , m3d_t * , m3d_t * );
     [b]
  
 */
-m3d_t m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
+m3d_t  * m3d_stack(m3d_t * ,  m3d_t * , m3d_t * );
  
 /** 
  Releases a m3d_t into the wilderness.
  */
 
 int m3d_equal(m3d_t const  *, m3d_t const  *);
-void m3d_copy(m3d_t  * , m3d_t const * );
-void m3d_putpadding(m3d_t  * , m3d_t const * );
+
+
+
+void m3d_copy_cutoff(m3d_t  * , m3d_t const * );
+
+
+/**
+ * \brief Releases a m3d_t into the wilderness.  
+ * \param a GF(3) matrix
+ *
+ * \Frees allocated memory in matrix
+ */
 void m3d_free( m3d_t *  );
 
 
 
 
-/* ****************************************************** 
-	These functions work with large amounts of 
-	partitions
-****************************************************** 
-*/
 
-void  m3d_slices(m3_slice *  , m3d_t * , wi_t );
+/**
+ * \brief Data structure  for holding m3d_t matrix windows  
+ * \param c Previously malloced structure for holding windows   
+ * \param a GF(3) matrix
+ * \param slicesize n*n size of slices(matrix windows), where n is a multiple of 64
+ * \
+ * \
+ */
+void  m3d_slices(m3_slice *  ,const m3d_t * , wi_t );
 
-//A direct transpose, using no windows
 
-void  m3d_quarter(m3_slice *  , m3d_t * );
 
-m3d_t m3d_transpose_sliced(m3d_t * );
+/**
+ * \brief Creates 4 equally sized windows  
+ * \param a Matrix over GF(3) 
+ * \
+ * \Returns a structure holding windows to four quadrants of  matrix a
+ *
+ * \[0][1]
+ * \[2][2] 
+ */
+ 
+m3_slice *  m3d_quarter( const m3d_t * );
 
-void m3d_copy(m3d_t *, m3d_t const *);
+
+/**
+ * \brief Creates 4 equally sized windows  
+ * \param a Matrix over GF(3) 
+ * \
+ * \ 
+ */
+m3d_t  * m3d_transpose_sliced(m3d_t * );
+
+
+m3d_t * m3d_copy(m3d_t *, m3d_t const *);
+
 void  m3d_colswap_capped_row(m3d_t *, rci_t , rci_t, rci_t );
+int m3d_cmp(m3d_t *A, m3d_t *B);
 
 #endif

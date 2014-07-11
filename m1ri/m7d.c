@@ -134,9 +134,12 @@ void m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b)
  
  */
 
-m7d_t    m7d_identity_set(m7d_t * a)
+void m7d_set_ui(m7d_t * a, rci_t value )
 
 {
+    
+    
+    
     if(a->ncols == a->nrows)
     {
         int k,i,  j,l;
@@ -183,22 +186,23 @@ m7d_t    m7d_identity_set(m7d_t * a)
         
         
     }
-    return *a;
+ \
 }
 
 
 
 
-m7d_t   m7d_identity(m7d_t  *a, rci_t n)
+m7d_t *   m7d_identity( rci_t n)
 {
-    *a = m7d_create(a, n, n);
-    *a = m7d_identity_set(a);
-    return *a;
+	m7d_t  *a = m7d_create(n, n);
+    a = m7d_create( n, n);
+    m7d_set_ui(a, 1);
+    return a;
 }
 
 
 
-//unfinished
+/* unfinished */
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
 {
     wi_t  block = (y  ) / M1RI_RADIX;
@@ -247,8 +251,10 @@ vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows)
  
  */
 
-m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
+m7d_t * m7d_create( rci_t nrows, rci_t ncols)
 {
+
+	m7d_t * a = m1ri_malloc(sizeof(m7d_t)); 
     a->ncols = ncols;
     a->nrows = nrows;
     a->width = M1RI_DN(ncols, M1RI_RADIX);
@@ -257,88 +263,49 @@ m7d_t m7d_create( m7d_t * a, rci_t nrows, rci_t ncols)
     a->flags = notwindowed;
     
     
-    return *a;
+    return a;
     
 }
 
-/** Creates a window for m7d_t matrices
-   this could also be called a submtrix.   */
+/* Creates a window for m7d_t matrices   */
 
-m7d_t   m7d_window(m7d_t *c, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t sizecols)
+m7d_t  * m7d_init_window(const m7d_t *c,const rci_t strow, const rci_t svtri,const rci_t sizerows, const rci_t sizecols)
 {
     
     
-    m7d_t  submatrix;
-     /** c->width should not be compared twice */
+    m7d_t * submatrix = m1ri_malloc(sizeof(m7d_t));
+    /** c->width should not be compared twice */
     if((strow + sizerows) > c->width)
+    {    
+        return  0;
+    }
+    
+    if((svtri + sizecols) > c->ncols)
     {
-        return submatrix;
+        return  0;
     }
-        
-    if((stvtri + sizecols) > c->width)
-    {
-
-        return submatrix;
-    }
-    
-    submatrix.nrows =   M1RI_RADIX * sizecols;
-    submatrix.ncols =  M1RI_RADIX * sizecols;
-    submatrix.flags = iswindowed;
-    submatrix.width =  sizecols;
-    submatrix.block = &c->block[(stvtri * stvtri)];
-    submatrix.rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vtri *));
-    submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
-    submatrix.fcol   = 0;
-    submatrix.svtri = stvtri;
-    
-    int i;
-    
-    for(  i =   strow; i < (strow + (M1RI_RADIX * sizerows)) ; i++)
-    {
-        
-        submatrix.rows[i - strow] = c->rows[i];
-        
-    }
-    
-    return submatrix;
-    
-}
-
-/** Creates a window for m7d_t matrices
-   this could also be called a submtrix. */
-void   m7d_window_create(m7d_t *c, m7d_t * submatrix, rci_t strow, rci_t stvtri, rci_t sizerows, rci_t sizecols)
-{
-     /** c->width should not be compared twice */
-    
-    if((strow + sizerows) > c->width)
-    {   
-        return;
-    }
-    if((stvtri + sizecols) > c->width)
-    {
-        return;    
-    }
-    int f = strow * M1RI_RADIX;
-    int i;
+    int i, f;
+	f = strow * M1RI_RADIX;
     submatrix->nrows =   M1RI_RADIX * sizerows;
     submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
     submatrix->width =  sizecols;
-    submatrix->block =      m1ri_calloc(sizecols * sizerows, sizeof(m7d_t));
-    submatrix->block = &c->block[(strow * stvtri)];
     submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vtri *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
-    submatrix->svtri = stvtri;
-   	for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
-    {    
-        submatrix->rows[i - f] = c->rows[i] + stvtri;
-    }   
+    submatrix->svtri = svtri;
+    
+    
+    
+    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
+    {
+        submatrix->rows[i - f] = c->rows[i] + svtri;   
+    }
+    return submatrix;
 }
 
-/** 
+
  
-*/
 vtri * m7d_allone(m7d_t * a)
 {
     int i;
@@ -417,7 +384,7 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
     r->middle = s^ x->middle ^ y->middle;
     t = ((s) & (x->middle | y->middle)) | (x->middle & y->middle);
     r->sign = x->sign ^ y->sign ^ t;
-    //to here I know is right
+    /* to here I know is right */
     
     
     s = ((t) & (x->sign | y->sign)) | (x->sign & y->sign);
@@ -480,7 +447,7 @@ void iadd_vtri(vtri  *x, vtri *y)
 void reduce_vtri( vtri * a)
 {
     vtri b = *a ;
-    a->units  = b.units ^ (b.units  | b.sign | b.middle) ;//  )
+    a->units  = b.units ^ (b.units  | b.sign | b.middle) ;/*   ) */
     a->middle  = b.middle ^ (b.units  | b.sign | b.middle) ;
     a->sign  = b.units ^ (b.units  | b.sign | b.middle) ;
 }
@@ -585,7 +552,7 @@ void m7d_add_4r(vtri *x, vtri * y)
     x->middle  = x->middle ^ t ;
     x->sign  = x->sign ^ (  t & x->middle);
     
-    //Optimize the multiplication later
+    /* Optimize the multiplication later */
     r.units = x->units;
     x->units = x->sign;
     x->sign = x->middle;
@@ -618,13 +585,14 @@ void m7d_sub_64(vtri **R, vtri  **A, vtri  **B)
     }
     
 }
-void m7d_sub( m7d_t *r, m7d_t  *x, m7d_t  *y)
+m7d_t * m7d_sub(  m7d_t  *x, m7d_t  *y)
 {
+	m7d_t *r;
 	int n , i;
   	if((x->nrows == y->nrows) && ( x->ncols == y->ncols))
   	{
   	
-  	  m7d_create(r, x->nrows , y->ncols);
+  	  r = m7d_create( x->nrows , y->ncols);
   	  for(i = 0; i < x->nrows; i++)
     	{
         
@@ -634,6 +602,7 @@ void m7d_sub( m7d_t *r, m7d_t  *x, m7d_t  *y)
         	}
     	}
     }
+    return r;
 }
 
 int m7d_equal(m7d_t const *a, m7d_t const *b)
@@ -685,7 +654,7 @@ int m7d_equal(m7d_t const *a, m7d_t const *b)
 
 
 
-void m7d_putpadding(m7d_t  * r, m7d_t  const * x)
+void m7d_copy_cutoff(m7d_t  * r, m7d_t  const * x)
 {
 		int i, s;
         for( i = 0; i < r->nrows; i++)
@@ -705,28 +674,29 @@ void m7d_add_64(vtri **R, vtri   **A, vtri  **B)
     for (i = 0; i < M1RI_RADIX; i++ )
     {
     	add_vtri(&R[i][0], &A[i][0], &B[i][0]);
-       // R[i][0] = add_m7dr(A[i][0], B[i][0]);
+       /*  R[i][0] = add_m7dr(A[i][0], B[i][0]); */
     }
 
 }
-void m7d_add_r(m7d_t *c, m7d_t *a, m7d_t *b)
+m7d_t * m7d_add( m7d_t *a, m7d_t *b)
 {
-
+	m7d_t *c;
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
         int i, j;
-     	m7d_create(c, b->nrows, b->ncols);
+     	c = m7d_create(b->nrows, b->ncols);
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {
                 
-                //
+                /*  */
                 add_vtri(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);    
             }
         }
         
     }
+    return c;
       
 }
 void *  m7d_combine3(vtri *table, vtri *input )
@@ -882,7 +852,7 @@ void m7d_mul_64(vtri **R, vtri **A, vtri **B)
         m7d_combine5(&tables5[i][0], &(B[54 + (5 * i)][0]));
     }
    
-    for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
+    for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
     {
         a = A[i][0];
  		v2 = a.middle;
@@ -935,12 +905,12 @@ void m7d_mul_64(vtri **R, vtri **A, vtri **B)
 		m7d_add_4r(&r1 ,&r3);
         
         R[i][0] = r1;
-       // */
+       /*  */ 
     }
     
 }
 
-//32 * 64,2048 bit, 256 byte matrix(slice) multiplication
+/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
 void m7d_mul_32(vtri *R, vtri *A, vtri *B)
 {
     long i;
@@ -1095,19 +1065,19 @@ void m7d_mul_4(vtri *R, vtri *A, vtri *B)
 /**
 
 */
-m7d_t  * m7_blockslice_allocate(m7d_t * block, rci_t  nrows,  wi_t  width)
+m7d_t  * m7_blockslice_allocate(rci_t  nrows,  wi_t  width)
 {
-    block  = m1ri_calloc(nrows * width ,  sizeof(m7d_t  ) );
+    m7d_t * block  = m1ri_calloc(nrows * width ,  sizeof(m7d_t  ) );
     return block;
 }
 
-m7d_t ** m7_rowslice_allocate(m7d_t * block, m7d_t ** rows, wi_t width, rci_t nrows)
+m7d_t ** m7_rowslice_allocate(m7d_t * block,  wi_t width, rci_t nrows)
 {
 	int i;
-    rows = m1ri_malloc( nrows * width * sizeof(m7d_t *));
+    m7d_t ** rows = m1ri_malloc( nrows * width * sizeof(m7d_t **));
     for ( i = 0; i <  nrows;  i++ )
     {
-        rows[i]  = block + (i * width);
+        rows[i]  = &block[i * width];
     };
     return rows;
 }
@@ -1138,59 +1108,61 @@ static inline  vtri *  m7d_transpose_vtri(vtri  **a, vtri  **b  )
 
 void  m7d_slices(m7_slice *  c, m7d_t * a, wi_t slicesize)
 {
-    wi_t l, z, r,  colroundeddown;
+     wi_t l,  r,  colroundeddown;
     int  i,  f,extrarows ,  extracols;
     extracols = a->width%slicesize;
     colroundeddown = a->width/slicesize;
-    c->width = M1RI_DN(a->width, slicesize);
-    extrarows = a->nrows%(M1RI_RADIX * slicesize);
+    c->width = a->width;
+    extrarows = a->nrows%(  slicesize);
     c->nrows = M1RI_DN(a->nrows, (M1RI_RADIX * slicesize));
     c->ncols = M1RI_DN(a->width, slicesize);
     l = a->nrows / (M1RI_RADIX * slicesize);
     l = l * slicesize;
     c->slicesize = slicesize;
-    c->block = m7_blockslice_allocate(c->block,  c->nrows,   c->width);
-    c->row = m7_rowslice_allocate(c->block,  c->row,   c->width, c->nrows);
-    z = 0;
+ 	c->block = m7_blockslice_allocate(c->nrows,   c->width);
+    c->row = m7_rowslice_allocate(c->block , c->width, c->nrows);
     r = 0 ;
-    
+     
     for ( i = 0; i <  l;  i = i + slicesize)
-    {
-   
-        for( f = 0; f <colroundeddown ; f++)
+    {       
+    	for( f = 0; f <colroundeddown ; f++)
         {
-            c->block[z] =  m7d_window(a, ( i ) , (f * slicesize), slicesize, slicesize);
-            z++;    
+        	c->row[(r * f) + f] = m7d_init_window(a,i , (f * slicesize), slicesize, slicesize);
         }
         
-        c->block[z] =  m7d_window(a, ( i ) , (f * slicesize),slicesize, extracols);
-        z++;
-        c->row[r] =  c->block + (c->ncols * i );
+        if(extracols > 0)
+        {
+        	c->row[(r * f) + f] = m7d_init_window(a,i , (f * slicesize), slicesize, extracols);
+		}
         r++;
         
-    }
-
-    for( f = 0; f <colroundeddown ; f++)
+   	}
+    
+    if(extrarows >0 )
     {
-        c->block[z] =  m7d_window(a, ( i ) , (f * slicesize),extrarows, slicesize);
-        z++;
-    }
+		for( f = 0; f <colroundeddown ; f++)
+        {
+           c->row[(r * f) + f] = m7d_init_window(a, i , (f * slicesize), extrarows, slicesize);
+        }
 
-    c->block[z] =  m7d_window(a, ( i ) , (f * slicesize),extrarows, extracols);
-	c->row[r] =   c->block + (c->ncols * i );
+    	if(extracols > 0)
+    	{
+           c->row[(r * f) + f] = m7d_init_window(a, i , (f * slicesize), extrarows, extracols);
+     	}
+    }
    
 }
 
-m7d_t m7d_transpose_sliced(m7d_t * a)
+m7d_t * m7d_transpose_sliced(m7d_t * a)
 {
     int x, y;
-    m7d_t c;
-    c = m7d_create(&c, a->ncols, a->nrows);
+    m7d_t *  c;
+    c = m7d_create( a->ncols, a->nrows);
     m7_slice * b, *d;
     d = malloc(sizeof(m7_slice));
     b = malloc(sizeof(m7_slice));
     m7d_slices(b, a, 1);
-    m7d_slices(d, &c, 1);
+    m7d_slices(d, c, 1);
     for (x = 0; x < b->nrows; x++)
      {
         for (y = 0; y < b->ncols; y ++)
@@ -1204,16 +1176,16 @@ m7d_t m7d_transpose_sliced(m7d_t * a)
     return c;
 }
 
-void m7d_quarter(m7_slice * c , m7d_t * a)
+m7_slice *  m7d_quarter(const m7d_t * a)
 {
-	//int arows, acols;
-	c->block = m7_blockslice_allocate(c->block,  2,   2);
-    c->row = m7_rowslice_allocate(c->block,  c->row,   2, 2);
-    m7d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/128, a->ncols/128);
-	m7d_window_create(a, &c->row[0][1], 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
-    m7d_window_create(a, &c->row[1][0], a->nrows/128, 0 , a->nrows/128, a->ncols/128);
-	m7d_window_create(a, &c->row[1][1], a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
-    
+	m7_slice * c = m1ri_malloc(sizeof(m7_slice));
+	c->block = m7_blockslice_allocate( 2,   2);
+    c->row = m7_rowslice_allocate(c->block,   2, 2);
+    c->row[0] = m7d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
+	c->row[1] = m7d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+    c->row[2] = m7d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	c->row[3] = m7d_init_window(a,  a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+    return c;
 }
 
 
@@ -1244,7 +1216,7 @@ static inline void vtri_elem(vtri * c, vtri const * a, vtri const * b)
   one.sign = a->units & b->sign;
   two.sign = a->sign & b->units;
   three.sign = a->middle & b->middle;        
-  //three.middle = 
+  /* three.middle =  */
   
 vec temp = (~(one.sign) & ~(one.middle) & ~(one.units));
    		one.sign   = one.sign | temp;
@@ -1280,7 +1252,7 @@ m7d_t * m7d_hadamard(m7d_t const * a, m7d_t const * b )
     {
        
         int i, j;
-        m7d_create(c, a->nrows, a->ncols);
+        c = m7d_create( a->nrows, a->ncols);
         if(a->ncols < 256)
         { 
           for( i = 0; i < a->nrows; i++)
@@ -1302,7 +1274,7 @@ m7d_t * m7d_hadamard(m7d_t const * a, m7d_t const * b )
 
 void m7d_copy(m7d_t * a, m7d_t const *b)
 {
-  m7d_create(a, b->ncols, b->nrows);
+  a = m7d_create(b->ncols, b->nrows);
   for(int i = 0; i < a->nrows; i++)
   {
     for(int j = 0; j < b->ncols; j++)
@@ -1312,8 +1284,8 @@ void m7d_copy(m7d_t * a, m7d_t const *b)
     
     }
     
-     a->lblock = b->lblock; //  first block pointed to in a window
-     a->fcol = b->fcol;  ///column offset of first block
+     a->lblock = b->lblock; /*   first block pointed to in a window */
+     a->fcol = b->fcol;  /* /column offset of first block */
      a->flags = b->flags;
   
   }
@@ -1439,7 +1411,7 @@ void  m7d_transpose(m7d_t   * a)
    
   int x, y;
      m7d_t * c;
-    m7d_create(c, a->ncols, a->nrows);
+    c = m7d_create( a->ncols, a->nrows);
     m7_slice * b, *d;
     d = malloc(sizeof(m7_slice));
     b = malloc(sizeof(m7_slice));

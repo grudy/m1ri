@@ -125,7 +125,7 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
  */
 
 
-//unfinished
+/* unfinished */
 void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u , vec m)
 {
       
@@ -178,10 +178,10 @@ vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows)
  
  */
 
-m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
+m5d_t  * m5d_create( rci_t nrows, rci_t ncols)
 {
     
-    
+    m5d_t * a = m1ri_malloc(sizeof(m5d_t));
     a->ncols = ncols;
     a->nrows = nrows;
     a->width = M1RI_DN(ncols, M1RI_RADIX);
@@ -189,7 +189,7 @@ m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
     a->rows  = m5d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = 0;
     a->fcol = 0;
-    return *a;
+    return a;
     
 }
 
@@ -205,71 +205,38 @@ m5d_t m5d_create( m5d_t * a, rci_t nrows, rci_t ncols)
  sizerow  = rows * M1RI_RADIX
  */
 
-m5d_t   m5d_window(m5d_t *c, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t sizecols)
+m5d_t *    m5d_init_window(const m5d_t *c,const rci_t strow, const rci_t stvfd, const rci_t sizerows, const  rci_t sizecols)
 {
-    int i;
-    m5d_t  submatrix;
-     /** c->width should not be compared twice */
+   
+    m5d_t * submatrix = m1ri_malloc(sizeof(m5d_t));
+    /** c->width should not be compared twice */
     if((strow + sizerows) > c->width)
     {    
-        return submatrix;
+        return  0;
     }
     
-    if((stvfd + sizecols) > c->width)
-    {   
-        return submatrix;
-    }
-    
-    submatrix.nrows =   M1RI_RADIX * sizerows;
-    submatrix.ncols =  M1RI_RADIX * sizecols;
-    submatrix.flags = iswindowed;
-    submatrix.width =  sizecols;
-    submatrix.block = &c->block[(stvfd * stvfd)];
-    submatrix.rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vfd *));
-    submatrix.lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
-    submatrix.fcol   = 0;
-    submatrix.svfd = stvfd;
-
-    for(  i =   strow; i < (strow + (M1RI_RADIX * sizerows)) ; i++)
+    if((stvfd + sizecols) > c->ncols)
     {
-        submatrix.rows[i - strow] = c->rows[i];
+        return  0;
     }
-    
-    return submatrix;
-    
-}
-
-void   m5d_window_create(m5d_t *c, m5d_t * submatrix, rci_t strow, rci_t stvfd, rci_t sizerows, rci_t sizecols)
-{
-     /** c->width should not be compared twice */
-    
-    if((strow + sizerows) > c->width)
-    {   
-        return;
-    }
-    
-    if((stvfd + sizecols) > c->width)
-    {
-        return;    
-    }
-    int f = strow * M1RI_RADIX;
-    int i;
+    int i, f;
+	f = strow * M1RI_RADIX;
     submatrix->nrows =   M1RI_RADIX * sizerows;
     submatrix->ncols =  M1RI_RADIX * sizecols;
     submatrix->flags = iswindowed;
     submatrix->width =  sizecols;
-    submatrix->block =      m1ri_calloc(sizecols * sizerows, sizeof(m5d_t));
-    submatrix->block = &c->block[(strow * stvfd)];
     submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vfd *));
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svfd = stvfd;
-   
-    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
-    {    
-        submatrix->rows[i - f] = c->rows[i] + stvfd;
-    }
     
+    
+    
+    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
+    {
+        submatrix->rows[i - f] = c->rows[i] + stvfd;   
+    }
+    return submatrix;
 }
 
 vfd * m5d_rand(m5d_t * a)
@@ -291,7 +258,7 @@ vfd * m5d_rand(m5d_t * a)
  n = matrix size (row length and column width)
 */
 
-m5d_t  m5d_identity_set(m5d_t * a)
+void   m5d_set_ui(m5d_t * a, rci_t value)
 
 {
     if(a->ncols == a->nrows)
@@ -333,18 +300,18 @@ m5d_t  m5d_identity_set(m5d_t * a)
         }
     }
     
-    return *a;
 }
 
 /** 
  Creates an Identity Matrix over GF(5)
  */
-m5d_t   m5d_identity(m5d_t  *a, rci_t n)
+m5d_t *  m5d_identity(rci_t n)
 {
-    *a = m5d_create(a, n, n);
-    *a = m5d_identity_set(a);
+	m5d_t * a;
+    a = m5d_create( n, n);
+    m5d_set_ui(a, 1);
     
-    return *a;   
+    return a;   
 }
 
 /** 
@@ -392,7 +359,7 @@ void add_vfd(vfd * r, vfd * a, vfd * b)
     m = ((j ^ a->middle)| c) ^ e;
 	r->middle  = m ^ (f | b->middle);
     r->units = ((m | d) ^ c)^(r->middle)) ;
-    /** */// = q;
+     = q; */
     /** 
 	*/
     
@@ -571,7 +538,7 @@ void iadd_vfd(vfd *r,vfd *x)
    
 }
 
- //matrix r = (matrix r - matrix x)
+ /* matrix r = (matrix r - matrix x) */
 void fb_i(vfd *r,vfd *x) 
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
@@ -631,7 +598,7 @@ vfd m5d_mul4(vfd a)
     
     return a; 
 }
- //matrix r = (matrix r - matrix x)
+ /* matrix r = (matrix r - matrix x) */
 void m5d_sub_i(vfd *r,vfd *x) 
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
@@ -656,21 +623,21 @@ void m5d_sub_i(vfd *r,vfd *x)
        
 }
 
-void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
+m5d_t * m5d_add( m5d_t  *a, m5d_t  *b)
 {
 	         
 
 
-    
+    m5d_t  *c;
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
         int i, j;
-         m5d_create(c, b->nrows, b->ncols);
+         c = m5d_create( b->nrows, b->ncols);
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {   
-                //add_vfd(c->rows[i + j] , a->rows[i + j], b->rows[i + j]);
+                /* add_vfd(c->rows[i + j] , a->rows[i + j], b->rows[i + j]); */
                add_vfd(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
                
                
@@ -678,7 +645,7 @@ void m5d_add_r(m5d_t * c, m5d_t  *a, m5d_t  *b)
         }
         
     }
-    
+    return c;
     
 }
 /**
@@ -732,7 +699,7 @@ void m5d_copy(m5d_t  * r, m5d_t  const * x)
         }
 }
 */
-void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
+void m5d_copy_cutoff(m5d_t  * r, m5d_t  const * x)
 {
 		int i, s;
         for( i = 0; i < r->nrows; i++)
@@ -745,23 +712,25 @@ void m5d_putpadding(m5d_t  * r, m5d_t  const * x)
         
 }
 
-void m5d_sub_64(m5d_t * c ,m5d_t  * a , m5d_t * b)
+void m5d_sub_64(vfd **c ,vfd **  a , vfd **b)
 {
-    /** todo: Test this functions */
-        for(int i = 0; i < a->nrows; i++)
-        {
-            vfd_sub(c->rows[i], a->rows[i], b->rows[i]);
-        }  
+    int i;
+    for (i= 0; i < M1RI_RADIX; i++ )
+    {
+    
+        vfd_sub( c[i], a[i], b[i]);
+    }
 }
 
 
 
-void m5d_sub(m5d_t * c ,m5d_t  * a , m5d_t * b)
+m5d_t * m5d_sub(m5d_t  * a , m5d_t * b)
 {
+	m5d_t * c;
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
         int i, j;
-        m5d_create(c, b->nrows, b->ncols);
+        c = m5d_create( b->nrows, b->ncols);
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
@@ -771,6 +740,7 @@ void m5d_sub(m5d_t * c ,m5d_t  * a , m5d_t * b)
         }
         
     }
+    return c;
 }
 
 void m5d_sub_d(m5d_t  * a , m5d_t * b)
@@ -951,7 +921,7 @@ void m5d_mul_64(vfd **R, vfd **A, vfd **B)
     }
   
     
-    for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
+    for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
     {
         a = A[i][0];
         
@@ -998,7 +968,7 @@ void m5d_mul_64(vfd **R, vfd **A, vfd **B)
     }   
 }
 
-//32 * 64,2048 bit, 256 byte matrix(slice) multiplication
+/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
 void m5d_mul_32(vfd *R, vfd *A, vfd *B)
 {
     long i;
@@ -1040,7 +1010,7 @@ void m5d_mul_32(vfd *R, vfd *A, vfd *B)
         t1 = tables4[2][v1&15]; iadd_vfd(&r1, &t1);
         t2 = tables4[2][v2&15]; iadd_vfd(&r2, &t2);
         t3 = tables4[2][v3&15]; iadd_vfd(&r3, &t3);
-        // m5d_sub_i(&r1, &r2);
+        /*  m5d_sub_i(&r1, &r2); */
         iadd_vfd(&r1, &r2);
         m5d_add2_i(&r1, &r3);
         
@@ -1049,7 +1019,7 @@ void m5d_mul_32(vfd *R, vfd *A, vfd *B)
     
 }
 
-//16 * 64,1024 bit, 128 byte matrix(slice) multiplication
+/* 16 * 64,1024 bit, 128 byte matrix(slice) multiplication */
 void m5d_mul_16(vfd *R, vfd *A, vfd *B)
 {
     long i;
@@ -1085,7 +1055,7 @@ void m5d_mul_16(vfd *R, vfd *A, vfd *B)
     }
 }
 
-//8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
+/* 8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication */
 void m5d_mul_8(vfd *R, vfd *A, vfd *B)
 {
 
@@ -1108,7 +1078,7 @@ void m5d_mul_8(vfd *R, vfd *A, vfd *B)
    	 	t1 = tables4[1][v1&15]; iadd_vfd(&r1, &t1);
     	t2 = tables4[1][v2&15]; iadd_vfd(&r2, &t2);
     	t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3);
-    	// m5d_sub_i((&r1, &r2);
+    	/*  m5d_sub_i((&r1, &r2); */
     	
     	iadd_vfd(&r1, &r2);
 		m5d_add2_i(&r1, &r3);
@@ -1117,7 +1087,7 @@ void m5d_mul_8(vfd *R, vfd *A, vfd *B)
     }
 }
 
-//4 * 64,256 bit, 32 byte matrix(slice) multiplication
+/* 4 * 64,256 bit, 32 byte matrix(slice) multiplication */
 void m5d_mul_4(vfd *R, vfd *A, vfd *B)
 {
     int i;
@@ -1147,21 +1117,24 @@ void m5d_mul_4(vfd *R, vfd *A, vfd *B)
     
 }
  
-m5d_t  * m5_blockslice_allocate(m5d_t * block, rci_t  nrows,  wi_t  width)
+m5d_t  * m5_blockslice_allocate(rci_t  nrows,  wi_t  width)
 {
-    block  = m1ri_calloc(nrows * width ,  sizeof(m5d_t  ) );
+	
+    m5d_t * block  = m1ri_calloc(nrows * width ,  sizeof(m5d_t * ) );
     return block;
 }
 
-m5d_t ** m5_rowslice_allocate(m5d_t * block, m5d_t ** rows, wi_t width, rci_t nrows)
+m5d_t ** m5_rowslice_allocate(m5d_t * block,  wi_t width, rci_t nrows)
 {
 	int i;
-    rows = m1ri_malloc( nrows * width * sizeof(m5d_t *));
+    m5d_t **rows = m1ri_malloc( nrows * width * sizeof(m5d_t *));
     for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = block + (i * width);
     };
     return rows;
+    
+    
 }
 void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
 {
@@ -1176,40 +1149,40 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
     l = a->nrows / (M1RI_RADIX * slicesize);
     l = l * slicesize;
     c->slicesize = slicesize;
- 	c->block = m5_blockslice_allocate(c->block,  c->nrows,   c->width);
-    c->row = m5_rowslice_allocate(c->block,  c->row,   c->width, c->nrows);
+ 	c->block = m5_blockslice_allocate(c->nrows,   c->width);
+    c->row = m5_rowslice_allocate(c->block , c->width, c->nrows);
     r = 0 ;
      
     for ( i = 0; i <  l;  i = i + slicesize)
     {       
     	for( f = 0; f <colroundeddown ; f++)
         {
-        	m5d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, slicesize);
+        	c->row[(r * f) + f] = m5d_init_window(a,i , (f * slicesize), slicesize, slicesize);
         }
         
         if(extracols > 0)
         {
-        	m5d_window_create(a, &c->row[r][f],i , (f * slicesize), slicesize, extracols);
+        	c->row[(r * f) + f] = m5d_init_window(a,i , (f * slicesize), slicesize, extracols);
 		}
         r++;
         
-    }
+   	}
     
     if(extrarows >0 )
     {
 		for( f = 0; f <colroundeddown ; f++)
         {
-           m5d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, slicesize);
+           c->row[(r * f) + f] = m5d_init_window(a, i , (f * slicesize), extrarows, slicesize);
         }
 
     	if(extracols > 0)
     	{
-           m5d_window_create(a, &c->row[r][f],i , (f * slicesize), extrarows, extracols);
-    	}
+           c->row[(r * f) + f] = m5d_init_window(a, i , (f * slicesize), extrarows, extracols);
+     	}
     }
 }
 
-inline vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
+static inline vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
 {
     int i, x;
     vfd temp;
@@ -1231,16 +1204,16 @@ inline vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
     return *b;
 }
 
-m5d_t m5d_transpose_sliced(m5d_t * a)
+m5d_t *  m5d_transpose_sliced(m5d_t * a)
 {
     int x, y;
-    m5d_t c;
-    c = m5d_create(&c, a->ncols, a->nrows);
+    m5d_t * c;
+    c = m5d_create(a->ncols, a->nrows);
     m5_slice * b, *d;
     d = malloc(sizeof(m5_slice));
     b = malloc(sizeof(m5_slice));
     m5d_slices(b, a, 1);
-    m5d_slices(d, &c, 1);
+    m5d_slices(d, c, 1);
     for (x = 0; x < b->nrows; x++) {
         for (y = 0; y < b->ncols; y ++) {
 			m5d_transpose_vfd(b->row[x][y].rows, d->row[y][x].rows);  
@@ -1248,18 +1221,24 @@ m5d_t m5d_transpose_sliced(m5d_t * a)
     }
     return c;
 }
-void m5d_quarter(m5_slice * c , m5d_t * a)
+m5_slice * m5d_quarter(const m5d_t * a)
 {
-
-	//int arows, acols;
-	c->block = m5_blockslice_allocate(c->block,  2,   2);
-    c->row = m5_rowslice_allocate(c->block,  c->row,   2, 2);
-    m5d_window_create(a, &c->row[0][0], 0, 0 , a->nrows/128, a->ncols/128);
-	m5d_window_create(a, &c->row[0][1], 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
-    m5d_window_create(a, &c->row[1][0], a->nrows/128, 0 , a->nrows/128, a->ncols/128);
-	m5d_window_create(a, &c->row[1][1], a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+	 m5_slice * c = m1ri_malloc(sizeof(m5_slice));
+	 int arows, acols;
+	 
+	 c->block = m5_blockslice_allocate(  2,   2);
+     
+     c->row = m5_rowslice_allocate(c->block, 2, 2);
+     
+     c->row[0] = m5d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
+	 
+	 c->row[1] = m5d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+     c->row[2] = m5d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	 c->row[3] = m5d_init_window(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
     
+    return c;
 }
+
  
  
  /**
@@ -1317,7 +1296,7 @@ m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
     {
        
         int i, j;
-        m5d_create(c, a->nrows , b->ncols);
+        c = m5d_create(a->nrows , b->ncols);
         if(a->ncols < 256)
         { 
           for( i = 0; i < a->nrows; i++)
@@ -1338,7 +1317,7 @@ m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
  
  void m5d_copy(m5d_t * a, m5d_t const *b)
 {
-  m5d_create(a, b->ncols, b->nrows);
+  a = m5d_create( b->ncols, b->nrows);
   for(int i = 0; i < a->nrows; i++)
   {
     for(int j = 0; j < b->ncols; j++)
@@ -1348,8 +1327,8 @@ m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
     
     }
     
-     a->lblock = b->lblock; //  first block pointed to in a window
-     a->fcol = b->fcol;  ///column offset of first block
+     a->lblock = b->lblock; /*   first block pointed to in a window */
+     a->fcol = b->fcol;  /* /column offset of first block */
      a->flags = b->flags;
   
   }
@@ -1469,17 +1448,19 @@ void  m5d_transpose(m5d_t   * a)
 {
 
    
-  int x, y;
-     m5d_t * c;
-    m5d_create(c, a->ncols, a->nrows);
+  	int x, y;
+    m5d_t * c;
+    c = m5d_create( a->ncols, a->nrows);
     m5_slice * b, *d;
     d = malloc(sizeof(m5_slice));
     b = malloc(sizeof(m5_slice));
     m5d_slices(b, a, 1);
     m5d_slices(d, c, 1);
-    for (x = 0; x < b->nrows; x++) {
-        for (y = 0; y < b->ncols; y ++) {
-         m5d_transpose_vfd(b->row[x][y].rows, d->row[y][x].rows);
+    for (x = 0; x < b->nrows; x++) 
+    {
+        for (y = 0; y < b->ncols; y ++) 
+        {
+         	 m5d_transpose_vfd(b->row[x][y].rows, d->row[y][x].rows);
             
         }
     }

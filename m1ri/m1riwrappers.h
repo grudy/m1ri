@@ -42,17 +42,17 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 
 #include <m1ri/misc.h>
 
-#define M1RI_FN(a, b, c, d) ((a)^(b))&((c)^(d)) //for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr)
-#define M1RI_ST(a, b , c) ((a)^(b)^(c)) //performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition
-#define M1RI_DN(a, n) ((a)/(n)) + ((1) && (a%n))//division by n rounded up
+#define M1RI_FN(a, b, c, d) ((a)^(b))&((c)^(d)) /* for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr) */
+#define M1RI_ST(a, b , c) ((a)^(b)^(c)) /* performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition */
+#define M1RI_DN(a, n) ((a)/(n)) + ((1) && (a%n))/* division by n rounded up */
 #define M1RI_MAX(a,b)  ((a > b)?  a: b)
 #define M1RI_MIN(a, b)  ((a > b)? b: a)
 
 typedef u_int64_t vec;
 
 #define M1RI_RADIX 64
-//static const int M1RI_RADIX = 64; 
-//=======
+/* static const int M1RI_RADIX = 64;  */
+/* ======= */
 
 
 
@@ -62,7 +62,7 @@ static  const u_int64_t rightbit = 1;
 static u_int64_t const ibits = 0x8040201008040201;
 typedef int rci_t;
 typedef int wi_t;
-//typedef unsigned int vbit;
+/* typedef unsigned int vbit; */
 
 
 /*

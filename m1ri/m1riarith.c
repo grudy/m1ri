@@ -34,8 +34,8 @@
 static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 {
-    //r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
-    //r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
+    /* r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0); */
+    /* r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t. */
 
 
 
@@ -67,8 +67,8 @@ static inline vbg add_m3dr(vbg  x, vbg const y)
 
 inline void sub_m3d( vbg *r, vbg const *x, vbg const *y)
 {
-   // r->units = ((x->units^y->units) | (x->sign^y->sign));
-   // r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
+   /*  r->units = ((x->units^y->units) | (x->sign^y->sign)); */
+   /*  r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign)); */
     r->sign = y->units ^ x->units;
     r->units = y->sign ^ x->sign;
     r->units = r->units | r->sign;
@@ -141,11 +141,11 @@ vbg vbg_mul_i(vbg const x, vbg const y)
 m3d_t * m3d_hadamard(m3d_t const *  a, m3d_t const *  b)
 {
     
-    m3d_t  * c = malloc(sizeof(m3d_t));
+    m3d_t  * c; 
     
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-        *c = m3d_create(c, a->nrows , b->ncols);
+        c = m3d_create(a->nrows , b->ncols);
         int i, j;
         if(a->ncols < 256)
         { 
@@ -164,42 +164,6 @@ m3d_t * m3d_hadamard(m3d_t const *  a, m3d_t const *  b)
     
     return c;
 }
-/*
-m3d_t * m3d_hadamard_v2(m3d_t const *  a, m3d_t const *  b)
-{
-    
-    m3d_t  * c = malloc(sizeof(m3d_t));
-     *c = m3d_create(c, a->nrows , b->ncols);
-    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
-    {
-       
-        int i, j;
-        if(a->ncols < 256)
-        { 
-          for( i = 0; i < a->nrows; i++)
-          {
-            for(j = 0; j < (a->width ); j++)
-            {  
-                c->rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
-            }  
-          }
-
-        }
-        
-      else
-      {
-          
-        
-        
-      }
-    
-    return c;
-}
-
-*/
-
-
-
 
 
 void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
@@ -229,13 +193,13 @@ void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
 	r = (x - y) 
 */
 
-void m3d_sub( m3d_t *r, const  m3d_t  *x, const m3d_t  *y)
+m3d_t *  m3d_sub(  const  m3d_t  *x, const m3d_t  *y)
 {
     int n , i;
-    
+    m3d_t * r;
   if((x->nrows == y->nrows) && ( x->ncols == y->ncols))
    { 
-      m3d_create(r, x->nrows, x->ncols);
+      r = m3d_create( x->nrows, x->ncols);
       for(i = 0; i < x->nrows; i++)
       {
           for(n = 0; n < x->width; n++)
@@ -244,20 +208,23 @@ void m3d_sub( m3d_t *r, const  m3d_t  *x, const m3d_t  *y)
           }
       }
    }
+   return r;
 }
 
-m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
+m3d_t  * m3d_add(m3d_t  *a, m3d_t  *b)
 {
-    m3d_t  c;
+    m3d_t *  c;
+    
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
-        c = m3d_create(&c, a->nrows , b->ncols);
+       
+        c = m3d_create( a->nrows , b->ncols);
         int i, j;
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {
-            add_vbg(&c.rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+            add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
             }   
         }
     }
@@ -269,13 +236,13 @@ m3d_t m3d_add(m3d_t  *a, m3d_t  *b)
 	Adds two m3d_t's
 	If this isn't possible it does nothing
 */
-
+/*
 void m3d_add_r(m3d_t * c, m3d_t  *  a, m3d_t  *  b)
 {
     if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
     {
     	int i, j;
-    	m3d_create(c, a->nrows , b->ncols);
+    	c = m3d_create( a->nrows , b->ncols);
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
@@ -285,7 +252,7 @@ void m3d_add_r(m3d_t * c, m3d_t  *  a, m3d_t  *  b)
         }
     }  
 }
-
+*/
 
 
 
@@ -449,7 +416,7 @@ void m3d_mul_64(vbg **R, vbg **  A, vbg **  B)
         m3d_combine5(&tables5[i][0], &(B[54 + (5 * i)][0]));
     }
 
-    for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
+    for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
     {
         a = A[i][0];
         v2 = a.sign;
@@ -482,12 +449,12 @@ void m3d_mul_64(vbg **R, vbg **  A, vbg **  B)
         
         isub_m3d(&r1, &r2);
         R[i][0] = r1;
-       // */
+       /*  */
     }
     
 }
 
-//32 * 64,2048 bit, 256 byte matrix(slice) multiplication
+/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
 void mul_32_m3d(vbg *R, vbg *A, vbg *B)
 {
     long i;
@@ -529,7 +496,7 @@ void mul_32_m3d(vbg *R, vbg *A, vbg *B)
     
 }
 
-//16 * 64,1024 bit, 128 byte matrix(slice) multiplication
+/* 16 * 64,1024 bit, 128 byte matrix(slice) multiplication */
 void mul_16_m3d(vbg *R, vbg *A, vbg *B)
 {
     long i;
@@ -558,7 +525,7 @@ void mul_16_m3d(vbg *R, vbg *A, vbg *B)
     }
 }
 
-//8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
+/* 8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication */
 void mul_8_m3d(vbg *R, vbg *A, vbg *B)
 
 {
@@ -589,7 +556,7 @@ void mul_8_m3d(vbg *R, vbg *A, vbg *B)
 
 
 
-//4 * 64,256 bit, 32 byte matrix(slice) multiplication
+/* 4 * 64,256 bit, 32 byte matrix(slice) multiplication */
 void mul_4_m3d(vbg *R, vbg *A, vbg *B)
 {
     int i;
