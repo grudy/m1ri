@@ -34,17 +34,14 @@ int main(int argc, const char * argv[])
   */
   
     m3d_t * a, * b, *c, *d;
-  
-    c = m1ri_malloc(sizeof(m3d_t)); 
-    d = m1ri_malloc(sizeof(m3d_t)); 
     a = m3d_create(4, 4);
     b = m3d_create( 4, 4);
     m3d_rand(a);
     m3d_rand(b);
     
-    c = m3d_add(a, b);
+    c = m3d_add(c, a, b);
     
-    d = m3d_sub( c, b);
+    d = m3d_sub(d, c, b);
     printf("Matrix a\n");
     m3d_print(a);
     printf("Matrix b\n");
@@ -74,26 +71,22 @@ int main(int argc, const char * argv[])
   
    /*
   	 m5d
-  * /
+  */
   printf("\n \n ****************************************\n \t\t\t\t\tm5d\n");
   
     m5d_t * e, * f, *g, * h;
   
   
 
-    e = m1ri_malloc(sizeof(m5d_t)); 
-    f = m1ri_malloc(sizeof(m5d_t)); 
-    g = m1ri_malloc(sizeof(m5d_t)); 
-    h = m1ri_malloc(sizeof(m5d_t)); 
-    
+ 
     e = m5d_create( 4, 4);
     f = m5d_create( 4, 4);
 
     m5d_rand(e);
     m5d_rand(f);
     
-     g = m5d_add( e, f);
-     h = m5d_sub(  g, f);
+     g = m5d_add(g, e, f);
+     h = m5d_sub(h,   g, f);
 
 
     printf("Matrix e\n");
@@ -127,20 +120,16 @@ int main(int argc, const char * argv[])
     printf("\n\n****************************************\n \t\t\t\t\tm7d\n");
      m7d_t * i, * j, *k,  * m;
   
-
-    k = m1ri_malloc(sizeof(m7d_t)); 
-    m = m1ri_malloc(sizeof(m7d_t)); 
-  
     i = m7d_create( 4, 4);
    
     j = m7d_create( 4, 4);
 
     m7d_rand(i);
     m7d_rand(j);
-   // m7d_specs(i);
+   /*  m7d_specs(i); */
 
-     k = m7d_add(  i, j);
-     m = m7d_sub(  k,  j);
+     k = m7d_add(k,  i, j);
+     m = m7d_sub(m,  k,  j);
 
 
     printf("Matrix i\n");
@@ -169,7 +158,7 @@ int main(int argc, const char * argv[])
          }
     
     }
-    //
+    /*  */
 	printf("m7d addition and subtraction test passed");
   
   m7d_free(i);
@@ -177,7 +166,7 @@ int main(int argc, const char * argv[])
   m7d_free(k);
   m7d_free(m);
   
-  */
+  
   return 0;
   
 

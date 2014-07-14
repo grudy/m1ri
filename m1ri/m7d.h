@@ -27,9 +27,9 @@
 #include <m1ri/m1riwrappers.h>
 
 
-/** *******************************************
+/** *****************************
  Creates  a structure of 192 bits
- ********************************************/
+ ******************************/
 
 typedef struct {
     
@@ -58,23 +58,23 @@ typedef struct {
 
 typedef struct {
     
-    rci_t nrows; //< number of rows
+    rci_t nrows; /* < number of rows */
     
-    rci_t ncols; //< number of columns
+    rci_t ncols; /* < number of columns */
     
-    wi_t width; //< the number of vbg's needed to hold columns
+    wi_t width; /* < the number of vbg's needed to hold columns */
     
-    vtri * block;  //< block containing the data contiguous in memory
+    vtri * block;  /* < block containing the data contiguous in memory */
     
-    vtri ** rows;  // < pointers to rows of the matrix
+    vtri ** rows;  /*  < pointers to rows of the matrix */
     
-    vec  svtri;   //Identifies first vbg used in row
+    vec  svtri;   /* Identifies first vbg used in row */
     
-    // wi_t rowstride;  //vbg's in block to traverse to  get to first
+    /*  wi_t rowstride;  //vbg's in block to traverse to  get to first */
     
-    u_int32_t  lblock; //  first block pointed to in a window
-    u_int32_t fcol;  //column offset of first block
-    u_int8_t flags;    //IsWindowed, NotWindowed
+    u_int32_t  lblock; /*   first block pointed to in a window */
+    u_int32_t fcol;  /* column offset of first block */
+    u_int8_t flags;    /* IsWindowed, NotWindowed */
 
     
     
@@ -93,36 +93,102 @@ typedef struct {
 
  */
 
-//Read 'middle' bits
+/* Read 'middle' bits */
 vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) ;
 
 
-// Read n 'sign' bits
+
+
+/**
+ \Brief Read n sign bits
+ \param M = Matrix read from 
+ \param x = rows
+ \param y = columns
+ \param n = number of bits to read 
+*/
+
 vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-// Read  n 'unit' bits
+
+/**
+ \Brief Read n units bits
+ \param M = Matrix read from 
+ \param x = rows
+ \param y = columns
+ \param n = number of bits to read 
+*/
 vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-// Read   n elements
+
+
+/**
+ \Brief Read n elements
+ \param x = rows
+ \param y = columns
+ \param M = Matrix read from 
+ \param n = elements to read from
+*/
+
+/*  Read n 'sign' bits */
+vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
+/*  Read  n 'unit' bits */
+vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
+/*  Read   n elements */
+
+/*  Read n 'sign' bits */
+vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
+/*  Read  n 'unit' bits */
+vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
+/*  Read   n elements */
+
 vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n);
 
+
+/**
+ \Brief Swap rows in m3d_t 
+ \param M = Matrix to swap rows of
+ \param a = first set of rows
+ \param b = second set of rows to swap
+*/
 void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
 
-/** 
- 
+/**
+ * \brief copy matrix b to a
+ * \param a matrix to hold copy
+ * \param b matrix to copy
  */
 void m7d_copy(m7d_t  * , m7d_t const * );
+
+
 void m7d_copy_cutoff(m7d_t  * , m7d_t const * );
+
+
 void m7d_add_64(vtri ** , vtri **, vtri **);
-//unfinished
+
+
+
+/**
+	\Brief Write an value in a matrix
+	\param M matrix to write to 
+	\param x row of value to change 
+	\param y column of value to change
+	\param s value of sign 
+	\param m value of middle
+	\param u value of units
+*/
+
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s,  vec m , vec u );
 /** 
  
  */
 
 vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width);
-/** 
- 
- */
 
+
+/**
+ \Brief allocate the row pointers for a m7d_t
+ \param rows pointed to 
+ \param block m7d_t->block to allocate
+ \param nrows rows in matrix
+*/
 vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows);
 /** 
  
@@ -144,38 +210,51 @@ m7d_t m7d_rand(m7d_t * a);
 
 void  m7d_set_ui(m7d_t *, rci_t );
 
+
 /** 
-		 
+ \brief identity matrix of size n * n
+ \param matrix 
+ \param n size of rows and column of matrix
+ \
+ \Returns an n * n identity matrix
 */
 m7d_t  *  m7d_identity(rci_t );
 
+
+
 /** 
+	\brief  Checks if two m7d_t's is equal to another
+	\param a = first matrix
+	\param b = second matrix
+	\return 1 if equal, 0 if false
+ */
  
- */
-
-
-/** 
- Releases a m7d_t into the wilderness.
- */
-
 int m7d_equal(m7d_t const *, m7d_t const *);
 
+
+/**
+ * \brief Releases a m7d_t into the wilderness.  
+ * \param a GF(7) matrix
+ *
+ * \Frees allocated memory in matrix
+ */
 void m7d_free( m7d_t *  );
 void vtri_negate( vtri * );
 
-/** *******************************************
+/** *****************************
  matrix r = (direct sum matrix r + matrix x)
- ********************************************/
+ ******************************/
 void add_vtri(vtri *, vtri * , vtri *);
 
-void iadd_vtri(vtri  *, vtri *);
+
 
 void m7d_sub_i(vtri  *, vtri *);
 
-m7d_t * m7d_sub( m7d_t * , m7d_t *);
+m7d_t *  m7d_sub(m7d_t *,   const  m7d_t  *, const m7d_t  *);
+
 void m7d_vtri_sub(vtri *, vtri *, vtri *  );
 void m7d_sub_64(vtri **, vtri   **, vtri  **);
-//Scalar  multiplication
+/* Scalar  multiplication */
 vtri vtri_mul_2(vtri);
 vtri vtri_mul_3(vtri);
 vtri vtri_mul_4(vtri);
@@ -184,41 +263,54 @@ vtri vtri_mul_6(vtri);
 
 
 
-/*Pointers to submatrices*/
+/**
+ * \brief Data structure  for holding m7d_t matrix windows  
+ * \param c Previously malloced structure for holding windows   
+ * \param a GF(7) matrix
+ * \param slicesize n*n size of slices(matrix windows), where n is a multiple of 64
+ * \
+ * \
+ */
 typedef struct
 {
      
     m7d_t * block;
     m7d_t ** row;
-    wi_t slicesize;// (slicesize ^ 2) * 64
-    wi_t width;   ///width in slices horizaontally per row
+    wi_t slicesize;/*  (slicesize ^ 2) * 64 */
+    wi_t width;   /* /width in slices horizaontally per row */
     rci_t nrows;
     rci_t ncols;
     
 }m7_slice;
 
 
-// negate  r0, r1, r2 ← a0, a1, a2
 
-/** *******************************************
- matrix r = (difference matrix r - matrix x)                //Or x will the function be  r  = x- r???
- ********************************************/
+
+ 
+ 
 vtri sub_m7dr(vtri const x, vtri const y);
 /** 
 	GF(7) Addition on a single M1RI word.
 */
-m7d_t * m7d_add( m7d_t *, m7d_t *);
+m7d_t * m7d_add( m7d_t *, const m7d_t *,const  m7d_t *);
 void m7d_add_2r(vtri *, vtri *);
 void m7d_add_4r( vtri *, vtri *);
-m7d_t  *  m7d_init_window(m7d_t *, rci_t , rci_t , rci_t , rci_t );
 
+m7d_t   * m7d_init_window(const m7d_t *, const rci_t , const  rci_t ,const rci_t , const rci_t );
 
 
 void  m7d_slices(m7_slice *  , m7d_t * , wi_t );
 
 /**
-A direct transpose, using no windows
-*/
+ * \brief Creates 4 equally sized windows  
+ * \param a Matrix over GF(7) 
+ * \
+ * \Returns a structure holding windows to four quadrants of  matrix a
+ *
+ * \[0][1]
+ * \[2][2] 
+ */
+ 
 m7_slice * m7d_quarter(const m7d_t * );
 
 
@@ -246,8 +338,55 @@ void m7d_mul_8(vtri *, vtri *, vtri *);
 void m7d_mul_4(vtri *, vtri *, vtri *);
 
 void  m7d_transpose(m7d_t   * );
-m7d_t * m7d_hadamard(m7d_t const * , m7d_t const *  );
+m7d_t * m7d_hadamard(m7d_t * ,const m7d_t  * ,const m7d_t  *  );
+
+
+/**
+ \Brief Swap columns in m3d_t 
+ \param M = Matrix to swap columns of
+ \param a = first set of columns
+ \param b = second set of columns to swap
+*/
 void m7d_colswap(m7d_t *, rci_t , rci_t);
+
+
+/**
+ \Brief Swap columns in m3d_t after a certain row
+ \param M = Matrix to swap columns of
+ \param a = first set of columns
+ \param b = second set of columns to swap
+ \param start_row  starting row
+*/
 void m7d_colswap_capped_row(m7d_t *, rci_t , rci_t, rci_t );
+
 int m7d_cmp(m7d_t *A, m7d_t *B);
+
+
+/** 
+    
+    \brief concat matrix a and matrix b, write result to c
+    \param c = matrix stacked 
+    \param a = left matrix
+    \param b = right matrix
+    \[a]
+    \     ===  C
+    \[b]
+ 	\
+*/
+m7d_t *  m7d_concat( m7d_t * , m7d_t * );
+
+/** 
+    
+    \brief stack matrix a on matrix b, write result to c
+    \param c = matrix stacked 
+    \param a = top matrix
+    \param b = bottom matrix
+    \[a]
+    \     ===  C
+    \[b]
+ 	\
+*/
+m7d_t  * m7d_stack(m7d_t * ,const   m7d_t * , const m7d_t * );
+ 
+
 #endif

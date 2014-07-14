@@ -16,4 +16,4 @@
 void m1ri_die(const char *errormessage, ...);
 
 
-#endif //MISC_H
+#endif /* MISC_H */

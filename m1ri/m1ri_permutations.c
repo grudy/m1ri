@@ -515,10 +515,31 @@ void  m3d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 {
         
 }
+
+
+/**
+ * Apply the permutation P to A from the right, but only on the upper
+ * the matrix A above the main diagonal.
+ *
+ * This is equivalent to column swaps walking from length-1 to 0.
+ *
+ * \param A Matrix.
+ * \param Q Permutation.
+ */
 void  m5d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 {
 
 }
+
+/**
+ * Apply the permutation P to A from the right, but only on the upper
+ * the matrix A above the main diagonal.
+ *
+ * This is equivalent to column swaps walking from length-1 to 0.
+ *
+ * \param A Matrix.
+ * \param Q Permutation.
+ */
 void  m7d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 {
 

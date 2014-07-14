@@ -28,6 +28,9 @@ int main(int argc, const char * argv[])
 {
     int isequal;
     m7d_t * a, * b,  *d, *e, *f, *g, *h, *i, *j, *k;
+    a = m7d_create( 64, 64);
+    b = m7d_create(64, 64);
+    /*
     a = m1ri_malloc(sizeof(m7d_t));
     b  = m1ri_malloc(sizeof(m7d_t));
     d = m1ri_malloc(sizeof(m7d_t));
@@ -38,7 +41,7 @@ int main(int argc, const char * argv[])
     i = m1ri_malloc(sizeof(m7d_t));
     j = m1ri_malloc(sizeof(m7d_t));
 	k = m1ri_malloc(sizeof(m7d_t));
-    
+    */
     
     m7d_rand(a);
     
@@ -47,15 +50,15 @@ int main(int argc, const char * argv[])
     isequal = m7d_equal(a, b);
     
     
-    if(isequal)
+    if(!isequal)
     {
-        printf("Equaltest: passed ");
+        printf("Rand test passed ");
         
     }
     
-    if(!isequal)
+    if(isequal)
     {
-        printf("Equaltest: failed ");
+        printf("Rand test failed ");
         return 1;
         
     }
@@ -67,8 +70,7 @@ int main(int argc, const char * argv[])
     m7d_print(test_m7d_output);
     
     m7d_write_elem(test_m7d_output, 1, 1, 1, 1, 1);
-    
-    
+
     d = m7d_identity(64);
     e = m7d_identity(64);
     isequal = m7d_equal(d, e);

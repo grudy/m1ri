@@ -40,22 +40,22 @@ void vbg_negation(vbg * );
 /**
 	
 */
-void sub_m3d( vbg *, vbg const *  , vbg const * );               //multiply matrix x by by matrix y.   The product is matrix r.
+void sub_m3d( vbg *, vbg const *  , vbg const * );               /* multiply matrix x by by matrix y.   The product is matrix r. */
 
 
-vbg sub_m3dr(vbg , vbg );               //
+vbg sub_m3dr(vbg , vbg );               /*  */
 
 
 /** *******************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-//void iadd_vbg(vbg *,vbg  *);
+/* void iadd_vbg(vbg *,vbg  *); */
 
-//void isub_m3d(vbg *,vbg  *);
+/* void isub_m3d(vbg *,vbg  *); */
 
 
 
-void  vbg_mul( vbg *, vbg  *, vbg  *);             //multiply matrix x by y assinging the output to r
+void  vbg_mul( vbg *, vbg  *, vbg  *);             /* multiply matrix x by y assinging the output to r */
 
 /**
 	m3d_t subtraction
@@ -113,18 +113,18 @@ void m3d_combine8(vbg *, vbg *);
 /** ***************************************************************************
 								GF(3)
 *****************************************************************************/
-//64 * 64,4096 bit, 512 byte matrix(slice) multiplication
+/* 64 * 64,4096 bit, 512 byte matrix(slice) multiplication */
 void m3d_mul_64(vbg **, vbg ** , vbg ** );
 
-//32 * 64,2048 bit, 256 byte matrix(slice) multiplication
+/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
 void mul_32_m3d(vbg *, vbg *, vbg *);
 
-//16 * 64,1024 bit, 128 byte matrix(slice) multiplication
+/* 16 * 64,1024 bit, 128 byte matrix(slice) multiplication */
 void mul_16_m3d(vbg *, vbg *, vbg *);
 
-//8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
+/* 8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication */
 void mul_8_m3d(vbg *, vbg *, vbg *);
 
-//4 * 64,256 bit, 32 byte matrix(slice) multiplication
+/* 4 * 64,256 bit, 32 byte matrix(slice) multiplication */
 void mul_4_m3d(vbg *R, vbg *A, vbg *B);
 #endif

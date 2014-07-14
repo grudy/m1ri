@@ -29,40 +29,90 @@
 #include <m1ri/m1ri_permutations.h>
 
 
-//	Prints an m3d_t matrix
 
-void m3d_print(m3d_t * );
+/**
+ \  brief prints an m3d_t matrix
+ \  param  a matrix to be printed
+ \
+ \	Prints an m3d_t to standard output 
+ */
+void m3d_print(const m3d_t * );
+/**
+ \  brief prints an m5d_t matrix
+ \  param  a matrix to be printed
+ \
+ \	Prints an m5d_t to standard output 
+ */
+void m5d_print(const m5d_t *);
 
-/** 
-	Prints an m5d_t matrix
+
+
+/**
+ \  brief prints an m7d_t matrix
+ \  param  a matrix to be printed
+ \
+ \	Prints an m7d_t to standard output 
+ */
+void m7d_print(const m7d_t * );
+
+
+/**
+	\ brief information on matrix
+	\ param a matrix that will have its output shown
+	\
+	\Displays:
+	\1.  Number of columns
+	\2.  Number of rows
+	\3.  Width in vbg's .
 */
-void m5d_print(m5d_t *);
-/** 
-	Prints an m7d_t matrix
-*/
-void m7d_print(m7d_t * );
-
 void m3d_specs(m3d_t *);
-
+/**
+	\ brief same a running m3d_print and then m3d_specs
+	\ param a input matrix
+*/
 void m3d_fullinfo(m3d_t *);
 
+
+/**
+	\ brief information on matrix
+	\ param a matrix that will have its output shown
+	\
+	\Displays:
+	\1.  Number of columns
+	\2.  Number of rows
+	\3.  Width in vfd's .
+*/
 void m5d_specs(m5d_t *);
 
+
+/**
+	\ brief same a running m5d_print and then m5d_specs
+	\ param a input matrix
+*/
 void m5d_fullinfo(m5d_t *);
 
+
+/**
+	\ brief information on matrix
+	\ param a matrix that will have its output shown
+	\
+	\Displays:
+	\1.  Number of columns
+	\2.  Number of rows
+	\3.  Width in vtri's .
+*/
 void m7d_specs(m7d_t *);
 
-void m7d_info(m7d_t *);
+
 
  m3d_t m3d_read_textfile(const char * fn);
  m5d_t m5d_read_textfile(const char * fn);
-
  m7d_t m7d_read_textfile (const char * fn);
 
 
 /**
  * Print  permutation matrices
- *
+ * 
  *
  */
 

@@ -39,7 +39,7 @@
 /**
     Permutations.
  */
-//Structures
+/* Structures */
 typedef struct m3p_t {
   /**
    *  LAPACK format.

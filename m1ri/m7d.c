@@ -202,7 +202,7 @@ m7d_t *   m7d_identity( rci_t n)
 
 
 
-//unfinished
+/* unfinished */
 void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
 {
     wi_t  block = (y  ) / M1RI_RADIX;
@@ -267,10 +267,9 @@ m7d_t * m7d_create( rci_t nrows, rci_t ncols)
     
 }
 
-/** Creates a window for m7d_t matrices
-   this could also be called a submtrix.   */
+/* Creates a window for m7d_t matrices   */
 
-m7d_t  * m7d_init_window(m7d_t *c, rci_t strow, rci_t svtri, rci_t sizerows, rci_t sizecols)
+m7d_t  * m7d_init_window(const m7d_t *c,const rci_t strow, const rci_t svtri,const rci_t sizerows, const rci_t sizecols)
 {
     
     
@@ -385,7 +384,7 @@ void add_vtri(vtri * r, vtri * x, vtri * y)
     r->middle = s^ x->middle ^ y->middle;
     t = ((s) & (x->middle | y->middle)) | (x->middle & y->middle);
     r->sign = x->sign ^ y->sign ^ t;
-    //to here I know is right
+    /* to here I know is right */
     
     
     s = ((t) & (x->sign | y->sign)) | (x->sign & y->sign);
@@ -422,7 +421,7 @@ void m7d_sub_i(vtri  *r, vtri *y)
 }
 
 
-void iadd_vtri(vtri  *x, vtri *y)
+inline void iadd_vtri(vtri  *x, vtri *y)
 {
     vtri  r;
     vec s;
@@ -448,7 +447,7 @@ void iadd_vtri(vtri  *x, vtri *y)
 void reduce_vtri( vtri * a)
 {
     vtri b = *a ;
-    a->units  = b.units ^ (b.units  | b.sign | b.middle) ;//  )
+    a->units  = b.units ^ (b.units  | b.sign | b.middle) ;/*   ) */
     a->middle  = b.middle ^ (b.units  | b.sign | b.middle) ;
     a->sign  = b.units ^ (b.units  | b.sign | b.middle) ;
 }
@@ -553,7 +552,7 @@ void m7d_add_4r(vtri *x, vtri * y)
     x->middle  = x->middle ^ t ;
     x->sign  = x->sign ^ (  t & x->middle);
     
-    //Optimize the multiplication later
+    /* Optimize the multiplication later */
     r.units = x->units;
     x->units = x->sign;
     x->sign = x->middle;
@@ -586,9 +585,9 @@ void m7d_sub_64(vtri **R, vtri  **A, vtri  **B)
     }
     
 }
-m7d_t * m7d_sub(  m7d_t  *x, m7d_t  *y)
+m7d_t * m7d_sub(m7d_t * r, const   m7d_t  *x, const m7d_t  *y)
 {
-	m7d_t *r;
+	
 	int n , i;
   	if((x->nrows == y->nrows) && ( x->ncols == y->ncols))
   	{
@@ -675,15 +674,30 @@ void m7d_add_64(vtri **R, vtri   **A, vtri  **B)
     for (i = 0; i < M1RI_RADIX; i++ )
     {
     	add_vtri(&R[i][0], &A[i][0], &B[i][0]);
-       // R[i][0] = add_m7dr(A[i][0], B[i][0]);
+       /*  R[i][0] = add_m7dr(A[i][0], B[i][0]); */
     }
 
 }
-m7d_t * m7d_add( m7d_t *a, m7d_t *b)
+
+m7d_t * m7d_add(m7d_t * c,const   m7d_t *a, const m7d_t *b)
 {
-	m7d_t *c;
-    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
-    {
+	if (c == NULL)
+	{
+		c = m7d_create(a->nrows, b->ncols);
+
+	} 
+	else if( (c->nrows != a->nrows || c->ncols != b->ncols)) 
+	{
+		m1ri_die("m7d_add: Provided return matrix has wrong dimensions.\n");
+    	
+	
+	}	
+
+    if((a->nrows != b->nrows) || ( b->ncols != a->ncols))
+    {   
+      m1ri_die("m7d_add: Input Matrices must have same dimension.\n");
+    }
+
         int i, j;
      	c = m7d_create(b->nrows, b->ncols);
         for( i = 0; i < a->nrows; i++)
@@ -691,12 +705,12 @@ m7d_t * m7d_add( m7d_t *a, m7d_t *b)
             for(j = 0; j < (a->width ); j++)
             {
                 
-                //
+                /*  */
                 add_vtri(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);    
             }
         }
         
-    }
+    
     return c;
       
 }
@@ -853,7 +867,7 @@ void m7d_mul_64(vtri **R, vtri **A, vtri **B)
         m7d_combine5(&tables5[i][0], &(B[54 + (5 * i)][0]));
     }
    
-    for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
+    for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
     {
         a = A[i][0];
  		v2 = a.middle;
@@ -906,12 +920,12 @@ void m7d_mul_64(vtri **R, vtri **A, vtri **B)
 		m7d_add_4r(&r1 ,&r3);
         
         R[i][0] = r1;
-       // */
+       /*  */ 
     }
     
 }
 
-//32 * 64,2048 bit, 256 byte matrix(slice) multiplication
+/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
 void m7d_mul_32(vtri *R, vtri *A, vtri *B)
 {
     long i;
@@ -1177,7 +1191,10 @@ m7d_t * m7d_transpose_sliced(m7d_t * a)
     return c;
 }
 
-m7_slice *  m7d_quarter(const m7d_t * a)
+
+
+
+m7_slice *  m7d_quarter(const  m7d_t * a)
 {
 	m7_slice * c = m1ri_malloc(sizeof(m7_slice));
 	c->block = m7_blockslice_allocate( 2,   2);
@@ -1217,7 +1234,7 @@ static inline void vtri_elem(vtri * c, vtri const * a, vtri const * b)
   one.sign = a->units & b->sign;
   two.sign = a->sign & b->units;
   three.sign = a->middle & b->middle;        
-  //three.middle = 
+  /* three.middle =  */
   
 vec temp = (~(one.sign) & ~(one.middle) & ~(one.units));
    		one.sign   = one.sign | temp;
@@ -1246,26 +1263,40 @@ temp = (~(two.sign) & ~(two.middle) & ~(two.units));
 
 
 
-m7d_t * m7d_hadamard(m7d_t const * a, m7d_t const * b )
+m7d_t * m7d_hadamard(m7d_t * c, m7d_t const * a, m7d_t const * b )
 {
-    m7d_t  * c = malloc(sizeof(m7d_t));
-    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+
+
+    if (c == NULL)
+	{
+		c = m7d_create(a->nrows, b->ncols);
+
+	} 
+	else if( (c->nrows != a->nrows || c->ncols != b->ncols)) 
+	{
+		m1ri_die("m7d_hadamard: Provided return matrix has wrong dimensions.\n");	
+	}
+    if((a->nrows != b->nrows) || ( b->ncols != a->ncols))
     {
        
-        int i, j;
-        c = m7d_create( a->nrows, a->ncols);
-        if(a->ncols < 256)
-        { 
-          for( i = 0; i < a->nrows; i++)
-          {
-            for(j = 0; j < (a->width ); j++)
-            {  
-               vtri_elem(c->rows[i] + j, a->rows[i]  + j, b->rows[i] + j);
-            }  
-          }
+      m1ri_die("m7d_hadamard: Input Matrices must have same dimension.\n");
+    }
 
-        }
-     }   
+    int i, j;
+    if(a->ncols < 256)
+    { 
+    	for( i = 0; i < a->nrows; i++)
+    	{
+    		for(j = 0; j < (a->width ); j++)
+    		{	  
+        		vtri_elem(c->rows[i] + j, a->rows[i]  + j, b->rows[i] + j);
+
+    		}  
+    	}
+
+    }
+    
+ 
         
     
     return c;
@@ -1285,8 +1316,8 @@ void m7d_copy(m7d_t * a, m7d_t const *b)
     
     }
     
-     a->lblock = b->lblock; //  first block pointed to in a window
-     a->fcol = b->fcol;  ///column offset of first block
+     a->lblock = b->lblock; /*   first block pointed to in a window */
+     a->fcol = b->fcol;  /* /column offset of first block */
      a->flags = b->flags;
   
   }

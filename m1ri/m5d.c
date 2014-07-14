@@ -125,8 +125,8 @@ void * m5d_rowswap (m5d_t * M, rci_t row_a, rci_t  row_b)
  */
 
 
-//unfinished
-void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u , vec m)
+/* unfinished */
+void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec m , vec u)
 {
       
     wi_t  block = (y  ) / M1RI_RADIX;
@@ -147,13 +147,7 @@ void *  m5d_write_elem( m5d_t * M,rci_t x, rci_t y, vec s, vec u , vec m)
 
 
 
-vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width)
-{
-    
-    block  = m1ri_malloc(nrows * width * sizeof(vfd) );
-    return block;
-     
-}
+
 
 /** 
  
@@ -174,9 +168,7 @@ vfd ** m5d_row_alloc(vfd * block, vfd ** rows, wi_t width, rci_t nrows)
     return rows;
 }
 
-/** 
- 
- */
+
 
 m5d_t  * m5d_create( rci_t nrows, rci_t ncols)
 {
@@ -193,17 +185,7 @@ m5d_t  * m5d_create( rci_t nrows, rci_t ncols)
     
 }
 
-/** 
- 
- */
 
-/** 
- windows in m1ri_word rows * m1ri_word column incriments
- stvfd = the vfd or width offset from the base matrix
- strow = row offset in increments of 64
- sizecol  = cols * M1RI_RADIX
- sizerow  = rows * M1RI_RADIX
- */
 
 m5d_t *    m5d_init_window(const m5d_t *c,const rci_t strow, const rci_t stvfd, const rci_t sizerows, const  rci_t sizecols)
 {
@@ -252,11 +234,6 @@ vfd * m5d_rand(m5d_t * a)
 }
 
 
-/** 
- Make an Identity Matrix
- a = Identity matrix
- n = matrix size (row length and column width)
-*/
 
 void   m5d_set_ui(m5d_t * a, rci_t value)
 
@@ -264,6 +241,7 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
     if(a->ncols == a->nrows)
     {
         int k,i,  j,l;
+        /*
         for( i  = 1; i < (a->width  ) ; ++i)
         {
             l =  ((i - 1) * M1RI_RADIX);
@@ -274,7 +252,7 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
 				l++;   
             }     
         }
-        
+        */
         if((a->ncols%M1RI_RADIX) != 0)
         {
             l = a->ncols %M1RI_RADIX;
@@ -283,6 +261,8 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
             for(i = 0; i < (M1RI_RADIX - l); i++)
             {   
                 a->rows[k + i][a->width-1].units = (leftbit)>>i;
+                a->rows[l][a->width -1].middle = 0;
+                a->rows[l][a->width -1].sign = 0;
             }
         }
         
@@ -294,17 +274,18 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
                 
             {
                 a->rows[l][a->width -1].units = (leftbit)>>i;
+                a->rows[l][a->width -1].middle = 0;
+                a->rows[l][a->width -1].sign = 0;
                 l++;    
             }
             
         }
+        
     }
     
 }
 
-/** 
- Creates an Identity Matrix over GF(5)
- */
+
 m5d_t *  m5d_identity(rci_t n)
 {
 	m5d_t * a;
@@ -314,9 +295,6 @@ m5d_t *  m5d_identity(rci_t n)
     return a;   
 }
 
-/** 
-  Releases a m5d_t into the wilderness.
- */
 
 void m5d_free( m5d_t *  tofree)
 { 
@@ -359,7 +337,7 @@ void add_vfd(vfd * r, vfd * a, vfd * b)
     m = ((j ^ a->middle)| c) ^ e;
 	r->middle  = m ^ (f | b->middle);
     r->units = ((m | d) ^ c)^(r->middle)) ;
-    /** */// = q;
+     = q; */
     /** 
 	*/
     
@@ -514,7 +492,7 @@ def sub(a,b):
 /** *******************************************
  matrix r = (direct sum matrix r + matrix x)
  ********************************************/
-void iadd_vfd(vfd *r,vfd *x)
+inline void iadd_vfd(vfd *r,vfd *x)
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
     c = x->units ^ r->units;
@@ -538,7 +516,7 @@ void iadd_vfd(vfd *r,vfd *x)
    
 }
 
- //matrix r = (matrix r - matrix x)
+ /* matrix r = (matrix r - matrix x) */
 void fb_i(vfd *r,vfd *x) 
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
@@ -598,7 +576,7 @@ vfd m5d_mul4(vfd a)
     
     return a; 
 }
- //matrix r = (matrix r - matrix x)
+ /* matrix r = (matrix r - matrix x) */
 void m5d_sub_i(vfd *r,vfd *x) 
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
@@ -623,28 +601,40 @@ void m5d_sub_i(vfd *r,vfd *x)
        
 }
 
-m5d_t * m5d_add( m5d_t  *a, m5d_t  *b)
+m5d_t * m5d_add(m5d_t * c,  const m5d_t  *a,const m5d_t  *b)
 {
-	         
 
+ 	if (c == NULL)
+	{
+		c = m5d_create(a->nrows, b->ncols);
 
-    m5d_t  *c;
-    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+	} 
+	else if( (c->nrows != a->nrows || c->ncols != b->ncols)) 
+	{
+		m1ri_die("m5d_add: Provided return matrix has wrong dimensions.\n");
+    	
+	
+	}	         
+
+	if((a->nrows != b->nrows) || ( b->ncols != a->ncols))
     {
-        int i, j;
-         c = m5d_create( b->nrows, b->ncols);
-        for( i = 0; i < a->nrows; i++)
+       
+      m1ri_die("m5d_add: Input Matrices must have same dimension.\n");
+    }
+    
+    
+    int i, j;
+	for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {   
-                //add_vfd(c->rows[i + j] , a->rows[i + j], b->rows[i + j]);
+        
                add_vfd(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
-               
                
             }
         }
         
-    }
+    
     return c;
     
 }
@@ -724,23 +714,36 @@ void m5d_sub_64(vfd **c ,vfd **  a , vfd **b)
 
 
 
-m5d_t * m5d_sub(m5d_t  * a , m5d_t * b)
+m5d_t * m5d_sub(m5d_t * r, const m5d_t  * a ,const  m5d_t * b)
 {
-	m5d_t * c;
-    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+  int i, j;
+  if (r == NULL)
+	{
+		r = m5d_create(a->nrows, b->ncols);
+
+	} 
+	else if( (r->nrows != a->nrows || r->ncols != b->ncols)) 
+	{
+		m1ri_die("m5d_sub: Provided return matrix has wrong dimensions.\n");
+    	
+	
+	}
+    if((a->nrows != b->nrows) || ( a->ncols != b->ncols))
     {
-        int i, j;
-        c = m5d_create( b->nrows, b->ncols);
-        for( i = 0; i < a->nrows; i++)
-        {
-            for(j = 0; j < (a->width ); j++)
-            {   
-                vfd_sub(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
-            }
-        }
-        
+       
+      m1ri_die("m5d_sub: Input Matrices must have same dimension.\n");
     }
-    return c;
+
+    for( i = 0; i < a->nrows; i++)
+    {
+        for(j = 0; j < (a->width ); j++)
+        {   
+                vfd_sub(&r->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+        }
+    }
+        
+
+    return r;
 }
 
 void m5d_sub_d(m5d_t  * a , m5d_t * b)
@@ -921,7 +924,7 @@ void m5d_mul_64(vfd **R, vfd **A, vfd **B)
     }
   
     
-    for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
+    for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
     {
         a = A[i][0];
         
@@ -968,7 +971,7 @@ void m5d_mul_64(vfd **R, vfd **A, vfd **B)
     }   
 }
 
-//32 * 64,2048 bit, 256 byte matrix(slice) multiplication
+/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
 void m5d_mul_32(vfd *R, vfd *A, vfd *B)
 {
     long i;
@@ -1010,7 +1013,7 @@ void m5d_mul_32(vfd *R, vfd *A, vfd *B)
         t1 = tables4[2][v1&15]; iadd_vfd(&r1, &t1);
         t2 = tables4[2][v2&15]; iadd_vfd(&r2, &t2);
         t3 = tables4[2][v3&15]; iadd_vfd(&r3, &t3);
-        // m5d_sub_i(&r1, &r2);
+        /*  m5d_sub_i(&r1, &r2); */
         iadd_vfd(&r1, &r2);
         m5d_add2_i(&r1, &r3);
         
@@ -1019,7 +1022,7 @@ void m5d_mul_32(vfd *R, vfd *A, vfd *B)
     
 }
 
-//16 * 64,1024 bit, 128 byte matrix(slice) multiplication
+/* 16 * 64,1024 bit, 128 byte matrix(slice) multiplication */
 void m5d_mul_16(vfd *R, vfd *A, vfd *B)
 {
     long i;
@@ -1055,7 +1058,7 @@ void m5d_mul_16(vfd *R, vfd *A, vfd *B)
     }
 }
 
-//8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
+/* 8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication */
 void m5d_mul_8(vfd *R, vfd *A, vfd *B)
 {
 
@@ -1078,7 +1081,7 @@ void m5d_mul_8(vfd *R, vfd *A, vfd *B)
    	 	t1 = tables4[1][v1&15]; iadd_vfd(&r1, &t1);
     	t2 = tables4[1][v2&15]; iadd_vfd(&r2, &t2);
     	t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3);
-    	// m5d_sub_i((&r1, &r2);
+    	/*  m5d_sub_i((&r1, &r2); */
     	
     	iadd_vfd(&r1, &r2);
 		m5d_add2_i(&r1, &r3);
@@ -1087,7 +1090,7 @@ void m5d_mul_8(vfd *R, vfd *A, vfd *B)
     }
 }
 
-//4 * 64,256 bit, 32 byte matrix(slice) multiplication
+/* 4 * 64,256 bit, 32 byte matrix(slice) multiplication */
 void m5d_mul_4(vfd *R, vfd *A, vfd *B)
 {
     int i;
@@ -1289,33 +1292,47 @@ static inline void vfd_elem(vfd * c, vfd const * a, vfd const * b)
   
   	  
 }
-m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
+m5d_t * m5d_hadamard(m5d_t * c, m5d_t const * a, m5d_t const * b )
 {
-    m5d_t  * c = malloc(sizeof(m5d_t));
-    if((a->nrows == b->nrows) && ( b->ncols == a->ncols))
+    
+    
+     if (c == NULL)
+	{
+		c = m5d_create(a->nrows, b->ncols);
+
+	} 
+	else if( (c->nrows != a->nrows || c->ncols != b->ncols)) 
+	{
+		m1ri_die("m5d_hadamard: Provided return matrix has wrong dimensions.\n");	
+	}
+    if((a->nrows != b->nrows) || ( b->ncols != a->ncols))
     {
        
-        int i, j;
-        c = m5d_create(a->nrows , b->ncols);
-        if(a->ncols < 256)
-        { 
-          for( i = 0; i < a->nrows; i++)
-          {
+      m1ri_die("m5d_hadamard: Input Matrices must have same dimension.\n");
+    }
+
+    int i, j;
+    if(a->ncols < 256)
+    { 
+        for( i = 0; i < a->nrows; i++)
+        {
             for(j = 0; j < (a->width ); j++)
             {  
                vfd_elem(c->rows[i] + j, a->rows[i]  + j, b->rows[i] + j);
             }  
           }
 
-        }
-     }   
+    }
+        
         
     
     return c;
 
 }
  
- void m5d_copy(m5d_t * a, m5d_t const *b)
+ 
+ 
+m5d_t *  m5d_copy(m5d_t * a, m5d_t const *b)
 {
   a = m5d_create( b->ncols, b->nrows);
   for(int i = 0; i < a->nrows; i++)
@@ -1327,12 +1344,12 @@ m5d_t * m5d_hadamard(m5d_t const * a, m5d_t const * b )
     
     }
     
-     a->lblock = b->lblock; //  first block pointed to in a window
-     a->fcol = b->fcol;  ///column offset of first block
+     a->lblock = b->lblock; /*   first block pointed to in a window */
+     a->fcol = b->fcol;  /* /column offset of first block */
      a->flags = b->flags;
   
   }
-  
+  return a;
   
 
 

@@ -34,8 +34,8 @@
 static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 {
-    //r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0);
-    //r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t.
+    /* r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0); */
+    /* r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t. */
 
 
 
@@ -67,8 +67,8 @@ static inline vbg add_m3dr(vbg  x, vbg const y)
 
 inline void sub_m3d( vbg *r, vbg const *x, vbg const *y)
 {
-   // r->units = ((x->units^y->units) | (x->sign^y->sign));
-   // r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
+   /*  r->units = ((x->units^y->units) | (x->sign^y->sign)); */
+   /*  r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign)); */
     r->sign = y->units ^ x->units;
     r->units = y->sign ^ x->sign;
     r->units = r->units | r->sign;
@@ -416,7 +416,7 @@ void m3d_mul_64(vbg **R, vbg **  A, vbg **  B)
         m3d_combine5(&tables5[i][0], &(B[54 + (5 * i)][0]));
     }
 
-    for (i = 0; i < 64; i ++  )//i from 0 <= i < 64
+    for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
     {
         a = A[i][0];
         v2 = a.sign;
@@ -449,12 +449,12 @@ void m3d_mul_64(vbg **R, vbg **  A, vbg **  B)
         
         isub_m3d(&r1, &r2);
         R[i][0] = r1;
-       // */
+       /*  */
     }
     
 }
 
-//32 * 64,2048 bit, 256 byte matrix(slice) multiplication
+/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
 void mul_32_m3d(vbg *R, vbg *A, vbg *B)
 {
     long i;
@@ -496,7 +496,7 @@ void mul_32_m3d(vbg *R, vbg *A, vbg *B)
     
 }
 
-//16 * 64,1024 bit, 128 byte matrix(slice) multiplication
+/* 16 * 64,1024 bit, 128 byte matrix(slice) multiplication */
 void mul_16_m3d(vbg *R, vbg *A, vbg *B)
 {
     long i;
@@ -525,7 +525,7 @@ void mul_16_m3d(vbg *R, vbg *A, vbg *B)
     }
 }
 
-//8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication
+/* 8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication */
 void mul_8_m3d(vbg *R, vbg *A, vbg *B)
 
 {
@@ -556,7 +556,7 @@ void mul_8_m3d(vbg *R, vbg *A, vbg *B)
 
 
 
-//4 * 64,256 bit, 32 byte matrix(slice) multiplication
+/* 4 * 64,256 bit, 32 byte matrix(slice) multiplication */
 void mul_4_m3d(vbg *R, vbg *A, vbg *B)
 {
     int i;

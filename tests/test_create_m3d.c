@@ -33,16 +33,16 @@ int main(int argc, const char * argv[])
  
     m3d_t * a = m3d_create( 64, 64);
     m3d_rand(a);
-    //m3d_print(a);
+    /* m3d_print(a); */
     int compression = 1;
     char * name = "m3d_testmatrix.png";
     char * comment = "comment";
     m3d_to_png( a,  name,  compression,  comment ,  0);
-    //printf("d");
-    //m3d_free(a);
-    //#if __M1RI_HAVE_LIBPNG
-    //printf("hi")
-    //#endif 
+    /* printf("d"); */
+    /* m3d_free(a); */
+    /* #if __M1RI_HAVE_LIBPNG */
+    /* printf("hi") */
+    /* #endif  */
 
      return 0;
     

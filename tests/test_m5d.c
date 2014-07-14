@@ -62,7 +62,10 @@ int main(int argc, const char * argv[])
     
     d = m5d_identity(64);
     e = m5d_identity(64);
-    
+	f = m5d_identity(64);
+	
+    m5d_print(d);
+    m5d_print(e);
     isequal = m5d_equal(d, e);
     
     if(isequal)
@@ -104,15 +107,15 @@ int main(int argc, const char * argv[])
   	m5d_rand(y2);
   	
 	y3 = m5d_strassen(y3, y0, y1);
-   	m5d_print(y3);
-   	/*
+   	//m5d_print(y3);
+   	
    	y4 = m5d_strassen(y4, y1, y2);
   	y5 = m5d_strassen(y5, y3, y2);
   	y6 = m5d_strassen(y6, y0, y4);
     m5d_print(y6);
-	*/
+
 	
-	/*  
+	
 	m5d_free(y0);
 	m5d_free(y1);
 	m5d_free(y2);
@@ -120,19 +123,21 @@ int main(int argc, const char * argv[])
 	m5d_free(y4);
 	m5d_free(y5);
 	m5d_free(y6);   
-	*/
-
-	m5d_classic_mul(k, i, j);
-	//m5d_print(k);
 	
 
-	m5d_free(a);
-	m5d_free(b);
-	m5d_free(d);
-	m5d_free(e);
-	m5d_free(f);
-	m5d_free(g);
-//	m5d_free(h);
+
+	k = m5d_classic_mul(k, i, j);
+	m5d_print(k); 
+
+	m5d_classic_mul(k, i, j);
+	/* m5d_print(k); */
+
+	m5d_free(h); 
+
+/* 	m5d_free(h); */
+
+/* 	m5d_free(h); */
+
 	m5d_free(i);
 	m5d_free(j);
 	m5d_free(k);

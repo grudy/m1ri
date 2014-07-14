@@ -24,7 +24,7 @@
 #include "m1ri_io.h"
 #if __M1RI_HAVE_LIBPNG
 #include <png.h>
-#endif //__M4RI_HAVE_LIBPNG
+#endif /* __M4RI_HAVE_LIBPNG */
 /** 
  
  Print a block of an m3d
@@ -66,7 +66,7 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
 
 */
 
-///print_m3d_block_buffered original title
+/* /print_m3d_block_buffered original title */
 
 static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
 {
@@ -84,13 +84,13 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
         {
         	
         	buffer[i++] = '2'; 
-              // printf("[ 1 ]");
+              /*  printf("[ 1 ]"); */
         }
         
-        else if(out == 1) //&& (b & (leftbit  >> x)))
+        else if(out == 1) /* && (b & (leftbit  >> x))) */
         {
         	buffer[i++] = '1'; 
-            //printf("[ 2 ]");
+            /* printf("[ 2 ]"); */
         }
         
 		else
@@ -122,13 +122,13 @@ static inline void print_m3d_block_more_buffered(vec a, vec b, u_int32_t l_unuse
         {
         	
         	buffer[*i++] = '2'; 
-              // printf("[ 1 ]");
+              /*  printf("[ 1 ]"); */
         }
         
-        else if(out == 1) //&& (a & (leftbit  >> x)))
+        else if(out == 1) /* && (a & (leftbit  >> x))) */
         {
         	buffer[*i++] = '1'; 
-            //printf("[ 2 ]");
+            /* printf("[ 2 ]"); */
         }
         
 		else
@@ -150,12 +150,12 @@ static inline void print_m3d_block_more_buffered(vec a, vec b, u_int32_t l_unuse
 /**  
 	The function is  to print m3d_t
 */
- void m3d_print(m3d_t *  a)
+ void m3d_print(const m3d_t *  a)
 {
     int i, m;
     printf("\n \n"); 
     
-    //testing for io improvement 
+    /* testing for io improvement  */
     if(a->width >=  16)
     {
     
@@ -271,7 +271,7 @@ void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
     }
 }
 
-void m5d_print(m5d_t *a)
+void m5d_print(const m5d_t *a)
 {
     int i, m;
     printf("\n \n");
@@ -322,7 +322,7 @@ static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_i
 {
 	
     u_int64_t out[3];
-    short value;//, x ;
+    short value;/* , x ; */
     for( int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         out[0] =  a & (leftbit >>  x);
@@ -359,7 +359,7 @@ static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_i
 /** 
 	Prints an m7d_t matrix
 */
-void m7d_print(m7d_t *a)
+void m7d_print(const m7d_t *a)
 {
     int i, m;
     printf("\n \n");
@@ -412,12 +412,7 @@ void m7d_print(m7d_t *a)
     
     
 }
-/**
-	Prints an m3d_t to standard output and then displays: 
-	1.  Number of columns
-	2.  Number of rows
-	3.  Width in vbg's .
-*/
+
 void m3d_specs(m3d_t * a)
 {
     
@@ -507,15 +502,11 @@ void m7d_fullinfo(m7d_t * a)
 
 
 
-/**
- * Print  permutation matrices
- *
- *
- */
+
 
 void m3p_print(m3p_t const *P)
 {
-
+  
   
 
 }
@@ -531,19 +522,19 @@ void m7p_print(m3p_t const *P)
 
  m3d_t m3d_read_textfile(const char * fn)
  {
-             FILE *in_file  = fopen("name_of_file", "r"); // read only 
+             FILE *in_file  = fopen("name_of_file", "r"); /*  read only  */
              
  
  }
  m5d_t m5d_read_textfile(const char * fn)
  {
-             FILE *in_file  = fopen("name_of_file", "r"); // read only 
+             FILE *in_file  = fopen("name_of_file", "r"); /*  read only  */
              
  }
  
  m7d_t m7d_read_textfile (const char * fn)
 {
-            FILE *in_file  = fopen("name_of_file", "r"); // read only 
+            FILE *in_file  = fopen("name_of_file", "r"); /*  read only  */
             
 
 }
@@ -619,15 +610,15 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
   png_write_info(png_ptr, info_ptr);
 
   png_set_packswap(png_ptr);
-  //png_set_invert_mono(png_ptr);
+  /* png_set_invert_mono(png_ptr); */
   
 		  png_bytep row = m1ri_calloc(sizeof(u_int8_t),A->ncols/4+16);
 
 		  wi_t j=0;
 		  vbg  tmp;
-		  u_int64_t p_row[2];//  Packed Row 
+		  u_int64_t p_row[2];/*   Packed Row  */
 		  tmp.units = 0;
-		  tmp.sign = 0;  // = 0;
+		  tmp.sign = 0;  /*  = 0; */
   		  u_int64_t ep_bit[64];
   
   
@@ -673,7 +664,7 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
 	  
 	  
 	  
-			  ////////////////////////////////////////////
+			  /* ////////////////////////////////////////// */
 			}
   
 	
@@ -703,7 +694,7 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
       row[8*j+7] = (png_byte)((tmp.units>>56) & 0xff);
       
       */
-          ////////////////////////////////////////////
+          /* ////////////////////////////////////////// */
 
     };
     png_write_row(png_ptr, row);

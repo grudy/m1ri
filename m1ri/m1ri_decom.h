@@ -42,8 +42,9 @@ void m7d_upper_triangular(m7d_t * L, m7d_t * B);
  
  
  /**
-   Solves U X = B with X and B matrices and U upper left triangular
-   X replaces B
+   \brief Solves U X = B with X and B matrices and U upper left triangular, X replaces B\
+   \param U matrix
+   \param 
  */
 
 void m3d_upper_left_triangular(m3d_t const *U, m3d_t *B  );
