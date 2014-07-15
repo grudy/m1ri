@@ -917,6 +917,7 @@ m3d_t  * m3d_add(m3d_t *c, const m3d_t  *a,const m3d_t  *b)
 }
 
 
+m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc);
 
 
 

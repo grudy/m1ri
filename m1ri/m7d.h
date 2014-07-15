@@ -93,7 +93,15 @@ typedef struct {
 
  */
 
-/* Read 'middle' bits */
+
+/**
+ \Brief Read n middle bits
+ \param x = rows
+ \param y = columns
+ \param M = Matrix read from 
+ \param n = elements to read from
+*/
+
 vec m7d_rm_bits(m7d_t *M, rci_t  x, rci_t  y, int  n) ;
 
 
@@ -119,25 +127,15 @@ vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
 vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
 
 
+
 /**
- \Brief Read n elements
+ \Brief Read n sign bits
  \param x = rows
  \param y = columns
  \param M = Matrix read from 
  \param n = elements to read from
 */
 
-/*  Read n 'sign' bits */
-vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-/*  Read  n 'unit' bits */
-vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-/*  Read   n elements */
-
-/*  Read n 'sign' bits */
-vec m7d_rs_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-/*  Read  n 'unit' bits */
-vec m7d_ru_bits(m7d_t *M, rci_t  x, rci_t  y, int  n);
-/*  Read   n elements */
 
 vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n);
 

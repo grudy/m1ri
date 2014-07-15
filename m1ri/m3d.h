@@ -430,19 +430,15 @@ void m3d_add_64(vbg **, vbg   **  , vbg    **  );
 m3d_t  * m3d_add(m3d_t *, const m3d_t  *,const  m3d_t  *);
 
 
-/*
-void * m3d_combine3(vbg *, vbg * );
+ /**
+ \Brief Return submatrix S from matrix M 
+ \param S = Submatrix to be, must be null
+ \param M = Matrix to gain a submatrix
+ \param b = Matrix to Sum
+ */
+m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc);
 
-void m3d_combine4(vbg *, vbg * );
 
-void m3d_combine5(vbg *, vbg * );
-
-void m3d_combine6(vbg *, vbg * );
-
-void m3d_combine7(vbg *, vbg * );
-
-void m3d_combine8(vbg *, vbg *);
-*/
 /** **************************************************
 								GF(3)
 ****************************************************/
