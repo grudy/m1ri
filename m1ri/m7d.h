@@ -294,6 +294,15 @@ m7d_t * m7d_add( m7d_t *, const m7d_t *,const  m7d_t *);
 void m7d_add_2r(vtri *, vtri *);
 void m7d_add_4r( vtri *, vtri *);
 
+
+
+/** 
+ \brief windows in M1RI_RADIX rows * M1RI_RADIX column incriments
+ \param stvbg = the vbg or width offset from the base matrix
+ \param strow = row offset in increments of 64
+ \param sizecol  = cols * 64
+ \param sizerow  = rows * 64
+ */
 m7d_t   * m7d_init_window(const m7d_t *, const rci_t , const  rci_t ,const rci_t , const rci_t );
 
 
@@ -386,5 +395,16 @@ m7d_t *  m7d_concat( m7d_t * , m7d_t * );
 */
 m7d_t  * m7d_stack(m7d_t * ,const   m7d_t * , const m7d_t * );
  
+int m7d_is_zero(const m7d_t *);
+
+
+
+ /**
+ \Brief Return a scalar product of the input Matrix B, return result to C
+ \param C Matrix to return, can be null
+ \param a Scalar
+ \param B Matrix to Multiply
+ */
+m7d_t *m7d_mul_scalar(m7d_t *, const long , const m7d_t *);
 
 #endif

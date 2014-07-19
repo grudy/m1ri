@@ -42,7 +42,12 @@ typedef struct vbg{
 } vbg;
 
 /**********************************
-    GF(3) Matrix structure
+    \brief GF(3) Matrix structure
+    \
+    \00 = 0
+	\01 = 1
+	\11 = 2  
+	\
 ******************************/
 typedef struct {
     
@@ -80,22 +85,15 @@ typedef struct
 
 
 
-/**
- * \brief 
- *
- * \param c 
- * \param a 
- * \param b 
- *
- * \wordoffset
- */
+
 /**
  Read n bits from a s portion of an element
  x = rows
  y = columns
  M = Matrix read from
- */
+ *
 void m3d_transpose( m3d_t   *);
+*/
 
 /**
  \Brief Read n sign bits
@@ -128,7 +126,7 @@ vbg m3d_read_elems(m3d_t const *, rci_t  , rci_t  , int  );
 
 
 
-m3d_t *  m3d_transposewin(const m3d_t   * );
+//m3d_t *  m3d_transposewin(const m3d_t   * );
 
 /**
  \Brief Swap rows in m3d_t 
@@ -195,7 +193,13 @@ static inline vbg ** m3d_row_alloc(vbg * block, wi_t width, rci_t nrows)
 */
 m3d_t *  m3d_create(  rci_t , rci_t );
 
-
+/**
+ * \brief Fill matrix with random values
+ * \
+ * \
+ * \
+ * \wordoffset
+ */
 m3d_t m3d_rand(m3d_t * );
 
 /** 
@@ -333,6 +337,14 @@ m3d_t  * m3d_transpose_sliced(m3d_t * );
  \param start_row  starting row
 */
 void  m3d_colswap_capped_row(m3d_t *, rci_t , rci_t, rci_t );
+
+
+/** 
+	\brief  Compares two m3d_t matrices
+	\param a = first matrix
+	\param b = second matrix
+	\return 1 if equal, 0 
+ */
 int m3d_cmp(m3d_t *A, m3d_t *B);
 
 /**
@@ -423,20 +435,35 @@ void m3d_add_64(vbg **, vbg   **  , vbg    **  );
 
  /**
  \Brief Add matrix a + b = c
- \param c = Where sum is written, may be Null 
- \param a = Matrix to Sum
- \param b = Matrix to Sum
+ \param c  Where sum is written, may be Null 
+ \param a  Matrix to Sum
+ \param b  Matrix to Sum
  */
 m3d_t  * m3d_add(m3d_t *, const m3d_t  *,const  m3d_t  *);
 
 
  /**
  \Brief Return submatrix S from matrix M 
- \param S = Submatrix to be, must be null
- \param M = Matrix to gain a submatrix
- \param b = Matrix to Sum
+ \param S Submatrix to be, must be null
+ \param M  Matrix to gain a submatrix
+ \param lowr lower row
+ \param lowc lower column
+ \param highr high row
+ \param highc high column 
  */
-m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc);
+m3d_t * m3d_submatrix(m3d_t *, const m3d_t *, const rci_t , const rci_t , const rci_t , const rci_t);
+
+ /**
+ \Brief Return a scalar product of the input Matrix B, return result to C
+ \param C Matrix to return, can be null
+ \param a Scalar
+ \param B Matrix to Multiply
+ */
+m3d_t *m3d_mul_scalar(m3d_t *, const long , const m3d_t *);
+
+
+
+int m3d_is_zero(const m3d_t *);
 
 
 /** **************************************************

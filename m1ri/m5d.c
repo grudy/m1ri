@@ -1485,3 +1485,135 @@ void  m5d_transpose(m5d_t   * a)
 
    
 }
+
+
+int m5d_is_zero(const m5d_t *A)
+{
+	int i, j;
+
+	for(i = 0; i < (A->width ); i++)
+   	{
+        for(j = 0; j < (A->width ); j++)
+        {
+            if((A->rows[i][j].units != 0) || (A->rows[i][j].sign != 0) || (A->rows[i][j].middle != 0));
+            return 0;
+            
+        }   
+    
+    }
+  
+  
+  
+  return 1;
+
+}
+
+inline void m5d_mul_zero(m5d_t * a)
+{
+	
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+			a->rows[i][j].units = 0;
+			a->rows[i][j].middle = 0;
+			a->rows[i][j].sign  = 0;
+		  
+		
+		}
+	
+	}
+
+}
+
+
+inline void m5d_mul_two(m5d_t * a, const m5d_t * b)
+{
+	int i, j;
+	vec temp;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+			
+			a->rows[i][j].middle = ~(b->rows[i][j].units) & (b->rows[i][j].sign);
+			a->rows[i][j].units = b->rows[i][j].middle ;
+		  
+		
+		}
+	
+	}
+
+
+}
+
+
+inline void m5d_mul_three(m5d_t * a, const m5d_t * b)
+{
+	int i, j;
+	vec;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+			a->rows[i][j].middle = b->rows[i][j].units; 
+			a->rows[i][j].units = ~(b->rows[i][j].middle) & b->rows[i][j].sign;
+		  
+		
+		}
+	
+	}
+
+
+}
+
+
+inline void m5d_mul_fourth(m5d_t * a, const m5d_t * b)
+{
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+			
+			a->rows[i][j].middle = ~(b->rows[i][j].middle) & b->rows[i][j].sign;	
+			a->rows[i][j].units = ~(b->rows[i][j].units) & b->rows[i][j].sign;	
+		  
+		
+		}
+	
+	}
+
+
+}
+
+m5d_t *m5d_mul_scalar(m5d_t *C, const long a, const m5d_t *B)
+{
+
+	if(C == NULL)
+    { 
+      C = m5d_create( B->ncols, B->nrows);
+    }
+    
+    else if(C->nrows != B->nrows || C->ncols !=  B->ncols)
+    {
+    	m1ri_die("m5d_mul_scalar: C has wrong dimensions!\n");
+    
+    }
+    
+    
+	long m = a%5;
+	switch(m)
+	{
+		case 0: m5d_mul_zero(C);
+		break ;
+  		case 2: m5d_mul_two(C, B);
+		break ;
+  		case 3: m5d_mul_three(C, B);
+		break ;
+  		case 4: m5d_mul_fourth(C, B);
+  	}	
+  
+  return C;
+}

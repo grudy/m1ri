@@ -360,6 +360,16 @@ int m5d_equal(m5d_t const *, m5d_t const *);
 
 
 void m5d_add_64(vfd **, vfd **  , vfd ** );
+
+
+/** 
+ \brief windows in M1RI_RADIX rows * M1RI_RADIX column incriments
+ \param stvbg = the vbg or width offset from the base matrix
+ \param strow = row offset in increments of 64
+ \param sizecol  = cols * 64
+ \param sizerow  = rows * 64
+ */
+
 m5d_t   * m5d_init_window( m5d_t const *, const rci_t , const  rci_t ,const rci_t , const rci_t );
 
 void m5d_sub_64(vfd **c ,vfd  ** a , vfd **b);
@@ -508,6 +518,18 @@ m5d_t *  m5d_concat( m5d_t * , m5d_t * );
  	\
 */
 m5d_t  * m5d_stack(m5d_t * ,const   m5d_t * , const m5d_t * );
+ 
+int m5d_is_zero(const m5d_t *);
+ /**
+ \Brief Return a scalar product of the input Matrix B, return result to C
+ \param C Matrix to return, can be null
+ \param a Scalar
+ \param B Matrix to Multiply
+ */
+m5d_t *m5d_mul_scalar(m5d_t *, const long , const m5d_t *);
+
+
+ 
  
 
 #endif

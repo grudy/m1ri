@@ -31,8 +31,13 @@ int main(int argc, const char * argv[])
 {
  	
  
-
-     return 0;
+	m3d_t * a, * b;
+	a  = m3d_create(128, 128);
+	m3d_rand(a);
+	b = m3d_submatrix(b, a, 0, 0, 64, 64 );
+	m3d_print(a);
+	m3d_print(b);
+	return 0;
     
     
 }

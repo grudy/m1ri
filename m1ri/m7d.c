@@ -1459,3 +1459,177 @@ void  m7d_transpose(m7d_t   * a)
 
    
 }
+
+
+int m7d_is_zero(const m7d_t *A)
+{
+	int i, j;
+
+	for(i = 0; i < (A->width ); i++)
+   	{
+        for(j = 0; j < (A->width ); j++)
+        {
+            if((A->rows[i][j].units != 0) || (A->rows[i][j].sign != 0) || (A->rows[i][j].middle != 0));
+            return 0;
+            
+        }   
+     
+    }
+  
+  
+  
+  return 1;
+
+}
+
+
+
+
+inline void m7d_mul_zero(m7d_t * a)
+{
+	
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+			a->rows[i][j].units = 0;
+			a->rows[i][j].middle = 0;
+			a->rows[i][j].sign  = 0;
+		  
+		
+		}
+	
+	}
+
+}
+
+
+
+inline void m7d_mul_two(m7d_t *a, const m7d_t * b)
+{
+	
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+		//  a->rows[i][j].units =   ;
+		
+		  
+		
+		}
+	
+	}
+
+
+}
+
+
+inline void m7d_mul_three(m7d_t *a, const m7d_t * b)
+{
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+		//  a->rows[i][j].units =   ;
+		
+		  
+		
+		}
+	
+	}
+
+
+}
+
+
+inline void m7d_mul_fourth(m7d_t *a, const m7d_t * b)
+{
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+		\
+		
+		  
+		
+		}
+	
+	}
+
+
+}
+
+
+inline void m7d_mul_five(m7d_t *a, const m7d_t * b)
+{
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+		//  a->rows[i][j].units =   ;
+		
+		  
+		
+		}
+	
+	}
+
+
+}
+
+
+inline void m7d_mul_six(m7d_t *a, const m7d_t * b)
+{
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+					
+		  	a->rows[i][j] = vtri_mul_6(b->rows[i][j]);
+		}
+	
+	}
+
+
+}
+
+m7d_t *m7d_mul_scalar(m7d_t *C, const long a, const m7d_t *B)
+{
+
+	if(C == NULL)
+    { 
+      C = m7d_create( B->ncols, B->nrows);
+    }
+    
+    else if(C->nrows != B->nrows || C->ncols !=  B->ncols)
+    {
+    	m1ri_die("m7d_mul_scalar: C has wrong dimensions!\n");
+    
+    }
+    
+	long m = a%7;
+	switch(m)
+	{
+		case 0: m7d_mul_zero(C);
+		break ;
+  		case 2: m7d_mul_two(C, B);
+		break ;
+  		case 3: m7d_mul_three(C, B);
+		break ;
+  		case 4: m7d_mul_fourth(C, B);
+		break ;
+  		case 5: m7d_mul_five(C, B);
+		break ;
+  		case 6: m7d_mul_six(C, B);
+		break ;
+  	}	
+  
+  return C;
+}
+

@@ -313,14 +313,12 @@ m3d_t  * m3d_identity(m3d_t  *a, rci_t n)
 }
 
 /** 
- windows in M1RI_RADIX rows * M1RI_RADIX column incriments
- stvbg = the vbg or width offset from the base matrix
- strow = row offset in increments of 64
- sizecol  = cols * 64
- sizerow  = rows * 64
+ \brief windows in M1RI_RADIX rows * M1RI_RADIX column incriments
+ \param stvbg = the vbg or width offset from the base matrix
+ \param strow = row offset in increments of 64
+ \param sizecol  = cols * 64
+ \param sizerow  = rows * 64
  */
-//m3d_t *m3d_init_window(const m3d_t *A, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc);  work on replacing with this
-
 m3d_t *    m3d_init_window(const m3d_t *c, const rci_t strow, const rci_t stvbg,const rci_t sizerows,const rci_t sizecols)
 {
 
@@ -910,15 +908,124 @@ m3d_t  * m3d_add(m3d_t *c, const m3d_t  *a,const m3d_t  *b)
         {
             for(j = 0; j < (a->width ); j++)
             {
-            add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
-            }   
+            	add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+        	}   
         }
     return c;  
 }
 
 
-m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc);
 
+
+
+m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc)
+{
+  	rci_t s_rows =  highr -  lowr;
+  	rci_t s_cols =  highc - lowc;
+  	if( S != NULL)
+	{
+		if((S->nrows < s_rows) || (S->ncols < s_cols))
+		{
+			m1ri_die("m3d_submatrix: S has too small of dimensions");
+    	}
+  
+	}
+  	else
+  	{
+  		S = m3d_create(s_rows, s_cols);
+ 	}
+ 	
+ 	vec temp_mask_l = ((leftbit >> ((lowc%M1RI_RADIX) -1)) - 1);
+	vec temp_mask_r = ~temp_mask_l;
+ 	rci_t s_width = lowc/M1RI_RADIX;
+ 	if(!(lowc % M1RI_RADIX))
+ 	{
+ 		
+ 		if(s_cols/64 != 0)
+ 		{
+ 			for(int i = 0; i < s_rows; i++)
+ 			{
+				memcpy(S->rows[i], M->rows[s_rows + i] + s_width , sizeof(vbg) * (s_cols / M1RI_RADIX));	
+ 				//check if copies correctly
+ 			}
+ 		}
+ 		
+ 		if(s_cols%64)
+ 		{
+ 	
+ 		   vec temp_mask = ~((leftbit >> ((s_cols%64) -1)) - 1);
+ 		   vbg temp;
+ 		   for(int i = 0; i < s_rows; i++)
+ 		   {
+ 					 
+ 				temp.units = M->rows[lowr + i][s_width + lowc / M1RI_RADIX].units & temp_mask;
+ 				temp.sign  =  M->rows[lowr + i][s_width + lowc / M1RI_RADIX].sign & temp_mask;
+       			S->rows[i][s_cols / M1RI_RADIX].units = temp.units;
+       			S->rows[i][s_cols / M1RI_RADIX].sign = temp.sign;
+
+ 		   } 
+ 		
+ 		}
+ 		
+ 		
+ 			
+	}
+	else 
+	{
+		
+		vec temp_mask_l = ((leftbit >> ((lowc%M1RI_RADIX) -1)) - 1);
+		vec temp_mask_r = ~temp_mask_l;
+		//vbg tempr;
+		vbg temp;
+		rci_t j;
+	
+		for(int i = 0; i < s_rows; i++)
+		{
+ 	  
+			for(j=0; j+M1RI_RADIX <=s_cols; j+= M1RI_RADIX)
+			{
+		   		temp.units = (M->rows[s_rows + i][(lowc + j) / M1RI_RADIX].units & temp_mask_l) << (lowc%M1RI_RADIX);
+ 			   	temp.sign  =  (M->rows[s_rows + i][(lowc + j)/ M1RI_RADIX].sign & temp_mask_l) << (lowc%M1RI_RADIX);
+       	   		S->rows[i][j].units = temp.units;
+       	   		S->rows[i][j].sign = temp.sign;
+       	   		S->rows[i][j].units |= (M->rows[s_rows + i][((lowc + j ) / M1RI_RADIX) + 1].units & temp_mask_r) >> (M1RI_RADIX - (lowc%M1RI_RADIX));
+       	   		S->rows[i][j].sign  |= (M->rows[s_rows + i][((lowc + j) / M1RI_RADIX) + 1].sign & temp_mask_r) >> (M1RI_RADIX - (lowc%M1RI_RADIX));
+				
+		
+			}
+        	
+ 			S->rows[i][j/M1RI_RADIX].units &= temp_mask_l;
+ 			S->rows[i][j/M1RI_RADIX].sign  &= temp_mask_l;
+      		S->rows[i][j/M1RI_RADIX].units |= m3d_ru_bits(M, lowr+i, lowc+j, s_cols - j) & temp_mask_r;
+ 		    S->rows[i][j/M1RI_RADIX].sign |= m3d_rs_bits(M, lowr+i, lowc+j, s_cols - j) & temp_mask_r;
+ 	   
+		}	 
+	}
+  return S;	
+}
+
+int m3d_is_zero(const m3d_t *A)
+{
+	int i, j;
+
+	for(i = 0; i < (A->width ); i++)
+   	{
+        for(j = 0; j < (A->width ); j++)
+        {
+            if((A->rows[i][j].units != 0) || (A->rows[i][j].sign != 0));
+            return 0;
+            
+        }   
+    
+    }
+  
+  
+  
+  return 1;
+
+}
+
+m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B);
 
 
 /*
@@ -1246,6 +1353,70 @@ void mul_4_m3d(vbg *R, vbg *A, vbg *B)
 
 
 
+inline void m3d_mul_zero(m3d_t * a)
+{
+	
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+		  a->rows[i][j].units = 0;
+		  a->rows[i][j].sign  = 0;
+		  
+		
+		}
+	
+	}
+
+}
+
+
+inline void m3d_mul_two(m3d_t * a, const m3d_t * b)
+{
+	int i, j;
+	for(i = 0; i < a->nrows; i++)
+	{
+		for(j = 0; j < a->ncols; j++)
+		{
+		  a->rows[i][j].units = ~(b->rows[i][j].units) && b->rows[i][j].sign ;
+		
+		  
+		
+		}
+	
+	}
+
+
+}
+
+
+m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B)
+{
+	
+
+    if(C == NULL)
+    { 
+      C = m3d_create( B->ncols, B->nrows);
+    }
+    
+    else if(C->nrows != B->nrows || C->ncols !=  B->ncols)
+    {
+    	m1ri_die("m3d_mul_scalar: C has wrong dimensions!\n");
+    
+    }
+    
+	long m = a%3;
+	switch(m)
+	{
+		case 0: m3d_mul_zero(C);
+			break ;
+  		case 2: m3d_mul_two(C, B);
+			break ;
+  	}
+  
+  return C;
+}
 
 
 
