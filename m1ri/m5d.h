@@ -519,6 +519,15 @@ m5d_t *  m5d_concat( m5d_t * , m5d_t * );
 */
 m5d_t  * m5d_stack(m5d_t * ,const   m5d_t * , const m5d_t * );
  
+ 
+ /** 
+    
+    \brief find if the input Matrix is 0
+    \param a input matrix, must NOT be NULL
+ 	\
+ 	\returns 1 if zero, else 0
+ 	
+*/
 int m5d_is_zero(const m5d_t *);
  /**
  \Brief Return a scalar product of the input Matrix B, return result to C
@@ -528,6 +537,16 @@ int m5d_is_zero(const m5d_t *);
  */
 m5d_t *m5d_mul_scalar(m5d_t *, const long , const m5d_t *);
 
+ /**
+ \Brief Row A[ar] = A[ar] + B[ar] after the startcol.
+ \param A Matrix to return, can NOT be null
+ \param ar Row to sum of Matrix A
+ \param B Matrix remains unchanged
+ \param br Row to add to sum of Matrix A
+ \pram  startcol column to start adding the row
+ \
+ */
+void m5d_add_row(m5d_t *, rci_t , const m5d_t *, rci_t , rci_t );
 
  
  

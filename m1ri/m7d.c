@@ -1463,6 +1463,14 @@ void  m7d_transpose(m7d_t   * a)
 
 int m7d_is_zero(const m7d_t *A)
 {
+
+	if(A == NULL)
+	{
+	
+		m1ri_die("m7d_is_zero: A cannot be null!\n");
+
+	
+	}
 	int i, j;
 
 	for(i = 0; i < (A->width ); i++)
@@ -1514,7 +1522,9 @@ inline void m7d_mul_two(m7d_t *a, const m7d_t * b)
 	{
 		for(j = 0; j < a->ncols; j++)
 		{
-		//  a->rows[i][j].units =   ;
+		
+		
+			a->rows[i][j] = vtri_mul_2(b->rows[i][j]);
 		
 		  
 		
@@ -1533,9 +1543,8 @@ inline void m7d_mul_three(m7d_t *a, const m7d_t * b)
 	{
 		for(j = 0; j < a->ncols; j++)
 		{
-		//  a->rows[i][j].units =   ;
 		
-		  
+			a->rows[i][j] = vtri_mul_3(b->rows[i][j]);		  
 		
 		}
 	
@@ -1552,8 +1561,9 @@ inline void m7d_mul_fourth(m7d_t *a, const m7d_t * b)
 	{
 		for(j = 0; j < a->ncols; j++)
 		{
-		\
-		
+
+		  	a->rows[i][j] = vtri_mul_4(b->rows[i][j]);
+			
 		  
 		
 		}
@@ -1571,7 +1581,7 @@ inline void m7d_mul_five(m7d_t *a, const m7d_t * b)
 	{
 		for(j = 0; j < a->ncols; j++)
 		{
-		//  a->rows[i][j].units =   ;
+			a->rows[i][j] = vtri_mul_5(b->rows[i][j]);
 		
 		  
 		
@@ -1631,5 +1641,19 @@ m7d_t *m7d_mul_scalar(m7d_t *C, const long a, const m7d_t *B)
   	}	
   
   return C;
+}
+
+
+void m7d_add_row(m7d_t *A, rci_t ar, const m7d_t *B, rci_t br, rci_t start_col)
+{
+	rci_t s_width = startcol/M1RI_RADIX;
+	if(startcol%64 != 0)
+	{
+		vbg temp = A->row[ar][s_width].units + 
+	
+	
+	}
+		
+
 }
 

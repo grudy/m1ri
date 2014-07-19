@@ -1006,6 +1006,13 @@ m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lo
 
 int m3d_is_zero(const m3d_t *A)
 {
+	if(A == NULL)
+	{
+	
+		m1ri_die("m3d_is_zero: A cannot be null!\n");
+
+	
+	}
 	int i, j;
 
 	for(i = 0; i < (A->width ); i++)
@@ -1418,6 +1425,10 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B)
   return C;
 }
 
+
+
+
+void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col);
 
 
 

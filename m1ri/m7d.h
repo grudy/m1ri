@@ -405,6 +405,21 @@ int m7d_is_zero(const m7d_t *);
  \param a Scalar
  \param B Matrix to Multiply
  */
+ 
 m7d_t *m7d_mul_scalar(m7d_t *, const long , const m7d_t *);
+
+
+ /**
+ \Brief Row A[ar] = A[ar] + B[ar] after the startcol.
+ \param A Matrix to return, can NOT be null
+ \param ar Row to sum of Matrix A
+ \param B Matrix remains unchanged
+ \param br Row to add to sum of Matrix A
+ \pram  startcol column to start adding the row
+ \
+ */
+void m7d_add_row(m7d_t *, rci_t , const m7d_t *, rci_t , rci_t );
+
+ 
 
 #endif

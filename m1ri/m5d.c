@@ -1489,6 +1489,13 @@ void  m5d_transpose(m5d_t   * a)
 
 int m5d_is_zero(const m5d_t *A)
 {
+	if(A == NULL)
+	{
+	
+		m1ri_die("m5d_is_zero: A cannot be null!\n");
+
+	
+	}
 	int i, j;
 
 	for(i = 0; i < (A->width ); i++)
@@ -1531,7 +1538,6 @@ inline void m5d_mul_zero(m5d_t * a)
 inline void m5d_mul_two(m5d_t * a, const m5d_t * b)
 {
 	int i, j;
-	vec temp;
 	for(i = 0; i < a->nrows; i++)
 	{
 		for(j = 0; j < a->ncols; j++)
@@ -1552,7 +1558,6 @@ inline void m5d_mul_two(m5d_t * a, const m5d_t * b)
 inline void m5d_mul_three(m5d_t * a, const m5d_t * b)
 {
 	int i, j;
-	vec;
 	for(i = 0; i < a->nrows; i++)
 	{
 		for(j = 0; j < a->ncols; j++)
@@ -1617,3 +1622,16 @@ m5d_t *m5d_mul_scalar(m5d_t *C, const long a, const m5d_t *B)
   
   return C;
 }
+
+
+void m5d_add_row(m5d_t *A, rci_t ar, const m5d_t *B, rci_t br, rci_t start_col)
+{
+
+
+}
+
+
+
+
+
+

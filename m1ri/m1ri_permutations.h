@@ -225,7 +225,35 @@ void m7d_apply_p_right_even_capped(m7d_t *, m7p_t const *, rci_t , rci_t );
  */
 
 void m3d_apply_p_right_trans_even_capped(m3d_t *, m3p_t const *, rci_t , rci_t );
+
+/**
+ * Apply the permutation P^T to A from the right starting at start_row.
+ *
+ * This is equivalent to column swaps walking from 0 to length-1.
+ *
+ * \param A Matrix.
+ * \param P Permutation.
+ * \param start_row Start swapping at this row.
+ * \param start_col Start swapping at this column.
+ *
+ * \wordoffset
+ */
+ 
 void m5d_apply_p_right_trans_even_capped(m5d_t *, m5p_t const *, rci_t , rci_t );
+
+/**
+ * Apply the permutation P^T to A from the right starting at start_row.
+ *
+ * This is equivalent to column swaps walking from 0 to length-1.
+ *
+ * \param A Matrix.
+ * \param P Permutation.
+ * \param start_row Start swapping at this row.
+ * \param start_col Start swapping at this column.
+ *
+ * \wordoffset
+ */
+
 void m7d_apply_p_right_trans_even_capped(m7d_t *, m7p_t const *, rci_t , rci_t );
 
 
@@ -239,7 +267,28 @@ void m7d_apply_p_right_trans_even_capped(m7d_t *, m7p_t const *, rci_t , rci_t )
  */
 
 void m3d_apply_p_right_trans(m3d_t *, m3p_t const *);
+
+
+/**
+ * Apply the permutation matrix P to A from the right but transpose P before.
+ *
+ * This is equivalent to column swaps walking from 0 to length-1.
+ *
+ * \param A Matrix.
+ * \param P Permutation.
+ */
+ 
 void m5d_apply_p_right_trans(m5d_t *, m5p_t const *);
+
+/**
+ * Apply the permutation matrix P to A from the right but transpose P before.
+ *
+ * This is equivalent to column swaps walking from 0 to length-1.
+ *
+ * \param A Matrix.
+ * \param P Permutation.
+ */
+ 
 void m7d_apply_p_right_trans(m7d_t *, m7p_t const *);
 
 
@@ -272,7 +321,32 @@ void  m7d_apply_p_right_trans_tri(m3d_t *, m3p_t const *);
  */
 
 void _m3d_compress_l(m3d_t *, rci_t r1, rci_t n1, rci_t r2);
+
+
+/**
+ * Compresses the matrix L in a step in blockwise-recursive PLE
+ * decomposition.
+ *
+ * \param A Matrix.
+ * \param r1 Rank of left matrix.
+ * \param n1 Column cut which separates left and right matrix.
+ * \param r2 Rank of right matrix.
+ */
+
 void _m5d_compress_l(m5d_t *, rci_t r1, rci_t n1, rci_t r2);
+
+
+
+/**
+ * Compresses the matrix L in a step in blockwise-recursive PLE
+ * decomposition.
+ *
+ * \param A Matrix.
+ * \param r1 Rank of left matrix.
+ * \param n1 Column cut which separates left and right matrix.
+ * \param r2 Rank of right matrix.
+ */
+
 void _m7d_compress_l(m7d_t *, rci_t r1, rci_t n1, rci_t r2);
 
 

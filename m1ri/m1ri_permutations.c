@@ -409,18 +409,6 @@ void m7d_apply_p_right_even_capped(m7d_t *A, m7p_t const *P, rci_t start_row, rc
   
 }
 
-/**
- * Apply the permutation P^T to A from the right starting at start_row.
- *
- * This is equivalent to column swaps walking from 0 to length-1.
- *
- * \param A Matrix.
- * \param P Permutation.
- * \param start_row Start swapping at this row.
- * \param start_col Start swapping at this column.
- *
- * \wordoffset
- */
 
 void m3d_apply_p_right_trans_even_capped(m3d_t *A, m3p_t const *P, rci_t start_row, rci_t start_col)
 {
@@ -501,45 +489,18 @@ void m7d_apply_p_right_trans(m7d_t *A, m7p_t const *P)
 
 
 
-
-/**
- * Apply the permutation P to A from the right, but only on the upper
- * the matrix A above the main diagonal.
- *
- * This is equivalent to column swaps walking from length-1 to 0.
- *
- * \param A Matrix.
- * \param Q Permutation.
- */
 void  m3d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 {
         
 }
 
 
-/**
- * Apply the permutation P to A from the right, but only on the upper
- * the matrix A above the main diagonal.
- *
- * This is equivalent to column swaps walking from length-1 to 0.
- *
- * \param A Matrix.
- * \param Q Permutation.
- */
+
 void  m5d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 {
 
 }
 
-/**
- * Apply the permutation P to A from the right, but only on the upper
- * the matrix A above the main diagonal.
- *
- * This is equivalent to column swaps walking from length-1 to 0.
- *
- * \param A Matrix.
- * \param Q Permutation.
- */
 void  m7d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 {
 
@@ -548,15 +509,6 @@ void  m7d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 
 
 
-/**
- * Compresses the matrix L in a step in blockwise-recursive PLE
- * decomposition.
- *
- * \param A Matrix.
- * \param r1 Rank of left matrix.
- * \param n1 Column cut which separates left and right matrix.
- * \param r2 Rank of right matrix.
- */
 
 void _m3d_compress_l(m3d_t *A, rci_t r1, rci_t n1, rci_t r2)
 {

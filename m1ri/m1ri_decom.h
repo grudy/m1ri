@@ -30,10 +30,8 @@
 
 
 /**
-Solves L X = B with X and B matrices and L upper triangular
-
-
-   X replaces B
+	\brief Solves L X = B with X and B matrices and L upper triangular
+	\ X replaces B
 */
 void m3d_upper_triangular(m3d_t * L, m3d_t B);
 void m5d_upper_triangular(m5d_t * L, m5d_t B);

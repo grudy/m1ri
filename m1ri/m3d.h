@@ -375,10 +375,6 @@ vbg sub_m3dr(vbg , vbg );
  matrix r = (direct sum matrix r + matrix x)
  ******************************/
  
-/* void iadd_vbg(vbg *,vbg  *); */
-
-/* void isub_m3d(vbg *,vbg  *); */
-
 
 
 void  vbg_mul( vbg *, vbg  *, vbg  *);             /* multiply matrix x by y assinging the output to r */
@@ -461,6 +457,18 @@ m3d_t * m3d_submatrix(m3d_t *, const m3d_t *, const rci_t , const rci_t , const 
  */
 m3d_t *m3d_mul_scalar(m3d_t *, const long , const m3d_t *);
 
+
+
+ /**
+ \Brief Row A[ar] = A[ar] + B[ar] after the startcol.
+ \param A Matrix to return, can NOT be null
+ \param ar Row to sum of Matrix A
+ \param B Matrix remains unchanged
+ \param br Row to add to sum of Matrix A
+ \pram  startcol column to start adding the row
+ \
+ */
+void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col);
 
 
 int m3d_is_zero(const m3d_t *);

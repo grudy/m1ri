@@ -118,13 +118,19 @@ static inline void m1ri_free(void * val) {
 }
 
 /** 
- For testing if windowed
+ \brief For testing if windowed
  */
 static u_int8_t const iswindowed = 0x1; 
+
 static u_int8_t const notwindowed = 0x2;
 
 
-
+/** 
+ \brief Wrapper for rand
+ \param a u_int64_t 
+ \
+ \Made for working on 64 bit variables "vecs" 
+ */
 static inline u_int64_t  m1ri_rand() {
   assert(RAND_MAX >= ((1ULL<<25)-1));
   u_int64_t randomword = random();
