@@ -37,6 +37,7 @@ int main(int argc, const char * argv[])
 	b = m3d_submatrix(b, a, 0, 0, 64, 64 );
 	m3d_print(a);
 	m3d_print(b);
+	
 	return 0;
     
     

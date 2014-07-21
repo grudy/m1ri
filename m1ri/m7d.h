@@ -242,8 +242,40 @@ void vtri_negate( vtri * );
 /** *****************************
  matrix r = (direct sum matrix r + matrix x)
  ******************************/
-void add_vtri(vtri *, vtri * , vtri *);
 
+static inline void add_vtri(vtri * r, vtri * x, vtri * y)
+
+{
+    
+    
+    /*
+    s3s2s1s0 ← add(a2a1a0, b2b1b0)
+    r2r1r0 ← add(s2s1s0, s3)
+
+    */
+    vec s;
+    vec t;
+    
+    r->units = x->units ^ y->units;
+
+    s = (x->units & y->units);
+    r->middle = s^ x->middle ^ y->middle;
+    t = ((s) & (x->middle | y->middle)) | (x->middle & y->middle);
+    r->sign = x->sign ^ y->sign ^ t;
+    /* to here I know is right */
+    
+    
+    s = ((t) & (x->sign | y->sign)) | (x->sign & y->sign);
+    
+    t = s & r->units;
+    r->units = s ^ r->units;
+    s= t & r->middle;
+    r->middle = r->middle ^ t;
+    r->sign = r->sign | s;
+
+    
+    
+}
 
 
 void m7d_sub_i(vtri  *, vtri *);
@@ -291,8 +323,10 @@ vtri sub_m7dr(vtri const x, vtri const y);
 	GF(7) Addition on a single M1RI word.
 */
 m7d_t * m7d_add( m7d_t *, const m7d_t *,const  m7d_t *);
-void m7d_add_2r(vtri *, vtri *);
-void m7d_add_4r( vtri *, vtri *);
+
+static inline void m7d_add_2r(vtri *, vtri *);
+
+static void m7d_add_4r( vtri *, vtri *);
 
 
 
@@ -366,6 +400,8 @@ void m7d_colswap(m7d_t *, rci_t , rci_t);
 */
 void m7d_colswap_capped_row(m7d_t *, rci_t , rci_t, rci_t );
 
+
+
 int m7d_cmp(m7d_t *A, m7d_t *B);
 
 
@@ -395,6 +431,15 @@ m7d_t *  m7d_concat( m7d_t * , m7d_t * );
 */
 m7d_t  * m7d_stack(m7d_t * ,const   m7d_t * , const m7d_t * );
  
+ 
+/** 
+    
+    \brief find if the input Matrix is 0
+    \param a input matrix, must NOT be NULL
+ 	\
+ 	\returns 1 if zero, else 0
+ 	
+*/ 
 int m7d_is_zero(const m7d_t *);
 
 

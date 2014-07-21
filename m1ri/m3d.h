@@ -393,7 +393,7 @@ m3d_t *  m3d_sub(m3d_t *,   const  m3d_t  *, const m3d_t  *);
 /**
 	Return the value of the matrix multiplied
 */
-vbg vbg_mul_i(vbg const , vbg const);
+vbg vbg_mul_elementwise(vbg const , vbg const);
 
 /** 
 
@@ -409,12 +409,37 @@ m3d_t * m3d_hadamard(m3d_t * , m3d_t const * , m3d_t const * );
 
 
 
-/** * * * * * * * * * * * * * * * * * * * *
- Subtract a 1 kilobyte Matrix from another
- 1 kilobyte Matrixhgg
- * * * * * * * * * * * * * * * * * * * * */
+/** 
+ \brief Optimized subtract for  64 * 64 matrix
+ * \param R = minuend
+ * \param A = subtrahend
+ * \param B = difference
+*/
 
-void m3d_sub_64(vbg ** , vbg  ** , vbg  ** );
+static inline void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
+{
+    int i;
+    for (i= 0; i < M1RI_RADIX; i++ )
+    {
+        R[i][0] = sub_m3dr(A[i][0], B[i][0]);
+    }
+    
+}
+
+/** 
+	\brief, base case for multiplication
+*/
+static inline vbg add_m3dr(vbg  x, vbg const y)
+{ 
+    vec t;
+    x.sign  = y.units ^ x.sign;
+    t = (x.sign & x.units) ^ y.sign;
+    x.units = (y.units ^ x.units) |  t;
+    x.sign = t & x.sign;
+    return x; 
+}
+
+
 
 /** * * * * * * * * * * * * * * * * * * * * * *
  Add a 1 kilobyte Matrix from another
@@ -427,8 +452,15 @@ void m3d_sub_64(vbg ** , vbg  ** , vbg  ** );
  \param B = Matrix to Sum
  \Assumes there are 64 values, doesn't check
 */
-void m3d_add_64(vbg **, vbg   **  , vbg    **  );
+static inline void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
+{
+    int i;
+    for (i = 0; i < M1RI_RADIX; i++ )
+    {
+        R[i][0] = add_m3dr(A[i][0], B[i][0]);
+    }
 
+}
  /**
  \Brief Add matrix a + b = c
  \param c  Where sum is written, may be Null 
@@ -470,7 +502,14 @@ m3d_t *m3d_mul_scalar(m3d_t *, const long , const m3d_t *);
  */
 void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col);
 
-
+ /** 
+    
+    \brief find if the input Matrix is 0
+    \param a input matrix, must NOT be NULL
+ 	\
+ 	\returns 1 if zero, else 0
+ 	
+*/
 int m3d_is_zero(const m3d_t *);
 
 

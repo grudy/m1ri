@@ -365,39 +365,6 @@ void m7d_free( m7d_t *  tofree)
 }
 
 
-void add_vtri(vtri * r, vtri * x, vtri * y)
-
-{
-    
-    
-    /*
-    s3s2s1s0 ← add(a2a1a0, b2b1b0)
-    r2r1r0 ← add(s2s1s0, s3)
-
-    */
-    vec s;
-    vec t;
-    
-    r->units = x->units ^ y->units;
-
-    s = (x->units & y->units);
-    r->middle = s^ x->middle ^ y->middle;
-    t = ((s) & (x->middle | y->middle)) | (x->middle & y->middle);
-    r->sign = x->sign ^ y->sign ^ t;
-    /* to here I know is right */
-    
-    
-    s = ((t) & (x->sign | y->sign)) | (x->sign & y->sign);
-    
-    t = s & r->units;
-    r->units = s ^ r->units;
-    s= t & r->middle;
-    r->middle = r->middle ^ t;
-    r->sign = r->sign | s;
-
-    
-    
-}
 
 void m7d_vtri_sub(vtri * r ,vtri * x, vtri * y)
 {
@@ -1646,10 +1613,10 @@ m7d_t *m7d_mul_scalar(m7d_t *C, const long a, const m7d_t *B)
 
 void m7d_add_row(m7d_t *A, rci_t ar, const m7d_t *B, rci_t br, rci_t start_col)
 {
-	rci_t s_width = startcol/M1RI_RADIX;
-	if(startcol%64 != 0)
+	rci_t s_width = start_col/M1RI_RADIX;
+	if(start_col%64 != 0)
 	{
-		vbg temp = A->row[ar][s_width].units + 
+		add_vtri(A->rows[ar] + s_width, A->rows[ar]+ s_width, B->rows[ar] + s_width);
 	
 	
 	}

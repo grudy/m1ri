@@ -701,18 +701,6 @@ static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 }
 
-/** 
-
-*/
-static inline vbg add_m3dr(vbg  x, vbg const y)
-{ 
-    vec t;
-    x.sign  = y.units ^ x.sign;
-    t = (x.sign & x.units) ^ y.sign;
-    x.units = (y.units ^ x.units) |  t;
-    x.sign = t & x.sign;
-    return x; 
-}
 
 
 
@@ -825,27 +813,9 @@ m3d_t * m3d_hadamard(m3d_t * c, m3d_t const *  a, m3d_t const *  b)
 }
 
 
-void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
-{
-    int i;
-    for (i= 0; i < M1RI_RADIX; i++ )
-    {
-        R[i][0] = sub_m3dr(A[i][0], B[i][0]);
-    }
-    
-}
-/**
-	Adds two 64 by 64 m3d_t matrices
-*/
-void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
-{
-    int i;
-    for (i = 0; i < M1RI_RADIX; i++ )
-    {
-        R[i][0] = add_m3dr(A[i][0], B[i][0]);
-    }
 
-}
+
+
 
 
 
@@ -1428,7 +1398,13 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B)
 
 
 
-void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col);
+void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col)
+{
+
+
+
+}
+
 
 
 
