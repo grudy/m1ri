@@ -200,7 +200,7 @@ m3d_t *  m3d_create(  rci_t , rci_t );
  * \
  * \wordoffset
  */
-m3d_t m3d_rand(m3d_t * );
+void m3d_rand(m3d_t * );
 
 /** 
  \brief Make an Identity Matrix times a scalar 'length'
@@ -427,7 +427,10 @@ static inline void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
 }
 
 /** 
-	\brief, base case for multiplication
+	\brief, addition base case
+	\param x augend
+	param  y addend
+	\return x as sum
 */
 static inline vbg add_m3dr(vbg  x, vbg const y)
 { 
@@ -511,6 +514,28 @@ void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col);
  	
 */
 int m3d_is_zero(const m3d_t *);
+
+static inline void m3d_set_zero(m3d_t * a)
+{
+  if(a == NULL)
+  {
+  	  m1ri_die("m3d_set_zero: bad argument to m3d_set_zero\n");
+
+  
+  }
+  for(int i = 0; i < a->nrows; i++)
+  {
+    for(int j = 0; j < a->width; j++)
+    {
+       a->rows[i][j].units = 0;
+       a->rows[i][j].sign = 0;
+    }
+  
+  }
+
+}
+
+
 
 
 /** **************************************************

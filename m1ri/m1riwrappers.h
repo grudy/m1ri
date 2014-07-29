@@ -110,7 +110,8 @@ static inline void * m1ri_realloc(void * val, size_t size) {
 }
 
 /** 
- Releases a value into the wilderness
+ \Releases a value into the wilderness
+ \param val pointer to be freed
 */
 
 static inline void m1ri_free(void * val) {
@@ -127,7 +128,6 @@ static u_int8_t const notwindowed = 0x2;
 
 /** 
  \brief Wrapper for rand
- \param a u_int64_t 
  \
  \Made for working on 64 bit variables "vecs" 
  */

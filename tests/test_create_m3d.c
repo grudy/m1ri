@@ -29,14 +29,209 @@
 
 int main(int argc, const char * argv[])
 {
- 	
- 
-	m3d_t * a, * b;
-	a  = m3d_create(128, 128);
+ 	m3d_t * a, *b, *c, *d, *e;	
+ 	m3_slice  * z;
+	
+	a = m3d_identity(a, 64);
+	b = m3d_identity(b, 64);	
+	
+	
+	if(a != b)
+	{
+	  printf("\nEquality test failed  on equal 64 by 64  matrices \n");
+	}
+	printf("Equality test passed on equal 64 by 64  matrices");
+	
+	m3d_free(a);
+	m3d_free(b);
+	
+	a = m3d_identity(a,256);
+	b = m3d_identity(b,256);	
+	
+	
+	if(a != b)
+	{
+	  printf("\nEquality test failed  on  equal 256 by 256 matrices \n");
+	}
+	printf("Equality test passed on equal 256 by 256 matrices");
+	
+	
+	m3d_free(a);
+	m3d_free(b);
+	
+		
+	//a = m3d_create(
+	
+		
+	//m3d_copy(m3d_t  * , m3d_t const * );
+
+	
+	
+	 a = m3d_create(256, 256);
+	 
+	 z = m3d_quarter(a);
+	  
+  	b = m3d_concat(z->row[0], z->row[1]);
+  	c = m3d_concat( z->row[2], z->row[3]);
+  
+  	d = m3d_stack(d,  b, c);
+  	
+
+  if(!m3d_equal(a, d))
+  {
+     printf("\n a and d not equal, \n m3d_stack and m3d_concat test failed \n");
+  	 return 1;
+  }
+	printf("\n Test of m3d_stack and m3d_concat passed \n");
+	
+	m3d_free(a);
+	m3d_free(b);
+	m3d_free(c);
+	m3d_free(d);
+	
+	a = m3d_create(64, 64);
+	b = m3d_create(64, 64);
+	m3d_set_ui(a, 2);
+	m3d_set_ui(b, 1);
+	
+  	if(m3d_equal(a, b))
+  	{
+     	printf("\n  identity matrix and scalar of the identity matrix have equal values \n");
+  		 return 1;
+ 	}
+  	m3d_free(a);
+	m3d_free(b);
+	
+	
+	
+	
+	
+	
+	a = m3d_create(128, 128);
 	m3d_rand(a);
-	b = m3d_submatrix(b, a, 0, 0, 64, 64 );
-	m3d_print(a);
-	m3d_print(b);
+	b = NULL;
+
+	
+	
+	
+	 
+	 
+	
+	
+/*
+	m3d_rowswap (m3d_t  * , rci_t , rci_t );
+
+	m3d_colswap(m3d_t *, rci_t , rci_t );
+	
+	
+	void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
+
+	
+
+	
+	
+
+	
+	void m3d_set_ui(m3d_t *A,unsigned int );
+	
+	
+	m3d_t  *  m3d_identity(m3d_t  *, rci_t );
+	
+	
+	m3d_t *    m3d_init_window(const m3d_t  *, rci_t , rci_t , rci_t , rci_t );
+	
+
+	
+	
+
+	
+	
+	
+	
+	
+	void  m3d_slices(m3_slice *  ,const m3d_t * , wi_t );
+	
+	
+	
+	
+	 
+	m3_slice *  m3d_quarter( const m3d_t * );
+	
+	
+	m3d_t  * m3d_transpose_sliced(m3d_t * );
+	
+	
+	void  m3d_colswap_capped_row(m3d_t *, rci_t , rci_t, rci_t );
+	
+	
+	
+	int m3d_cmp(m3d_t *A, m3d_t *B);
+	
+	
+	void vbg_negation(vbg * );
+	
+	
+	void sub_m3d( vbg *, vbg const *  , vbg const * );       
+	
+	
+	
+	vbg sub_m3dr(vbg , vbg );               
+	
+	
+	
+	
+	void  vbg_mul( vbg *, vbg  *, vbg  *);      
+	
+	
+	m3d_t *  m3d_sub(m3d_t *,   const  m3d_t  *, const m3d_t  *);
+	
+	
+	vbg vbg_mul_elementwise(vbg const , vbg const);
+	
+	
+	m3d_t * m3d_hadamard(m3d_t * , m3d_t const * , m3d_t const * );
+	
+	
+	
+	static inline void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
+	{
+	    int i;
+	    for (i= 0; i < M1RI_RADIX; i++ )
+	    {
+	        R[i][0] = sub_m3dr(A[i][0], B[i][0]);
+	    }
+	    
+	}
+	
+	static inline vbg add_m3dr(vbg  x, vbg const y)
+	{ 
+	    vec t;
+	    x.sign  = y.units ^ x.sign;
+	    t = (x.sign & x.units) ^ y.sign;
+	    x.units = (y.units ^ x.units) |  t;
+	    x.sign = t & x.sign;
+	    return x; 
+	}
+	
+	
+	
+	
+
+
+	m3d_t  * m3d_add(m3d_t *, const m3d_t  *,const  m3d_t  *);
+
+
+
+
+	m3d_t *m3d_mul_scalar(m3d_t *, const long , const m3d_t *);
+
+
+
+	void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col);
+
+	int m3d_is_zero(const m3d_t *);
+
+*/
 	
 	return 0;
     

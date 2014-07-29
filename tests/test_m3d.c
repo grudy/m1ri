@@ -47,7 +47,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   m3d_print(s->row[2]);
   m3d_print(s->row[3]);
 
-  printf("\n\n s done \n");
+ 
   ab = m3d_concat(s->row[0], s->row[1]);
   cd = m3d_concat( s->row[2], s->row[3]);
   
@@ -66,8 +66,8 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   m3d_print(o);
   if(!m3d_equal(o, abcd))
   {
-     printf("\n o and abcd not equal \n");
-  
+     printf("\n o and abcd not equal, stack and concat test failed \n");
+  	 return 1;
   }
   
   v = m3d_create( 4, 4);

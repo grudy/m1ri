@@ -31,43 +31,80 @@
 #include <m1ri/m7d.h>
 #include <m1ri/m1ri_io.h>
 
-/**
-  Strassen  algorithm on an m3d_t	
-*/
-
 
 /**
-	Recursive Matrix Multiplication over GF(3), on a square matrix.
+	\brief Strassen Matrix Multiplication over GF(3), on a matrix.
+	\param c product matrix, may be null
+	\param b multiplicand matrix, must not be null
+	\param a multiplier matrix, must not be null 	
+	\	
+	\	c = a * b
+	
 */
+
 m3d_t *  m3d_strassen(m3d_t *, const m3d_t *,const m3d_t*);
-/**
-	This handles the arithmetic of m3d_strassen
-*/
 
 
 /**
-	Recursive Matrix Multiplication over GF(5), on a square matrix.
+	\brief Strassen Matrix Multiplication over GF(3), on a matrix.
+	\param c product matrix, may be null
+	\param b multiplicand matrix, must not be null
+	\param a multiplier matrix, must not be null 	
+	\	
+	\	c = a * b
 */
+
 m5d_t *  m5d_strassen(m5d_t * ,const m5d_t *, const m5d_t *);
-/**
-	This handles the arithmetic of m5d_strassen
 
-	Strassen  algorithm on an m7d_t
+
+/**
+	\brief Strassen Matrix Multiplication over GF(3), on a matrix.
+	\param c product matrix, may be null
+	\param b multiplicand matrix, must not be null
+	\param a multiplier matrix, must not be null 	
+	\	
+	\	c = a * b
+	
 */
 m7d_t *  m7d_strassen(m7d_t * ,const m7d_t *, const m7d_t *);
 
 
 
-/* void m3d_mul_naive_square(m3d_t *, m3d_t  * , m3d_t  *); */
+/**
+	\brief Classical Matrix Multiplication over GF(3), on a matrix.
+	\param c product matrix, may be null
+	\param b multiplicand matrix, must not be null
+	\param a multiplier matrix, must not be null 	
+	\	
+	\	c = a * b
+	
+*/
+
+m3d_t *  m3d_classic_mul(m3d_t *,const   m3d_t  * , const m3d_t  *);
+
+/**
+	\brief Classical Matrix Multiplication over GF(5), on a matrix.
+	\param c product matrix, may be null
+	\param b multiplicand matrix, must not be null
+	\param a multiplier matrix, must not be null 	
+	\	
+	\	c = a * b
+	
+*/
+
+m5d_t *  m5d_classic_mul(m5d_t *, const m5d_t  * , const m5d_t  *);
 
 
 /**
-
+	\brief Classical Matrix Multiplication over GF(7), on a matrix.
+	\param c product matrix, may be null
+	\param b multiplicand matrix, must not be null
+	\param a multiplier matrix, must not be null 	
+	\	
+	\	c = a * b
+	
 */
-m3d_t *  m3d_classic_mul(m3d_t *,const   m3d_t  * , const m3d_t  *);
-/* void m5d_mul_naive_square(m5d_t *, m5d_t  * , m5d_t  *); */
-m5d_t *  m5d_classic_mul(m5d_t *, const m5d_t  * , const m5d_t  *);
-/* void m7d_mul_naive_square(m7d_t *, m7d_t  * , m7d_t  *); */
+
 m7d_t *  m7d_classic_mul(m7d_t *, const  m7d_t  * , const m7d_t  *);
 
 #endif

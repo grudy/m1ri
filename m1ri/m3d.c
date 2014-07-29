@@ -206,7 +206,7 @@ m3d_t * m3d_create( rci_t nrows, rci_t ncols)
     return a;
     
 }
-m3d_t  m3d_rand(m3d_t * a)
+void  m3d_rand(m3d_t * a)
 {
     int i,  z;
     for(i = 0; i < (a->nrows); i++)
@@ -222,7 +222,7 @@ m3d_t  m3d_rand(m3d_t * a)
     
     }
     
-    return *a;    
+   
 }
 
 
@@ -252,11 +252,12 @@ m3d_t * m3d_transposewin(const m3d_t  *a )
 }
 
                                                                                         
-void m3d_set_ui(m3d_t * a, unsigned int length)
+static inline void m3d_set_one_ui(m3d_t * a)
 
 {
 
     if(a->ncols == a->nrows)
+    
     {
         int k,i, j,l;
         for( i = 1; i < (a->width ) ; ++i)
@@ -304,6 +305,85 @@ void m3d_set_ui(m3d_t * a, unsigned int length)
 
 }
 
+
+
+static inline void m3d_set_two_ui(m3d_t * a)
+
+{
+
+    if(a->ncols == a->nrows)
+    
+    {
+        int k,i, j,l;
+        for( i = 1; i < (a->width ) ; ++i)
+        {
+            l = ((i - 1) * M1RI_RADIX);
+            j = i - 1;
+            for ( k = 0 ; k < M1RI_RADIX; k++)
+            {
+                
+              a->rows[l][j].units = (leftbit)>>k;
+              a->rows[l][j].sign = (leftbit)>>k;
+              l++;
+                
+            }
+            
+        }
+        
+        if((a->ncols%M1RI_RADIX) != 0)
+        {
+            l = a->ncols %M1RI_RADIX;
+            k = ((a->width -1) * M1RI_RADIX);
+            l = M1RI_RADIX - l;
+            for(i = 0; i < (M1RI_RADIX - l); i++)
+            {
+                
+              a->rows[k + i][a->width-1].units = (leftbit)>>i;
+              a->rows[k + i][a->width-1].sign = (leftbit)>>i;
+            }
+            
+        }
+        if ((a->ncols%64) == 0)
+        {
+            
+            l = (a->width - 1) * 64;
+            for(i = 0; i < 64; i++)
+                
+            {
+              a->rows[l][a->width -1].units = (leftbit)>>i;
+              a->rows[l][a->width -1].sign = (leftbit)>>i;
+                l++;
+                
+            }
+            
+        }
+        
+        
+    }
+
+}
+
+
+void m3d_set_ui(m3d_t * a, unsigned int scalar)
+{
+	unsigned int value = scalar%3;
+	switch(value)
+	{
+		case 0: 
+				m3d_set_zero;
+			break ;
+		case 1:
+				m3d_set_one_ui(a);;
+			break;
+  		case 2: m3d_set_two_ui(a);
+  			break;
+		
+  		
+  	}	
+  
+
+
+}
 
 m3d_t  * m3d_identity(m3d_t  *a, rci_t n)
 {
@@ -501,6 +581,8 @@ void m3d_free( m3d_t *  a)
 { 		
     m1ri_free(a->rows);
     m1ri_free(a->block);
+    a == NULL;
+    
 }
 
 
@@ -902,6 +984,7 @@ m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lo
 	}
   	else
   	{
+
   		S = m3d_create(s_rows, s_cols);
  	}
  	
@@ -915,7 +998,7 @@ m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lo
  		{
  			for(int i = 0; i < s_rows; i++)
  			{
-				memcpy(S->rows[i], M->rows[s_rows + i] + s_width , sizeof(vbg) * (s_cols / M1RI_RADIX));	
+				//memcpy(S->rows[i], M->rows[s_rows + i] + s_width , sizeof(vbg) * (s_cols / M1RI_RADIX));	
  				//check if copies correctly
  			}
  		}
@@ -1400,7 +1483,7 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B)
 
 void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col)
 {
-
+  
 
 
 }
