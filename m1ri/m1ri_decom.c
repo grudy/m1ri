@@ -125,9 +125,11 @@ void m7d_lower_right_triangular(m7d_t const *U, m7d_t *B)
 }
  
  
- /*
+/*
    Invert triangular matrix a
- */
+ 
+*/
+ 
  void m3d_inverse_triangular(m3d_t * a)
 {  
   

@@ -468,6 +468,7 @@ void m3d_apply_p_right_trans(m3d_t *A, m3p_t const *P)
   
   }
 }
+
 void m5d_apply_p_right_trans(m5d_t *A, m5p_t const *P)
 {   
    for(int i = 0; i < P->length; i++)
@@ -478,6 +479,7 @@ void m5d_apply_p_right_trans(m5d_t *A, m5p_t const *P)
   
 
 }
+
 void m7d_apply_p_right_trans(m7d_t *A, m7p_t const *P)
 {
     for(int i = 0; i < P->length; i++)

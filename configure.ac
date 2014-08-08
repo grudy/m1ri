@@ -130,5 +130,7 @@ RELEASE="AC_PACKAGE_VERSION"
 AC_SUBST(RELEASE)
 
 AC_CONFIG_FILES([Makefile m1ri/m1ri_config.h m1ri.pc])
+
+AC_CONFIG_FILES([Makefile bench/Makefile])
 AC_OUTPUT
 

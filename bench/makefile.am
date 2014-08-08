@@ -1,0 +1,24 @@
+
+BENCHCFLAGS = $(AM_CFLAGS)  -I.. @CFLAGS@ -DNDEBUG
+BENCHLIBADD = -lm1ri cpucycles.o
+BENCHLDFLAGS = -Wl,-rpath,../.libs/ ../.libs/libm1rie.so  -Wl
+
+EXTRA_PROGRAMS = bench_multiplication 
+.PHONY: clean dist-clean
+
+cpucycles.o:
+	(cd $(CPUCYCLES_DIR); sh do; mv cpucycles.o ..; mv cpucycles.h ..; cd ../..)
+
+cpucycles.h: cpucycles.o
+
+clean-local:
+	-rm -f cpucycles.h
+	-rm -f $(EXTRA_PROGRAMS)
+
+bench_multiplication_SOURCES=bench_multiplication.c
+bench_multiplication_CFLAGS=${BENCHCFLAGS}
+bench_multiplication_LDFLAGS=${BENCHLDFLAGS} ${BENCHLIBADD}
+
+
+
+bench: cpucycles.o ${EXTRA_PROGRAMS}
