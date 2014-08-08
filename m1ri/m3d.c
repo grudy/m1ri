@@ -996,10 +996,15 @@ m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lo
  		
  		if(s_cols/64 != 0)
  		{
+ 		
  			for(int i = 0; i < s_rows; i++)
  			{
-				//memcpy(S->rows[i], M->rows[s_rows + i] + s_width , sizeof(vbg) * (s_cols / M1RI_RADIX));	
- 				//check if copies correctly
+				
+						for(int m = 0; m <= s_width; m++)
+						{
+								S->rows[i][m].units	= M->rows[i][m].units;
+ 								S->rows[i][m].sign	= M->rows[i][m].sign;
+ 						}				
  			}
  		}
  		

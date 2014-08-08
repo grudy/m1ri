@@ -451,8 +451,8 @@ static inline vbg add_m3dr(vbg  x, vbg const y)
  /**
  \Brief Add a 64 by 64 m3d_t matrix where the 
  \param R = Where sum is written, may be Null 
- \param A = Matrix to Sum
- \param B = Matrix to Sum
+ \param A = augend
+ \param B = addend
  \Assumes there are 64 values, doesn't check
 */
 static inline void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
@@ -467,8 +467,8 @@ static inline void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
  /**
  \Brief Add matrix a + b = c
  \param c  Where sum is written, may be Null 
- \param a  Matrix to Sum
- \param b  Matrix to Sum
+ \param a  augend
+ \param b  addend
  */
 m3d_t  * m3d_add(m3d_t *, const m3d_t  *,const  m3d_t  *);
 

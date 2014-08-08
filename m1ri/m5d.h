@@ -540,9 +540,9 @@ m5d_t *m5d_mul_scalar(m5d_t *, const long , const m5d_t *);
  /**
  \Brief Row A[ar] = A[ar] + B[ar] after the startcol.
  \param A Matrix to return, can NOT be null
- \param ar Row to sum of Matrix A
+ \param ar augend row of of Matrix A
  \param B Matrix remains unchanged
- \param br Row to add to sum of Matrix A
+ \param br  addend Row  of matrix b
  \pram  startcol column to start adding the row
  \
  */

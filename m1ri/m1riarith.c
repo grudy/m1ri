@@ -30,6 +30,13 @@
 #include <omp.h>
 #endif
 
+/*
+  /brief adds two vectors and writes the result to a new vector
+  
+
+*/
+
+
 
 static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 

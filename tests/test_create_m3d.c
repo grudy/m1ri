@@ -63,7 +63,6 @@ int main(int argc, const char * argv[])
 	//a = m3d_create(
 	
 		
-	//m3d_copy(m3d_t  * , m3d_t const * );
 
 	
 	
@@ -110,26 +109,21 @@ int main(int argc, const char * argv[])
 	a = m3d_create(128, 128);
 	m3d_rand(a);
 	b = NULL;
+	c = NULL;
+	d = NULL;
+	b = m3d_submatrix(b, a, 0, 0, 64, 64 );
+	c = m3d_submatrix(c, a, 0, 64, 64, 128);
+	//d = m3d_submatrix
+	m3d_print(c);
+	
+	m3d_free(a);
+	
 
-	
-	
-	
-	 
-	 
-	
-	
-/*
 	m3d_rowswap (m3d_t  * , rci_t , rci_t );
-
 	m3d_colswap(m3d_t *, rci_t , rci_t );
 	
 	
-	void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
-
-	
-
-	
-	
+	//void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
 
 	
 	void m3d_set_ui(m3d_t *A,unsigned int );

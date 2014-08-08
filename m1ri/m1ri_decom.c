@@ -130,7 +130,7 @@ void m7d_lower_right_triangular(m7d_t const *U, m7d_t *B)
  */
  void m3d_inverse_triangular(m3d_t * a)
 {  
-
+  
 
 }
  void m5d_inverse_triangular(m5d_t * a)

@@ -1626,7 +1626,7 @@ m5d_t *m5d_mul_scalar(m5d_t *C, const long a, const m5d_t *B)
 
 void m5d_add_row(m5d_t *A, rci_t ar, const m5d_t *B, rci_t br, rci_t start_col)
 {
-
+  
 
 }
 

@@ -466,10 +466,14 @@ m5d_t *  m5d_strassen(m5d_t *c, m5d_t const  *a, const  m5d_t   *b)
 }
 
 
+
+
 /**
 	This handles the arithmetic of m7d_strassen 
 	
 */
+
+
 void m7d_qrt_mul(m7d_t * c,const m7d_t *   a,const m7d_t *   b )
 {
   	m7d_t * x1;
