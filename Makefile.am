@@ -64,4 +64,8 @@ test_m7d__CFLAGS=$(AM_CFLAGS)
 
 TESTS =  test_arithmetic test_hadamard test_create_m3d test_m3d test_m5d test_m7d 
 
+
+SUBDIRS = . bench
+
 clean-local:
+	(cd tests; make clean; cd ..)

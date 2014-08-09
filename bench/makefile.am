@@ -1,20 +1,30 @@
-
-BENCHCFLAGS = $(AM_CFLAGS)  -I.. @CFLAGS@ -DNDEBUG
-BENCHLIBADD = -lm1ri cpucycles.o
-BENCHLDFLAGS = -Wl,-rpath,../.libs/ ../.libs/libm1rie.so  -Wl
-
-EXTRA_PROGRAMS = bench_multiplication 
-.PHONY: clean dist-clean
-
-
-clean-local:
-	-rm -f cpucycles.h
-	-rm -f $(EXTRA_PROGRAMS)
-
-bench_multiplication_SOURCES=bench_multiplication.c
-bench_multiplication_CFLAGS=${BENCHCFLAGS}
-bench_multiplication_LDFLAGS=${BENCHLDFLAGS} ${BENCHLIBADD}
+CC = gcc -std=cc99
+DEFINES =
+TOPSRCDIR = ..
+CFLAGS = -I$(TOPSRCDIR) -D_XOPEN_SOURCE=600 -g -O2 @CFLAGS@ $(DEFINES) @OPENMP_CFLAGS@
+STAGEDIR := $(realpath -s $(TOPSRCDIR)/.libs)
+LDFLAGS = -L$(STAGEDIR) -Wl,-rpath,$(STAGEDIR) -lm1ri -lm
+PAPI_FLAGS =  
+PAPI_CFLAGS = 
+DEBUG = -gdb
 
 
+	
 
-bench:  ${EXTRA_PROGRAMS}
+
+pkgincludesubdir = $(includedir)/m1ri
+M1RI_HEADERS = ../src/m1ri/m5d.h\
+	../src/m1ri/m3d.h\
+	../src/m7d.h\
+	../src/m1ri_combine.h\
+	 ../src/m1ri_small.h\
+	../src/m1ri_cubes.h\
+	../src/m1ri_strassen.h\
+	.../src/m1riwrappers.h\
+	../src//m1ri_classical.h\
+	../src/m1ri_io.h
+	../src/m1ri_io.h
+	
+	
+distclean: clean
+	@MAINTAINER_MODE_TRUE@ rm -f Makefile

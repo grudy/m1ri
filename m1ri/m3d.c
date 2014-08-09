@@ -438,9 +438,8 @@ m3d_t *    m3d_init_window(const m3d_t *c, const rci_t strow, const rci_t stvbg,
  Concat b on the end of a, the result is c 
  [a] [b] ----->  [a b]   ===  C
  */
- /* This function still needs work*/
  
- m3d_t *  m3d_concat( m3d_t * a, m3d_t * b)
+ m3d_t *  m3d_concat( m3d_concat(m3d_t * c,const   m3d_t * a, const m3d_t * b);
 {
 
     m3d_t * c;

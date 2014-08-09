@@ -251,7 +251,7 @@ m3d_t *    m3d_init_window(const m3d_t  *, rci_t , rci_t , rci_t , rci_t );
     \[b]
  	\
 */
-m3d_t *  m3d_concat( m3d_t * , m3d_t * );
+m3d_t *  m3d_concat(m3d_t * ,const   m3d_t * , const m3d_t * );
 
 /** 
     

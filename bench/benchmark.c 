@@ -1,24 +1,22 @@
-
-BENCHCFLAGS = $(AM_CFLAGS)  -I.. @CFLAGS@ -DNDEBUG
-BENCHLIBADD = -lm1ri cpucycles.o
-BENCHLDFLAGS = -Wl,-rpath,../.libs/ ../.libs/libm1rie.so  -Wl
-
-EXTRA_PROGRAMS = bench_multiplication 
-.PHONY: clean dist-clean
-
-cpucycles.o:
-	(cd $(CPUCYCLES_DIR); sh do; mv cpucycles.o ..; mv cpucycles.h ..; cd ../..)
-
-cpucycles.h: cpucycles.o
-
-clean-local:
-	-rm -f cpucycles.h
-	-rm -f $(EXTRA_PROGRAMS)
-
-bench_multiplication_SOURCES=bench_multiplication.c
-bench_multiplication_CFLAGS=${BENCHCFLAGS}
-bench_multiplication_LDFLAGS=${BENCHLDFLAGS} ${BENCHLIBADD}
-
-
-
-bench: cpucycles.o ${EXTRA_PROGRAMS}
+/** * M1RI
+ TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
+ RUSSIANS OVER LARGER FINITE FIELDS"
+ 
+ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
+ 
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ 
+ benchmark.c
+*/

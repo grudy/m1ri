@@ -44,6 +44,9 @@ else
 fi
 AC_SUBST(m1RI_HAVE_OPENMP)
 
+
+
+
 # SSE2 support
 AC_ARG_ENABLE([sse2],
         AS_HELP_STRING([--disable-sse2], [don't use SSE2 instruction set.]),
@@ -129,8 +132,7 @@ AC_FUNC_REALLOC
 RELEASE="AC_PACKAGE_VERSION"
 AC_SUBST(RELEASE)
 
-AC_CONFIG_FILES([Makefile m1ri/m1ri_config.h m1ri.pc])
+AC_CONFIG_FILES([Makefile  m1ri/m1ri_config.h m1ri.pc bench/Makefile])
 
-AC_CONFIG_FILES([Makefile bench/Makefile])
 AC_OUTPUT
 

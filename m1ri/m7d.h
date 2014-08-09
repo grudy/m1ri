@@ -416,7 +416,7 @@ int m7d_cmp(m7d_t *A, m7d_t *B);
     \[b]
  	\
 */
-m7d_t *  m7d_concat( m7d_t * , m7d_t * );
+m7d_t *  m7d_concat(m3d_t * ,const   m3d_t * , const m3d_t * );
 
 /** 
     
