@@ -20,3 +20,6 @@
  
  benchmark.c
 */
+
+
+#include m1ri.h

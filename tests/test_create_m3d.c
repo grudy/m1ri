@@ -145,10 +145,9 @@ int main(int argc, const char * argv[])
 	m3d_free(e);
 	
 	
-	/*
+	
 	a = m3d_create(128, 128);
 	m3d_rowswap (m3d_t  * , rci_t , rci_t );
-	
 	m3d_colswap(m3d_t *, rci_t , rci_t );
 	
 		
