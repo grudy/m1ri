@@ -141,7 +141,7 @@ vtri m7d_read_elems(m7d_t *M, rci_t  x, rci_t  y, int  n);
 
 
 /**
- \Brief Swap rows in m3d_t 
+ \Brief Swap rows in m7d_t 
  \param M = Matrix to swap rows of
  \param a = first set of rows
  \param b = second set of rows to swap
@@ -383,7 +383,7 @@ m7d_t * m7d_hadamard(m7d_t * ,const m7d_t  * ,const m7d_t  *  );
 
 
 /**
- \Brief Swap columns in m3d_t 
+ \Brief Swap columns in m7d_t 
  \param M = Matrix to swap columns of
  \param a = first set of columns
  \param b = second set of columns to swap
@@ -392,7 +392,7 @@ void m7d_colswap(m7d_t *, rci_t , rci_t);
 
 
 /**
- \Brief Swap columns in m3d_t after a certain row
+ \Brief Swap columns in m7d_t after a certain row
  \param M = Matrix to swap columns of
  \param a = first set of columns
  \param b = second set of columns to swap
@@ -416,7 +416,7 @@ int m7d_cmp(m7d_t *A, m7d_t *B);
     \[b]
  	\
 */
-m7d_t *  m7d_concat(m3d_t * ,const   m3d_t * , const m3d_t * );
+m7d_t *  m7d_concat(m7d_t * ,const   m7d_t * , const m7d_t * );
 
 /** 
     

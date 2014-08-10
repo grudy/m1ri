@@ -504,7 +504,7 @@ int m5d_cmp(m5d_t *A, m5d_t *B);
     \[b]
  	\
 */
-m5d_t *  m5d_concat(m3d_t * ,const   m3d_t * , const m3d_t * );
+m5d_t *  m5d_concat(m5d_t * ,const   m5d_t * , const m5d_t * );
 
 /** 
     

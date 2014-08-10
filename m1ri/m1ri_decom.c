@@ -22,8 +22,7 @@
  
  
  Matrix decompositions
- m1ri_permutations.h
- */
+
 
  m3d_decom.c
  

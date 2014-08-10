@@ -115,16 +115,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	 }   
   
   */
-  slat:
-	563646_692099967468709_1325619765_n.jpg
-	1620689_763960680282637_1778918951_n.jpg
-	tumblr_mll74vb7yd1qhkqndo1_500.jpg
-	tumblr_n5e7mx5DhX1sn7hy3o1_1280.jpg
-	tumblr_n9tkrzsioh1sn7hy3o1_1280.jpg
-	tumblr_n9tkrzsioh1sn7hy3o2_500.jpg
-	tumblr_n9tkrzsioh1sn7hy3o3_500.jpg
-	tumblr_n9tkrzsioh1sn7hy3o4_500.jpg
-	tumblr_n9tkskdDLy1sn7hy3o1_500.jpg
+
 
   
   printf("Classic Multiplication m3d test passed"); 

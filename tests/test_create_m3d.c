@@ -29,7 +29,7 @@
 
 int main(int argc, const char * argv[])
 {
- 	m3d_t * a, *b, *c, *d, *e, *f, *g;	
+ 	m3d_t * a, *b, *c, *d, *e, *f, *g, *h;	
  	m3_slice  * z;
 	
 	a = m3d_identity(a, 64);
@@ -145,8 +145,14 @@ int main(int argc, const char * argv[])
 	m3d_free(e);
 	
 	
-	
+
 	a = m3d_create(128, 128);
+	b = m3d_create(128, 128);
+	c = m3d_create(128, 128);
+
+	
+	
+/*
 	m3d_rowswap (m3d_t  * , rci_t , rci_t );
 	m3d_colswap(m3d_t *, rci_t , rci_t );
 	
