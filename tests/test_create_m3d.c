@@ -29,6 +29,7 @@
 
 int main(int argc, const char * argv[])
 {
+/*
  	m3d_t * a, *b, *c, *d, *e, *f, *g, *h;	
  	m3_slice  * z;
 	
@@ -112,7 +113,7 @@ int main(int argc, const char * argv[])
 		 
 		 
 		 
-	*/
+	
 	a = m3d_create(128, 128);
 	m3d_rand(a);
 	b = NULL;
