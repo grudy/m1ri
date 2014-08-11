@@ -30,42 +30,31 @@
 
 
 
-double m3d_strassen_test(int y, int z)
+void m3d_strassen_test(int y, int z)
 {
 	m3d_t * a, *b, *c;
 	a = m3d_create(y, z);
     b = m3d_create(y, z);
+	time_t before;
     m3d_rand(a);
     m3d_rand(b);
+    m3d_strassen(c, a, b);
+    time_t after;
+    time(&after);
+    double m3d_time_test_m1ri = difftime( after, before);
     
-	clock_t begin, end;
-	double time_spent;
-	begin = clock();
-	m3d_strassen(c, a, b);	
-	end = clock();
-	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-	
-
+    printf("\n m3d_strassen on two %d by %d matrix matrices  \n \t Runs in %9f seconds. \n", x, y, m3d_time_test_m1ri);
+    
+    m3d_free(a);
+    m3d_free(b);
+    m3d_free(c);
 
 }
 
 
 int main(int argc, const char * argv[])
 {
- 	m3d_t * a, *b, *c; 
-    /*
-    
-    	Small test
-    */
-    a = m3d_create(64, 64);
-    b = m3d_create(64, 64);
-    m3d_rand(a);
-    m3d_rand(b);
-    m3d_strassen(c, a, b);
-    
-    
-    
-    
+ 	m3d_strassen_test(64, 64)
     
     
     
