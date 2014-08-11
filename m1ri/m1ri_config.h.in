@@ -1,5 +1,5 @@
-#ifndef M1RI_M1RI_CONFIG_H
-#define M1RI_M1RI_CONFIG_H
+#ifndef M1RI_config_H
+#define M1RI_config_H
 
 // Defines determined during configuration of M1RI.
 //#define __M1RI_HAVE_OPENMP		@M1RI_HAVE_OPENMP@
@@ -10,4 +10,4 @@
 #define __M1RI_OPENMP_CFLAGS            "@OPENMP_CFLAGS@"
 #define __M1RI_HAVE_LIBPNG              @M1RI_HAVE_LIBPNG@
 
-#endif // M1RI_M1RI_CONFIG_H
+#endif // M1RI_config_H

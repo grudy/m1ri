@@ -28,7 +28,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #ifdef HAVE_CONFIG_H
 
 #include <m1ri/config.h>
-#include <m1ri/m1ri_config.h>
+#include <m1ri/config.h>
 #endif
 
 #include <stdint.h>

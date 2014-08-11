@@ -10,7 +10,7 @@ DEBUG = -ggdb
 
 TESTS = \
 	hadamard.c	\
-	m3d_create_test.c	\
+	m3d_test.c	\
 	m3d_functions.c	\
 	m5d_tests.c	\
 	m7d_tests.c
