@@ -561,7 +561,7 @@ int m3d_equal(m3d_t const *a, m3d_t const *b)
         {
             if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].units != b->rows[i][j].units))
             {
-                printf("row [%d][%d] not equal \n", i, j);
+                //printf("row [%d][%d] not equal \n", i, j);
                 return 0;
             }
             
