@@ -170,12 +170,13 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	
 	m3d_free(a);
 	m3d_free(b);
-	
+	b = NULL;
 	/*
 		copy test
 	*/
 	a = m3d_create(64, 64);
 	m3d_rand(a);
+	
 	m3d_copy(b, a);
 	
 
