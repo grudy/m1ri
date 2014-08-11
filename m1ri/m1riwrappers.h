@@ -47,6 +47,8 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define M1RI_DN(a, n) ((a)/(n)) + ((1) && (a%n))/* division by n rounded up */
 #define M1RI_MAX(a,b)	((a > b)?	a: b)
 #define M1RI_MIN(a, b)	((a > b)? b: a)
+#define M1RI_TIME_FUNCTION(a) clock_t begin, end; double time_spent; begin = clock(); time(&after); end = clock(); time_spent = (double)(end - begin) / CLOCKS_PER_SEC; printf("Hello");
+
 
 typedef u_int64_t vec;
 
@@ -155,5 +157,6 @@ static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*
 {
 	qsort(	&ptr,	count, size,	comp); 
 }
+
 
 #endif

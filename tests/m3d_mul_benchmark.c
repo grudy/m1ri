@@ -36,17 +36,25 @@ void m3d_strassen_test(int y, int z)
 	a = m3d_create(y, z);
     b = m3d_create(y, z);
     
-	time_t before;
     m3d_rand(a);
     m3d_rand(b);
     c = m3d_copy(c, a);
-    m3d_strassen(c, a, b);
+    
+    
+    
+	clock_t begin, end;
+	double time_spent;
+	begin = clock();
+	m3d_strassen(c, a, b);
     time_t after;
     time(&after);
-    double m3d_time_test_m1ri = difftime( after, before);
+	end = clock();
+	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     
-    printf("\n m3d_strassen on two %d by %d matrix matrices  \n \t Runs in %9f seconds. \n", y, z , m3d_time_test_m1ri);
-    
+    printf("----------------------------------------------------------------------");
+    printf("\nm3d_strassen on two %d by %d matrix matrices.", y, z  );
+    printf(" \n------------------->Runs in%9f seconds. \n", time_spent);
+    printf("----------------------------------------------------------------------");
     m3d_free(a);
     m3d_free(b);
     m3d_free(c);
