@@ -49,7 +49,6 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define M1RI_MIN(a, b)	((a > b)? b: a)
 #define M1RI_TIME_FUNCTION(a) clock_t begin, end; double time_spent; begin = clock(); time(&after); end = clock(); time_spent = (double)(end - begin) / CLOCKS_PER_SEC; printf("Hello");
 
-
 typedef u_int64_t vec;
 
 #define M1RI_RADIX 64

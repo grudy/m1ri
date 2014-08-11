@@ -230,7 +230,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
     {
  
       	/*  These hold the padded matrix sizes */
-    /*  	
+    	
 	u_int32_t  arcr, acbr, bccc;
 	arcr = a->nrows;
 	acbr = a->ncols;
@@ -246,7 +246,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 	lasta = 64 - a->nrows%64;
 	lastb = 64 -  b->ncols%64;  
 	lastboth = 64 - a->nrows; 
-	* /
+	
 	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (b->ncols))
 	{
 		m3d_t * padded_a,   * padded_b , * padded_c;
@@ -268,13 +268,13 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 	
 	else
 	{
-		//m3d_qrt_mul(c, a, b); 
+		m3d_qrt_mul(c, a, b); 
 	}
 	
 
           
     }
-    */
+    
     return c;
     
 }
@@ -894,6 +894,7 @@ m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
 			m7d_mul_naive_square(c, a, b); 
 		}
 	}
+	
 	return c;
 	
 }
