@@ -46,9 +46,6 @@ test_hadamard_SOURCES=tests/test_hadamard.c
 test_hadamard_LDFLAGS=-lm1ri -lm
 test_hadamard__CFLAGS=$(AM_CFLAGS)
 
-test_create_m3d_SOURCES=tests/test_create_m3d.c 
-test_create_m3d_LDFLAGS=-lm1ri -lm
-test_create_m3d__CFLAGS=$(AM_CFLAGS)
 
 test_m3d_SOURCES=tests/test_m3d.c 
 test_m3d_LDFLAGS=-lm1ri -lm

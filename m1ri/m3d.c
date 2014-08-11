@@ -906,7 +906,7 @@ m3d_t *  m3d_sub(m3d_t * r,   const  m3d_t  *x, const m3d_t  *y)
 	r = m3d_create(x->nrows, y->ncols);
 
 	} 
-	else if( (r->nrows != x->nrows || r->ncols != y->ncols)) 
+	else if( (r->nrows != x->nrows || (r->ncols != y->ncols))) 
 	{
 		m1ri_die("m3d_sub: Provided return matrix has wrong dimensions.\n");
     	

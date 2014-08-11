@@ -127,9 +127,12 @@ int main(int argc, const char * argv[])
 	
 	a  = m3d_create(64, 64);
 	b  = m3d_create(64, 64);
+	c  = m3d_create(64, 64);
+	d  = m3d_create(64, 64);
 	
-	a =   m3d_add(m3d_t *a, const m3d_t  *b,const  m3d_t  *c);
-	b =   m3d_sub(m3
+	
+	//c =   m3d_add(m3d_t *a, const m3d_t  *b,const  m3d_t  *c);
+	//d =   m3d_sub(
 
 	
 	
