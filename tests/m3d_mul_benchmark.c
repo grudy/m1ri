@@ -30,13 +30,21 @@
 
 
 
-inline void m3d_t * m3d_strassen_test(int y, int z)
+double m3d_strassen_test(int y, int z)
 {
+	m3d_t * a, *b, *c;
 	a = m3d_create(y, z);
     b = m3d_create(y, z);
     m3d_rand(a);
     m3d_rand(b);
-    m3d_strassen(c, a, b);
+    
+	clock_t begin, end;
+	double time_spent;
+	begin = clock();
+	m3d_strassen(c, a, b);	
+	end = clock();
+	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+	
 
 
 }
