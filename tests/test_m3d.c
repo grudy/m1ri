@@ -185,7 +185,6 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	m3d_rand(a);
 	m3d_copy(b, a);
 	
-	if
 	
 	
 	

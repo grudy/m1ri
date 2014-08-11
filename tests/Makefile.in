@@ -13,7 +13,8 @@ TESTS = \
 	m3d_test.c	\
 	m3d_functions.c	\
 	m5d_tests.c	\
-	m7d_tests.c
+	m3d_mul_benchmark.c \
+	m7d_tests.c 
 
 
 pkgincludesubdir = $(includedir)/m1ri

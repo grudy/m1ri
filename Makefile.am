@@ -64,7 +64,7 @@ m3d_mul_benchmark_LDFLAGS=-lm1ri -lm
 m3d_mul_benchmark__CFLAGS=$(AM_CFLAGS)
 
 
-TESTS =  test_arithmetic test_hadamard  test_m3d test_m5d test_m7d 
+TESTS =  test_arithmetic test_hadamard m3d_mul_benchmark test_m3d test_m5d test_m7d 
 
 
 
