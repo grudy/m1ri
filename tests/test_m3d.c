@@ -26,11 +26,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #include "time.h"
  int main(int argc, const char * argv[])
 {
-  /*
-	 [a][b]
-	 [c][d]
-	 
-	*/
+ 
 	m3d_t * o, *ab, *cd, *abcd, *v; 
 	m3_slice * s;  
  
@@ -182,7 +178,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	m3d_rand(a);
 	m3d_copy(b, a);
 	
-	if
+
 	
 	
 	

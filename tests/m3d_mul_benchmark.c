@@ -21,4 +21,45 @@
  m3d_mulbenchmark.c
  */ 
 
+#include <m1ri/m1ri.h>
 
+
+
+
+#include "time.h"
+
+
+
+inline void m3d_t * m3d_strassen_test(int y, int z)
+{
+	a = m3d_create(y, z);
+    b = m3d_create(y, z);
+    m3d_rand(a);
+    m3d_rand(b);
+    m3d_strassen(c, a, b);
+
+
+}
+
+
+int main(int argc, const char * argv[])
+{
+ 	m3d_t * a, *b, *c; 
+    /*
+    
+    	Small test
+    */
+    a = m3d_create(64, 64);
+    b = m3d_create(64, 64);
+    m3d_rand(a);
+    m3d_rand(b);
+    m3d_strassen(c, a, b);
+    
+    
+    
+    
+    
+    
+    
+    
+}    
