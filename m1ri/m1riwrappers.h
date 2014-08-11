@@ -45,19 +45,19 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define M1RI_FN(a, b, c, d) ((a)^(b))&((c)^(d)) /* for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr) */
 #define M1RI_ST(a, b , c) ((a)^(b)^(c)) /* performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition */
 #define M1RI_DN(a, n) ((a)/(n)) + ((1) && (a%n))/* division by n rounded up */
-#define M1RI_MAX(a,b)  ((a > b)?  a: b)
-#define M1RI_MIN(a, b)  ((a > b)? b: a)
+#define M1RI_MAX(a,b)	((a > b)?	a: b)
+#define M1RI_MIN(a, b)	((a > b)? b: a)
 
 typedef u_int64_t vec;
 
 #define M1RI_RADIX 64
-/* static const int M1RI_RADIX = 64;  */
+/* static const int M1RI_RADIX = 64;	*/
 /* ======= */
 
 
 
-static  const u_int64_t leftbit  = (1ULL)<<(M1RI_RADIX-1);
-static  const u_int64_t rightbit = 1;
+static	const u_int64_t leftbit	= (1ULL)<<(M1RI_RADIX-1);
+static	const u_int64_t rightbit = 1;
 
 
 
@@ -72,41 +72,51 @@ typedef int wi_t;
 */
 static inline u_int32_t powerof2(u_int32_t v)
 {
-  v--;
-  v |= v >> 1;
-  v |= v >> 2;
-  v |= v >> 4;
-  v |= v >> 8;
-  v |= v >> 16;
-  v++; 
-  return v; 
+	v--;
+	v |= v >> 1;
+	v |= v >> 2;
+	v |= v >> 4;
+	v |= v >> 8;
+	v |= v >> 16;
+	v++; 
+	return v; 
 }
 
 static inline void * m1ri_malloc(size_t size) {
-  void * allocate = malloc(size);
-  if(allocate == NULL)
-    m1ri_die("Out of memory, exiting\n");
-  return  allocate;
+	void * allocate = malloc(size);
+	if(allocate == NULL)
+	{
+		m1ri_die("Out of memory, exiting\n");
+	}	
+	return allocate;
 }
 
 /*
 	Wrapper for calloc
 */
-static inline void * m1ri_calloc(size_t nobj, size_t size) {
-  void * allocate = calloc(nobj, size);
-  if(allocate == NULL)
-    m1ri_die("Out of memory, exiting\n");
-  return allocate;
+static inline void * m1ri_calloc(size_t nobj, size_t size) 
+{
+	void * allocate = calloc(nobj, size);
+	if(allocate == NULL)
+	{
+		m1ri_die("Out of memory, exiting\n");
+	}	
+	return allocate;
 }
 
 /** 
-	Wrapper for realloc  
+	Wrapper for realloc	
  */
-static inline void * m1ri_realloc(void * val, size_t size) {
-  void  * reallocate =  realloc(val, size);
-  if(reallocate == NULL)
-    m1ri_die("Out of memory, exiting\n");
-  return reallocate;
+static inline void * m1ri_realloc(void * val, size_t size) 
+{
+	
+	void * reallocate =	realloc(val, size);
+	if(reallocate == NULL)
+	{
+		m1ri_die("Out of memory, exiting\n");
+	}
+		
+	return reallocate;
 }
 
 /** 
@@ -115,7 +125,7 @@ static inline void * m1ri_realloc(void * val, size_t size) {
 */
 
 static inline void m1ri_free(void * val) {
-  free(val);    
+free(val);	
 }
 
 /** 
@@ -131,17 +141,19 @@ static u_int8_t const notwindowed = 0x2;
  \
  \Made for working on 64 bit variables "vecs" 
  */
-static inline u_int64_t  m1ri_rand() {
-  assert(RAND_MAX >= ((1ULL<<25)-1));
-  u_int64_t randomword = random();
-  randomword ^= (u_int64_t)random() << 25;
-  randomword ^= (u_int64_t)random() << 50;
-  return randomword;
+static inline u_int64_t	m1ri_rand() 
+{
+
+	assert(RAND_MAX >= ((1ULL<<25)-1));
+	u_int64_t randomword = random();
+	randomword ^= (u_int64_t)random() << 25;
+	randomword ^= (u_int64_t)random() << 50;
+	return randomword;
 }
 
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
-               {
-                    qsort(  &ptr,  count, size,  comp);           
-               }
-                           
+{
+	qsort(	&ptr,	count, size,	comp); 
+}
+
 #endif

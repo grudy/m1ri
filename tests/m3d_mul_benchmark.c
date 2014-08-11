@@ -35,9 +35,11 @@ void m3d_strassen_test(int y, int z)
 	m3d_t * a, *b, *c;
 	a = m3d_create(y, z);
     b = m3d_create(y, z);
+    
 	time_t before;
     m3d_rand(a);
     m3d_rand(b);
+    c = m3d_copy(c, a);
     m3d_strassen(c, a, b);
     time_t after;
     time(&after);
@@ -48,6 +50,7 @@ void m3d_strassen_test(int y, int z)
     m3d_free(a);
     m3d_free(b);
     m3d_free(c);
+    
 
 }
 
