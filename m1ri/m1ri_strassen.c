@@ -230,6 +230,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
     {
  
       	/*  These hold the padded matrix sizes */
+    /*  	
 	u_int32_t  arcr, acbr, bccc;
 	arcr = a->nrows;
 	acbr = a->ncols;
@@ -245,34 +246,35 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 	lasta = 64 - a->nrows%64;
 	lastb = 64 -  b->ncols%64;  
 	lastboth = 64 - a->nrows; 
-
+	* /
 	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (b->ncols))
 	{
-	m3d_t * padded_a,   * padded_b , * padded_c;
-	padded_a = m3d_create(arcr, acbr);
-	padded_b = m3d_create(acbr, bccc);
-	padded_a = m3d_create(arcr, bccc);
-	m3d_copy(padded_a, a);
-	m3d_copy(padded_b, b);
-	m3d_copy(padded_c, c);
+		m3d_t * padded_a,   * padded_b , * padded_c;
+		padded_a = m3d_create(arcr, acbr);
+		padded_b = m3d_create(acbr, bccc);
+		padded_a = m3d_create(arcr, bccc);
+		m3d_copy(padded_a, a);
+		m3d_copy(padded_b, b);
+		m3d_copy(padded_c, c);
 	
 	
-	m3d_qrt_mul(padded_c, padded_a, padded_b); 
+		//m3d_qrt_mul(padded_c, padded_a, padded_b); 
 
-	m3d_free(padded_a);
-	m3d_free(padded_b);
-	m3d_free(padded_c);
+		m3d_free(padded_a);
+		m3d_free(padded_b);
+		m3d_free(padded_c);
 	}
 	
 	
 	else
 	{
-	m3d_qrt_mul(c, a, b); 
+		//m3d_qrt_mul(c, a, b); 
 	}
 	
 
           
     }
+    */
     return c;
     
 }
@@ -741,78 +743,15 @@ m3d_t * m3d_classic_mul(m3d_t *c, const m3d_t  *a, const m3d_t  *b)
 	
 }
 
+/*
 
-
-/**
-	Recursive Matrix Multiplication over GF(5), on a square matrix.
-*/
-static inline void m5d_mul_naive_square(m5d_t *c, const m5d_t *a, const m5d_t *b)
-{
-	
-	m5d_t  * x1, * x2; 
-  	m5_slice *  a_slice, *  b_slice, *  c_slice;
-	a_slice = m5d_quarter( a);
-    b_slice = m5d_quarter( b);
-    c_slice = m5d_quarter(c);
-    
-    if((c_slice->row[0]->ncols) > M1RI_RADIX)
-    {
-       
-    	x1 = m5d_create( c_slice->row[0]->nrows, c_slice->row[0]->ncols);		    
-     	x2 = m5d_create( c_slice->row[0]->nrows, c_slice->row[0]->ncols);	    	   
-		
-		m5d_mul_naive_square(x1, a_slice->row[0], b_slice->row[0]);
-    	
-    	m5d_mul_naive_square(x2, a_slice->row[1], b_slice->row[2]);
-	    c_slice->row[0] = m5d_add(c_slice->row[0],  x1, x2) ; 
-		m5d_mul_naive_square(x1, a_slice->row[0], b_slice->row[1]);
-       	m5d_mul_naive_square(x2, a_slice->row[1], b_slice->row[3]);
-    	
-    	c_slice->row[1] = m5d_add(c_slice->row[1],  x1, x2) ;
-	    m5d_mul_naive_square(x1, a_slice->row[2], b_slice->row[0]);
-      	m5d_mul_naive_square(x2, a_slice->row[3], b_slice->row[2]);
-       	c_slice->row[2] = m5d_add(c_slice->row[2], x1, x2); 
-	    m5d_mul_naive_square(x1, a_slice->row[2], b_slice->row[1]);
-		m5d_mul_naive_square(x2, a_slice->row[3], b_slice->row[3]); 
- 	    c_slice->row[3] = m5d_add(c_slice->row[3], x1, x2) ;
- 	 	m5d_free(x1);
-		m5d_free(x2);
-		
-    }
-   
-    else if((c->ncols ) == (M1RI_RADIX  << 1))
-    {
-       /*
-    	x1 = m5d_create(M1RI_RADIX,M1RI_RADIX);		    
-		x2 = m5d_create( M1RI_RADIX, M1RI_RADIX);
-   	 	m5d_mul_64(x1->rows, a_slice->row[0]->rows, b_slice->row[0]->rows);
-    	m5d_mul_64(x2->rows, a_slice->row[1]->rows, b_slice->row[2]->rows);
-  	    m5d_add_64(c_slice->row[0]->rows, x1->rows, x2->rows) ;
-        m5d_mul_64(x1->rows,  a_slice->row[0]->rows, b_slice->row[1]->rows );
-        m5d_mul_64(x2->rows, a_slice->row[1]->rows, b_slice->row[3]->rows);
-		m5d_add_64(c_slice->row[1]->rows, x1->rows, x2->rows) ; 
-       	m5d_mul_64(x1->rows, a_slice->row[2]->rows, b_slice->row[0]->rows);
-       	m5d_mul_64(x2->rows, a_slice->row[3]->rows, b_slice->row[2]->rows);
-     	m5d_add_64(c_slice->row[2]->rows, x1->rows, x2->rows); 
-        m5d_mul_64(x1->rows, a_slice->row[2]->rows, b_slice->row[1]->rows);
-        m5d_mul_64(x2->rows, a_slice->row[3]->rows, b_slice->row[3]->rows); 
-		m5d_add_64(c_slice->row[3]->rows, x1->rows, x2->rows); 
-		m5d_free(x1);
-		m5d_free(x2);
-		*/
-		
-    }
-   
-}
-
-/**
 	Classic O(N)^3 algorithm for Matrix Multiplication over GF(5)
 */
 m5d_t * m5d_classic_mul(m5d_t *c, const m5d_t  *a, const m5d_t  *b)
 {
 	if (c == NULL)
 	{
-	c = m5d_create(a->nrows, b->ncols);
+		c = m5d_create(a->nrows, b->ncols);
 
 	} 
 	
@@ -882,69 +821,6 @@ m5d_t * m5d_classic_mul(m5d_t *c, const m5d_t  *a, const m5d_t  *b)
 	
 }
 
-/**
-	Recursive Matrix Multiplication over GF(5), on a square matrix.
-*/
-
-static inline void m7d_mul_naive_square(m7d_t *c, const m7d_t *a, const m7d_t *b)
-{
-	
-	m7d_t  * x1, * x2; 
-  	m7_slice *  a_slice, *  b_slice, *  c_slice;
-
-   	a_slice = m7d_quarter( a);
-   /* m7d_print(a_slice->row[0][0]); */
-    b_slice = m7d_quarter( b);
-    c_slice = m7d_quarter(c);
-   
-    if((c_slice->row[0]->ncols) > M1RI_RADIX)
-    {
-       
-    	x1 = m7d_create( c_slice->row[0]->nrows, c_slice->row[0]->ncols);		    
-     	x2 = m7d_create( c_slice->row[0]->nrows, c_slice->row[0]->ncols);	
-     	    	   
-    	m7d_mul_naive_square(x1, a_slice->row[0], b_slice->row[0]);
-    	m7d_mul_naive_square(x2, a_slice->row[1], b_slice->row[2]);
-	    c_slice->row[0] = m7d_add(c_slice->row[0],  x1, x2) ; 
-		m7d_mul_naive_square(x1, a_slice->row[0], b_slice->row[1]);
-       	m7d_mul_naive_square(x2, a_slice->row[1], b_slice->row[3]);
-    	c_slice->row[1] = m7d_add(c_slice->row[1],  x1, x2) ;
-	    m7d_mul_naive_square(x1, a_slice->row[2], b_slice->row[0]);
-      	m7d_mul_naive_square(x2, a_slice->row[3], b_slice->row[2]);
-       	c_slice->row[2] = m7d_add(c_slice->row[2], x1, x2); 
-	    m7d_mul_naive_square(x1, a_slice->row[2], b_slice->row[1]);
-		m7d_mul_naive_square(x2, a_slice->row[3], b_slice->row[3]); 
- 	    c_slice->row[3] = m7d_add(c_slice->row[3], x1, x2) ;
- 	 	m7d_free(x1);
-		m7d_free(x2);
-	
-    }
-   
-    else if((c->ncols ) == (M1RI_RADIX  << 1))
-    {
-    	x1 = m7d_create(M1RI_RADIX,M1RI_RADIX);		    
-		x2 = m7d_create( M1RI_RADIX, M1RI_RADIX);
-   	 	m7d_mul_64(x1->rows, a_slice->row[0]->rows, b_slice->row[0]->rows);
-    	m7d_mul_64(x2->rows, a_slice->row[1]->rows, b_slice->row[2]->rows);
-  	    m7d_add_64(c_slice->row[0]->rows, x1->rows, x2->rows) ;
-        m7d_mul_64(x1->rows,  a_slice->row[0]->rows, b_slice->row[1]->rows );
-        m7d_mul_64(x2->rows, a_slice->row[1]->rows, b_slice->row[3]->rows);
-		m7d_add_64(c_slice->row[1]->rows, x1->rows, x2->rows) ; 
-       	m7d_mul_64(x1->rows, a_slice->row[2]->rows, b_slice->row[0]->rows);
-       	m7d_mul_64(x2->rows, a_slice->row[3]->rows, b_slice->row[2]->rows);
-     	m7d_add_64(c_slice->row[2]->rows, x1->rows, x2->rows); 
-        m7d_mul_64(x1->rows, a_slice->row[2]->rows, b_slice->row[1]->rows);
-        m7d_mul_64(x2->rows, a_slice->row[3]->rows, b_slice->row[3]->rows); 
-		m7d_add_64(c_slice->row[3]->rows, x1->rows, x2->rows); 
-		m7d_free(x1);
-		m7d_free(x2);
-		
-    }
-
-}
-
-
-
 
 
 m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
@@ -956,68 +832,68 @@ m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
 	} 
 	
 	else 
-	{
-	if (c->nrows != a->nrows || c->ncols != b->ncols) 
-	{
-		m1ri_die("m7d_mul_naive: Provided return matrix has wrong dimensions.\n");
-    	}
-	
-	}
-	
-	
-	c = m7d_create(  a->nrows, b->ncols); 
-	/** * arcr, acbr, bccc hold the padded matrix sizes*/
-	
-	
-	u_int32_t  arcr, acbr, bccc, g;
-	arcr = a->nrows;
-	acbr = a->ncols;
-	bccc  = b->ncols;
-	arcr =  powerof2(arcr);
-	acbr =  powerof2(acbr);
-	bccc =  powerof2(bccc);
-	g = (M1RI_RADIX  << 1);
-	while (arcr <  g)
-	{
-		arcr = arcr << 1;
-	
-	}
-	while (acbr < g )
-	{
-	acbr = 	acbr << 1;
-	
-	}
-	
-	while (bccc <  g)
-	{
-		bccc = bccc << 1;
-	
-	}
-	
-
-	m7d_t * padded_a  = m1ri_malloc(sizeof(m7d_t));
-	m7d_t  * padded_b  = m1ri_malloc(sizeof(m7d_t));
-	m7d_t * padded_c = m1ri_malloc(sizeof(m7d_t));;
-	
-	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
-	{
-		padded_a = m7d_create( arcr, acbr);
-		padded_b = m7d_create( acbr, bccc);
-		padded_c = m7d_create( arcr, bccc);
-		m7d_copy(padded_a, a);
-		m7d_copy(padded_b, b);
-		m7d_mul_naive_square(padded_c, padded_a, padded_b); 
-		m7d_copy_cutoff(c, padded_c);
-		m7d_free(padded_a);
-		m7d_free(padded_b);
-		m7d_free(padded_c);
-	}
+	{		
+		if (c->nrows != a->nrows || c->ncols != b->ncols) 
+		{
+			m1ri_die("m7d_mul_naive: Provided return matrix has wrong dimensions.\n");
+	    	
 		
-	else
-	{
-		m7d_mul_naive_square(c, a, b); 
-	}
+		}
+		
+		
+		c = m7d_create(  a->nrows, b->ncols); 
+		/** * arcr, acbr, bccc hold the padded matrix sizes*/
+		
+		
+		u_int32_t  arcr, acbr, bccc, g;
+		arcr = a->nrows;
+		acbr = a->ncols;
+		bccc  = b->ncols;
+		arcr =  powerof2(arcr);
+		acbr =  powerof2(acbr);
+		bccc =  powerof2(bccc);
+		g = (M1RI_RADIX  << 1);
+		while (arcr <  g)
+		{
+			arcr = arcr << 1;
+		
+		}
+		while (acbr < g )
+		{
+		acbr = 	acbr << 1;
+		
+		}
+		
+		while (bccc <  g)
+		{
+			bccc = bccc << 1;
+		
+		}
+		
 	
+		m7d_t * padded_a  = m1ri_malloc(sizeof(m7d_t));
+		m7d_t  * padded_b  = m1ri_malloc(sizeof(m7d_t));
+		m7d_t * padded_c = m1ri_malloc(sizeof(m7d_t));;
+		
+		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
+		{
+			padded_a = m7d_create( arcr, acbr);
+			padded_b = m7d_create( acbr, bccc);
+			padded_c = m7d_create( arcr, bccc);
+			m7d_copy(padded_a, a);
+			m7d_copy(padded_b, b);
+			m7d_mul_naive_square(padded_c, padded_a, padded_b); 
+			m7d_copy_cutoff(c, padded_c);
+			m7d_free(padded_a);
+			m7d_free(padded_b);
+			m7d_free(padded_c);
+		}
+			
+		else
+		{
+			m7d_mul_naive_square(c, a, b); 
+		}
+	}
 	return c;
 	
 }
