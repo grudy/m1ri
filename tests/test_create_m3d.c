@@ -32,6 +32,11 @@ int main(int argc, const char * argv[])
 
  	m3d_t * a, *b, *c, *d, *e, *f, *g, *h;	
  	m3_slice  * z;
+	a = m3d_create(64, 64);
+	m3d_rand(a);
+	m3d_copy(a)
+	
+	
 	
 	a = m3d_identity(a, 64);
 	b = m3d_identity(b, 64);	
@@ -46,8 +51,18 @@ int main(int argc, const char * argv[])
 	m3d_free(a);
 	m3d_free(b);
 	
+	/*
+		copy test
+	*/
+	a = m3d_create(64, 64);
+	m3d_rand(b, a);
+	m3d_copy(b, a);
+	
+	
+	
 	a = m3d_identity(a,256);
-	b = m3d_identity(b,256);	
+	b = m3d_identity(b,256);
+		
 	
 	
 	if(a != b)
@@ -110,8 +125,12 @@ int main(int argc, const char * argv[])
   	m3d_free(a);
 	m3d_free(b);
 	
+	a  = m3d_create(64, 64);
+	b  = m3d_create(64, 64);
 	
-	
+	a =   m3d_add(m3d_t *a, const m3d_t  *b,const  m3d_t  *c);
+	b =   m3d_sub(m3
+
 	
 	
 	/*
@@ -121,7 +140,7 @@ int main(int argc, const char * argv[])
 		 
 	*/  
 		 
-		
+	/*	
 	a = m3d_create(128, 128);
 	m3d_rand(a);
 	b = NULL;
@@ -129,16 +148,22 @@ int main(int argc, const char * argv[])
 	d = NULL;
 	e = NULL;
 	
-	b = m3d_submatrix(b, a, 0, 0, 63, 63 );
-	c = m3d_submatrix(c, a, 0, 64, 127, 127);
-	d = m3d_submatrix(d, a, 63, 0, 127, 63); 
-	e = m3d_submatrix(e, a, 64, 64, 127, 127); 
-	
+	b = m3d_submatrix(b, a, 0, 0, 64, 64 );
+	c = m3d_submatrix(c, a, 0, 64, 64, 128);
+	d = m3d_submatrix(d, a, 64,  0, 128,64); 
+	//e = m3d_submatrix(e, a, 64, 64, 128, 128); 
+	/
 	f = m3d_stack(f, b, d);
 	
 	g = m3d_stack(g, c, e);
-	m3d_print(f);
-	m3d_print(g);
+	*/
+	//m3d_specs(b);
+	//m3d_specs(c);
+	//m3d_specs(d);
+	//m3d_specs(e);
+	//m3d_specs(f);
+	//m3d_specs(g);
+	/*
 	//e = m3d_concat(e, f, g);
 /*
 	if(!m3d_equal(a, h))
@@ -149,9 +174,6 @@ int main(int argc, const char * argv[])
  	printf("\n Test of Submatrix,  m3d_stack and m3d_concat passed over smaller matrices \n");
 
 	
-	*/
-
-	/*
 	m3d_free(a);
 	m3d_free(b);
 	m3d_free(c);
@@ -166,15 +188,21 @@ int main(int argc, const char * argv[])
 
 	
 	*/
-/*
+
+	
+	
+	
+	/*
 	m3d_rowswap (m3d_t  * , rci_t , rci_t );
 	m3d_colswap(m3d_t *, rci_t , rci_t );
 	
-		
-	void m3d_set_ui(m3d_t *A,unsigned int );
 	
 	
-	m3d_t  *  m3d_identity(m3d_t  *, rci_t );
+	/*
+
+	
+	
+
 	
 	
 	m3d_t *    m3d_init_window(const m3d_t  *, rci_t , rci_t , rci_t , rci_t );
@@ -257,7 +285,6 @@ int main(int argc, const char * argv[])
 	
 
 
-	m3d_t  * m3d_add(m3d_t *, const m3d_t  *,const  m3d_t  *);
 
 
 

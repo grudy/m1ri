@@ -969,8 +969,8 @@ m3d_t  * m3d_add(m3d_t *c, const m3d_t  *a,const m3d_t  *b)
 
 m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc)
 {
-  	rci_t s_rows =  highr -  lowr;
-  	rci_t s_cols =  highc - lowc;
+  	rci_t s_rows =  highr -  lowr ;
+  	rci_t s_cols =  highc - lowc ;
   	if( S != NULL)
 	{
 		if((S->nrows < s_rows) || (S->ncols < s_cols))
@@ -1008,7 +1008,7 @@ m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lo
  		if(s_cols%64)
  		{
  	
- 		   vec temp_mask = ~((leftbit >> ((s_cols%64) -1)) - 1);
+				   vec temp_mask = ~((leftbit >> ((s_cols%64) -1)) - 1);
  		   vbg temp;
  		   for(int i = 0; i < s_rows; i++)
  		   {
