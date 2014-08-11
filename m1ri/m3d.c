@@ -738,8 +738,12 @@ void  m3d_transpose(m3d_t   * a)
 
 m3d_t *  m3d_copy(m3d_t * a, m3d_t const *b)
 {
+  if(a == NULL)
+  {	
+  	a = m3d_create( b->ncols, b->nrows);
+  }
   
-  a = m3d_create( b->ncols, b->nrows);
+  if
   for(int i = 0; i < a->nrows; i++)
   {
     for(int j = 0; j < b->ncols; j++)
