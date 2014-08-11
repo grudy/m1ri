@@ -59,6 +59,7 @@ void m3d_strassen_test(int y, int z)
     m3d_free(b);
     m3d_free(c);
     
+    
 
 }
 
@@ -66,7 +67,9 @@ void m3d_strassen_test(int y, int z)
 int main(int argc, const char * argv[])
 {
  	m3d_strassen_test(64, 64);
-    
+   // m3d_strassen_test(640, 640);
+   // m3d_strassen_test(6400, 6400);
+   // m3d_strassen_test(64000, 64000);
     
     
    return 0 ; 
