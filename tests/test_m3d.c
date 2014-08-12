@@ -332,15 +332,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	
 	
 	m3d_t *    m3d_init_window(const m3d_t  *, rci_t , rci_t , rci_t , rci_t );
-	
 
-	
-	
-
-	
-	
-	
-	
 	
 	void  m3d_slices(m3_slice *  ,const m3d_t * , wi_t );
 	
@@ -406,19 +398,8 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	    return x; 
 	}
 	
-	
-	
-	
-
-
-
-
-
 
 	m3d_t *m3d_mul_scalar(m3d_t *, const long , const m3d_t *);
-
-
-
 	void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col);
 
 	int m3d_is_zero(const m3d_t *);
