@@ -26,46 +26,25 @@
 #include "time.h"
 
 
- int m3d_test_addition(m, n)
+ void m3d_test_addition(int m,int  n)
  {
-   
- 
- 
- }
 
-
-int main(int argc, const char * argv[])
-{
-    
-    
-  /*
-  	 m3d
-  
-  */
-  
     m3d_t * a, * b, *c, *d;
-    a = m3d_create(4, 4);
-    b = m3d_create( 4, 4);
+    a = m3d_create(m, n);
+    b = m3d_create( m, n);
     m3d_rand(a);
     m3d_rand(b);
     
     c = m3d_add(c, a, b);
     
     d = m3d_sub(d, c, b);
-    printf("Matrix a\n");
-    m3d_print(a);
-    printf("Matrix b\n");
-    m3d_print(b);
-    printf("Matrix c\n");
-    m3d_print(c);
-    printf("Matrix d\n");
-    m3d_print(d); 
-	
+   
+	m3d_print(d);
+
 	if(!(m3d_equal(d, a)))
     {
      	{
-          printf("Error in m3d addition and subtraction");
-          return 1; 
+          m1ri_die("Error in m3d addition and subtraction of size %d by %d,\n", m, n);
     
          }
     
@@ -77,20 +56,20 @@ int main(int argc, const char * argv[])
   m3d_free(c);
   m3d_free(d);
   
-  /*
-  
-   /*
-  	 m5d
-  */
-  printf("\n \n ****************************************\n \t\t\t\t\tm5d\n");
-  
-    m5d_t * e, * f, *g, * h;
+ 
+ }
+
+
+ void m5d_test_addition(int m,int  n)
+ {
+
+	  m5d_t * e, * f, *g, * h;
   
   
 
  
-    e = m5d_create( 4, 4);
-    f = m5d_create( 4, 4);
+    e = m5d_create( m, n);
+    f = m5d_create( m, n);
 
     m5d_rand(e);
     m5d_rand(f);
@@ -99,21 +78,13 @@ int main(int argc, const char * argv[])
      h = m5d_sub(h,   g, f);
 
 
-    printf("Matrix e\n");
-    m5d_print(e);
-    printf("Matrix f\n");
-    m5d_print(f);
-    printf("Matrix g\n");
-    m5d_print(g);
-    printf("Matrix h\n");
-    m5d_print(h); 
-	
+
+	m5d_print(f);
 	
 	if(!(m5d_equal(h, e)))
     {
      	{
-          printf("Error in m5d addition and subtraction\n");
-          return 1; 
+          m1ri_die("Error in m5d addition and subtraction of size %d by %d,\n", m, n);
     
          }
     
@@ -126,6 +97,75 @@ int main(int argc, const char * argv[])
   m5d_free(g);
   m5d_free(h);
 
+ 
+ }
+
+
+void m7d_test_addition(int m,int  n)
+ {
+
+	  m7d_t * e, * f, *g, * h;
+  
+  
+
+ 	
+    e = m7d_create( m, n);
+    f = m7d_create( m, n);
+
+    m7d_rand(e);
+    m7d_rand(f);
+    
+     g = m7d_add(g, e, f);
+     h = m7d_sub(h,   g, f);
+
+
+	m7d_print(f);
+	
+	if(!(m7d_equal(h, e)))
+    {
+     	{
+          m1ri_die("Error in m7d addition and subtraction of size %d by %d,\n", m, n);
+    
+         }
+    
+    }
+    
+	printf("m7d addition and subtraction test passed\n");
+    
+  m7d_free(e);
+  m7d_free(f);
+  m7d_free(g);
+  m7d_free(h);
+
+ 
+ }
+
+
+int main(int argc, const char * argv[])
+{
+    
+    m3d_test_addition(4, 4);
+    m3d_test_addition(64, 64);
+    m3d_test_addition(64, 4);
+    m3d_test_addition(4, 800);
+    
+    
+        
+    m5d_test_addition(4, 4);
+    m5d_test_addition(64, 64);
+    m5d_test_addition(64, 4);
+    m5d_test_addition(4, 800);
+    
+    
+            
+    m7d_test_addition(4, 4);
+    m7d_test_addition(64, 64);
+    m7d_test_addition(64, 4);
+    m7d_test_addition(4, 800);
+
+  printf("\n \n ****************************************\n \t\t\t\t\tm5d\n");
+  
+  
   
     printf("\n\n****************************************\n \t\t\t\t\tm7d\n");
      m7d_t * i, * j, *k,  * m;

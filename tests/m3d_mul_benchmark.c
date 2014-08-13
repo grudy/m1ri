@@ -46,6 +46,8 @@ void m3d_strassen_test(int y, int z)
 	double time_spent;
 	begin = clock();
 	c = m3d_strassen(c, a, b);
+	printf("\n %d by %d matrix \n", c->nrows, c->ncols);
+	m3d_print(c);
     time_t after;
     time(&after);
 	end = clock();
