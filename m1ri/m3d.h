@@ -416,12 +416,12 @@ m3d_t * m3d_hadamard(m3d_t * , m3d_t const * , m3d_t const * );
  * \param B = difference
 */
 
-static inline void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
+static inline void m3d_sub_64(vbg *R, vbg  *A, vbg  *B)
 {
     int i;
     for (i= 0; i < M1RI_RADIX; i++ )
     {
-        R[i][0] = sub_m3dr(A[i][0], B[i][0]);
+        R[i] = sub_m3dr(A[i], B[i]);
     }
     
 }
@@ -455,12 +455,12 @@ static inline vbg add_m3dr(vbg  x, vbg const y)
  \param B = addend
  \Assumes there are 64 values, doesn't check
 */
-static inline void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
+static inline void m3d_add_64(vbg *R, vbg   *A, vbg  *B)
 {
     int i;
     for (i = 0; i < M1RI_RADIX; i++ )
     {
-        R[i][0] = add_m3dr(A[i][0], B[i][0]);
+        R[i] = add_m3dr(A[i], B[i]);
     }
 
 }
@@ -542,7 +542,7 @@ static inline void m3d_set_zero(m3d_t * a)
 								GF(3)
 ****************************************************/
 /* 64 * 64,4096 bit, 512 byte matrix(slice) multiplication */
-void m3d_mul_64(vbg **, vbg ** , vbg ** );
+void m3d_mul_64(vbg *, vbg * , vbg * );
 
 /* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
 void mul_32_m3d(vbg *, vbg *, vbg *);

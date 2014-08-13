@@ -185,12 +185,12 @@ void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
 /**
 	Adds two 64 by 64 m3d_t matrices
 */
-void m3d_add_64(vbg **R, vbg   **A, vbg  **B)
+void m3d_add_64(vbg *R, vbg   *A, vbg  *B)
 {
     int i;
     for (i = 0; i < M1RI_RADIX; i++ )
     {
-        R[i][0] = add_m3dr(A[i][0], B[i][0]);
+        add_m3dr(R[i], A[i], B[i]);
     }
 
 }

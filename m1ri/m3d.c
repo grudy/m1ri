@@ -1240,7 +1240,7 @@ void m3d_combine8(vbg *table, vbg *input)
 }
 
 
-void m3d_mul_64(vbg **R, vbg **  A, vbg **  B)
+void m3d_mul_64(vbg *R, vbg *  A, vbg *  B)
 {
     int i;
     vbg t1, t2, r1, r2, a;
@@ -1251,17 +1251,17 @@ void m3d_mul_64(vbg **R, vbg **  A, vbg **  B)
     
 	for (i = 0; i < 9; i ++)
     {
-        m3d_combine6(&tables6[i][0], &(B [6*i][0]));
+        m3d_combine6(tables6[i], B + (6*i));
     }
    
     for (i = 0; i < 2; i ++)
     {
-        m3d_combine5(&tables5[i][0], &(B[54 + (5 * i)][0]));
+        m3d_combine5(tables5[i], B + (54 + (5 * i)));
     }
 
     for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
     {
-        a = A[i][0];
+        a = A[i];
         v2 = a.sign;
     
         v1 = (a.units ^ v2);		
@@ -1291,7 +1291,7 @@ void m3d_mul_64(vbg **R, vbg **  A, vbg **  B)
         t2 = tables5[1][v2&31]; iadd_vbg(&r2, &t2);
         
         isub_m3d(&r1, &r2);
-        R[i][0] = r1;
+        R[i] = r1;
        /*  */
     }
     
