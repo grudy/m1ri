@@ -148,13 +148,20 @@ int main(int argc, const char * argv[])
     m3d_test_addition(64, 64);
     m3d_test_addition(64, 4);
     m3d_test_addition(4, 800);
-    
+    m3d_test_addition(14, 294);
+    m3d_test_addition(342, 64);
+    m3d_test_addition(64, 44);
+    m3d_test_addition(142, 181);
     
         
     m5d_test_addition(4, 4);
     m5d_test_addition(64, 64);
     m5d_test_addition(64, 4);
     m5d_test_addition(4, 800);
+    m5d_test_addition(14, 294);
+    m5d_test_addition(342, 64);
+    m5d_test_addition(64, 44);
+    m5d_test_addition(142, 181);
     
     
             
@@ -162,7 +169,11 @@ int main(int argc, const char * argv[])
     m7d_test_addition(64, 64);
     m7d_test_addition(64, 4);
     m7d_test_addition(4, 800);
-
+	m7d_test_addition(14, 294);
+    m7d_test_addition(342, 64);
+    m7d_test_addition(64, 44);
+    m7d_test_addition(142, 181);
+    
   printf("\n \n ****************************************\n \t\t\t\t\tm5d\n");
   
   
