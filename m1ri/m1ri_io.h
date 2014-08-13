@@ -65,7 +65,7 @@ void m7d_print(const m7d_t * );
 	\2.  Number of rows
 	\3.  Width in vbg's .
 */
-void m3d_specs(m3d_t *);
+void m3d_specs(const m3d_t *);
 /**
 	\ brief same a running m3d_print and then m3d_specs
 	\ param a input matrix

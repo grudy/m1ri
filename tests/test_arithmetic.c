@@ -24,6 +24,16 @@
 #include <m1ri/m1ri.h>
 
 #include "time.h"
+
+
+ int m3d_test_addition(m, n)
+ {
+   
+ 
+ 
+ }
+
+
 int main(int argc, const char * argv[])
 {
     

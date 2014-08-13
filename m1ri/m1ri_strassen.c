@@ -100,7 +100,7 @@ static inline void m3d_mul_naive_square(m3d_t *c, const m3d_t *a, const m3d_t *b
 
 }
 
-void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
+static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
 {
   	m3d_t * x1;
     m3d_t * x2;
@@ -112,70 +112,72 @@ void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     a_slice = m3d_quarter( a);
    	b_slice = m3d_quarter(b);
    	c_slice = m3d_quarter( c);
-   	
-
+	
+	//m3d_specs(a_slice->row[0]);
 	if((c->ncols) > (M1RI_RADIX << 1))
     {
      
-       {
+       
+        //x1 = m3d_sub(x1, a_slice->row[0], a_slice->row[2]);      // 1 
+        
+        /*
+        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[1]);      // 2 
+        m3d_qrt_mul(c_slice->row[2], x1, x2);      // 3 
+        x1 = m3d_add(x1, a_slice->row[2],a_slice->row[1]);      // 4 
+        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[0]);      // 5 
+        m3d_qrt_mul(c_slice->row[3], x1, x2);        // 6 
+        x1 = m3d_sub(x1, x1,a_slice->row[0]);    // 7 
+        x2 = m3d_sub(x2, b_slice->row[1],x2);      // 8 
+        m3d_qrt_mul(c_slice->row[1],x1,x2);     // 9 
+        x1 = m3d_sub(x1, a_slice->row[1],x1);        // 10 
+        m3d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);       // 11 
+        m3d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);      // 12 
+        c_slice->row[1] = m3d_add(c_slice->row[1], x1 , c_slice->row[1]);       // 13 
+        c_slice->row[2] = m3d_add(c_slice->row[2], c_slice->row[1] , c_slice->row[2]);       // 14 
+        c_slice->row[1] = m3d_add(c_slice->row[1], c_slice->row[1] , c_slice->row[3]);       // 15 
+        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);        // 16 
+        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);      // 17 
+        x2 = m3d_sub(x2, x2, b_slice->row[2]);                // 18 
+        m3d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);                // 19 
+        c_slice->row[2] = m3d_sub(c_slice->row[2], c_slice->row[2], c_slice->row[0]);      // 20 
 
-        x1 = m3d_sub(x1, a_slice->row[0], a_slice->row[2]);  /* 1 */
-        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[1]);  /* 2 */
-        m3d_qrt_mul(c_slice->row[2], x1, x2);  /* 3 */
-        x1 = m3d_add(x1, a_slice->row[2],a_slice->row[1]);  /* 4 */
-        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[0]);  /* 5 */
-        m3d_qrt_mul(c_slice->row[3], x1, x2);    /* 6 */
-        x1 = m3d_sub(x1, x1,a_slice->row[0]);/* 7 */
-        x2 = m3d_sub(x2, b_slice->row[1],x2);  /* 8 */
-        m3d_qrt_mul(c_slice->row[1],x1,x2); /* 9 */
-        x1 = m3d_sub(x1, a_slice->row[1],x1);    /* 10 */
-        m3d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   /* 11 */
-        m3d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  /* 12 */
-        c_slice->row[1] = m3d_add(c_slice->row[1], x1 , c_slice->row[1]);   /* 13 */
-        c_slice->row[2] = m3d_add(c_slice->row[2], c_slice->row[1] , c_slice->row[2]);   /* 14 */
-        c_slice->row[1] = m3d_add(c_slice->row[1], c_slice->row[1] , c_slice->row[3]);   /* 15 */
-        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);    /* 16 */
-        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);  /* 17 */
-        x2 = m3d_sub(x2, x2, b_slice->row[2]);            /* 18 */
-        m3d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            /* 19 */
-        c_slice->row[2] = m3d_sub(c_slice->row[2], c_slice->row[2], c_slice->row[0]);  /* 20 */
-
-        x1 = m3d_sub(x1 ,  a_slice->row[0], a_slice->row[2]);  /* 1 */
-        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[1]);  /* 2 */
-        m3d_qrt_mul(c_slice->row[2], x1, x2);  /* 3 */
-        x1 = m3d_add(x1, a_slice->row[2],a_slice->row[1]);  /* 4 */
-        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[0]);  /* 5 */
-        m3d_qrt_mul(c_slice->row[3], x1, x2);    /* 6 */
-        x1 = m3d_sub(x1, x1,a_slice->row[0]);/* 7 */
-        x2 = m3d_sub(x2, b_slice->row[1],x2);  /* 8 */
-        m3d_qrt_mul(c_slice->row[1],x1,x2); /* 9 */
-        x1 = m3d_sub(x1, a_slice->row[1],x1);    /* 10 */
-        m3d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   /* 11 */
-        m3d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  /* 12 */
-        c_slice->row[1] = m3d_add(c_slice->row[1], x1 , c_slice->row[1]);   /* 13 */
-        c_slice->row[2] = m3d_add(c_slice->row[2], c_slice->row[1] , c_slice->row[2]);   /* 14 */
-        c_slice->row[1] = m3d_add(c_slice->row[1], c_slice->row[1] , c_slice->row[3]);   /* 15 */
-        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);    /* 16 */
-        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);  /* 17 */
-        x2 = m3d_sub(x2, x2, b_slice->row[2]);            /* 18 */
-        m3d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            /* 19 */
-        c_slice->row[2] = m3d_sub( c_slice->row[2], c_slice->row[2], c_slice->row[0]);  /* 20 */
+        x1 = m3d_sub(x1 ,  a_slice->row[0], a_slice->row[2]);      // 1 
+        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[1]);      // 2 
+        m3d_qrt_mul(c_slice->row[2], x1, x2);      // 3 
+        x1 = m3d_add(x1, a_slice->row[2],a_slice->row[1]);      // 4 
+        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[0]);      // 5 
+        m3d_qrt_mul(c_slice->row[3], x1, x2);        // 6 
+        x1 = m3d_sub(x1, x1,a_slice->row[0]);    // 7 
+        x2 = m3d_sub(x2, b_slice->row[1],x2);      // 8 
+        m3d_qrt_mul(c_slice->row[1],x1,x2);     // 9 
+        x1 = m3d_sub(x1, a_slice->row[1],x1);        // 10 
+        m3d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);       // 11 
+        m3d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);      // 12 
+        c_slice->row[1] = m3d_add(c_slice->row[1], x1 , c_slice->row[1]);       // 13 
+        c_slice->row[2] = m3d_add(c_slice->row[2], c_slice->row[1] , c_slice->row[2]);       // 14 
+        c_slice->row[1] = m3d_add(c_slice->row[1], c_slice->row[1] , c_slice->row[3]);       // 15 
+        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);        // 16 
+        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);      // 17 
+        x2 = m3d_sub(x2, x2, b_slice->row[2]);                // 18 
+        m3d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);                // 19 
+        c_slice->row[2] = m3d_sub( c_slice->row[2], c_slice->row[2], c_slice->row[0]);      // 20 
 
         m3d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]);
         c_slice->row[0] = m3d_add(c_slice->row[0], x1,c_slice->row[0] );
         m3d_free(x1);
     	m3d_free(x2);
-       }	
+       	*/
+       	
     }
     
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
 
-
-
 		
+
+
 		m3d_sub_64(x1->block, a_slice->row[0]->block, a_slice->row[2]->block); //   1 * /
-        /*m3d_sub_64(x2->block,b_slice->row[3]->block,b_slice->row[1]->block) ; //   2  
+        m3d_sub_64(x2->block,b_slice->row[3]->block,b_slice->row[1]->block) ; //   2  
         m3d_mul_64(c_slice->row[2]->block, x1->block, x2->block); //   3 
         m3d_add_64(x1->block,a_slice->row[2]->block,a_slice->row[3]->block) ; //   4 
         m3d_sub_64(x2->block,b_slice->row[1]->block,b_slice->row[0]->block) ; //   5 
@@ -201,11 +203,11 @@ void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
         m3d_add_64(c_slice->row[0]->block, x1->block,c_slice->row[0]->block) ; // 
  
 		
-
+		
         m3d_free(x1);
     	m3d_free(x2);
     	
-    	*/
+    	
     	
     }
     
@@ -274,6 +276,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 	
 	else
 	{
+	
 		m3d_qrt_mul(c, a, b); 
 	}
 	
@@ -361,7 +364,7 @@ void m5d_qrt_mul(m5d_t * c,const m5d_t *   a, const m5d_t *   b )
     
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
-
+	
 		m5d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows);  /* 1 */
         m5d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ;  /* 2 */
         m5d_mul_64(c_slice->row[2]->rows, x1->rows, x2->rows);  /* 3 */

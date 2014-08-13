@@ -164,7 +164,9 @@ void   m3d_write_elem( m3d_t * ,rci_t , rci_t , vec , vec  );
 static inline void  * m3d_block_allocate(rci_t  nrows,  wi_t  width)
 {
 	
+    //m3d_t * block = m1ri_calloc(nrows * width ,  sizeof(vbg) );
     m3d_t * block = m1ri_calloc(nrows * width ,  sizeof(vbg) );
+
     return block;
 }
 
@@ -368,7 +370,21 @@ void sub_m3d( vbg *, vbg const *  , vbg const * );
  * \returns r with difference
  */
 
-vbg sub_m3dr(vbg , vbg );               
+inline void sub_m3dr( vbg *r, vbg const *x, vbg const *y)
+{
+   /*  r->units = ((x->units^y->units) | (x->sign^y->sign)); */
+   /*  r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign)); */
+    r->sign = y->units ^ x->units;
+    r->units = y->sign ^ x->sign;
+    r->units = r->units | r->sign;
+    r->sign = r->sign ^ y->sign;
+    r->sign = (y->units ^ x->sign) & r->sign;   
+   
+   
+   
+   
+}
+            
 
 
 /** *****************************
@@ -421,7 +437,7 @@ static inline void m3d_sub_64(vbg *R, vbg  *A, vbg  *B)
     int i;
     for (i= 0; i < M1RI_RADIX; i++ )
     {
-        R[i] = sub_m3dr(A[i], B[i]);
+       sub_m3dr(R, A, B);
     }
     
 }

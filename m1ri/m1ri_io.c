@@ -413,7 +413,7 @@ void m7d_print(const m7d_t *a)
     
 }
 
-void m3d_specs(m3d_t * a)
+void m3d_specs(const m3d_t * a)
 {
     
     

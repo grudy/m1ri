@@ -425,8 +425,8 @@ m3d_t *    m3d_init_window(const m3d_t *c, const rci_t strow, const rci_t stvbg,
     submatrix->svbg = stvbg;
     
     
-    
-    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
+   
+    for(  i =   f; i < (f + submatrix->nrows) ; i++)
     {
         submatrix->rows[i - f] = c->rows[i] + stvbg;   
     }
@@ -701,15 +701,18 @@ m3d_t * m3d_transpose_sliced(m3d_t * a)
 /**
   Allocates a m3_slice to consist of four equally sized windows
 */
+#include "m1ri_io.h"
 m3_slice * m3d_quarter(const m3d_t * a)
 {
 	 m3_slice * c = m1ri_malloc(sizeof(m3_slice));
 	 c->block = m3_blockslice_allocate(  2,   2);
-     c->row = m3_rowslice_allocate(c->block, 2, 2);
+     c->row = m1ri_malloc(4 * sizeof(m3d_t *));
      c->row[0] = m3d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
 	 c->row[1] = m3d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
      c->row[2] = m3d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
 	 c->row[3] = m3d_init_window(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+	 
+
     return c;
 }
 
@@ -790,9 +793,6 @@ static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 }
 
-
-
-
 inline void sub_m3d( vbg *r, vbg const *x, vbg const *y)
 {
    /*  r->units = ((x->units^y->units) | (x->sign^y->sign)); */
@@ -809,6 +809,8 @@ inline void sub_m3d( vbg *r, vbg const *x, vbg const *y)
 }
 
 
+
+
 void vbg_negation(vbg *r)
 {
      r->sign = r->sign ^ r->units;
@@ -816,15 +818,7 @@ void vbg_negation(vbg *r)
 
 
 
-vbg sub_m3dr(vbg const x, vbg const y)
 
-{
-    vbg r;
-    r.units = ((x.units^y.units) | (x.sign^y.sign));
-    r.sign = (((x.units^y.units)^x.sign)&(y.units ^ x.sign));
-    
-    return r;
-}
 
 static inline void iadd_vbg(vbg *r,vbg  const *  x)
 {
@@ -932,7 +926,7 @@ m3d_t *  m3d_sub(m3d_t * r,   const  m3d_t  *x, const m3d_t  *y)
     {
     	for(n = 0; n < x->width; n++)
         {
-		  sub_m3d(&r->rows[i][n], &x->rows[i][n], &y->rows[i][n]);
+		  sub_m3d(r->rows[i] + n, x->rows[i] + n , y->rows[i] + n );
         }
     }
    
