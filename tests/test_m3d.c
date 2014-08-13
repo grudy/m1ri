@@ -32,7 +32,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  
 	o   = m3d_create( 128, 128);
 	m3d_rand(o);
-		/*    */
+	
 	
 	 s = m3d_quarter( o);
 	
@@ -42,7 +42,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	m3d_print(s->row[1]);
 	m3d_print(s->row[2]);
 	m3d_print(s->row[3]);
-
+	
  
 	ab = m3d_concat(ab, s->row[0], s->row[1]);
 	cd = m3d_concat(cd, s->row[2], s->row[3]);
@@ -65,6 +65,8 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	   printf("\n o and abcd not equal, stack and concat test failed \n");
 		 return 1;
 	}
+	/*
+	*/
 	
 	v = m3d_create( 4, 4);
 	
@@ -93,11 +95,15 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   	m3d_rand(w0);
   	m3d_rand(w1);
 	m3d_rand(w2);
+	
+	
   	w3 = m3d_classic_mul(w3, w0, w1);
+	
+	/*
 	w4 = m3d_classic_mul(w4, w1, w2);
 	w5 = m3d_classic_mul(w5, w3, w2);
 	w6 = m3d_classic_mul(w6, w0, w4);
-   	
+   	*/
 
   /*	
   if(!(m3d_equal(w5, w6)))   
@@ -107,7 +113,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	 
 	 }   
   
-  */
+  * /
 
 
   
@@ -173,7 +179,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	b = NULL;
 	/*
 		copy test
-	*/
+	* /
 	a = m3d_create(64, 64);
 	m3d_rand(a);
 	
@@ -253,7 +259,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	c  = m3d_create(64, 64);
 	d  = m3d_create(64, 64);
 	
-	
+	*/
 	//c =   m3d_add(m3d_t *a, const m3d_t  *b,const  m3d_t  *c);
 	//d =   m3d_sub(
 
