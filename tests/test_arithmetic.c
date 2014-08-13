@@ -49,7 +49,6 @@
          }
     
     }
-	printf("m3d addition and subtraction test passed\n");
    
   m3d_free(a);
   m3d_free(b);
@@ -90,7 +89,6 @@
     
     }
     
-	printf("m5d addition and subtraction test passed\n");
     
   m5d_free(e);
   m5d_free(f);
@@ -130,7 +128,6 @@ void m7d_test_addition(int m,int  n)
     
     }
     
-	printf("m7d addition and subtraction test passed\n");
     
   m7d_free(e);
   m7d_free(f);
@@ -152,7 +149,8 @@ int main(int argc, const char * argv[])
     m3d_test_addition(342, 64);
     m3d_test_addition(64, 44);
     m3d_test_addition(142, 181);
-    
+    printf("\nm3d addition and subtraction test passed\n");
+
         
     m5d_test_addition(4, 4);
     m5d_test_addition(64, 64);
@@ -162,7 +160,8 @@ int main(int argc, const char * argv[])
     m5d_test_addition(342, 64);
     m5d_test_addition(64, 44);
     m5d_test_addition(142, 181);
-    
+    printf("\nm5d addition and subtraction test passed\n");
+
     
             
     m7d_test_addition(4, 4);
@@ -173,7 +172,8 @@ int main(int argc, const char * argv[])
     m7d_test_addition(342, 64);
     m7d_test_addition(64, 44);
     m7d_test_addition(142, 181);
-    
+    printf("\nm7d addition and subtraction test passed\n");
+
   printf("\n \n ****************************************\n \t\t\t\t\tm5d\n");
   
   

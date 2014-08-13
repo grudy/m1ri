@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = gnu
+AUTOMAKE_OPTIONS = gnu subdir-objects
 ACLOCAL_AMFLAGS = -I m4
 AM_CFLAGS=${SIMD_CFLAGS} ${OPENMP_CFLAGS} ${DEBUG_FLAGS}
 lib_LTLIBRARIES = libm1ri.la
@@ -67,7 +67,9 @@ m3d_mul_benchmark__CFLAGS=$(AM_CFLAGS)
 TESTS =  test_arithmetic test_hadamard m3d_mul_benchmark test_m3d test_m5d test_m7d 
 
 
+# benchmarketing
 
+SUBDIRS = . bench
 
 clean-local:
 	(cd tests; make clean; cd ..)

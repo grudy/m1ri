@@ -96,12 +96,16 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   	m3d_rand(w1);
 	m3d_rand(w2);
   	w3 = m3d_classic_mul(w3, w0, w1);
+  	printf("w2");
+  	m3d_print(w2);
+  	printf("w3");
+  	m3d_print(w3);
 	w4 = m3d_classic_mul(w4, w1, w2);
 	w5 = m3d_classic_mul(w5, w3, w2);
 	w6 = m3d_classic_mul(w6, w0, w4);
    	
 
-  /*	
+   m3d_print(w5);
   if(!(m3d_equal(w5, w6)))   
 	 {
 	 	printf("Classic Multiplication m3d test failed");
@@ -109,7 +113,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	 
 	 }   
   
-  */
+  
 
 
   
