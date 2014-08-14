@@ -64,11 +64,9 @@ void m3d_hadamard_test(int m, int n)
 	 r2_m3d = m3d_add(r2_m3d, t2_m3d, t3_m3d);
 	 if(!(m3d_equal(r1_m3d, r2_m3d)))
 	 {
-	 	printf("Hadamard m3d test failed");
-	    return 1;
+	 	m1ri_die("Hadamard m3d test failed");
 	 
 	 }   
-	 printf("Hadamard m3d test passed"); 
 	m3d_free(a_m3d);
     m3d_free(b_m3d);
     m3d_free(c_m3d);
@@ -120,11 +118,10 @@ void m5d_hadamard_test(int m, int n)
 	 r2_m5d = m5d_add(r2_m5d, t2_m5d, t3_m5d);
 	 if(!(m5d_equal(r1_m5d, r2_m5d)))
 	 {
-	 	printf("Hadamard m5d test failed");
-	    return 1;
+	 	m1ri_die("Hadamard m5d test failed");
 	 
 	 }   
-	 printf("Hadamard m5d test passed"); 
+
 	m5d_free(a_m5d);
     m5d_free(b_m5d);
     m5d_free(c_m5d);
@@ -178,8 +175,7 @@ void m7d_hadamard_test(int m, int n)
 	 r2_m7d = m7d_add(r2_m7d, t2_m7d, t3_m7d);
 	 if(!(m7d_equal(r1_m7d, r2_m7d)))
 	 {
-	 	printf("Hadamard m7d test failed");
-	    return 1;
+	 	m1ri_die("Hadamard m7d test failed");
 	 
 	 }   
 	 printf("Hadamard m7d test passed"); 
