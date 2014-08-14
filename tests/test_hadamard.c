@@ -24,19 +24,19 @@
 #include <m1ri/m1ri.h>
 
 #include "time.h"
-int main(int argc, const char * argv[])
+
+
+void m3d_hadamard_test(int m, int n)
 {
-    
-    
-    
+	    
      /* A*(B+C) == A*B + A*C */
      
      /* m3d */
     m3d_t * a_m3d,  * b_m3d,  * c_m3d, * t1_m3d,* t2_m3d, *t3_m3d, * r1_m3d, *  r2_m3d;
  
-	a_m3d = m3d_create( 4, 4);
-	b_m3d = m3d_create(4, 4);
-	c_m3d = m3d_create(4, 4);
+	a_m3d = m3d_create(m, n);
+	b_m3d = m3d_create(m, n);
+	c_m3d = m3d_create(m, n);
 
 	/*
 	m3d_rand(a_m3d);
@@ -78,89 +78,81 @@ int main(int argc, const char * argv[])
 	m3d_free(r1_m3d);
     m3d_free(r2_m3d);
     
-       
-    
+
+
+}
+
+void m5d_hadamard_test(int m, int n)
+{
+	    
      /* A*(B+C) == A*B + A*C */
      
      /* m5d */
-     
-     
     m5d_t * a_m5d,  * b_m5d,  * c_m5d, * t1_m5d,* t2_m5d, *t3_m5d, * r1_m5d, *  r2_m5d;
-  
  
-	a_m5d = m5d_create( 4, 4);
-	b_m5d = m5d_create( 4, 4);
-	c_m5d = m5d_create( 4, 4);
+	a_m5d = m5d_create( m, n);
+	b_m5d = m5d_create(m, n);
+	c_m5d = m5d_create(m, n);
 
-	
+	/*
 	m5d_rand(a_m5d);
 	m5d_rand(b_m5d);
 	m5d_rand(c_m5d);
-/* 	 /* */
-/* 	     a_m5d * (b_m5d  + c_m5d)   == (a_m5d * b_m5d) + (a_m5d *  c_m5d); */
-/* 	 * / */
-	 
-	 
+	 /*
+	     a_m5d * (b_m5d  + c_m5d)   == (a_m5d * b_m5d) + (a_m5d *  c_m5d);
+	 */
 	 
 	 t1_m5d = m5d_add(t1_m5d, b_m5d, c_m5d);
 	 r1_m5d = m5d_hadamard(r1_m5d, a_m5d, t1_m5d);
-	 
-	 printf("\n\t\tm5d \n******************************\n");
+	 printf("\n\t\tm5D \n******************************\n");
 	 printf("\n a_m5d\n");
 	 m5d_print(a_m5d);
 	 printf("\n b_m5d\n");
 	 m5d_print(b_m5d);
-	 
-	
-	 t2_m5d = m5d_hadamard(t2_m5d, a_m5d , b_m5d);
-	  printf("\n t2_m5d\n");
-	 m5d_print(t2_m5d);
-	 
-	 
-	  printf("\n c_m5d\n");
+	 printf("\n c_m5d\n");
 	 m5d_print(c_m5d);
 	 printf("\n t1_m5d\n");
 	 m5d_print(t1_m5d);
 	 printf("\n r1_m5d\n");
 	 m5d_print(r1_m5d);
-	 
+	 t2_m5d = m5d_hadamard(t2_m5d, a_m5d , b_m5d);
 	 t3_m5d = m5d_hadamard(t3_m5d, a_m5d ,  c_m5d);
 	 r2_m5d = m5d_add(r2_m5d, t2_m5d, t3_m5d);
-	  
-	 printf("\n r2_m5d\n");
-	  m5d_print(r2_m5d);
-	  
 	 if(!(m5d_equal(r1_m5d, r2_m5d)))
 	 {
 	 	printf("Hadamard m5d test failed");
 	    return 1;
 	 
 	 }   
-	 
-	 
-	 
-	 
 	 printf("Hadamard m5d test passed"); 
 	m5d_free(a_m5d);
     m5d_free(b_m5d);
     m5d_free(c_m5d);
-    
     m5d_free(t1_m5d);
     m5d_free(t2_m5d);
     m5d_free(t3_m5d);
 	m5d_free(r1_m5d);
     m5d_free(r2_m5d);
-      
-      /* A*(B+C) == A*B + A*C */
+    
+
+
+}
+
+
+
+void m7d_hadamard_test(int m, int n)
+{
+	    
+     /* A*(B+C) == A*B + A*C */
      
      /* m7d */
     m7d_t * a_m7d,  * b_m7d,  * c_m7d, * t1_m7d,* t2_m7d, *t3_m7d, * r1_m7d, *  r2_m7d;
+ 
+	a_m7d = m7d_create(m, n);
+	b_m7d = m7d_create(m, n);
+	c_m7d = m7d_create(m, n);
 
-	a_m7d = m7d_create(4, 4);
-	b_m7d = m7d_create( 4, 4);
-	c_m7d = m7d_create( 4, 4);
-
-	
+	/*
 	m7d_rand(a_m7d);
 	m7d_rand(b_m7d);
 	m7d_rand(c_m7d);
@@ -170,12 +162,7 @@ int main(int argc, const char * argv[])
 	 
 	 t1_m7d = m7d_add(t1_m7d, b_m7d, c_m7d);
 	 r1_m7d = m7d_hadamard(r1_m7d, a_m7d, t1_m7d);
-	 
-
-	 t2_m7d = m7d_hadamard(t2_m7d, a_m7d , b_m7d);
-	 t3_m7d = m7d_hadamard(t3_m7d, a_m7d ,  c_m7d);
-	 r2_m7d = m7d_add(r2_m7d, t2_m7d, t3_m7d);
-	  printf("\n\t\tm7d \n******************************\n");
+	 printf("\n\t\tm7D \n******************************\n");
 	 printf("\n a_m7d\n");
 	 m7d_print(a_m7d);
 	 printf("\n b_m7d\n");
@@ -186,8 +173,9 @@ int main(int argc, const char * argv[])
 	 m7d_print(t1_m7d);
 	 printf("\n r1_m7d\n");
 	 m7d_print(r1_m7d);
-	 printf("\n r2_m7d\n");
-	 m7d_print(r2_m7d);
+	 t2_m7d = m7d_hadamard(t2_m7d, a_m7d , b_m7d);
+	 t3_m7d = m7d_hadamard(t3_m7d, a_m7d ,  c_m7d);
+	 r2_m7d = m7d_add(r2_m7d, t2_m7d, t3_m7d);
 	 if(!(m7d_equal(r1_m7d, r2_m7d)))
 	 {
 	 	printf("Hadamard m7d test failed");
@@ -203,6 +191,18 @@ int main(int argc, const char * argv[])
     m7d_free(t3_m7d);
 	m7d_free(r1_m7d);
     m7d_free(r2_m7d);
+    
+
+
+}
+int main(int argc, const char * argv[])
+{
+    
+    
+	
+       
+    
+    
     
     
 	return 0;
