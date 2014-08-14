@@ -220,6 +220,13 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     	
     }
     
+    else if(c->ncols  == M1RI_RADIX )
+    {
+     m3d_mul_64(c->rows[0], a->rows[0], b->rows[0]);
+    
+    } 
+    
+    
     m1ri_free(a_slice);
     m1ri_free(b_slice);
     m1ri_free(c_slice);

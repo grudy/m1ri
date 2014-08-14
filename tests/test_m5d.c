@@ -37,18 +37,18 @@ int main(int argc, const char * argv[])
     m5d_print(a);
     m5d_print(b);
     
-    if(!isequal)
+    
+     if(isequal)
     {
-        printf("Equaltest: passed ");
+        m1ri_die("Equaltest: failed ");
         
     }
     
-    if(isequal)
-    {
-        printf("Equaltest: failed ");
-        return 1;
+        printf("Equaltest: passed ");
         
-    }
+    
+    
+   
 
     
     m5d_t *  test_m5d_output  = m5d_create( 3   ,3);
