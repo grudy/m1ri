@@ -51,20 +51,7 @@ void m3d_hadamard_test(int m, int n)
 	 t1_m3d = m3d_add(t1_m3d, b_m3d, c_m3d);
 	 r1_m3d = m3d_hadamard(r1_m3d, a_m3d, t1_m3d);
 	 
-	 
-	 printf("%d by %d,\n  \n", m, n);
-	m3d_print(r1_m3d); 
-	 printf("\n\t\tM3D \n******************************\n");
-	 printf("\n a_m3d\n");
-	 //m3d_print(a_m3d);
-	 printf("\n b_m3d\n");
-	// m3d_print(b_m3d);
-	 printf("\n c_m3d\n");
-	// m3d_print(c_m3d);
-	 printf("\n t1_m3d\n");
-	// m3d_print(t1_m3d);
-	 printf("\n r1_m3d\n");
-	// m3d_print(r1_m3d);
+
 	 t2_m3d = m3d_hadamard(t2_m3d, a_m3d , b_m3d);
 	 t3_m3d = m3d_hadamard(t3_m3d, a_m3d ,  c_m3d);
 	 r2_m3d = m3d_add(r2_m3d, t2_m3d, t3_m3d);
@@ -113,26 +100,12 @@ void m5d_hadamard_test(int m, int n)
 	 
 	 t1_m5d = m5d_add(t1_m5d, b_m5d, c_m5d);
 	 r1_m5d = m5d_hadamard(r1_m5d, a_m5d, t1_m5d);
-	 printf("\n\t\tm5D \n******************************\n");
-	 printf("\n a_m5d\n");
-	 //m5d_print(a_m5d);
-	 printf("\n b_m5d\n");
-	 //m5d_print(b_m5d);
-	 printf("\n c_m5d\n");
-	 //m5d_print(c_m5d);
-	 printf("\n t1_m5d\n");
-	 //m5d_print(t1_m5d);
-	 printf("\n r1_m5d\n");
-	 //m5d_print(r1_m5d);
+	
 	 t2_m5d = m5d_hadamard(t2_m5d, a_m5d , b_m5d);
 	 t3_m5d = m5d_hadamard(t3_m5d, a_m5d ,  c_m5d);
 	 r2_m5d = m5d_add(r2_m5d, t2_m5d, t3_m5d);
 	 
-	 
-	 printf("%r1_m5d d by %d,\n  \n", m, n);
-		m5d_print(r1_m5d);
-		printf("%r2_m5d %d by %d,\n  \n", m, n);
-		m5d_print(r2_m5d);
+
 	 if(!(m5d_equal(r1_m5d, r2_m5d)))
 	 {
 	 	
@@ -173,9 +146,7 @@ void m7d_hadamard_test(int m, int n)
 	m7d_rand(a_m7d);
 	m7d_rand(b_m7d);
 	m7d_rand(c_m7d);
-	printf("a_m7d %d by %d,\n  \n", m, n);
-	m7d_print(a_m7d);
-	m7d_specs(a_m7d);
+	
 	 	
 	
 	
@@ -185,17 +156,7 @@ void m7d_hadamard_test(int m, int n)
 	 
 	 t1_m7d = m7d_add(t1_m7d, b_m7d, c_m7d);
 	 r1_m7d = m7d_hadamard(r1_m7d, a_m7d, t1_m7d);
-	 printf("\n\t\tm7D \n******************************\n");
-	 printf("\n a_m7d\n");
-	 //m7d_print(a_m7d);
-	 printf("\n b_m7d\n");
-	 //m7d_print(b_m7d);
-	 printf("\n c_m7d\n");
-	 //m7d_print(c_m7d);
-	 printf("\n t1_m7d\n");
-	 //m7d_print(t1_m7d);
-	 printf("\n r1_m7d\n");
-	 //m7d_print(r1_m7d);
+	
 	 t2_m7d = m7d_hadamard(t2_m7d, a_m7d , b_m7d);
 	 t3_m7d = m7d_hadamard(t3_m7d, a_m7d ,  c_m7d);
 	 r2_m7d = m7d_add(r2_m7d, t2_m7d, t3_m7d);
@@ -229,7 +190,7 @@ int main(int argc, const char * argv[])
     m3d_hadamard_test(521, 34);
     m3d_hadamard_test(54, 434);
     m3d_hadamard_test(512, 512);
-    	 printf("Hadamard m3d test passed"); 
+    	 printf("\nHadamard m3d test passed\n"); 
 
     
     m5d_hadamard_test(64, 64);
@@ -238,7 +199,7 @@ int main(int argc, const char * argv[])
     m5d_hadamard_test(521, 34);
     m5d_hadamard_test(54, 434);
 	m5d_hadamard_test(512, 512);
-    	 printf("Hadamard m5d test passed"); 
+    	 printf("Hadamard m5d test passed\n"); 
 
 	m7d_hadamard_test(64, 64);
     m7d_hadamard_test(128, 128);
@@ -247,7 +208,7 @@ int main(int argc, const char * argv[])
     m7d_hadamard_test(54, 434);
     m7d_hadamard_test(512, 512);
        
-    	 printf("Hadamard m7d test passed"); 
+    	 printf("Hadamard m7d test passed\n"); 
 
     
     

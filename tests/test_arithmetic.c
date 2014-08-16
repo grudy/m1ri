@@ -39,7 +39,6 @@
     
     d = m3d_sub(d, c, b);
    
-	m3d_print(d);
 
 	if(!(m3d_equal(d, a)))
     {
@@ -78,7 +77,6 @@
 
 
 
-	m5d_print(f);
 	
 	if(!(m5d_equal(h, e)))
     {
@@ -117,7 +115,7 @@ void m7d_test_addition(int m,int  n)
      h = m7d_sub(h,   g, f);
 
 
-	m7d_print(f);
+
 	
 	if(!(m7d_equal(h, e)))
     {
@@ -174,58 +172,7 @@ int main(int argc, const char * argv[])
     m7d_test_addition(142, 181);
     printf("\nm7d addition and subtraction test passed\n");
 
-  printf("\n \n ****************************************\n \t\t\t\t\tm5d\n");
-  
-  
-  
-    printf("\n\n****************************************\n \t\t\t\t\tm7d\n");
-     m7d_t * i, * j, *k,  * m;
-  
-    i = m7d_create( 4, 4);
-   
-    j = m7d_create( 4, 4);
 
-    m7d_rand(i);
-    m7d_rand(j);
-   /*  m7d_specs(i); */
-
-     k = m7d_add(k,  i, j);
-     m = m7d_sub(m,  k,  j);
-
-
-    printf("Matrix i\n");
-    m7d_print(i);
-    printf("Matrix j\n");
-    m7d_print(j);
-    printf("Matrix k\n");
-    m7d_print(k);
-	printf("Matrix m\n");
-    m7d_print(m); 
-	
-	
-	if(!(m7d_equal(i, m)))
-    {
-     	{
-     	    m7d_free(i);
-  			m7d_free(j);
-  			m7d_free(k);
-  			m7d_free(m);
-  	
-     	
-     	
-          printf("Error in m7d addition and subtraction\n");
-          return 1; 
-    
-         }
-    
-    }
-    /*  */
-	printf("m7d addition and subtraction test passed");
-  
-  m7d_free(i);
-  m7d_free(j);
-  m7d_free(k);
-  m7d_free(m);
   
   
   return 0;
