@@ -1312,17 +1312,16 @@ m5d_t * m5d_hadamard(m5d_t * c, m5d_t const * a, m5d_t const * b )
     }
 
     int i, j;
-    if(a->ncols < 256)
-    { 
-        for( i = 0; i < a->nrows; i++)
+
+    for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
             {  
                vfd_elem(c->rows[i] + j, a->rows[i]  + j, b->rows[i] + j);
             }  
-          }
+          
 
-    }
+    	}
         
         
     

@@ -9,7 +9,7 @@ PAPI_CFLAGS =
 DEBUG = -ggdb
 
 TESTS = \
-	hadamard.c	\
+	test_hadamard.c	\
 	m3d_test.c	\
 	m3d_functions.c	\
 	m5d_tests.c	\

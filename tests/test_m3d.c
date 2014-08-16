@@ -96,7 +96,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   	m3d_rand(w1);
 	m3d_rand(w2);
   	w3 = m3d_classic_mul(w3, w0, w1);
-  	printf("w2");
+  	printf("w2x");
   	m3d_print(w2);
   	printf("w3");
   	m3d_print(w3);

@@ -41,3 +41,5 @@ m3d_testmatrix.png
 *.lognow
 
 outputfile
+
+m3d_mul_benchmark

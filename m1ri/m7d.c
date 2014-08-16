@@ -224,7 +224,7 @@ void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
 vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width)
 {
     
-    block  = m1ri_malloc(nrows * width * sizeof(vtri) );
+    block  = m1ri_calloc((nrows * width) ,  sizeof(vtri) );
     return block;
 }
 
@@ -1250,8 +1250,7 @@ m7d_t * m7d_hadamard(m7d_t * c, m7d_t const * a, m7d_t const * b )
     }
 
     int i, j;
-    if(a->ncols < 256)
-    { 
+  
     	for( i = 0; i < a->nrows; i++)
     	{
     		for(j = 0; j < (a->width ); j++)
@@ -1261,7 +1260,7 @@ m7d_t * m7d_hadamard(m7d_t * c, m7d_t const * a, m7d_t const * b )
     		}  
     	}
 
-    }
+    
     
  
         

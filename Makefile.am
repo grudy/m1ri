@@ -28,6 +28,8 @@ pkgincludesub_HEADERS =  m1ri/m1ri.h
 	m1ri/m1ri_decom.h \
 	m1ri/config.h
 
+
+
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = m1ri.pc
 
@@ -55,6 +57,9 @@ test_m5d_CFLAGS=$(AM_CFLAGS)
 test_m7d_SOURCES=tests/test_m7d.c
 test_m7d_LDFLAGS=-lm1ri -lm
 test_m7d_CFLAGS=$(AM_CFLAGS)
+
+TESTS =  test_arithmetic test_hadamard test_m3d test_m5d test_m7d 
+
 
 bin_PROGRAMS = m3d_mul_benchmark
 

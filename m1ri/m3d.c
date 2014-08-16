@@ -881,17 +881,18 @@ m3d_t * m3d_hadamard(m3d_t * c, m3d_t const *  a, m3d_t const *  b)
     }
 
     int i, j;
-    if(a->ncols < 256)
-    { 
-    	for( i = 0; i < a->nrows; i++)
-    	{
-    		for(j = 0; j < (a->width ); j++)
-    		{	  
-        		c->rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
-    		}  
-    	}
-
+    //if(a->ncols < 256)
+    //{ 
+    
+    for( i = 0; i < a->nrows; i++)
+    {
+    	for(j = 0; j < (a->width ); j++)
+    	{	  
+    		c->rows[i][j] = vbg_mul_i(a->rows[i][j], b->rows[i][j]);
+    	}  
     }
+
+	//}
         
         
    
