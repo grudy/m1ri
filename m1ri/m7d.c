@@ -261,6 +261,7 @@ m7d_t * m7d_create( rci_t nrows, rci_t ncols)
     a->block = m7d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m7d_row_alloc(a->block, a->rows, a->width, a->nrows);
     a->flags = notwindowed;
+    a->fcol = 0;
     
     
     return a;

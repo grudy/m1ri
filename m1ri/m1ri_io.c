@@ -380,12 +380,14 @@ void m7d_print(const m7d_t *a)
                 
                 if(a->ncols%64 == 0)
                 {
+                	
                     print_m7d_block(a->rows[i][m].units,a->rows[i][m].middle, a->rows[i][m].sign, 0, 0 );
                     
                 }
                 
                 if(a->ncols%64 != 0)
                 {
+                	
                     print_m7d_block(a->rows[i][m].units,a->rows[i][m].middle, a->rows[i][m].sign, 0, (64 - a->ncols%64) );
                 }
             }

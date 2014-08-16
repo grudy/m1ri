@@ -173,7 +173,7 @@ void m7d_hadamard_test(int m, int n)
 	m7d_rand(a_m7d);
 	m7d_rand(b_m7d);
 	m7d_rand(c_m7d);
-	printf("%d by %d,\n  \n", m, n);
+	printf("a_m7d %d by %d,\n  \n", m, n);
 	m7d_print(a_m7d);
 	m7d_specs(a_m7d);
 	 	
@@ -202,6 +202,7 @@ void m7d_hadamard_test(int m, int n)
 	 if(!(m7d_equal(r1_m7d, r2_m7d)))
 	 {
 	 	m7d_specs(r1_m7d);
+	 	m7d_print(r1_m7d);
 	 	printf("\nm7d Hadamard  test of size size %d by %d,\n failed \n", m, n);
 	 	
 	 	m1ri_die("");
