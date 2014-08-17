@@ -162,8 +162,7 @@ void m7d_hadamard_test(int m, int n)
 	 r2_m7d = m7d_add(r2_m7d, t2_m7d, t3_m7d);
 	 if(!(m7d_equal(r1_m7d, r2_m7d)))
 	 {
-	 	m7d_specs(r1_m7d);
-	 	m7d_print(r1_m7d);
+	
 	 	printf("\nm7d Hadamard  test of size size %d by %d,\n failed \n", m, n);
 	 	
 	 	m1ri_die("");

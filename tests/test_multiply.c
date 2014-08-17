@@ -38,7 +38,9 @@ void m3d_strassen_test(int y, int z)
     
     m3d_rand(a);
     m3d_rand(b);
-   
+    
+   // printf("\nOutput of first matrix a of size %d, by %d\n", y, z);
+   //	m3d_print(a);
     
     
     
@@ -46,8 +48,8 @@ void m3d_strassen_test(int y, int z)
 	double time_spent;
 	begin = clock();
 	c = m3d_strassen(c, a, b);
-	printf("\n %d by %d matrix \n", c->nrows, c->ncols);
-	m3d_print(c);
+	//printf("\n %d by %d matrix \n", c->nrows, c->ncols);
+	//m3d_print(c);
     time_t after;
     time(&after);
 	end = clock();
@@ -69,9 +71,22 @@ void m3d_strassen_test(int y, int z)
 int main(int argc, const char * argv[])
 {
  	//m3d_strassen_test(64, 64);
-   	
-  	//m3d_strassen_test(512, 512);
+   	//m3d_strassen_test(512, 512);
+   
+   
+   
+   m3d_t * a, *b, *c;
+	a = m3d_create(128, 128);
+    b = m3d_create(128, 128);
     
-  //  m3d_strassen_test(4096, 4096);
+    m3d_rand(a);
+    m3d_rand(b);
+    
+//   	m3d_print(a);
+    
+    
+	c = m3d_strassen(c, a, b);
+	
+///	m3d_print(c);
    return 0 ; 
 }    

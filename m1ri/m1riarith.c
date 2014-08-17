@@ -118,7 +118,7 @@ static inline void iadd_vbg(vbg *r,vbg  const *  x)
     r->units = t | r->units;
 }
 
-static inline void isub_m3d(vbg  *r,vbg  *x)
+static inline void isub_m3d(vbg  *r,vbg  const *x)
 {
     vec t;
     r->units = x->units ^ r->units;

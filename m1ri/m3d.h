@@ -370,21 +370,32 @@ void sub_m3d( vbg *, vbg const *  , vbg const * );
  * \returns r with difference
  */
 
-inline void sub_m3dr( vbg *r, vbg const *x, vbg const *y)
+static inline vbg sub_m3dr(vbg const x, vbg const y)
+
 {
-   /*  r->units = ((x->units^y->units) | (x->sign^y->sign)); */
-   /*  r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign)); */
-    r->sign = y->units ^ x->units;
-    r->units = y->sign ^ x->sign;
-    r->units = r->units | r->sign;
-    r->sign = r->sign ^ y->sign;
-    r->sign = (y->units ^ x->sign) & r->sign;   
-   
-   
-   
-   
+    vbg r;
+    r.units = ((x.units^y.units) | (x.sign^y.sign));
+    r.sign = (((x.units^y.units)^x.sign)&(y.units ^ x.sign));
+    
+    return r;
 }
-            
+  
+         
+/** 
+ \brief Optimized subtract for  64 * 64 matrix
+ * \param R = minuend
+ * \param A = subtrahend
+ * \param B = difference
+*/
+static inline void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
+{
+    int i;
+    for (i= 0; i < M1RI_RADIX; i++ )
+    {
+        R[i][0] = sub_m3dr(A[i][0], B[i][0]);
+    }
+    
+}
 
 
 /** *****************************
@@ -425,22 +436,6 @@ m3d_t * m3d_hadamard(m3d_t * , m3d_t const * , m3d_t const * );
 
 
 
-/** 
- \brief Optimized subtract for  64 * 64 matrix
- * \param R = minuend
- * \param A = subtrahend
- * \param B = difference
-*/
-
-static inline void m3d_sub_64(vbg *R, vbg  *A, vbg  *B)
-{
-    int i;
-    for (i= 0; i < M1RI_RADIX; i++ )
-    {
-       sub_m3dr(R, A, B);
-    }
-    
-}
 
 /** 
 	\brief, addition base case
@@ -448,7 +443,7 @@ static inline void m3d_sub_64(vbg *R, vbg  *A, vbg  *B)
 	param  y addend
 	\return x as sum
 */
-static inline vbg add_m3dr(vbg  x, vbg const y)
+static inline vbg m3d_inc(vbg  x, vbg const y)
 { 
     vec t;
     x.sign  = y.units ^ x.sign;
@@ -476,7 +471,7 @@ static inline void m3d_add_64(vbg *R, vbg   *A, vbg  *B)
     int i;
     for (i = 0; i < M1RI_RADIX; i++ )
     {
-        R[i] = add_m3dr(A[i], B[i]);
+        R[i] = m3d_inc(A[i], B[i]);
     }
 
 }
@@ -560,15 +555,5 @@ static inline void m3d_set_zero(m3d_t * a)
 /* 64 * 64,4096 bit, 512 byte matrix(slice) multiplication */
 void m3d_mul_64(vbg *, vbg * , vbg * );
 
-/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
-void mul_32_m3d(vbg *, vbg *, vbg *);
 
-/* 16 * 64,1024 bit, 128 byte matrix(slice) multiplication */
-void mul_16_m3d(vbg *, vbg *, vbg *);
-
-/* 8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication */
-void mul_8_m3d(vbg *, vbg *, vbg *);
-
-/* 4 * 64,256 bit, 32 byte matrix(slice) multiplication */
-void mul_4_m3d(vbg *R, vbg *A, vbg *B);
 #endif

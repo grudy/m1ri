@@ -36,7 +36,12 @@ pkgconfig_DATA = m1ri.pc
 libm1ri_la_LDFLAGS = -release 0.0.$(RELEASE) -no-undefined
 libm1ri_la_LIBADD = $(LIBPNG_LIBADD)
 
-check_PROGRAMS =  test_arithmetic test_hadamard m3d_mul_benchmark test_m3d test_m5d test_m7d
+check_PROGRAMS =  test_multiply test_arithmetic test_hadamard m3d_mul_benchmark test_m3d test_m5d test_m7d
+
+test_multiply_SOURCES=tests/test_multiply.c
+test_multiply_LDFLAGS=-lm1ri -lm
+test_multiply_CFLAGS=$(AM_CFLAGS)
+
 
 test_arithmetic_SOURCES=tests/test_arithmetic.c
 test_arithmetic_LDFLAGS=-lm1ri -lm
@@ -58,7 +63,11 @@ test_m7d_SOURCES=tests/test_m7d.c
 test_m7d_LDFLAGS=-lm1ri -lm
 test_m7d_CFLAGS=$(AM_CFLAGS)
 
-TESTS =  test_arithmetic test_hadamard test_m3d test_m5d test_m7d 
+test_m7d_SOURCES=tests/test_m7d.c
+test_m7d_LDFLAGS=-lm1ri -lm
+test_m7d_CFLAGS=$(AM_CFLAGS)
+
+TESTS =  test_arithmetic test_hadamard test_m3d test_m5d test_m7d test_multiply
 
 
 bin_PROGRAMS = m3d_mul_benchmark

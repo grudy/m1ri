@@ -102,6 +102,7 @@ static inline void m3d_mul_naive_square(m3d_t *c, const m3d_t *a, const m3d_t *b
 
 }
 
+
 static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
 {
   	m3d_t * x1;
@@ -180,37 +181,51 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     {
 
 			
+		
 
-
-		m3d_sub_64(x1->block, a_slice->row[0]->rows[0], a_slice->row[2]->rows[0]); //   1 * /
+		m3d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows); //   1 * /
         
         
-        m3d_sub_64(x2->block,b_slice->row[3]->rows[0],b_slice->row[1]->rows[0]) ; //   2  
-        
+        m3d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ; //   2  
+       
         m3d_mul_64(c_slice->row[2]->rows[0], x1->rows[0], x2->rows[0]); //   3 
+        
+        
+ 
+
+        
+        
+        
+        
         m3d_add_64(x1->rows[0],a_slice->row[2]->rows[0],a_slice->row[3]->rows[0]) ; //   4 
-        m3d_sub_64(x2->rows[0],b_slice->row[1]->rows[0],b_slice->row[0]->rows[0]) ; //   5 
+        
+        m3d_sub_64(x2->rows,b_slice->row[1]->rows,b_slice->row[0]->rows) ; //   5 
 
      	m3d_mul_64(c_slice->row[3]->rows[0], x1->rows[0], x2->rows[0]); //     6 
-        m3d_sub_64(x1->rows[0],x1->rows[0],a_slice->row[0]->rows[0]) ; // 7 
-        m3d_sub_64(x2->rows[0],b_slice->row[3]->rows[0],x2->rows[0]); //   8 
+        m3d_sub_64(x1->rows,x1->rows,a_slice->row[0]->rows) ; // 7 
+        m3d_sub_64(x2->rows,b_slice->row[3]->rows,x2->rows); //   8 
         m3d_mul_64(c_slice->row[1]->rows[0],x1->rows[0],x2->rows[0]); //  9 
-        m3d_sub_64(x1->rows[0],a_slice->row[1]->rows[0],x1->rows[0]); //     10 
-
+        m3d_sub_64(x1->rows,a_slice->row[1]->rows,x1->rows); //     10 
+		
+		
+		
         m3d_mul_64(c_slice->row[0]->rows[0],x1->rows[0],b_slice->row[3]->rows[0]); //    11 
         m3d_mul_64(x1->rows[0], a_slice->row[3]->rows[0], b_slice->row[3]->rows[0]); //   12 
+        
+        /*
         m3d_add_64(c_slice->row[1]->rows[0],x1->rows[0] , c_slice->row[1]->rows[0]) ; //    13 
         m3d_add_64(c_slice->row[2]->rows[0],c_slice->row[1]->rows[0] , c_slice->row[2]->rows[0]) ; //    14 
         m3d_add_64(c_slice->row[1]->rows[0],c_slice->row[1]->rows[0] , c_slice->row[3]->rows[0]) ; //    15 
         m3d_add_64(c_slice->row[3]->rows[0],c_slice->row[2]->rows[0] , c_slice->row[3]->rows[0]) ; //     16 
         m3d_add_64(c_slice->row[3]->rows[0],c_slice->row[2]->rows[0] , c_slice->row[3]->rows[0]) ; //   17 
-
-    	m3d_sub_64(x2->rows[0], x2->rows[0], b_slice->row[2]->rows[0]) ; //             18 
+		*/
+		/*
+    	m3d_sub_64(x2->rows, x2->rows, b_slice->row[2]->rows) ; //             18 
         m3d_mul_64(c_slice->row[2]->rows[0], a_slice->row[3]->rows[0], x2->rows[0]); //             19 
-        m3d_sub_64(c_slice->row[2]->rows[0], c_slice->row[2]->rows[0],c_slice->row[0]->rows[0]); //   20 
+        m3d_sub_64(c_slice->row[2]->rows, c_slice->row[2]->rows,c_slice->row[0]->rows); //   20 
         m3d_mul_64(c_slice->row[0]->rows[0], a_slice->row[1]->rows[0],b_slice->row[2]->rows[0]); //
         m3d_add_64(c_slice->row[0]->rows[0], x1->rows[0],c_slice->row[0]->rows[0]) ; // 
- 
+ 		*/
 		
 		
         m3d_free(x1);
@@ -272,7 +287,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 	lasta = 64 - a->nrows%64;
 	lastb = 64 -  b->ncols%64;  
 	lastboth = 64 - a->nrows; 
-	
+
 	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (b->ncols))
 	{
 		m3d_t * padded_a,   * padded_b , * padded_c;
@@ -823,7 +838,7 @@ m5d_t * m5d_classic_mul(m5d_t *c, const m5d_t  *a, const m5d_t  *b)
 	m5d_t * padded_a  = m1ri_malloc(sizeof(m5d_t));
 	m5d_t  * padded_b  = m1ri_malloc(sizeof(m5d_t));
 	m5d_t * padded_c = m1ri_malloc(sizeof(m5d_t));;
-	
+
 	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
 	{
 		padded_a = m5d_create( arcr, acbr);
@@ -840,7 +855,7 @@ m5d_t * m5d_classic_mul(m5d_t *c, const m5d_t  *a, const m5d_t  *b)
 		
 	else
 	{
-		m5d_mul_naive_square(c, a, b); 
+		//m5d_mul_naive_square(c, a, b); 
 	}
 	
 	return c;

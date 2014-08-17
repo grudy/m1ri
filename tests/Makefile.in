@@ -9,12 +9,13 @@ PAPI_CFLAGS =
 DEBUG = -ggdb
 
 TESTS = \
-	test_hadamard.c	\
-	m3d_test.c	\
-	m3d_functions.c	\
-	m5d_tests.c	\
-	m3d_mul_benchmark.c \
-	m7d_tests.c 
+	test_arithmetic.c\
+	test_hadamard.c\
+ 	test_m3d.c\
+	test_m5d.c\
+ 	test_m7d.c\
+	test_multiply.c .c\
+
 
 
 pkgincludesubdir = $(includedir)/m1ri

@@ -423,7 +423,7 @@ m3d_t *    m3d_init_window(const m3d_t *c, const rci_t strow, const rci_t stvbg,
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svbg = stvbg;
-    
+   
     
    
     for(  i =   f; i < (f + submatrix->nrows) ; i++)
@@ -605,7 +605,7 @@ static inline m3d_t ** m3_rowslice_allocate(m3d_t * block,  wi_t width, rci_t nr
 {
 	
 	int i;
-    m3d_t ** rows = m1ri_calloc( nrows , width  * sizeof(m3d_t **));
+    m3d_t ** rows = m1ri_calloc( nrows , sizeof(m3d_t **));
     for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = block + (i * width);
@@ -662,6 +662,30 @@ void  m3d_slices(m3_slice *  c, const m3d_t * a, wi_t slicesize)
 }
 
 
+/**
+  Allocates a m3_slice to consist of four equally sized windows
+*/
+m3_slice * m3d_quarter(const m3d_t * a)
+{
+	 m3_slice * c = m1ri_malloc(sizeof(m3_slice));
+	 
+	 
+	 c->block = m1ri_calloc( 4 , sizeof(m3d_t *));
+     c->row = m1ri_calloc( 4 , sizeof(m3d_t **));
+
+     
+     
+     c->row[0] = m3d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
+	 c->row[1] = m3d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+     c->row[2] = m3d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	 c->row[3] = m3d_init_window(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+	 
+	 
+	 
+
+    return c;
+}
+
 static inline vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
 {
     int i, x;
@@ -698,27 +722,7 @@ m3d_t * m3d_transpose_sliced(m3d_t * a)
     return c;
   
 }
-/**
-  Allocates a m3_slice to consist of four equally sized windows
-*/
-#include "m1ri_io.h"
-m3_slice * m3d_quarter(const m3d_t * a)
-{
-	 m3_slice * c = m1ri_malloc(sizeof(m3_slice));
-	 
-	 
-	 c->block = m3_blockslice_allocate(  2,   2);
-     
-     
-     c->row = m1ri_malloc(4 * sizeof(m3d_t *));
-     c->row[0] = m3d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
-	 c->row[1] = m3d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
-     c->row[2] = m3d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
-	 c->row[3] = m3d_init_window(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
-	 
 
-    return c;
-}
 
 void  m3d_transpose(m3d_t   * a)
 {
@@ -1103,13 +1107,14 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B);
   Matrix Multiplication Lookup tables
 
 */
-void *  m3d_combine3(vbg *table, vbg *input )
-{
+
+static inline void m3d_combine3(vbg *table, vbg *input) {
     vbg t, a, b, c;
     t.sign = t.units = 0;
     a = input[0];
     b = input[1];
     c = input[2];
+
     table[0] = t;
     table[1] = a;
     table[2] = b;
@@ -1117,312 +1122,167 @@ void *  m3d_combine3(vbg *table, vbg *input )
 
     add_vbg(&t, &a, &b);
     table[3] = t;
-    iadd_vbg(&t, &c);
+    m3d_inc(t, c);
     table[7] = t;
     isub_m3d(&t, &a);
     table[6] = t;
-    add_vbg((table + 5), &a , &b);
-
-    return 0;
     
+    add_vbg(table+5, &a, &c);
 }
 
-
-void m3d_combine4(vbg *table, vbg *input )
-{
-    vbg t, a, b, c , d;
+static inline void m3d_combine4(vbg *table, vbg *input) {
+    vbg t, a, b, c, d;
     t.sign = t.units = 0;
     a = input[0];
     b = input[1];
     c = input[2];
     d = input[3];
-    
+
     table[0] = t;
     table[1] = a;
     table[2] = b;
     table[4] = c;
     table[8] = d;
-    
-    add_vbg(&t, &c, &d);
-    
+
+    add_vbg(&t,&c,&d);
     table[12] = t;
     
     add_vbg(&t,&b,&c);
     table[6] = t;
-    iadd_vbg(&t,&d);
+    m3d_inc(t,d);
     table[14] = t;
     isub_m3d(&t,&c);
     table[10] = t;
-    
-    add_vbg(&t,&b,&c);
+
+    add_vbg(&t,&a,&b);
     table[3] = t;
-    iadd_vbg(&t, &d);
-    
-    
-    
+    m3d_inc(t,d);
     table[11] = t;
-    iadd_vbg(&t, &c);
+    m3d_inc(t,c);
     table[15] = t;
-    isub_m3d(&t, &d);
+    isub_m3d(&t,&d);
     table[7] = t;
-    isub_m3d(&t, &b);
+    isub_m3d(&t,&b);
     table[5] = t;
-    iadd_vbg(&t, &d);
+    m3d_inc(t,d);
     table[13] = t;
-    isub_m3d(&t, &c);
+    isub_m3d(&t,&c);
     table[9] = t;
-    
-    
 }
 
-
-void m3d_combine5(vbg *table, vbg *input )
-{
-	int i;
+static inline void m3d_combine5(vbg *table, vbg *input) {
     vbg e, *t4;
+    int i;
 
     m3d_combine4(table, input);
     e = input[4];
-    t4 = table + 16;
+    t4 = table+16;
     table[16] = e;
     
-    for ( i = 1; i < 16 ; i ++ ) {
-        add_vbg(t4 + i, table + i, &e);
-    }
+    for(i=1;i<16;i++)
+        add_vbg(t4 + i, table+i, &e);
 }
-
-
-void m3d_combine6(vbg *table, vbg *input )
-
-{
+    
+static inline void m3d_combine6(vbg *table, vbg *input) {
+    vbg e, *t4;
     vbg f, *t5;
     int i;
-    m3d_combine5(table, input);
-    f = input[5];
-    t5 = (table + 32);
-    table [32] = f;
-    for (i = 1; i < 32; i++)
-        add_vbg((t5 + i), (table + i), &f);
     
+    m3d_combine4(table, input);
+    e = input[4];
+    t4 = table+16;
+    table[16] = e;
+
+    f = input[5];
+    t5 = table+32;
+    table[32] = f;
+    
+    for(i=1;i<16;i++)
+        add_vbg(t4 + i, table+i, &e);
+
+    for(i=1;i<32;i++)
+        add_vbg(t5 + i, table+i, &f);
+
 }
 
- void m3d_combine7(vbg *table, vbg *input )
-
-{
-    
+static inline void m3d_combine7(vbg *table, vbg *input) {
     vbg g, *t6;
     int i;
+
     m3d_combine6(table, input);
     g = input[6];
-    t6 = (table+64);
+    t6 = table+64;
     table[64] = g;
-    for (i = 1; i < 64; i = i +1) {
-        add_vbg((t6 + i), (table + i), &g );
-    }
- 
+    
+    for(i=1;i<64;i++)
+        add_vbg(t6 + i, table+i, &g);
+
 }
 
-
-void m3d_combine8(vbg *table, vbg *input)
-
-{
+static inline void m3d_combine8(vbg *table, vbg *input) {
     vbg h, *t7;
     int i;
-    
+
     m3d_combine7(table, input);
     h = input[7];
-    t7 = (table+128);
+    t7 = table+128;
     table[128] = h;
     
-    for (i = 1; i < 128; i++)
-        add_vbg((t7 + i), (table+i), &h);
+    for(i=1;i<128;i++)
+        add_vbg(t7 + i, table+i, &h);
 }
 
 
 void m3d_mul_64(vbg *R, vbg *  A, vbg *  B)
 {
-    int i;
-    vbg t1, t2, r1, r2, a;
-    vec v1, v2;
-    
-    vbg  tables6[9][64];
-    vbg tables5[2][32];
-    
-	for (i = 0; i < 9; i ++)
+     int i;
+    vec v1,v2;
+    vbg a, t1, t2, r1, r2;
+    vbg tables6[4][64];
+    vbg tables5[8][32];
+    for(i=0;i<4;i++) 
     {
-        m3d_combine6(tables6[i], B + (6*i));
+        m3d_combine6(tables6[i], B + 0 + 6*i);
     }
-   
-    for (i = 0; i < 2; i ++)
-    {
-        m3d_combine5(tables5[i], B + (54 + (5 * i)));
+    for(i=0;i<8;i++) {
+        m3d_combine5(tables5[i], B + 24 + 5*i);
     }
-
-    for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
+    for(i=0;i<64;i++) 
     {
         a = A[i];
         v2 = a.sign;
-    
-        v1 = (a.units ^ v2);		
-        r1 = tables6[0][v1&63];
-        v1 >>= 6;
-        r2 = tables6[0][v2&63];
-        v2 >>= 6;
-        t1 = tables6[1][v1&63]; iadd_vbg(&r1, &t1);v1 >>= 6;
+        v1 = a.units ^ v2;
+        r1 = tables6[0][v1&63];                  v1 >>= 6;
+        r2 = tables6[0][v2&63];                  v2 >>= 6;
+        t1 = tables6[1][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
         t2 = tables6[1][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
         t1 = tables6[2][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
         t2 = tables6[2][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
         t1 = tables6[3][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
         t2 = tables6[3][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
-        t1 = tables6[4][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
-        t2 = tables6[4][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
-        t1 = tables6[5][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
-        t2 = tables6[5][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
-        t1 = tables6[6][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
-        t2 = tables6[6][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
-        t1 = tables6[7][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
-        t2 = tables6[7][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
-        t1 = tables6[8][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
-        t2 = tables6[8][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
         t1 = tables5[0][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
         t2 = tables5[0][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
-        t1 = tables5[1][v1&31]; iadd_vbg(&r1, &t1);
-        t2 = tables5[1][v2&31]; iadd_vbg(&r2, &t2);
-        
-        isub_m3d(&r1, &r2);
-        R[i] = r1;
-       /*  */
-    }
-    
-}
-
-/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
-void mul_32_m3d(vbg *R, vbg *A, vbg *B)
-{
-    long i;
-    vbg t1, t2, r1, r2, a;
-    long v1, v2;
-    
-    vbg tables5[4][32];
-    vbg tables4[3][16];
-    for (i = 1; i < 4; i ++)
-        
-        m3d_combine5(tables5[i], B + 0 + 5*i);
-    for (i = 0; i < 3; i++)
-        m3d_combine4(tables4[i], B + 20 + 4*i);
-    
-    for (i = 0;i < 32; i++)
-    {
-        
-        a = A[i];
-        v2 = a.sign;
-        v1 = a.units ^ v2;
-        t1 = tables5[0][v1&31]; v1 >>= 5;
-        t2 = tables5[0][v2&31]; v2 >>= 5;
         t1 = tables5[1][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
         t2 = tables5[1][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
         t1 = tables5[2][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
         t2 = tables5[2][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
         t1 = tables5[3][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
         t2 = tables5[3][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
-        t1 = tables4[0][v1&15]; iadd_vbg(&r1, &t1); v1 >>= 4;
-        t2 = tables4[0][v2&15]; iadd_vbg(&r2, &t2); v2 >>= 4;
-        t1 = tables4[1][v1&15]; iadd_vbg(&r1, &t1); v1 >>= 4;
-        t2 = tables4[1][v2&15]; iadd_vbg(&r2, &t2); v2 >>= 4;
-        t1 = tables4[2][v1&15]; iadd_vbg(&r1, &t1);
-        t2 = tables4[2][v2&15]; iadd_vbg(&r2, &t2);
-        
+        t1 = tables5[4][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
+        t2 = tables5[4][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
+        t1 = tables5[5][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
+        t2 = tables5[5][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
+        t1 = tables5[6][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
+        t2 = tables5[6][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
+        t1 = tables5[7][v1&31]; iadd_vbg(&r1, &t1);          
+        t2 = tables5[7][v2&31]; iadd_vbg(&r2, &t2);          
+
         isub_m3d(&r1, &r2);
-        R[i] = r1;
+        R[i * 2] = r1;
+       /*  */
     }
     
 }
-
-/* 16 * 64,1024 bit, 128 byte matrix(slice) multiplication */
-void mul_16_m3d(vbg *R, vbg *A, vbg *B)
-{
-    long i;
-    vbg t1, t2, r1, r2, a;
-    long v1, v2;
-    
-    vbg tables4[4][16];
-    for (i = 0; i < 4; i++)
-        m3d_combine4(tables4[i], B + (4*i));
-    for (i = 0;  i < 16; i++)
-    {
-        a = A[i];
-        v2 = a.sign;
-        v1 = a.units ^ v2;
-        r1 = tables4[0][v1&15]; v1 >>= 4;
-        r2 = tables4[0][v2&15]; v2 >>= 4;
-        t1 = tables4[1][v1&15]; iadd_vbg(&r1, &t1); v1 >>= 4;
-        t2 = tables4[1][v2&15]; iadd_vbg(&r2, &t2); v2 >>= 4;
-        t1 = tables4[2][v1&15]; iadd_vbg(&r1, &t1); v1 >>= 4;
-        t2 = tables4[2][v2&15]; iadd_vbg(&r2, &t2); v2 >>= 4;
-        t1 = tables4[3][v1&15]; iadd_vbg(&r1, &t1);
-        t2 = tables4[3][v2&15]; iadd_vbg(&r2, &t2);
-    
-        isub_m3d(&r1, &r2);
-        R[i] = r1;
-    }
-}
-
-/* 8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication */
-void mul_8_m3d(vbg *R, vbg *A, vbg *B)
-
-{
-    int i;
-    vbg t1, t2, r1, r2, a;
-    vec v1, v2;
-    
-    vbg tables4[2][16];
-    for (i = 0; i < 2; i++)
-        m3d_combine4(tables4[i], B + (4*i));
-    for (i = 0; i < 8; i++)
-    {
-        a = A[i];
-    v2 = a.sign;
-    v1 = a.units ^ v2;
-    r1 = tables4[0][v1&15]; v1 >>= 4;
-    r2 = tables4[0][v2&15]; v2 >>= 4;
-    t1 = tables4[1][v1&15]; iadd_vbg(&r1, &t1);
-    t2 = tables4[1][v2&15]; iadd_vbg(&r2, &t2);
-    
-    isub_m3d(&r1, &r2);
-    R[i] = r1;
-    }
-}
-
-
-
-
-
-
-/* 4 * 64,256 bit, 32 byte matrix(slice) multiplication */
-void mul_4_m3d(vbg *R, vbg *A, vbg *B)
-{
-    int i;
-    vbg r1, r2, a;
-    vec v1, v2;
-    
-    vbg table4[16];
-    for (i = 0; i < 1; i++)
-        m3d_combine4(table4, B + (4*i));
-    for(i = 0; i < 4; i++)
-    {
-        a = A[i];
-        v2 = a.sign;
-        v1 = a.units ^ v2;
-        r1 = table4[v1&15];
-        r2 = table4[v2&15];
-        
-        isub_m3d(&r1, &r2);
-        R[i] = r1;
-    }
-    
-}
-
-
 
 inline void m3d_mul_zero(m3d_t * a)
 {

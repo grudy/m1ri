@@ -121,6 +121,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
   
   
 	m3d_t * y0, *y1,* y2,* y3, *y4,* y5,* y6;
+	
 	y0 = m3d_create(512, 512);
 	y1 = m3d_create(512, 512);
 	y2 = m3d_create(512, 512);
@@ -134,7 +135,11 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	y4 = m3d_strassen(y4, y1, y2);
 	y5 = m3d_strassen(y5, y3, y2);
 	y6 = m3d_strassen(y6, y0, y4);
- 
+ 	m3d_free(y3);
+	m3d_free(y4);
+	m3d_free(y5);
+	m3d_free(y6);
+  
   
 	m3d_free(w0);
 	m3d_free(w1);
@@ -147,10 +152,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	m3d_free(y0);
 	m3d_free(y1);
 	m3d_free(y2);
-	m3d_free(y3);
-	m3d_free(y4);
-	m3d_free(y5);
-	m3d_free(y6);
+	
 	
 	m3d_free(v);	
 	m3d_free(o);
