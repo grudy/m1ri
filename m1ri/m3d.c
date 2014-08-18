@@ -1108,7 +1108,7 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B);
 
 */
 
-static inline void m3d_combine3(vbg *table, vbg *input) {
+static inline void m3d_combine3(vbg *table, vbg const *input) {
     vbg t, a, b, c;
     t.sign = t.units = 0;
     a = input[0];
@@ -1130,7 +1130,7 @@ static inline void m3d_combine3(vbg *table, vbg *input) {
     add_vbg(table+5, &a, &c);
 }
 
-static inline void m3d_combine4(vbg *table, vbg *input) {
+static inline void m3d_combine4(vbg *table, vbg const *input) {
     vbg t, a, b, c, d;
     t.sign = t.units = 0;
     a = input[0];
@@ -1170,7 +1170,7 @@ static inline void m3d_combine4(vbg *table, vbg *input) {
     table[9] = t;
 }
 
-static inline void m3d_combine5(vbg *table, vbg *input) {
+static inline void m3d_combine5(vbg *table, vbg const *input) {
     vbg e, *t4;
     int i;
 
@@ -1183,7 +1183,7 @@ static inline void m3d_combine5(vbg *table, vbg *input) {
         add_vbg(t4 + i, table+i, &e);
 }
     
-static inline void m3d_combine6(vbg *table, vbg *input) {
+static inline void m3d_combine6(vbg *table, vbg const *input) {
     vbg e, *t4;
     vbg f, *t5;
     int i;
@@ -1205,7 +1205,7 @@ static inline void m3d_combine6(vbg *table, vbg *input) {
 
 }
 
-static inline void m3d_combine7(vbg *table, vbg *input) {
+static inline void m3d_combine7(vbg *table, vbg const *input) {
     vbg g, *t6;
     int i;
 
@@ -1233,7 +1233,7 @@ static inline void m3d_combine8(vbg *table, vbg *input) {
 }
 
 
-void m3d_mul_64(vbg *R, vbg *  A, vbg *  B)
+void m3d_mul_64(vbg *R, vbg const *  A, vbg const *  B)
 {
      int i;
     vec v1,v2;

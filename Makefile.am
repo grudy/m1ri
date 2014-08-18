@@ -63,9 +63,7 @@ test_m7d_SOURCES=tests/test_m7d.c
 test_m7d_LDFLAGS=-lm1ri -lm
 test_m7d_CFLAGS=$(AM_CFLAGS)
 
-test_m7d_SOURCES=tests/test_m7d.c
-test_m7d_LDFLAGS=-lm1ri -lm
-test_m7d_CFLAGS=$(AM_CFLAGS)
+
 
 TESTS =  test_arithmetic test_hadamard test_m3d test_m5d test_m7d test_multiply
 
