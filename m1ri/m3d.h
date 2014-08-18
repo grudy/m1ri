@@ -466,12 +466,34 @@ static inline vbg m3d_inc(vbg  x, vbg const y)
  \param B = addend
  \Assumes there are 64 values, doesn't check
 */
-static inline void m3d_add_64(vbg *R, vbg   *A, vbg  *B)
+
+
+static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
+
+{
+    /* r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0); */
+    /* r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t. */
+
+
+
+ 	r->units = y->sign ^ x->units;
+    r->sign = y->units ^ x->sign;
+    r->sign = r->sign & r->units;
+    r->units = r->units ^ x->sign;
+    r->units = (y->units ^ x->units) | r->units;
+
+
+
+
+}
+
+
+static inline void m3d_add_64(vbg *R, vbg const   *A, vbg  const *B)
 {
     int i;
     for (i = 0; i < M1RI_RADIX; i++ )
     {
-        R[i] = m3d_inc(A[i], B[i]);
+         add_vbg(R + i, A + i, B + i);
     }
 
 }
