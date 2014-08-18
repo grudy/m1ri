@@ -34,7 +34,7 @@ void m3d_strassen_test(int y, int z)
 
     m3d_rand(a);
     m3d_rand(b);
-    c = m3d_copy(c, a);
+
 
 
 
