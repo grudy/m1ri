@@ -766,7 +766,8 @@ m3d_t *  m3d_copy(m3d_t * a, m3d_t const *b)
     for(int j = 0; j < b->ncols; j++)
     {
     
-		a->rows[i][j] = b->rows[i][j];
+		a->rows[i][j].units = b->rows[i][j].units;
+		a->rows[i][j].sign = b->rows[i][j].sign;
  
     }
     
