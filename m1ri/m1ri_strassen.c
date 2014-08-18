@@ -115,6 +115,8 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
    	b_slice = m3d_quarter(b);
    	c_slice = m3d_quarter( c);
 	
+	x1 = m3d_create( c->ncols/2, c->nrows/2);
+    x2 = m3d_create(c->ncols/2, c->nrows/2);
 	if((c->ncols) > (M1RI_RADIX << 1))
     {
      
@@ -177,8 +179,6 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
-		   x1 = m3d_create( 64, 64);
-    		x2 = m3d_create(64, 64);
 		m3d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows); //   1 * /
         m3d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ; //   2  
         m3d_mul_64(c_slice->row[2]->rows[0], x1->rows[0], x2->rows[0]); //   3         

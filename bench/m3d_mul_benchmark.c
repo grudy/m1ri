@@ -62,7 +62,7 @@ void m3d_strassen_test(int y, int z)
 
 int main(int argc, const char * argv[])
 {
- 	m3d_strassen_test(64, 64);
+ 	//m3d_strassen_test(64, 64);
    	m3d_strassen_test(256, 256);
     m3d_strassen_test(6400, 6400);
    // m3d_strassen_test(64000, 64000);
