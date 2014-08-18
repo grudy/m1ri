@@ -106,18 +106,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
    	
 
    m3d_print(w5);
-  if(!(m3d_equal(w5, w6)))   
-	 {
-	 	printf("Classic Multiplication m3d test failed");
-	    return 1;  
-	 
-	 }   
-  
-  
-
-
-  
-  printf("Classic Multiplication m3d test passed"); 
+ 
   
   
 	m3d_t * y0, *y1,* y2,* y3, *y4,* y5,* y6;
@@ -131,16 +120,15 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	m3d_rand(y2);
   
 	y3 = m3d_strassen(y3, y0, y1);
-  	printf("\nclassic\n");
-  	m3d_print(y3);
-	//y4 = m3d_strassen(y4, y1, y2);
-/*	y5 = m3d_strassen(y5, y3, y2);
+  
+	y4 = m3d_strassen(y4, y1, y2);
+	y5 = m3d_strassen(y5, y3, y2);
 	y6 = m3d_strassen(y6, y0, y4);
  	m3d_free(y3);
 	m3d_free(y4);
 	m3d_free(y5);
 	m3d_free(y6);
-   */
+   
   
 	m3d_free(w0);
 	m3d_free(w1);
@@ -169,7 +157,8 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 		
 	a = m3d_identity(a, 64);
 	b = m3d_identity(b, 64);	
-	
+	m3d_print(a);
+	m3d_print(b);
 	
 	if(!m3d_equal(a, b))
 	{

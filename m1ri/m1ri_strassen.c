@@ -107,11 +107,10 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
 {
   	m3d_t * x1;
     m3d_t * x2;
-    	
+	 	
     
 	m3_slice *  a_slice, *  b_slice, *  c_slice;     	
-    x1 = m3d_create( c->nrows/2, c->ncols/2);
-    x2 = m3d_create( c->nrows/2, c->ncols/2);
+ 
     a_slice = m3d_quarter( a);
    	b_slice = m3d_quarter(b);
    	c_slice = m3d_quarter( c);
@@ -122,7 +121,7 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
        
         x1 = m3d_sub(x1, a_slice->row[0], a_slice->row[2]);      // 1 
         
-    
+    	
         x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[1]);      // 2 
         
         
@@ -131,7 +130,7 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
         x1 = m3d_add(x1, a_slice->row[2],a_slice->row[1]);      // 4 
         x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[0]);      // 5 
         
-    
+    	
         m3d_qrt_mul(c_slice->row[3], x1, x2);        // 6 
         x1 = m3d_sub(x1, x1,a_slice->row[0]);    // 7 
         x2 = m3d_sub(x2, b_slice->row[1],x2);      // 8 
@@ -171,15 +170,15 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
 
         m3d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]);
         c_slice->row[0] = m3d_add(c_slice->row[0], x1,c_slice->row[0] );
-        m3d_free(x1);
-    	m3d_free(x2);
+    	
        	
        	
     }
     
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
-
+		   x1 = m3d_create( 64, 64);
+    		x2 = m3d_create(64, 64);
 		m3d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows); //   1 * /
         m3d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ; //   2  
         m3d_mul_64(c_slice->row[2]->rows[0], x1->rows[0], x2->rows[0]); //   3         
@@ -199,13 +198,7 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
   	    m3d_mul_64(x1->rows[0], a_slice->row[3]->rows[0], b_slice->row[3]->rows[0]); //   12 
   	    
   	    
-  	    printf("before supposed addition: ,x1->rows[0]\n");
-  	    m3d_print(x1);
-  	    printf("\n c_slice->row[1]\n");
-  	            m3d_print(c_slice->row[1]);
         m3d_add_64(c_slice->row[1]->rows[0],x1->rows[0] , c_slice->row[1]->rows[0]) ; //    13 
-        printf("\nc_slice->row[1] after supposed addition\n ");
-        m3d_print(c_slice->row[1]);
         m3d_add_64(c_slice->row[2]->rows[0],c_slice->row[1]->rows[0] , c_slice->row[2]->rows[0]) ; //    14 
         m3d_add_64(c_slice->row[1]->rows[0],c_slice->row[1]->rows[0] , c_slice->row[3]->rows[0]) ; //    15 
         m3d_add_64(c_slice->row[3]->rows[0],c_slice->row[2]->rows[0] , c_slice->row[3]->rows[0]) ; //     16 
@@ -216,9 +209,8 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
         m3d_mul_64(c_slice->row[0]->rows[0], a_slice->row[1]->rows[0],b_slice->row[2]->rows[0]); //
         m3d_add_64(c_slice->row[0]->rows[0], x1->rows[0],c_slice->row[0]->rows[0]) ; // 
  			
-        m3d_free(x1);
-    	m3d_free(x2);
-
+  
+		
     	
     }
     
@@ -232,6 +224,8 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     m1ri_free(a_slice);
     m1ri_free(b_slice);
     m1ri_free(c_slice);
+        m3d_free(x1);
+    	m3d_free(x2);
 }
 
 /**
@@ -278,6 +272,9 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (b->ncols))
 	{
 		m3d_t * padded_a,   * padded_b , * padded_c;
+	
+		
+		
 		padded_a = m3d_create(arcr, acbr);
 		padded_b = m3d_create(acbr, bccc);
 		padded_c = m3d_create(arcr, bccc);
@@ -287,10 +284,12 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 	
 	
 		m3d_qrt_mul(padded_c, padded_a, padded_b); 
-
+		
 		m3d_free(padded_a);
 		m3d_free(padded_b);
 		m3d_free(padded_c);
+		
+		
 	}
 	
 	

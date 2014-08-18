@@ -761,7 +761,7 @@ m3d_t *  m3d_copy(m3d_t * a, m3d_t const *b)
   }
   
   
-  for(int i = 0; i < a->nrows; i++)
+  for(int i = 0; i < b->nrows; i++)
   {
     for(int j = 0; j < b->ncols; j++)
     {
@@ -770,11 +770,13 @@ m3d_t *  m3d_copy(m3d_t * a, m3d_t const *b)
  
     }
     
+  
+  }
+  
+  
      a->lblock = b->lblock; //  first block pointed to in a window
      a->fcol = b->fcol;  ///column offset of first block
      a->flags = b->flags;
-  
-  }
   
   
   return a;
@@ -947,7 +949,7 @@ m3d_t  * m3d_add(m3d_t *c, const m3d_t  *a,const m3d_t  *b)
        
       m1ri_die("m3d_add: Input Matrices must have same dimension.\n");
     }
-     c = m3d_create( a->nrows , b->ncols);
+
         int i, j;
         for( i = 0; i < a->nrows; i++)
         {
@@ -1261,7 +1263,7 @@ void m3d_mul_64(vbg *R, vbg const *  A, vbg const *  B)
         t2 = tables5[7][v2&31]; iadd_vbg(&r2, &t2);          
 
         isub_m3d(&r1, &r2);
-        R[i * 2] = r1;
+        R[i] = r1;
        /*  */
     }
     

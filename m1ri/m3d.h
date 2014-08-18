@@ -179,7 +179,7 @@ static inline vbg ** m3d_row_alloc(vbg * block, wi_t width, rci_t nrows)
 {
 	int i;
 	vbg ** rows;
-    rows = m1ri_malloc( nrows * width * sizeof(vbg *));
+    rows = m1ri_calloc( nrows ,  width * sizeof(vbg *));
     for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = block + i * width;

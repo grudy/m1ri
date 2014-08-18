@@ -78,8 +78,8 @@ int main(int argc, const char * argv[])
    m3d_t * a, *b, *c;
 //	a = m3d_create(128, 128);
   //  b = m3d_create(128, 128);
-    a = m3d_create(512, 512);
-  	b = m3d_create(512, 512);
+    a = m3d_create(640, 640);
+  	b = m3d_create(640, 640);
     m3d_rand(a);
     m3d_rand(b);
     
@@ -87,6 +87,6 @@ int main(int argc, const char * argv[])
     
     
 	c = m3d_strassen(c, a, b);
- 	m3d_print(c);
+ 	//m3d_print(c);
    return 0 ; 
 }    
