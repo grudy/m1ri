@@ -278,7 +278,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 		padded_b = m3d_create(acbr, bccc);
 		padded_c = m3d_create(arcr, bccc);
 		padded_a = m3d_copy(padded_a, a);
-		/*padded_b = m3d_copy(padded_b, b);
+		padded_b = m3d_copy(padded_b, b);
 		padded_c = m3d_copy(padded_c, c);
 	
 		m3d_qrt_mul(padded_c, padded_a, padded_b); 
@@ -286,7 +286,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 		m3d_free(padded_a);
 		m3d_free(padded_b);
 		m3d_free(padded_c);
-		*/
+		
 		
 	}
 	
