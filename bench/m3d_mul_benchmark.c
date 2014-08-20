@@ -51,7 +51,7 @@ void m3d_strassen_test(int y, int z)
     printf("\nm3d_strassen on two %d by %d matrix matrices.", y, z  );
     printf(" \n------------------->Runs in%9f seconds. \n", time_spent);
     printf("----------------------------------------------------------------------");
-    m3d_print(c);
+    //m3d_print(c);
     m3d_free(a);
     m3d_free(b);
     m3d_free(c);
