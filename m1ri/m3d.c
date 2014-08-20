@@ -532,9 +532,9 @@ m3d_t *  m3d_stack(m3d_t * c,const   m3d_t * a,const m3d_t * b)
 m3d_t * m3d_copy_cutoff(m3d_t  * a, m3d_t  const * b)
 {
 	int i, s;
-    for( i = 0; i < b->nrows; i++)
+    for( i = 0; i < a->nrows; i++)
     {
-    	for( s = 0; s < b->width; s++)
+    	for( s = 0; s < a->width; s++)
         {
             a->rows[i][s] = b->rows[i][s];
         }          
