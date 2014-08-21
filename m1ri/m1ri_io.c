@@ -159,7 +159,6 @@ static inline void print_m3d_block_more_buffered(vec a, vec b, u_int32_t l_unuse
     if(a->width >=  16)
     {
     
-    int  * j = m1ri_malloc(sizeof(int));
     char buffer[8192];
     for( i  = 0; i < a->nrows ; i++)
     {
