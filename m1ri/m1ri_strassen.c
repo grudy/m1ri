@@ -221,9 +221,9 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     } 
     
     
-    m1ri_free(a_slice);
-    m1ri_free(b_slice);
-    m1ri_free(c_slice);
+    m3d_quarter_free(a_slice);
+    m3d_quarter_free(b_slice);
+    m3d_quarter_free(c_slice);
         m3d_free(x1);
     	m3d_free(x2);
 }
