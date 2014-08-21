@@ -757,7 +757,7 @@ m3d_t *  m3d_copy(m3d_t * a, m3d_t const *b)
 {
   if(a == NULL)
   {	
-  	a = m3d_create( b->ncols, b->nrows);
+  	a = m3d_create( b->nrows, b->ncols);
   }
   
   if((a->ncols < b->ncols) || (a->nrows < b->nrows))
@@ -769,7 +769,7 @@ m3d_t *  m3d_copy(m3d_t * a, m3d_t const *b)
   
   for(int i = 0; i < b->nrows; i++)
   {
-    for(int j = 0; j < b->ncols; j++)
+    for(int j = 0; j < b->width; j++)
     {
     
 		a->rows[i][j].units = b->rows[i][j].units;
