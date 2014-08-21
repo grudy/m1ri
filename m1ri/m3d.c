@@ -199,7 +199,7 @@ m3d_t * m3d_create( rci_t nrows, rci_t ncols)
     a->rows =  NULL;
     a->block = m3d_block_allocate(a->nrows,    a->width);
     a->rows  = m3d_row_alloc(a->block, a->width, a->nrows);
-    a->flags = 0;
+    a->flags = notwindowed;
     a->lblock = ncols%64;
     a->fcol = 0;
     a->svbg = 0;
@@ -577,10 +577,16 @@ int m3d_equal(m3d_t const *a, m3d_t const *b)
 void m3d_free( m3d_t *  a)
 { 		
     m1ri_free(a->rows);
-    m1ri_free(a->block);
+    if(a->flags == notwindowed)
+    {
+	  m1ri_free(a->block); 	
+	}
+    
+    m1ri_free(a);
     a == NULL;
     
 }
+
 
 
 
@@ -670,7 +676,7 @@ m3_slice * m3d_quarter(const m3d_t * a)
 	 m3_slice * c = m1ri_malloc(sizeof(m3_slice));
 	 
 	 
-	 c->block = m1ri_calloc( 4 , sizeof(m3d_t *));
+	
      c->row = m1ri_calloc( 4 , sizeof(m3d_t **));
 
      

@@ -88,5 +88,6 @@ int main(int argc, const char * argv[])
     
 	c = m3d_strassen(c, a, b);
  	//m3d_print(c);
+ 	m3d_free(c);
    return 0 ; 
 }    

@@ -51,7 +51,7 @@ void m3d_strassen_test(int y, int z)
     printf("\nm3d_strassen on two %d by %d matrix matrices.", y, z  );
     printf(" \n------------------->Runs in%9f seconds. \n", time_spent);
     printf("----------------------------------------------------------------------");
-    //m3d_print(c);
+  
     m3d_free(a);
     m3d_free(b);
     m3d_free(c);
@@ -65,8 +65,9 @@ int main(int argc, const char * argv[])
 {
  	//m3d_strassen_test(64, 64);
    	m3d_strassen_test(256, 256);
-    m3d_strassen_test(4096, 4096);
-   // m3d_strassen_test(1640, 1640);
+    //m3d_strassen_test(2048, 2048);
+     m3d_strassen_test(6400, 6400);
+     
    // m3d_strassen_test(64000, 64000);
 
 

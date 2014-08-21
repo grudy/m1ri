@@ -244,7 +244,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 	if (c->nrows != a->nrows || c->ncols != b->ncols) 
 	{
 		m1ri_die("m3d_strassen: Provided return matrix has wrong dimensions.\n");
-    	}
+    }
 	
 	}
 	
@@ -263,7 +263,7 @@ m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
 	acbr =  powerof2(acbr);
 	bccc =  powerof2(bccc);
 	
-	c = m3d_create( a->nrows, b->ncols); 
+
 	int lasta, lastb, lastboth;
 	lasta = 64 - a->nrows%64;
 	lastb = 64 -  b->ncols%64;  

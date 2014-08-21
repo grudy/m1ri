@@ -182,7 +182,7 @@ static inline vbg ** m3d_row_alloc(vbg * block, wi_t width, rci_t nrows)
     rows = m1ri_calloc( nrows ,  width * sizeof(vbg *));
     for ( i = 0; i <  nrows;  i++ )
     {
-        rows[i]  = block + i * width;
+		rows[i]  = block + (i * width);
     };
     return rows;
 }
@@ -294,8 +294,24 @@ m3d_t * m3d_copy_cutoff(m3d_t  * , m3d_t const * );
  */
 void m3d_free( m3d_t *  );
 
-
-
+/**
+ * \brief Releases a m3_slice  allocated by a m3d_quarter function 
+ * \param a GF(3) matrix slice structure
+ *
+ * \Frees allocated and memory in slices, including windows
+ */
+static inline void m3d_quarter_free(m3_slice *a)
+{
+	
+	m3d_free(a->row[0]);
+	m3d_free(a->row[1]);
+	m3d_free(a->row[2]);
+	m3d_free(a->row[3]);
+	
+	m1ri_free(a->row);
+	m1ri_free(a);
+	
+}
 
 
 /**
@@ -320,7 +336,10 @@ void  m3d_slices(m3_slice *  ,const m3d_t * , wi_t );
  * \[2][2] 
  */
  
-m3_slice *  m3d_quarter( const m3d_t * );
+m3_slice *  m3d_quarter( const m3d_t * a );
+
+
+
 
 
 /**
