@@ -435,7 +435,6 @@ void  vbg_mul( vbg *, vbg  *, vbg  *);             /* multiply matrix x by y ass
 
 m3d_t *  m3d_sub(m3d_t *,   const  m3d_t  *, const m3d_t  *);
 
-//void m3d_sub_unshackled(m3d_t * r,   const  m3d_t  *x, const m3d_t  *y);
 
 static inline void  m3d_sub_unshackled(m3d_t * r,   const  m3d_t  *x, const m3d_t  *y)
 {

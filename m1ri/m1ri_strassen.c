@@ -50,7 +50,6 @@ static inline void m3d_mul_naive_square(m3d_t *c, const m3d_t *a, const m3d_t *b
   	m3_slice *  a_slice, *  b_slice, *  c_slice;
 
    	a_slice = m3d_quarter( a);
-   /* m3d_print(a_slice->row[0][0]); */
     b_slice = m3d_quarter( b);
     c_slice = m3d_quarter(c);
    
@@ -130,7 +129,6 @@ m3d_t * m3d_classic_mul(m3d_t *c, const m3d_t  *a, const m3d_t  *b)
 	}
 	
 	
-	c = m3d_create(  a->nrows, b->ncols); 
 	/** * arcr, acbr, bccc hold the padded matrix sizes*/
 	
 	
