@@ -389,14 +389,13 @@ void sub_m3d( vbg *, vbg const *  , vbg const * );
  * \returns r with difference
  */
 
-static inline vbg sub_m3dr(vbg const x, vbg const y)
+static inline void sub_m3dr(vbg  * r,vbg const * x, vbg const * y)
 
 {
-    vbg r;
-    r.units = ((x.units^y.units) | (x.sign^y.sign));
-    r.sign = (((x.units^y.units)^x.sign)&(y.units ^ x.sign));
+    r->units = ((x->units^y->units) | (x->sign^y->sign));
+    r->sign = (((x->units^y->units)^x->sign)&(y->units ^ x->sign));
     
-    return r;
+ 
 }
   
          
@@ -411,7 +410,7 @@ static inline void m3d_sub_64(vbg **R, vbg  **A, vbg  **B)
     int i;
     for (i= 0; i < M1RI_RADIX; i++ )
     {
-        R[i][0] = sub_m3dr(A[i][0], B[i][0]);
+      sub_m3dr(R[i], A[i], B[i]);
     }
     
 }
@@ -435,6 +434,61 @@ void  vbg_mul( vbg *, vbg  *, vbg  *);             /* multiply matrix x by y ass
  */
 
 m3d_t *  m3d_sub(m3d_t *,   const  m3d_t  *, const m3d_t  *);
+
+//void m3d_sub_unshackled(m3d_t * r,   const  m3d_t  *x, const m3d_t  *y);
+
+static inline void  m3d_sub_unshackled(m3d_t * r,   const  m3d_t  *x, const m3d_t  *y)
+{
+	
+	int n , i;
+	for(i = 0; i < x->nrows; i++)
+    {
+    	for(n = 0; n < x->width; n++)
+        {
+		  sub_m3d(r->rows[i] + n, x->rows[i] + n , y->rows[i] + n );
+        }
+    }
+   
+
+
+
+}
+
+
+static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
+
+{
+    /* r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0); */
+    /* r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t. */
+
+
+
+ 	r->units = y->sign ^ x->units;
+    r->sign = y->units ^ x->sign;
+    r->sign = r->sign & r->units;
+    r->units = r->units ^ x->sign;
+    r->units = (y->units ^ x->units) | r->units;
+
+
+
+
+}
+
+
+
+static inline void   m3d_add_unshackled(m3d_t *c, const m3d_t  *a,const m3d_t  *b)
+{
+
+   int i, j;
+        for( i = 0; i < a->nrows; i++)
+        {
+            for(j = 0; j < (a->width ); j++)
+            {
+            	add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
+        	}   
+        }
+}
+
 
 /**
 	Return the value of the matrix multiplied
@@ -487,33 +541,20 @@ static inline vbg m3d_inc(vbg  x, vbg const y)
 */
 
 
-static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
-
-{
-    /* r->units = (x->units ^ y->sign) & (x->sign ^ y->units); // ///r0 ← (x0 ⊕y->1)∧(x1 ⊕y->0); */
-    /* r->sign = (M1RI_ST(x->units, y->sign, x->sign ) | M1RI_ST(x->sign, y->units, y->sign)); //// r1 ← s XOR t. */
-
-
-
- 	r->units = y->sign ^ x->units;
-    r->sign = y->units ^ x->sign;
-    r->sign = r->sign & r->units;
-    r->units = r->units ^ x->sign;
-    r->units = (y->units ^ x->units) | r->units;
-
-
-
-
-}
-
 
 static inline void m3d_add_64(vbg *R, vbg const   *A, vbg  const *B)
 {
-    int i;
+	/*
+	int i;
     for (i = 0; i < M1RI_RADIX; i++ )
     {
          add_vbg(R + i, A + i, B + i);
     }
+    */
+    
+    
+    
+    
 
 }
  /**
@@ -524,6 +565,7 @@ static inline void m3d_add_64(vbg *R, vbg const   *A, vbg  const *B)
  */
 m3d_t  * m3d_add(m3d_t *, const m3d_t  *,const  m3d_t  *);
 
+//void   m3d_add_unshackled(m3d_t *, const m3d_t  *,const  m3d_t  *);
 
  /**
  \Brief Return submatrix S from matrix M 
@@ -586,6 +628,7 @@ static inline void m3d_set_zero(m3d_t * a)
   }
 
 }
+
 
 
 

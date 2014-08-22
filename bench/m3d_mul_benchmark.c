@@ -51,7 +51,43 @@ void m3d_strassen_test(int y, int z)
     printf("\nm3d_strassen on two %d by %d matrix matrices.", y, z  );
     printf(" \n------------------->Runs in%9f seconds. \n", time_spent);
     printf("----------------------------------------------------------------------");
-  
+
+    m3d_free(a);
+    m3d_free(b);
+    m3d_free(c);
+
+	
+
+}
+
+
+
+void m3d_classic_mul_test(int y, int z)
+{
+	m3d_t * a, *b, *c;
+	a = m3d_create(y, z);
+    b = m3d_create(y, z);
+
+    m3d_rand(a);
+    m3d_rand(b);
+
+
+
+
+	clock_t begin, end;
+	double time_spent;
+	begin = clock();
+	c = m3d_classic_mul(c, a, b);
+    time_t after;
+    time(&after);
+	end = clock();
+	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+    printf("----------------------------------------------------------------------");
+    printf("\nm3d_classic_mul on two %d by %d matrix matrices.", y, z  );
+    printf(" \n------------------->Runs in%9f seconds. \n", time_spent);
+    printf("----------------------------------------------------------------------");
+
     m3d_free(a);
     m3d_free(b);
     m3d_free(c);
@@ -64,9 +100,9 @@ void m3d_strassen_test(int y, int z)
 int main(int argc, const char * argv[])
 {
  	//m3d_strassen_test(64, 64);
-   	m3d_strassen_test(256, 256);
+   	//m3d_strassen_test(256, 256);
     //m3d_strassen_test(2048, 2048);
-     m3d_strassen_test(6400, 6400);
+     m3d_classic_mul_test(65536, 65536);
      
    // m3d_strassen_test(64000, 64000);
 

@@ -45,3 +45,5 @@ outputfile
 m3d_mul_benchmark
 
 test_multiply
+
+m3d_mul_benchmark_now

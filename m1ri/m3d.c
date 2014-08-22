@@ -399,6 +399,10 @@ m3d_t  * m3d_identity(m3d_t  *a, rci_t n)
  \param sizecol  = cols * 64
  \param sizerow  = rows * 64
  */
+ 
+ 
+ 
+ 
 m3d_t *    m3d_init_window(const m3d_t *c, const rci_t strow, const rci_t stvbg,const rci_t sizerows,const rci_t sizecols)
 {
 
@@ -434,6 +438,30 @@ m3d_t *    m3d_init_window(const m3d_t *c, const rci_t strow, const rci_t stvbg,
     
 }
 
+ m3d_t *    m3d_init_window_unshackled(const m3d_t *c, const rci_t strow, const rci_t stvbg,const rci_t sizerows,const rci_t sizecols)
+{
+
+	m3d_t * submatrix = m1ri_malloc(sizeof(m3d_t));
+    int i, f;
+	f = strow * M1RI_RADIX;
+    submatrix->nrows =   M1RI_RADIX * sizerows;
+    submatrix->ncols =  M1RI_RADIX * sizecols;
+    submatrix->flags = iswindowed;
+    submatrix->width =  sizecols;
+    submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vbg *));
+    submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
+    submatrix->fcol   = 0;
+    submatrix->svbg = stvbg;
+   
+    
+   
+    for(  i =   f; i < (f + submatrix->nrows) ; i++)
+    {
+        submatrix->rows[i - f] = c->rows[i] + stvbg;   
+    }
+    return submatrix;
+    
+}
 /** 
  Concat b on the end of a, the result is c 
  [a] [b] ----->  [a b]   ===  C
@@ -681,10 +709,10 @@ m3_slice * m3d_quarter(const m3d_t * a)
 
      
      
-     c->row[0] = m3d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
-	 c->row[1] = m3d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
-     c->row[2] = m3d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
-	 c->row[3] = m3d_init_window(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+     c->row[0] = m3d_init_window_unshackled(a,  0, 0 , a->nrows/128, a->ncols/128);
+	 c->row[1] = m3d_init_window_unshackled(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+     c->row[2] = m3d_init_window_unshackled(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	 c->row[3] = m3d_init_window_unshackled(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
 	 
 	 
 	 
@@ -933,6 +961,9 @@ m3d_t *  m3d_sub(m3d_t * r,   const  m3d_t  *x, const m3d_t  *y)
    
    return r;
 }
+
+
+
 
 
 

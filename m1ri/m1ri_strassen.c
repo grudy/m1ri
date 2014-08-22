@@ -83,6 +83,7 @@ static inline void m3d_mul_naive_square(m3d_t *c, const m3d_t *a, const m3d_t *b
     {
     	x1 = m3d_create(M1RI_RADIX,M1RI_RADIX);		    
 		x2 = m3d_create( M1RI_RADIX, M1RI_RADIX);
+   	 	
    	 	m3d_mul_64(x1->rows[0], a_slice->row[0]->rows[0], b_slice->row[0]->rows[0]);
     	m3d_mul_64(x2->rows[0], a_slice->row[1]->rows[0], b_slice->row[2]->rows[0]);
   	    m3d_add_64(c_slice->row[0]->rows[0], x1->rows[0], x2->rows[0]) ;
@@ -99,9 +100,95 @@ static inline void m3d_mul_naive_square(m3d_t *c, const m3d_t *a, const m3d_t *b
 		m3d_free(x2);
 	
     }
+    
+    m3d_quarter_free(a_slice);
+    m3d_quarter_free(b_slice);
+    m3d_quarter_free(c_slice);
 
 }
 
+
+/**
+	Classic O(N)^3 algorithm for Matrix Multiplication over GF(3) this function
+	handles padding and calls  m3d_mul_naive_square for the multiplication portion.
+*/
+m3d_t * m3d_classic_mul(m3d_t *c, const m3d_t  *a, const m3d_t  *b)
+{
+	if (c == NULL)
+	{
+	c = m3d_create(a->nrows, b->ncols);
+
+	} 
+	
+	else 
+	{
+	if (c->nrows != a->nrows || c->ncols != b->ncols) 
+	{
+		m1ri_die("m3d_mul_naive: Provided return matrix has wrong dimensions.\n");
+    	}
+	
+	}
+	
+	
+	c = m3d_create(  a->nrows, b->ncols); 
+	/** * arcr, acbr, bccc hold the padded matrix sizes*/
+	
+	
+	u_int32_t  arcr, acbr, bccc, g;
+	arcr = a->nrows;
+	acbr = a->ncols;
+	bccc  = b->ncols;
+	arcr =  powerof2(arcr);
+	acbr =  powerof2(acbr);
+	bccc =  powerof2(bccc);
+	g = (M1RI_RADIX  << 1);
+	while (arcr <  g)
+	{
+		arcr = arcr << 1;
+	
+	}
+	while (acbr < g )
+	{
+	acbr = 	acbr << 1;
+	
+	}
+	
+	while (bccc <  g)
+	{
+		bccc = bccc << 1;
+	
+	}
+	
+
+	
+	
+	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
+	{
+		m3d_t * padded_a,   * padded_b , * padded_c;
+	
+	
+		padded_a = m3d_create(arcr, acbr);
+		padded_b = m3d_create(acbr, bccc);
+		padded_c = m3d_create(arcr, bccc);
+		padded_a = m3d_copy(padded_a, a);
+		padded_b = m3d_copy(padded_b, b);
+		padded_c = m3d_copy(padded_c, c);
+	
+		m3d_mul_naive_square(padded_c, padded_a, padded_b); 
+		c  = m3d_copy_cutoff(c, padded_c);
+		m3d_free(padded_a);
+		m3d_free(padded_b);
+		m3d_free(padded_c);
+	}
+		
+	else
+	{
+		m3d_mul_naive_square(c, a, b); 
+	}
+	
+	return c;
+	
+}
 
 static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
 {
@@ -121,57 +208,30 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     {
      
        
-        x1 = m3d_sub(x1, a_slice->row[0], a_slice->row[2]);      // 1 
-        
-    	
-        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[1]);      // 2 
-        
-        
-        
-    	m3d_qrt_mul(c_slice->row[2], x1, x2);      // 3 
-        x1 = m3d_add(x1, a_slice->row[2],a_slice->row[1]);      // 4 
-        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[0]);      // 5 
-        
-    	
-        m3d_qrt_mul(c_slice->row[3], x1, x2);        // 6 
-        x1 = m3d_sub(x1, x1,a_slice->row[0]);    // 7 
-        x2 = m3d_sub(x2, b_slice->row[1],x2);      // 8 
-        m3d_qrt_mul(c_slice->row[1],x1,x2);     // 9 
-        x1 = m3d_sub(x1, a_slice->row[1],x1);        // 10 
-        m3d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);       // 11 
-        m3d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);      // 12 
-        c_slice->row[1] = m3d_add(c_slice->row[1], x1 , c_slice->row[1]);       // 13 
-        c_slice->row[2] = m3d_add(c_slice->row[2], c_slice->row[1] , c_slice->row[2]);       // 14 
-        c_slice->row[1] = m3d_add(c_slice->row[1], c_slice->row[1] , c_slice->row[3]);       // 15 
-        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);        // 16 
-        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);      // 17 
-        x2 = m3d_sub(x2, x2, b_slice->row[2]);                // 18 
-        m3d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);                // 19 
-        c_slice->row[2] = m3d_sub(c_slice->row[2], c_slice->row[2], c_slice->row[0]);      // 20 
-		
-        x1 = m3d_sub(x1 ,  a_slice->row[0], a_slice->row[2]);      // 1 
-        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[1]);      // 2 
+       
+        m3d_sub_unshackled(x1 ,  a_slice->row[0], a_slice->row[2]);      // 1 
+       	m3d_sub_unshackled(x2, b_slice->row[1],b_slice->row[1]);      // 2 
         m3d_qrt_mul(c_slice->row[2], x1, x2);      // 3 
-        x1 = m3d_add(x1, a_slice->row[2],a_slice->row[1]);      // 4 
-        x2 = m3d_sub(x2, b_slice->row[1],b_slice->row[0]);      // 5 
+        m3d_add_unshackled(x1, a_slice->row[2],a_slice->row[1]);      // 4 
+        m3d_sub_unshackled(x2, b_slice->row[1],b_slice->row[0]);      // 5 
         m3d_qrt_mul(c_slice->row[3], x1, x2);        // 6 
-        x1 = m3d_sub(x1, x1,a_slice->row[0]);    // 7 
-        x2 = m3d_sub(x2, b_slice->row[1],x2);      // 8 
+        m3d_sub_unshackled(x1, x1,a_slice->row[0]);    // 7 
+        m3d_sub_unshackled(x2, b_slice->row[1],x2);      // 8 
         m3d_qrt_mul(c_slice->row[1],x1,x2);     // 9 
-        x1 = m3d_sub(x1, a_slice->row[1],x1);        // 10 
+        m3d_sub_unshackled(x1, a_slice->row[1],x1);        // 10 
         m3d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);       // 11 
         m3d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);      // 12 
-        c_slice->row[1] = m3d_add(c_slice->row[1], x1 , c_slice->row[1]);       // 13 
-        c_slice->row[2] = m3d_add(c_slice->row[2], c_slice->row[1] , c_slice->row[2]);       // 14 
-        c_slice->row[1] = m3d_add(c_slice->row[1], c_slice->row[1] , c_slice->row[3]);       // 15 
-        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);        // 16 
-        c_slice->row[3] = m3d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);      // 17 
-        x2 = m3d_sub(x2, x2, b_slice->row[2]);                // 18 
+        m3d_add_unshackled(c_slice->row[1], x1 , c_slice->row[1]);       // 13 
+        m3d_add_unshackled(c_slice->row[2], c_slice->row[1] , c_slice->row[2]);       // 14 
+        m3d_add_unshackled(c_slice->row[1], c_slice->row[1] , c_slice->row[3]);       // 15 
+        m3d_add_unshackled(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);        // 16 
+        m3d_add_unshackled(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);      // 17 
+        m3d_sub_unshackled(x2, x2, b_slice->row[2]);                // 18 
         m3d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);                // 19 
-        c_slice->row[2] = m3d_sub( c_slice->row[2], c_slice->row[2], c_slice->row[0]);      // 20 
+       m3d_sub_unshackled( c_slice->row[2], c_slice->row[2], c_slice->row[0]);      // 20 
 
         m3d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]);
-        c_slice->row[0] = m3d_add(c_slice->row[0], x1,c_slice->row[0] );
+         m3d_add_unshackled(c_slice->row[0], x1,c_slice->row[0] );
     	
        	
        	
@@ -689,85 +749,6 @@ m7d_t *  m7d_strassen(m7d_t *c,const m7d_t  *a,const m7d_t   *b)
 
 
 
-
-/**
-	Classic O(N)^3 algorithm for Matrix Multiplication over GF(3) this function
-	handles padding and calls  m3d_mul_naive_square for the multiplication portion.
-*/
-m3d_t * m3d_classic_mul(m3d_t *c, const m3d_t  *a, const m3d_t  *b)
-{
-	if (c == NULL)
-	{
-	c = m3d_create(a->nrows, b->ncols);
-
-	} 
-	
-	else 
-	{
-	if (c->nrows != a->nrows || c->ncols != b->ncols) 
-	{
-		m1ri_die("m3d_mul_naive: Provided return matrix has wrong dimensions.\n");
-    	}
-	
-	}
-	
-	
-	c = m3d_create(  a->nrows, b->ncols); 
-	/** * arcr, acbr, bccc hold the padded matrix sizes*/
-	
-	
-	u_int32_t  arcr, acbr, bccc, g;
-	arcr = a->nrows;
-	acbr = a->ncols;
-	bccc  = b->ncols;
-	arcr =  powerof2(arcr);
-	acbr =  powerof2(acbr);
-	bccc =  powerof2(bccc);
-	g = (M1RI_RADIX  << 1);
-	while (arcr <  g)
-	{
-		arcr = arcr << 1;
-	
-	}
-	while (acbr < g )
-	{
-	acbr = 	acbr << 1;
-	
-	}
-	
-	while (bccc <  g)
-	{
-		bccc = bccc << 1;
-	
-	}
-	
-
-	m3d_t * padded_a  = m1ri_malloc(sizeof(m3d_t));
-	m3d_t  * padded_b  = m1ri_malloc(sizeof(m3d_t));
-	m3d_t * padded_c = m1ri_malloc(sizeof(m3d_t));;
-	
-	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
-	{
-		padded_a = m3d_create( arcr, acbr);
-		padded_b = m3d_create( acbr, bccc);
-		padded_c = m3d_create( arcr, bccc);
-		m3d_copy(padded_a, a);
-		m3d_copy(padded_b, b);
-		m3d_mul_naive_square(padded_c, padded_a, padded_b); 
-		m3d_copy_cutoff(c, padded_c);
-		m3d_free(padded_a);
-		m3d_free(padded_b);
-		m3d_free(padded_c);
-	}
-		
-	else
-	{
-		m3d_mul_naive_square(c, a, b); 
-	}
-	
-	return c;
-	
-}
 
 /*
 
