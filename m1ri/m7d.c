@@ -306,6 +306,32 @@ m7d_t  * m7d_init_window(const m7d_t *c,const rci_t strow, const rci_t svtri,con
 }
 
 
+static inline m7d_t  * m7d_init_window_unshackled(const m7d_t *c,const rci_t strow, const rci_t svtri,const rci_t sizerows, const rci_t sizecols)
+{
+    
+    
+    m7d_t * submatrix = m1ri_malloc(sizeof(m7d_t));
+  
+    int i, f;
+	f = strow * M1RI_RADIX;
+    submatrix->nrows =   M1RI_RADIX * sizerows;
+    submatrix->ncols =  M1RI_RADIX * sizecols;
+    submatrix->flags = iswindowed;
+    submatrix->width =  sizecols;
+    submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vtri *));
+    submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
+    submatrix->fcol   = 0;
+    submatrix->svtri = svtri;
+    
+    
+    
+    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
+    {
+        submatrix->rows[i - f] = c->rows[i] + svtri;   
+    }
+    return submatrix;
+}
+
  
 vtri * m7d_allone(m7d_t * a)
 {
@@ -1164,13 +1190,16 @@ m7d_t * m7d_transpose_sliced(m7d_t * a)
 
 m7_slice *  m7d_quarter(const  m7d_t * a)
 {
-	m7_slice * c = m1ri_malloc(sizeof(m7_slice));
-	c->block = m7_blockslice_allocate( 2,   2);
-    c->row = m7_rowslice_allocate(c->block,   2, 2);
-    c->row[0] = m7d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
-	c->row[1] = m7d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
-    c->row[2] = m7d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
-	c->row[3] = m7d_init_window(a,  a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+
+ 	m7_slice * c = m1ri_malloc(sizeof(m7_slice));
+	c->row = m1ri_calloc( 4 , sizeof(m7d_t **));
+	c->row[0] = m7d_init_window_unshackled(a,  0, 0 , a->nrows/128, a->ncols/128);
+	c->row[1] = m7d_init_window_unshackled(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+    c->row[2] = m7d_init_window_unshackled(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	c->row[3] = m7d_init_window_unshackled(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+	 
+	 
+	 
     return c;
 }
 

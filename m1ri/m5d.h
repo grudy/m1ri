@@ -129,6 +129,33 @@ typedef struct
 
 
 /**
+ * \brief Releases a m5d_t into the wilderness.  
+ * \param a GF(5) matrix
+ *
+ * \Frees allocated memory in matrix
+ */
+void m5d_free( m5d_t *  );
+
+/**
+ * \brief Releases a m5_slice  allocated by a m5d_quarter function 
+ * \param a GF(5) matrix slice structure
+ *
+ * \Frees allocated and memory in slices, including windows
+ */
+static inline void m5d_quarter_free(m5_slice *a)
+{
+	
+	m5d_free(a->row[0]);
+	m5d_free(a->row[1]);
+	m5d_free(a->row[2]);
+	m5d_free(a->row[3]);
+	
+	m1ri_free(a->row);
+	m1ri_free(a);
+	
+}
+
+/**
  \Brief allocate the block pointers for a m5d_t
  \param block m5d_t->block to allocate
  \param nrows rows in matrix
@@ -275,13 +302,6 @@ void   m5d_set_ui(m5d_t *, rci_t );
 m5d_t  *  m5d_identity(rci_t );
 
 
-/**
- * \brief Releases a m5d_t into the wilderness.  
- * \param a GF(5) matrix
- *
- * \Frees allocated memory in matrix
- */
-void m5d_free( m5d_t *  );
 
 
 /**
@@ -370,7 +390,6 @@ void m5d_add_64(vfd **, vfd **  , vfd ** );
  \param sizerow  = rows * 64
  */
 
-m5d_t   * m5d_init_window( m5d_t const *, const rci_t , const  rci_t ,const rci_t , const rci_t );
 
 void m5d_sub_64(vfd **c ,vfd  ** a , vfd **b);
 
@@ -454,6 +473,7 @@ void  m5d_slices(m5_slice *  , m5d_t * , wi_t );
  */
 
 m5_slice *  m5d_quarter(const m5d_t * );
+
 
 m5d_t *  m5d_transpose_sliced(m5d_t * );
 

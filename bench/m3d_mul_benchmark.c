@@ -96,6 +96,150 @@ void m3d_classic_mul_test(int y, int z)
 }
 
 
+
+
+
+void m5d_strassen_test(int y, int z)
+{
+	m5d_t * a, *b, *c;
+	a = m5d_create(y, z);
+    b = m5d_create(y, z);
+
+    m5d_rand(a);
+    m5d_rand(b);
+
+
+
+
+	clock_t begin, end;
+	double time_spent;
+	begin = clock();
+	c = m5d_strassen(c, a, b);
+    time_t after;
+    time(&after);
+	end = clock();
+	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+    printf("----------------------------------------------------------------------");
+    printf("\nm5d_strassen on two %d by %d matrix matrices.", y, z  );
+    printf(" \n------------------->Runs in%9f seconds. \n", time_spent);
+    printf("----------------------------------------------------------------------");
+    m5d_free(a);
+    m5d_free(b);
+    m5d_free(c);
+
+	
+
+}
+
+
+
+void m5d_classic_mul_test(int y, int z)
+{
+	m5d_t * a, *b, *c;
+	a = m5d_create(y, z);
+    b = m5d_create(y, z);
+
+    m5d_rand(a);
+    m5d_rand(b);
+
+
+
+
+	clock_t begin, end;
+	double time_spent;
+	begin = clock();
+	c = m5d_classic_mul(c, a, b);
+    time_t after;
+    time(&after);
+	end = clock();
+	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+    printf("----------------------------------------------------------------------");
+    printf("\nm5d_classic_mul on two %d by %d matrix matrices.", y, z  );
+    printf(" \n------------------->Runs in %9f seconds. \n", time_spent);
+    printf("----------------------------------------------------------------------");
+
+    m5d_free(a);
+    m5d_free(b);
+    m5d_free(c);
+
+	
+
+}
+
+
+
+void m7d_strassen_test(int y, int z)
+{
+	m7d_t * a, *b, *c;
+	a = m7d_create(y, z);
+    b = m7d_create(y, z);
+
+    m7d_rand(a);
+    m7d_rand(b);
+
+
+
+
+	clock_t begin, end;
+	double time_spent;
+	begin = clock();
+	c = m7d_strassen(c, a, b);
+    time_t after;
+    time(&after);
+	end = clock();
+	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+    printf("----------------------------------------------------------------------");
+    printf("\nm7d_strassen on two %d by %d matrix matrices.", y, z  );
+    printf(" \n------------------->Runs in%9f seconds. \n", time_spent);
+    printf("----------------------------------------------------------------------");
+    m7d_free(a);
+    m7d_free(b);
+    m7d_free(c);
+
+	
+
+}
+
+
+
+void m7d_classic_mul_test(int y, int z)
+{
+	m7d_t * a, *b, *c;
+	a = m7d_create(y, z);
+    b = m7d_create(y, z);
+
+    m7d_rand(a);
+    m7d_rand(b);
+
+
+
+
+	clock_t begin, end;
+	double time_spent;
+	begin = clock();
+	c = m7d_classic_mul(c, a, b);
+    time_t after;
+    time(&after);
+	end = clock();
+	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+
+    printf("----------------------------------------------------------------------");
+    printf("\nm7d_classic_mul on two %d by %d matrix matrices.", y, z  );
+    printf(" \n------------------->Runs in %9f seconds. \n", time_spent);
+    printf("----------------------------------------------------------------------");
+
+    m7d_free(a);
+    m7d_free(b);
+    m7d_free(c);
+
+	
+
+}
+
+
 int main(int argc, const char * argv[])
 {
 
@@ -119,6 +263,39 @@ int main(int argc, const char * argv[])
     m3d_classic_mul_test(8192, 8192);
 	m3d_classic_mul_test(16384, 16384);     
 
+
+
+	
+/**
+
+
+		what could be m5d_mul_benchmark.c
+*/
+	
+	m5d_strassen_test(64, 64);
+   	m5d_strassen_test(256, 256);
+   	m5d_strassen_test(512, 512);
+	m5d_strassen_test(1024, 1024);
+	m5d_strassen_test(2048, 2048);
+    m5d_strassen_test(4096, 4096);
+    m5d_strassen_test(8192, 8192);
+	m5d_strassen_test(16384, 16384);
+	
+	
+ 	m7d_classic_mul_test(64, 64);
+   	m7d_classic_mul_test(256, 256);
+   	m7d_classic_mul_test(512, 512);
+	m7d_classic_mul_test(1024, 1024);
+	m7d_classic_mul_test(2048, 2048);
+    m7d_classic_mul_test(4096, 4096);
+    m7d_classic_mul_test(8192, 8192);
+	m7d_classic_mul_test(16384, 16384);     
+
+    
+
+
+	
+	
 
 
    return 0 ;

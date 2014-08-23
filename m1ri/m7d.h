@@ -81,6 +81,19 @@ typedef struct {
 } m7d_t;
 
 
+typedef struct
+{
+     
+    m7d_t * block;
+    m7d_t ** row;
+    wi_t slicesize;/*  (slicesize ^ 2) * 64 */
+    wi_t width;   /* /width in slices horizaontally per row */
+    rci_t nrows;
+    rci_t ncols;
+    
+}m7_slice;
+
+
 
 
 /** 
@@ -237,6 +250,26 @@ int m7d_equal(m7d_t const *, m7d_t const *);
  * \Frees allocated memory in matrix
  */
 void m7d_free( m7d_t *  );
+
+
+/**
+ * \brief Releases a m7_slice  allocated by a m7d_quarter function 
+ * \param a GF(7) matrix slice structure
+ *
+ * \Frees allocated and memory in slices, including windows
+ */
+static inline void m7d_quarter_free(m7_slice *a)
+{
+	
+	m7d_free(a->row[0]);
+	m7d_free(a->row[1]);
+	m7d_free(a->row[2]);
+	m7d_free(a->row[3]);
+	
+	m1ri_free(a->row);
+	m1ri_free(a);
+	
+}
 void vtri_negate( vtri * );
 
 /** *****************************
@@ -301,19 +334,6 @@ vtri vtri_mul_6(vtri);
  * \
  * \
  */
-typedef struct
-{
-     
-    m7d_t * block;
-    m7d_t ** row;
-    wi_t slicesize;/*  (slicesize ^ 2) * 64 */
-    wi_t width;   /* /width in slices horizaontally per row */
-    rci_t nrows;
-    rci_t ncols;
-    
-}m7_slice;
-
-
 
 
  

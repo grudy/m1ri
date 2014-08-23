@@ -1224,20 +1224,55 @@ m5d_t *  m5d_transpose_sliced(m5d_t * a)
     }
     return c;
 }
+
+
+/*
+m5d_init_window without checks
+	
+*/
+static inline m5d_t   * m5d_init_window_unshackled(const m5d_t *c,const rci_t strow, const rci_t stvfd, const rci_t sizerows, const  rci_t sizecols)
+{
+	
+	m5d_t * submatrix = m1ri_malloc(sizeof(m5d_t));
+    int i, f;
+	f = strow * M1RI_RADIX;
+    submatrix->nrows =   M1RI_RADIX * sizerows;
+    submatrix->ncols =  M1RI_RADIX * sizecols;
+    submatrix->flags = iswindowed;
+    submatrix->width =  sizecols;
+    submatrix->rows = m1ri_calloc(M1RI_RADIX * sizerows ,  sizecols * sizeof(vfd *));
+    submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
+    submatrix->fcol   = 0;
+    submatrix->svfd = stvfd;
+    
+    
+    
+    for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
+    {
+        submatrix->rows[i - f] = c->rows[i] + stvfd;   
+    }
+    return submatrix;
+}
+
+
 m5_slice * m5d_quarter(const m5d_t * a)
 {
 	 m5_slice * c = m1ri_malloc(sizeof(m5_slice));
-	 int arows, acols;
 	 
-	 c->block = m5_blockslice_allocate(  2,   2);
-     
-     c->row = m5_rowslice_allocate(c->block, 2, 2);
-     
-     c->row[0] = m5d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
 	 
-	 c->row[1] = m5d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
-     c->row[2] = m5d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
-	 c->row[3] = m5d_init_window(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+	
+     c->row = m1ri_calloc( 4 , sizeof(m5d_t **));
+
+     
+     
+     c->row[0] = m5d_init_window_unshackled(a,  0, 0 , a->nrows/128, a->ncols/128);
+	 c->row[1] = m5d_init_window_unshackled(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+     c->row[2] = m5d_init_window_unshackled(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	 c->row[3] = m5d_init_window_unshackled(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+	 
+	 
+	 
+
     
     return c;
 }

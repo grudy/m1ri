@@ -146,10 +146,11 @@ static inline void m5d_mul_naive_square(m5d_t *c, const m5d_t *a, const m5d_t *b
    
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
-       /*
-    	x1 = m5d_create(M1RI_RADIX,M1RI_RADIX);		    
-		x2 = m5d_create( M1RI_RADIX, M1RI_RADIX);
-   	 	m5d_mul_64(x1->rows, a_slice->row[0]->rows, b_slice->row[0]->rows);
+       
+    	//x1 = m5d_create(M1RI_RADIX,M1RI_RADIX);		    
+		//x2 = m5d_create( M1RI_RADIX, M1RI_RADIX);
+   	 	
+   	 	/*m5d_mul_64(x1->rows, a_slice->row[0]->rows, b_slice->row[0]->rows);
     	m5d_mul_64(x2->rows, a_slice->row[1]->rows, b_slice->row[2]->rows);
   	    m5d_add_64(c_slice->row[0]->rows, x1->rows, x2->rows) ;
         m5d_mul_64(x1->rows,  a_slice->row[0]->rows, b_slice->row[1]->rows );
@@ -166,7 +167,15 @@ static inline void m5d_mul_naive_square(m5d_t *c, const m5d_t *a, const m5d_t *b
 		*/
 		
     }
-   
+ 	
+ 	else if(c->ncols  == M1RI_RADIX )
+    {
+    	 //m5d_mul_64(c->rows, a->rows, b->rows);
+    
+    } 
+ 	//m5d_quarter_free(a_slice);
+    //m5d_quarter_free(b_slice);
+    //m5d_quarter_free(c_slice);  
 }
 
 
