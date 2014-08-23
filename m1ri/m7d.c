@@ -1305,7 +1305,7 @@ void m7d_copy(m7d_t * a, m7d_t const *b)
   a = m7d_create(b->ncols, b->nrows);
   for(int i = 0; i < a->nrows; i++)
   {
-    for(int j = 0; j < b->ncols; j++)
+    for(int j = 0; j < b->width; j++)
     {
     
       a->rows[i][j] = b->rows[i][j];
