@@ -171,17 +171,17 @@ static inline void m5d_mul_naive_square(m5d_t *c, const m5d_t *a, const m5d_t *b
  	
  	else if(c->ncols  == M1RI_RADIX )
     {
-    	 //m5d_mul_64(c->rows, a->rows, b->rows);
+    	  m5d_mul_64(c->rows, a->rows, b->rows);
     
     } 
- 	//m5d_quarter_free(a_slice);
-    //m5d_quarter_free(b_slice);
-    //m5d_quarter_free(c_slice);  
+ 	  m5d_quarter_free(a_slice);
+      m5d_quarter_free(b_slice);
+      m5d_quarter_free(c_slice);  
 }
 
 
 /**
-	Recursive Matrix Multiplication over GF(), on a square matrix.
+	\brief Recursive Matrix Multiplication over GF(7), on a square matrix.
 */
 
 static inline void m7d_mul_naive_square(m7d_t *c, const m7d_t *a, const m7d_t *b)
