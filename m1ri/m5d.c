@@ -296,12 +296,17 @@ m5d_t *  m5d_identity(rci_t n)
 }
 
 
-void m5d_free( m5d_t *  tofree)
-{ 
-
-
-    m1ri_free(tofree->rows);
-    m1ri_free(tofree->block);   
+void m5d_free( m5d_t *  a)
+{ 		
+    m1ri_free(a->rows);
+    if(a->flags == notwindowed)
+    {
+	  m1ri_free(a->block); 	
+	}
+    
+    m1ri_free(a);
+    a == NULL;
+    
 }
 
 void add_vfd(vfd * r, vfd * a, vfd * b)

@@ -382,12 +382,16 @@ m7d_t  m7d_rand(m7d_t * a)
  Releases a m7d_t into the wilderness.
  */
 
-
-
-void m7d_free( m7d_t *  tofree)
-{
-    m1ri_free(tofree->rows);
-    m1ri_free(tofree->block);
+void m7d_free( m7d_t *  a)
+{ 		
+    m1ri_free(a->rows);
+    if(a->flags == notwindowed)
+    {
+	  m1ri_free(a->block); 	
+	}
+    
+    m1ri_free(a);
+    a == NULL;
     
 }
 

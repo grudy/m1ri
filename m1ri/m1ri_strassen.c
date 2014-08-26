@@ -462,16 +462,17 @@ static inline void m5d_qrt_mul(m5d_t * c,const m5d_t *   a, const m5d_t *   b )
     	
     }
     
-    /*
+    
     else if((c->ncols ) == (M1RI_RADIX  == 1))
     {
     	m5d_qrt_mul(c, a, b);
     
     }
+    
     m5d_quarter_free(a_slice);
     m5d_quarter_free(b_slice);
     m5d_quarter_free(c_slice);
-  	*/
+  	
 }
 
 
