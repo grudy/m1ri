@@ -561,18 +561,18 @@ static inline void m7d_qrt_mul(m7d_t * c,const m7d_t *   a,const m7d_t *   b )
 {
   	m7d_t * x1;
     m7d_t * x2;
-	m7_slice  * a_slice, * b_slice,*  c_slice;
+	
+   	
+
+	if((c->ncols) > (M1RI_RADIX << 1))
+    {
+     m7_slice  * a_slice, * b_slice,*  c_slice;
     	
     x1 = m7d_create( c->nrows/2, c->ncols/2);
     x2 = m7d_create( c->nrows/2, c->ncols/2);
     a_slice = m7d_quarter( a);
    	b_slice = m7d_quarter(b);
    	c_slice = m7d_quarter( c);
-   	
-
-	if((c->ncols) > (M1RI_RADIX << 1))
-    {
-     
        
 
    
@@ -607,7 +607,13 @@ static inline void m7d_qrt_mul(m7d_t * c,const m7d_t *   a,const m7d_t *   b )
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
 
-	
+		m7_slice  * a_slice, * b_slice,*  c_slice;
+    	
+   		x1 = m7d_create( c->nrows/2, c->ncols/2);
+    	x2 = m7d_create( c->nrows/2, c->ncols/2);
+    	a_slice = m7d_quarter( a);
+   		b_slice = m7d_quarter(b);
+   		c_slice = m7d_quarter( c);
 		m7d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows);  /* 1 */
         m7d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ;  /* 2 */
         m7d_mul_64(c_slice->row[2]->rows, x1->rows, x2->rows);  /* 3 */
@@ -664,18 +670,14 @@ m7d_t *  m7d_strassen(m7d_t *c,const m7d_t  *a,const m7d_t   *b)
 
 	} 
 	
-	else 
-	{
-	if (c->nrows != a->nrows || c->ncols != b->ncols) 
+	else if (c->nrows != a->nrows || c->ncols != b->ncols) 
 	{
 		m1ri_die("m7d_strassen: Provided return matrix has wrong dimensions.\n");
-    	}
+    	
 	
 	}
 	
-    if(a->ncols == b->nrows)
-    {
- 
+
     /*  These hold the padded matrix sizes */
     
 	u_int32_t  arcr, acbr, bccc;
@@ -720,7 +722,7 @@ m7d_t *  m7d_strassen(m7d_t *c,const m7d_t  *a,const m7d_t   *b)
 	
 
           
-    }
+    
     return c;
     
 }
@@ -740,14 +742,12 @@ m5d_t * m5d_classic_mul(m5d_t *c, const m5d_t  *a, const m5d_t  *b)
 
 	} 
 	
-	else 
-	{
-	if (c->nrows != a->nrows || c->ncols != b->ncols) 
+	else if (c->nrows != a->nrows || c->ncols != b->ncols) 
 	{
 		m1ri_die("m5d_mul_naive: Provided return matrix has wrong dimensions.\n");
-    	}
+    }
 	
-	}
+	
 	
 	
 	/** * arcr, acbr, bccc hold the padded matrix sizes*/
@@ -777,12 +777,13 @@ m5d_t * m5d_classic_mul(m5d_t *c, const m5d_t  *a, const m5d_t  *b)
 	}
 	
 
-	m5d_t * padded_a  = m1ri_malloc(sizeof(m5d_t));
-	m5d_t  * padded_b  = m1ri_malloc(sizeof(m5d_t));
-	m5d_t * padded_c = m1ri_malloc(sizeof(m5d_t));;
+	
 
 	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
 	{
+		m5d_t * padded_a  = m1ri_malloc(sizeof(m5d_t));
+		m5d_t  * padded_b  = m1ri_malloc(sizeof(m5d_t));
+		m5d_t * padded_c = m1ri_malloc(sizeof(m5d_t));
 		padded_a = m5d_create( arcr, acbr);
 		padded_b = m5d_create( acbr, bccc);
 		padded_c = m5d_create( arcr, bccc);
@@ -815,9 +816,7 @@ m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
 
 	} 
 	
-	else 
-	{		
-		if (c->nrows != a->nrows || c->ncols != b->ncols) 
+	else if (c->nrows != a->nrows || c->ncols != b->ncols) 
 		{
 			m1ri_die("m7d_mul_naive: Provided return matrix has wrong dimensions.\n");
 	    	
@@ -877,7 +876,7 @@ m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
 		{
 			m7d_mul_naive_square(c, a, b); 
 		}
-	}
+	
 	
 	return c;
 	

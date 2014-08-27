@@ -119,7 +119,7 @@ static inline void m5d_mul_naive_square(m5d_t *c, const m5d_t *a, const m5d_t *b
     b_slice = m5d_quarter( b);
     c_slice = m5d_quarter(c);
     
-    if((c_slice->row[0]->ncols) > M1RI_RADIX)
+	if((c->ncols) > (M1RI_RADIX << 1))
     {
        
     	x1 = m5d_create( c_slice->row[0]->nrows, c_slice->row[0]->ncols);		    
@@ -144,7 +144,7 @@ static inline void m5d_mul_naive_square(m5d_t *c, const m5d_t *a, const m5d_t *b
 		
     }
    
-    else if((c->ncols ) == (M1RI_RADIX  << 1))
+    else if((c->ncols ) == (M1RI_RADIX  <<1))
     {
        
     	x1 = m5d_create(M1RI_RADIX,M1RI_RADIX);		    
@@ -195,7 +195,7 @@ static inline void m7d_mul_naive_square(m7d_t *c, const m7d_t *a, const m7d_t *b
     b_slice = m7d_quarter( b);
     c_slice = m7d_quarter(c);
    
-    if((c_slice->row[0]->ncols) > M1RI_RADIX)
+    if((c->ncols) > (M1RI_RADIX << 1))
     {
        
     	x1 = m7d_create( c_slice->row[0]->nrows, c_slice->row[0]->ncols);		    
@@ -239,6 +239,12 @@ static inline void m7d_mul_naive_square(m7d_t *c, const m7d_t *a, const m7d_t *b
 		
     }
 
+
+	else if(c->ncols  == M1RI_RADIX )
+    {
+    	  m7d_mul_64(c->rows, a->rows, b->rows);
+    
+    } 
 }
 
 
