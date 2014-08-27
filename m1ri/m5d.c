@@ -179,7 +179,7 @@ m5d_t  * m5d_create( rci_t nrows, rci_t ncols)
     a->width = M1RI_DN(ncols, M1RI_RADIX);
     a->block = m5d_block_allocate(a->block,  a->nrows,    a->width);
     a->rows  = m5d_row_alloc(a->block, a->rows, a->width, a->nrows);
-    a->flags = 0;
+    a->flags = notwindowed;
     a->fcol = 0;
     return a;
     
