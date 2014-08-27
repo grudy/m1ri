@@ -857,7 +857,8 @@ m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
 		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
 		{
 			
-	
+			m7d_t * padded_a,   * padded_b , * padded_c;
+
 			padded_a = m7d_create( arcr, acbr);
 			padded_b = m7d_create( acbr, bccc);
 			padded_c = m7d_create( arcr, bccc);
