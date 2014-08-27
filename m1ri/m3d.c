@@ -1131,6 +1131,24 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B);
 
 */
 
+
+/** 
+	\brief, addition base case
+	\param x augend
+	param  y addend
+	\return x as sum
+*/
+static inline void m3d_inc(vbg  * x, vbg const *  y)
+{ 
+    vec t;
+    x->sign  = y->units ^ x->sign;
+    t = (x->sign & x->units) ^ y->sign;
+    x->units = (y->units ^ x->units) |  t;
+    x->sign = t & x->sign;
+    
+}
+
+
 static inline void m3d_combine3(vbg *table, vbg const *input) {
     vbg t, a, b, c;
     t.sign = t.units = 0;
@@ -1145,7 +1163,7 @@ static inline void m3d_combine3(vbg *table, vbg const *input) {
 
     add_vbg(&t, &a, &b);
     table[3] = t;
-    m3d_inc(t, c);
+    m3d_inc(&t, &c);
     table[7] = t;
     isub_m3d(&t, &a);
     table[6] = t;
@@ -1172,22 +1190,23 @@ static inline void m3d_combine4(vbg *table, vbg const *input) {
     
     add_vbg(&t,&b,&c);
     table[6] = t;
-    m3d_inc(t,d);
+    m3d_inc(&t,&d);
     table[14] = t;
     isub_m3d(&t,&c);
     table[10] = t;
 
     add_vbg(&t,&a,&b);
     table[3] = t;
-    m3d_inc(t,d);
+    m3d_inc(&t,&d);
+    
     table[11] = t;
-    m3d_inc(t,c);
+    m3d_inc(&t,&c);
     table[15] = t;
     isub_m3d(&t,&d);
     table[7] = t;
     isub_m3d(&t,&b);
     table[5] = t;
-    m3d_inc(t,d);
+    m3d_inc(&t,&d);
     table[13] = t;
     isub_m3d(&t,&c);
     table[9] = t;
@@ -1265,7 +1284,7 @@ void m3d_mul_64(vbg *R, vbg const *  A, vbg const *  B)
     vbg tables5[8][32];
     for(i=0;i<4;i++) 
     {
-        m3d_combine6(tables6[i], B + 0 + 6*i);
+        m3d_combine6(tables6[i], B  + 6*i);
     }
     for(i=0;i<8;i++) {
         m3d_combine5(tables5[i], B + 24 + 5*i);

@@ -681,19 +681,7 @@ void m5d_add_64(vfd **R, vfd   **A, vfd  **B)
 
 
 
-/*
-void m5d_copy(m5d_t  * r, m5d_t  const * x)
-{
-		int  s;
-        for(int i = 0; i < x->nrows; i++)
-        {
-			for( s = 0; s < x->width; s++)
-        	{
-            	r->rows[i][s] = x->rows[i][s];
-            }   
-        }
-}
-*/
+
 void m5d_copy_cutoff(m5d_t  * r, m5d_t  const * x)
 {
 		int i, s;
@@ -1373,8 +1361,18 @@ m5d_t * m5d_hadamard(m5d_t * c, m5d_t const * a, m5d_t const * b )
  
 m5d_t *  m5d_copy(m5d_t * a, m5d_t const *b)
 {
-  a = m5d_create( b->ncols, b->nrows);
-  for(int i = 0; i < a->nrows; i++)
+  if(a == NULL)
+  {	
+  	a = m5d_create( b->nrows, b->ncols);
+  }
+  
+  if((a->ncols < b->ncols) || (a->nrows < b->nrows))
+  {
+  	m1ri_die("m5d_copy: Provided return matrix has wrong dimensions.\n");
+  
+  }
+  
+  for(int i = 0; i < b->nrows; i++)
   {
     for(int j = 0; j < b->width; j++)
     {
@@ -1383,11 +1381,13 @@ m5d_t *  m5d_copy(m5d_t * a, m5d_t const *b)
     
     }
     
+  
+  
+  }
+  
      a->lblock = b->lblock; /*   first block pointed to in a window */
      a->fcol = b->fcol;  /* /column offset of first block */
      a->flags = b->flags;
-  
-  }
   return a;
   
 

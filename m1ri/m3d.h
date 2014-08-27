@@ -509,22 +509,6 @@ m3d_t * m3d_hadamard(m3d_t * , m3d_t const * , m3d_t const * );
 
 
 
-/** 
-	\brief, addition base case
-	\param x augend
-	param  y addend
-	\return x as sum
-*/
-static inline vbg m3d_inc(vbg  x, vbg const y)
-{ 
-    vec t;
-    x.sign  = y.units ^ x.sign;
-    t = (x.sign & x.units) ^ y.sign;
-    x.units = (y.units ^ x.units) |  t;
-    x.sign = t & x.sign;
-    return x; 
-}
-
 
 
 /** * * * * * * * * * * * * * * * * * * * * * *

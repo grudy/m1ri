@@ -1306,8 +1306,18 @@ m7d_t * m7d_hadamard(m7d_t * c, m7d_t const * a, m7d_t const * b )
 
 m7d_t *  m7d_copy(m7d_t * a, m7d_t const *b)
 {
-  a = m7d_create(b->ncols, b->nrows);
-  for(int i = 0; i < a->nrows; i++)
+   if(a == NULL)
+  {	
+  	a = m7d_create( b->nrows, b->ncols);
+  }
+  
+  if((a->ncols < b->ncols) || (a->nrows < b->nrows))
+  {
+  	m1ri_die("m7d_copy: Provided return matrix has wrong dimensions.\n");
+  
+  }
+  
+  for(int i = 0; i < b->nrows; i++)
   {
     for(int j = 0; j < b->width; j++)
     {
@@ -1316,11 +1326,12 @@ m7d_t *  m7d_copy(m7d_t * a, m7d_t const *b)
     
     }
     
-     a->lblock = b->lblock; /*   first block pointed to in a window */
-     a->fcol = b->fcol;  /* /column offset of first block */
-     a->flags = b->flags;
-  
+    
   }
+  
+   a->lblock = b->lblock; /*   first block pointed to in a window */
+   a->fcol = b->fcol;  /* /column offset of first block */
+   a->flags = b->flags;
   
   return a;
 
@@ -1403,22 +1414,22 @@ void m7d_colswap_capped_row(m7d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
           {
 		     
 		  
-		           tempa.units  = (b_place  & M->rows[i][block_b].units) ? (a_place  ): 0;
-		     	tempb.units  = (a_place  & M->rows[i][block_a].units) ? (b_place  ): 0; 
+		    tempa.units  = (b_place  & M->rows[i][block_b].units) ? (a_place  ): 0;
+		     tempb.units  = (a_place  & M->rows[i][block_a].units) ? (b_place  ): 0; 
 		     
-		     	tempa.middle  = (b_place  & M->rows[i][block_b].middle) ? (a_place  ): 0;
-		     	tempb.middle  = (a_place  & M->rows[i][block_a].middle) ? (b_place  ): 0; 
+		     tempa.middle  = (b_place  & M->rows[i][block_b].middle) ? (a_place  ): 0;
+		     tempb.middle  = (a_place  & M->rows[i][block_a].middle) ? (b_place  ): 0; 
 		     
-		       tempa.sign  = (b_place  & M->rows[i][block_b].sign) ? (a_place  ): 0;
-		       tempb.sign  = (a_place  & M->rows[i][block_a].sign) ? (b_place  ): 0; 
-		       M->rows[i][block_a].units  = (tempa.units)  ? M->rows[i][block_a].units  | tempa.units :   M->rows[i][block_a].units  & ~a_place; 
-		       M->rows[i][block_b].units  = (tempb.units)  ? M->rows[i][block_a].units  | tempb.units :   M->rows[i][block_b].units  & ~b_place;  
+		    tempa.sign  = (b_place  & M->rows[i][block_b].sign) ? (a_place  ): 0;
+		    tempb.sign  = (a_place  & M->rows[i][block_a].sign) ? (b_place  ): 0; 
+		    M->rows[i][block_a].units  = (tempa.units)  ? M->rows[i][block_a].units  | tempa.units :   M->rows[i][block_a].units  & ~a_place; 
+		    M->rows[i][block_b].units  = (tempb.units)  ? M->rows[i][block_a].units  | tempb.units :   M->rows[i][block_b].units  & ~b_place;  
 		     
-		       M->rows[i][block_a].sign  = (tempa.sign)  ? (M->rows[i][block_a].sign  | tempa.sign) :   M->rows[i][block_a].sign  & ~a_place; 
-		       M->rows[i][block_b].sign  = (tempb.sign)  ? (M->rows[i][block_a].sign  | tempb.sign) :   M->rows[i][block_b].sign  & ~b_place; 
+		    M->rows[i][block_a].sign  = (tempa.sign)  ? (M->rows[i][block_a].sign  | tempa.sign) :   M->rows[i][block_a].sign  & ~a_place; 
+		    M->rows[i][block_b].sign  = (tempb.sign)  ? (M->rows[i][block_a].sign  | tempb.sign) :   M->rows[i][block_b].sign  & ~b_place; 
 		      
-		       M->rows[i][block_a].middle  = (tempa.middle)  ? (M->rows[i][block_a].middle  | tempa.middle) :   M->rows[i][block_a].middle  & ~a_place; 
-		       M->rows[i][block_b].middle  = (tempb.middle)  ? (M->rows[i][block_a].middle  | tempb.middle) :   M->rows[i][block_b].middle  & ~b_place; 
+		    M->rows[i][block_a].middle  = (tempa.middle)  ? (M->rows[i][block_a].middle  | tempa.middle) :   M->rows[i][block_a].middle  & ~a_place; 
+		    M->rows[i][block_b].middle  = (tempb.middle)  ? (M->rows[i][block_a].middle  | tempb.middle) :   M->rows[i][block_b].middle  & ~b_place; 
 		     
 		       
 		       

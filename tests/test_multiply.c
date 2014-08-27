@@ -29,6 +29,73 @@
 
 
 
+
+void m3d_mul_associative_test(int y, int z)
+{
+	m3d_t * a, *b, *c, *d, * e, *f, *g;
+	a = m3d_create(y, z);
+	b = m3d_create(y, z);
+	c  = m3d_create(y, z);
+	
+	m3d_rand(a);
+	m3d_rand(b);
+	m3d_rand(c);
+
+	/*
+		testing if 
+		(a * b)  * c  == a * (b * c)
+		 d 	     * c  == a *   e  
+				f     ==   g
+ 		
+		where * is matrix multiplication 
+	
+	*/
+	
+
+	d = m3d_strassen(d, a, b);
+	f = m3d_strassen(f, d, c);
+	
+	
+	e = m3d_strassen(e, b, c);
+	g = m3d_strassen(g, a, e);
+	
+	
+	
+	
+	
+	if((y <= 256) && (z <= 256))
+	{
+		printf("\n matrix e \n");
+		m3d_print(e);
+		printf("\n matrix g \n");
+		m3d_print(g);
+	
+	}
+	
+	/*
+	if(!m3d_equal(e, g))
+	{
+		printf("\nm3d_strassen on two %d by %d matrix matrices not associative ", y, z  );
+		m1ri_die("");
+	
+	}
+	*/
+	
+	
+	
+    printf("----------------------------------------------------------------------");
+    
+    
+    
+    m3d_free(a);
+    m3d_free(b);
+    m3d_free(c);
+    
+    
+
+}
+
+
 void m3d_strassen_test(int y, int z)
 {
 	m3d_t * a, *b, *c;
@@ -72,7 +139,7 @@ int main(int argc, const char * argv[])
  	//m3d_strassen_test(64, 64);
    	//m3d_strassen_test(512, 512);
    
-   
+   m3d_mul_associative_test(64, 64);
    
    m3d_t * a, *b, *c;
 //	a = m3d_create(128, 128);

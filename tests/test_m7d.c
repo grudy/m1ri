@@ -30,18 +30,7 @@ int main(int argc, const char * argv[])
     m7d_t * a, * b,  *d, *e, *f, *g, *h, *i, *j, *k;
     a = m7d_create( 64, 64);
     b = m7d_create(64, 64);
-    /*
-    a = m1ri_malloc(sizeof(m7d_t));
-    b  = m1ri_malloc(sizeof(m7d_t));
-    d = m1ri_malloc(sizeof(m7d_t));
-    e = m1ri_malloc(sizeof(m7d_t));
-    f =  m1ri_malloc(sizeof(m7d_t));
-    g  = m1ri_malloc(sizeof(m7d_t));
-    h = m1ri_malloc(sizeof(m7d_t));
-    i = m1ri_malloc(sizeof(m7d_t));
-    j = m1ri_malloc(sizeof(m7d_t));
-	k = m1ri_malloc(sizeof(m7d_t));
-    */
+ 
     
     m7d_rand(a);
     
