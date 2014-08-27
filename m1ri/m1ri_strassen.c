@@ -524,9 +524,9 @@ m5d_t *  m5d_strassen(m5d_t *c, m5d_t const  *a, const  m5d_t   *b)
 		padded_a = m5d_create(arcr, acbr);
 		padded_b = m5d_create(acbr, bccc);
 		padded_a = m5d_create(arcr, bccc);
-		m5d_copy(padded_a, a);
-		m5d_copy(padded_b, b);
-		m5d_copy(padded_c, c);
+		padded_a = m5d_copy(padded_a, a);
+		padded_b = m5d_copy(padded_b, b);
+		padded_c  = m5d_copy(padded_c, c);
 		m5d_qrt_mul(padded_c, padded_a, padded_b); 
 		m5d_free(padded_a);
 		m5d_free(padded_b);
@@ -702,9 +702,9 @@ m7d_t *  m7d_strassen(m7d_t *c,const m7d_t  *a,const m7d_t   *b)
 		padded_a = m7d_create(arcr, acbr);
 		padded_b = m7d_create(acbr, bccc);
 		padded_a = m7d_create(arcr, bccc);
-		m7d_copy(padded_a, a);
-		m7d_copy(padded_b, b);
-		m7d_copy(padded_c, c);
+		padded_a = m7d_copy(padded_a, a);
+		padded_b = m7d_copy(padded_b, b);
+		padded_c = m7d_copy(padded_c, c);
 	
 	
 		m7d_qrt_mul(padded_c, padded_a, padded_b); 
@@ -857,9 +857,7 @@ m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
 		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
 		{
 			
-			m7d_t * padded_a  = m1ri_malloc(sizeof(m7d_t));
-			m7d_t  * padded_b  = m1ri_malloc(sizeof(m7d_t));
-			m7d_t * padded_c = m1ri_malloc(sizeof(m7d_t));;
+	
 			padded_a = m7d_create( arcr, acbr);
 			padded_b = m7d_create( acbr, bccc);
 			padded_c = m7d_create( arcr, bccc);
