@@ -142,7 +142,8 @@ int main(int argc, const char * argv[])
    m3d_mul_associative_test(64, 64);
    
    m3d_t * a, *b, *c;
-//	a = m3d_create(128, 128);
+  
+  //	a = m3d_create(128, 128);
   //  b = m3d_create(128, 128);
     a = m3d_create(640, 640);
   	b = m3d_create(640, 640);

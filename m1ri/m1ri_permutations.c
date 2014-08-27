@@ -36,23 +36,36 @@
 
 m3p_t *m3p_init(rci_t length)
 {
-  m3p_t * a = malloc(sizeof(m3p_t));
+  m3p_t * a = m1ri_malloc(sizeof(m3p_t));
   a->values = m1ri_malloc(sizeof(rci_t) * length);
+  a->length = length;
+  for(rci_t i = 0; i < length; i++)
+  {
+    a->[i] = i;
+  }
   
   
+  return a;
 }
 
 m5p_t *m5p_init(rci_t length)
 {
-  m5p_t * a = malloc(sizeof(m3p_t));
-  a->values = m1ri_malloc(sizeof(rci_t) * length);
-  a->length = length;
+	m5p_t * a = m1ri_malloc(sizeof(m3p_t));
+  	a->values = m1ri_malloc(sizeof(rci_t) * length);
+  	a->length = length;
+  	for(rci_t i = 0; i < length; i++)
+  	{
+   	 a->[i] = i;
+  	}
+  
+  
+  return a;
 
 }
 m7p_t *m7p_init(rci_t length)
 {
 
-  m7p_t * a = malloc(sizeof(m3p_t));
+  m7p_t * a = m1ri_malloc(sizeof(m3p_t));
   a->values = m1ri_malloc(sizeof(rci_t) * length);
   a->length = length;
 }
@@ -66,14 +79,17 @@ m7p_t *m7p_init(rci_t length)
 void m3p_free(m3p_t *P)
 {
   m1ri_free(P->values);
+  m1ri_free(P);
 }
 void m5p_free(m5p_t *P)
 {
   m1ri_free(P->values);
+  m1ri_free(P);
 }
 void m7p_free(m7p_t *P)
 {
   m1ri_free(P->values);
+  m1ri_free(P);
 }
 
 /**
