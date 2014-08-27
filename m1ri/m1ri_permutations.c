@@ -41,7 +41,7 @@ m3p_t *m3p_init(rci_t length)
   a->length = length;
   for(rci_t i = 0; i < length; i++)
   {
-    a->[i] = i;
+    a->values[i] = i;
   }
   
   
@@ -55,7 +55,7 @@ m5p_t *m5p_init(rci_t length)
   	a->length = length;
   	for(rci_t i = 0; i < length; i++)
   	{
-   	 a->[i] = i;
+   	 a->values[i] = i;
   	}
   
   
@@ -68,6 +68,14 @@ m7p_t *m7p_init(rci_t length)
   m7p_t * a = m1ri_malloc(sizeof(m3p_t));
   a->values = m1ri_malloc(sizeof(rci_t) * length);
   a->length = length;
+  for(rci_t i = 0; i < length; i++)
+  	{
+   	 a->values[i] = i;
+  	}
+  
+  
+  return a;
+  
 }
 
 /**
@@ -268,25 +276,42 @@ void m7p_set_ui(m7p_t *P, unsigned int value)
 void m3d_apply_p_left(m3d_t *A, m3p_t const *P)
 {
   
-  for(int i = 0; i < P->length; i++)
-  {
-     m3d_rowswap(A, i, P->values[i]);
-  }
+ 	if(A->ncols == 0)
+  	  return;
+  	rci_t const length = MIN(P->length, A->nrows);
+  	for (rci_t i = 0; i < length; ++i)
+  	 {
+   		assert(P->values[i] >= i);
+    	m3d_rowswap(A, i, P->values[i]);
+  	}
 }
+
+
 void m5d_apply_p_left(m5d_t *A, m5p_t const *P)
 {
-   for(int i = 0; i < P->length; i++)
-  {
-     m5d_rowswap(A, i, P->values[i]);
-  }
+ 	if(A->ncols == 0)
+  	  return;
+  	rci_t const length = MIN(P->length, A->nrows);
+  	for (rci_t i = 0; i < length; ++i) 
+  	{
+   		assert(P->values[i] >= i);
+   		m5d_rowswap(A, i, P->values[i]);
+  	}
 }
+
+
 void m7d_apply_p_left(m7d_t *A, m7p_t const *P)
 {
-  for(int i = 0; i < P->length; i++)
-  {
-     m7d_rowswap(A, i, P->values[i]);
-     
-  }
+
+	if(A->ncols == 0)
+  	  return;
+  	rci_t const length = MIN(P->length, A->nrows);
+  	for (rci_t i = 0; i < length; ++i) 
+  	{
+   		assert(P->values[i] >= i);
+    	m7d_rowswap(A, i, P->values[i]);
+  	}
+
 }
 
 /**
@@ -300,32 +325,45 @@ void m7d_apply_p_left(m7d_t *A, m7p_t const *P)
 
 void m3d_apply_p_left_trans(m3d_t *A, m3p_t const *P)
 {
-  for(int i = P->length - 1;i >= P->length; i--)
-  {
-    m3d_rowswap(A, i , P->values[i]);
-  
-  }
+	if(A->ncols == 0)
+    	return;
+	rci_t const length = MIN(P->length, A->nrows);
+  	for (rci_t i = length - 1; i >= 0; --i)
+  	{
+    	assert(P->values[i] >= i);
+    	m3d_rowswap(A, i, P->values[i]);
+  	}
   
 
 }
 void m5d_apply_p_left_trans(m5d_t *A, m5p_t const *P)
 {  
-  for(int i = P->length - 1;i >= P->length; i--)
-  {
-    m5d_rowswap(A, i , P->values[i]);
-  
-  }
-  
+
+	if(A->ncols == 0)
+    	return;
+	rci_t const length = MIN(P->length, A->nrows);
+  	for (rci_t i = length - 1; i >= 0; --i)
+  	{
+    	assert(P->values[i] >= i);
+    	m5d_rowswap(A, i, P->values[i]);
+  	}
+    
 
 
 }
 void m7d_apply_p_left_trans(m7d_t *A, m7p_t const *P)
 {
-   for(int i = P->length - 1;i >= P->length; i--)
-  {
-    m7d_rowswap(A, i , P->values[i]);
+
+	if(A->ncols == 0)
+    	return;
+	rci_t const length = MIN(P->length, A->nrows);
+  	for (rci_t i = length - 1; i >= 0; --i)
+  	{
+    	assert(P->values[i] >= i);
+    	m7d_rowswap(A, i, P->values[i]);
+  	}
   
-  }
+
 }
 
 /**
@@ -509,28 +547,71 @@ void m7d_apply_p_right_trans(m7d_t *A, m7p_t const *P)
 
 void  m3d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
 {
-        
+ 	if(A->nrows == 0)
+    return;
+  	rci_t const length = MIN(Q->length, A->ncols);
+  	int const step_size = MAX(  4096 / A->width, 1);
+  	for(rci_t j = 0; j < A->nrows; j += step_size) 
+  	{
+   		rci_t stop_row = MIN(j + step_size, A->nrows);
+    	
+    	for (rci_t i = 0; i < length; ++i) 
+    	{
+      		assert(Q->values[i] >= i);
+      		m3d_col_swap_in_rows(A, i, Q->values[i], j, stop_row);
+    	}
+  }       
+
 }
 
 
 
-void  m5d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
+void  m5d_apply_p_right_trans_tri(m5d_t *A, m5p_t const *Q)
 {
-
+	if(A->nrows == 0)
+	{
+    	return;
+  	}
+  	
+  	rci_t const length = MIN(Q->length, A->ncols);
+  	int const step_size = MAX(  4096 / A->width, 1);
+  	for(rci_t j = 0; j < A->nrows; j += step_size) 
+  	{
+   		rci_t stop_row = MIN(j + step_size, A->nrows);
+    	
+    	for (rci_t i = 0; i < length; ++i) 
+    	{
+      		assert(Q->values[i] >= i);
+      		m5d_col_swap_in_rows(A, i, Q->values[i], j, stop_row);
+    	}
+  }       
 }
 
-void  m7d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
+void  m7d_apply_p_right_trans_tri(m7d_t *A, m7p_t const *Q)
 {
-
+	if(A->nrows == 0)
+    {
+        	return;
+    }	
+  	rci_t const length = MIN(Q->length, A->ncols);
+  	int const step_size = MAX(  4096 / A->width, 1);
+  	for(rci_t j = 0; j < A->nrows; j += step_size) 
+  	{
+   		rci_t stop_row = MIN(j + step_size, A->nrows);
+    	
+    	for (rci_t i = 0; i < length; ++i) 
+    	{
+      		assert(Q->values[i] >= i);
+      		m7d_col_swap_in_rows(A, i, Q->values[i], j, stop_row);
+    	}
+  }       
 }
-
-
 
 
 
 void _m3d_compress_l(m3d_t *A, rci_t r1, rci_t n1, rci_t r2)
 {
-  
+   
 }
 void _m5d_compress_l(m5d_t *A, rci_t r1, rci_t n1, rci_t r2)
 {

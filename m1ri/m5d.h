@@ -168,6 +168,66 @@ static inline vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width)
     return block;
      
 }
+/**
+ \Brief Swap columns in m5d_t after a certain row
+ \param M = Matrix to swap columns of
+ \param a = first set of columns
+ \param b = second set of columns to swap
+ \param start_row  starting row
+ \param end_row end row 
+*/
+static inline void m5d_col_swap_in_rows(m5d_t *M, rci_t col_a, rci_t col_b, rci_t start_row, rci_t end_row)
+{
+      if((M->ncols >= (col_a ) && (M->ncols >= col_b)))
+    {
+        int i;
+        vec block_a, block_b, dif_a, dif_b, a_place, b_place; 
+        vfd tempa, tempb;
+         block_a = (col_a-1)/M1RI_RADIX;
+         block_b = (col_b-1)/M1RI_RADIX;
+         dif_a = col_a%M1RI_RADIX;
+         dif_b = col_b%M1RI_RADIX;
+         a_place =  leftbit >>  dif_a ;
+         b_place =  leftbit >> dif_b ;
+        if(block_a == block_b)
+        { 
+
+              
+          for( i = start_row; i < end_row; i++)
+          {
+		     
+		  
+		           tempa.units  = (b_place  & M->rows[i][block_b].units) ? (a_place  ): 0;
+		     tempb.units  = (a_place  & M->rows[i][block_a].units) ? (b_place  ): 0; 
+		     
+		     tempa.middle  = (b_place  & M->rows[i][block_b].middle) ? (a_place  ): 0;
+		     tempb.middle  = (a_place  & M->rows[i][block_a].middle) ? (b_place  ): 0; 
+		     
+		     tempa.sign  = (b_place  & M->rows[i][block_b].sign) ? (a_place  ): 0;
+		     tempb.sign  = (a_place  & M->rows[i][block_a].sign) ? (b_place  ): 0; 
+		    M->rows[i][block_a].units  = (tempa.units)  ? M->rows[i][block_a].units  | tempa.units :   M->rows[i][block_a].units  & ~a_place; 
+		    M->rows[i][block_b].units  = (tempb.units)  ? M->rows[i][block_a].units  | tempb.units :   M->rows[i][block_b].units  & ~b_place;  
+		     
+		    M->rows[i][block_a].sign  = (tempa.sign)  ? (M->rows[i][block_a].sign  | tempa.sign) :   M->rows[i][block_a].sign  & ~a_place; 
+		    M->rows[i][block_b].sign  = (tempb.sign)  ? (M->rows[i][block_a].sign  | tempb.sign) :   M->rows[i][block_b].sign  & ~b_place; 
+		      
+		    M->rows[i][block_a].middle  = (tempa.middle)  ? (M->rows[i][block_a].middle  | tempa.middle) :   M->rows[i][block_a].middle  & ~a_place; 
+		    M->rows[i][block_b].middle  = (tempb.middle)  ? (M->rows[i][block_a].middle  | tempb.middle) :   M->rows[i][block_b].middle  & ~b_place; 
+		     
+		       
+		       
+
+		       
+          }
+    
+        }
+        
+      
+        
+        
+    } 
+
+}
 
 #endif
 
@@ -178,6 +238,9 @@ static inline vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width)
  */
 m5d_t *  m5d_copy(m5d_t  * , const m5d_t  * );
 void m5d_copy_cutoff(m5d_t  * , m5d_t const * );
+
+
+
 
 /** 
  

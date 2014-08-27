@@ -5,8 +5,8 @@
 # DESCRIPTION
 #
 #   Find L1, L2, L3 caches size by running some timing experiments.
-#   The results are available in the defines __M4RI_CPU_L1_CACHE,
-#   __M4RI_CPU_L2_CACHE and __M4RI_CPU_L3_CACHE.
+#   The results are available in the defines __M1RI_CPU_L1_CACHE,
+#   __M1RI_CPU_L2_CACHE and __M1RI_CPU_L3_CACHE.
 #
 #   This macro depends on AC_PROG_SED, AC_PROG_CC.
 #
@@ -187,10 +187,10 @@ size_t cache_size(const size_t *candidates, const size_t n, size_t trials) {
   ax_l3_size=`echo $ax_cv_cache_sizes | cut -d ':' -f 3`
   AC_MSG_RESULT( $ax_l3_size Bytes)
 
-  M4RI_CPU_L1_CACHE=${ax_l1_size}
-  M4RI_CPU_L2_CACHE=${ax_l2_size}
-  M4RI_CPU_L3_CACHE=${ax_l3_size}
-  AC_SUBST(M4RI_CPU_L1_CACHE)
-  AC_SUBST(M4RI_CPU_L2_CACHE)
-  AC_SUBST(M4RI_CPU_L3_CACHE)
+  M1RI_CPU_L1_CACHE=${ax_l1_size}
+  M1RI_CPU_L2_CACHE=${ax_l2_size}
+  M1RI_CPU_L3_CACHE=${ax_l3_size}
+  AC_SUBST(M1RI_CPU_L1_CACHE)
+  AC_SUBST(M1RI_CPU_L2_CACHE)
+  AC_SUBST(M1RI_CPU_L3_CACHE)
 ])

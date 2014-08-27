@@ -145,8 +145,7 @@ void m3d_colswap_capped_row(m3d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
          dif_b = col_b%M1RI_RADIX;
          a_place =  leftbit >>  dif_a ;
          b_place =  leftbit >> dif_b ;
-        if(block_a == block_b)
-        { 
+       
 
               
           for( i = start_row; i < M->nrows; i++)
@@ -165,7 +164,7 @@ void m3d_colswap_capped_row(m3d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
 		       
 
 		       
-          }
+          
     
         }
         

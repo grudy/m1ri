@@ -45,8 +45,8 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #define M1RI_FN(a, b, c, d) ((a)^(b))&((c)^(d)) /* for finding R[0]# (the first half of the value representingthe sum of vectory and vectorx, vectorr) */
 #define M1RI_ST(a, b , c) ((a)^(b)^(c)) /* performing the (S= x[0] XOR y[1] XOR [x1]) and (T = x[1] XOR Y[0] XOR Y[1]) operations of addition */
 #define M1RI_DN(a, n) ((a)/(n)) + ((1) && (a%n))/* division by n rounded up */
-#define M1RI_MAX(a,b)	((a > b)?	a: b)
-#define M1RI_MIN(a, b)	((a > b)? b: a)
+#define MAX(a,b)	((a > b)?	a: b)
+#define MIN(a, b)	((a > b)? b: a)
 #define M1RI_TIME_FUNCTION(a) clock_t begin, end; double time_spent; begin = clock(); time(&after); end = clock(); time_spent = (double)(end - begin) / CLOCKS_PER_SEC; printf("Hello");
 
 typedef u_int64_t vec;

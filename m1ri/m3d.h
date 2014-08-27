@@ -234,6 +234,54 @@ m3d_t  *  m3d_identity(m3d_t  *, rci_t );
 m3d_t *    m3d_init_window(const m3d_t  *, rci_t , rci_t , rci_t , rci_t );
 
 
+/**
+ \Brief Swap columns in m3d_t after a certain row
+ \param M = Matrix to swap columns of
+ \param a = first set of columns
+ \param b = second set of columns to swap
+ \param start_row  starting row
+ \param end_row end row 
+*/
+static inline void m3d_col_swap_in_rows(m3d_t *M, rci_t col_a, rci_t col_b, rci_t start_row, rci_t end_row)
+{
+	
+		 if (col_a == col_b)
+    		return;
+        int i;
+        vec block_a, block_b, dif_a, dif_b, a_place, b_place; 
+        vbg tempa, tempb;
+         block_a = (col_a-1)/M1RI_RADIX;
+         block_b = (col_b-1)/M1RI_RADIX;
+         dif_a = col_a%M1RI_RADIX;
+         dif_b = col_b%M1RI_RADIX;
+         a_place =  leftbit >>  dif_a ;
+         b_place =  leftbit >> dif_b ;
+    
+
+              
+          for( i = start_row; i <  end_row; i++)
+          {
+		     
+		  
+		           tempa.units  = (b_place  & M->rows[i][block_b].units) ? (a_place  ): 0;
+		     tempb.units  = (a_place  & M->rows[i][block_a].units) ? (b_place  ): 0; 
+		       M->rows[i][block_a].units  = (tempa.units)  ? M->rows[i][block_a].units  | tempa.units :   M->rows[i][block_a].units  & ~a_place; 
+		       M->rows[i][block_b].units  = (tempb.units)  ? M->rows[i][block_a].units  | tempb.units :   M->rows[i][block_b].units  & ~b_place;  
+		         tempa.sign  = (b_place  & M->rows[i][block_b].sign) ? (a_place  ): 0;
+		     tempb.sign  = (a_place  & M->rows[i][block_a].sign) ? (b_place  ): 0; 
+		       M->rows[i][block_a].sign  = (tempa.sign)  ? (M->rows[i][block_a].sign  | tempa.sign) :   M->rows[i][block_a].sign  & ~a_place; 
+		       M->rows[i][block_b].sign  = (tempb.sign)  ? (M->rows[i][block_a].sign  | tempb.sign) :   M->rows[i][block_b].sign  & ~b_place; 
+		     
+		       
+
+		       
+          }
+    
+   
+
+
+}
+
 
 
 /** 
