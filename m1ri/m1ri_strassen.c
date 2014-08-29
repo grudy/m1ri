@@ -43,7 +43,7 @@
 /**
 	Recursive Matrix Multiplication over GF(3), on a square matrix.
 */
-static inline void m3d_mul_naive_square(m3d_t *c, const m3d_t *a, const m3d_t *b)
+static inline void m3d_mul_naive_square(m3d_t *c,  m3d_t const *a,  m3d_t  const *b)
 {
 	
 	m3d_t  * x1, * x2; 
@@ -116,7 +116,7 @@ static inline void m3d_mul_naive_square(m3d_t *c, const m3d_t *a, const m3d_t *b
 	Classic O(N)^3 algorithm for Matrix Multiplication over GF(3) this function
 	handles padding and calls  m3d_mul_naive_square for the multiplication portion.
 */
-m3d_t * m3d_classic_mul(m3d_t *c, const m3d_t  *a, const m3d_t  *b)
+m3d_t * m3d_classic_mul(m3d_t *c,  m3d_t  const *a,  m3d_t const *b)
 {
 	if (c == NULL)
 	{
@@ -193,7 +193,7 @@ m3d_t * m3d_classic_mul(m3d_t *c, const m3d_t  *a, const m3d_t  *b)
 	
 }
 
-static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
+static inline void m3d_qrt_mul(m3d_t * c, m3d_t  const *   a, m3d_t  const *   b )
 {
   	m3d_t * x1;
     m3d_t * x2;
@@ -281,6 +281,7 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
     {
     	 m3d_mul_64(c->rows[0], a->rows[0], b->rows[0]);
     
+    
     } 
     
     
@@ -294,7 +295,7 @@ static inline void m3d_qrt_mul(m3d_t * c,const m3d_t *   a,const m3d_t *   b )
 /**
   Strassen  algorithm on an m3d_t	
 */
-m3d_t *  m3d_strassen(m3d_t *c,const m3d_t  *a,const m3d_t   *b)
+m3d_t *  m3d_strassen(m3d_t *c, m3d_t  const *a, m3d_t  const  *b)
 {
 	if (c == NULL)
 	{
@@ -601,6 +602,10 @@ static inline void m7d_qrt_mul(m7d_t * c,const m7d_t *   a,const m7d_t *   b )
         c_slice->row[0] = m7d_add(c_slice->row[0], x1,c_slice->row[0] );
         m7d_free(x1);
     	m7d_free(x2);
+    	m7d_quarter_free(a_slice);
+    	m7d_quarter_free(b_slice);
+    	m7d_quarter_free(c_slice);
+    	
        
     }
     
@@ -640,7 +645,9 @@ static inline void m7d_qrt_mul(m7d_t * c,const m7d_t *   a,const m7d_t *   b )
         m7d_mul_64(c_slice->row[0]->rows, a_slice->row[1]->rows,b_slice->row[2]->rows);
         m7d_add_64(c_slice->row[0]->rows, x1->rows,c_slice->row[0]->rows) ; 
  
-
+	   	m7d_quarter_free(a_slice);
+    	m7d_quarter_free(b_slice);
+    	m7d_quarter_free(c_slice);
 
         m7d_free(x1);
     	m7d_free(x2);

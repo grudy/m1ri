@@ -42,7 +42,7 @@
 	
 */
 
-m3d_t *  m3d_strassen(m3d_t *, const m3d_t *,const m3d_t*);
+m3d_t *  m3d_strassen(m3d_t *,  m3d_t const  *, m3d_t const *);
 
 
 /**

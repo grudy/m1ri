@@ -58,6 +58,62 @@
  }
 
 
+
+ void m3d_test_inc(int m,int  n)
+ {
+
+    m3d_t * a, * b, *c;
+    a = m3d_create(m, n);
+    b = m3d_create( m, n);
+    m3d_rand(a);
+    m3d_rand(b);
+    c = m3d_copy(c, a); 
+    
+   	for(int i = 0; i < m; i++)
+   	{
+   		for(int j = 0; j < M1RI_DN(n, 64); j++)
+   	  	{
+	  		m3d_inc(a->rows[i] + j, b->rows[i] + j);
+   	  		
+   	  	}
+   	
+   	}
+   	
+   	
+   	if(m3d_equal(a, c))
+    {
+     	{
+          m1ri_die("Error in m3d_inc size %d by %d,\n", m, n);
+    
+         }
+    
+    }
+   	
+   for(int i = 0; i < m; i++)
+   	{
+   		for(int j = 0; j < M1RI_DN(n, 64); j++)
+   	  	{
+
+   	  		isub_m3d(a->rows[i]  + j, b->rows[i] + j);
+   	  	}
+   	
+   	}
+
+	if(!(m3d_equal(a, c)))
+    {
+     	{
+          m1ri_die("Error in m3d_inc and subtraction of size %d by %d,\n", m, n);
+    
+         }
+    
+    }
+   
+  m3d_free(a);
+  m3d_free(b);
+  m3d_free(c);
+  
+ }
+
  void m5d_test_addition(int m,int  n)
  {
 
@@ -149,7 +205,18 @@ int main(int argc, const char * argv[])
     m3d_test_addition(142, 181);
     printf("\nm3d addition and subtraction test passed\n");
 
-        
+
+	
+    m3d_test_inc(64, 64);
+    
+    m3d_test_inc(64, 4);
+    m3d_test_inc(4, 800);
+    m3d_test_inc(14, 294);
+    m3d_test_inc(342, 64);
+    m3d_test_inc(64, 44);
+    m3d_test_inc(142, 181);
+    
+    
     m5d_test_addition(4, 4);
     m5d_test_addition(64, 64);
     m5d_test_addition(64, 4);

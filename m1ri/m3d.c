@@ -698,7 +698,7 @@ void  m3d_slices(m3_slice *  c, const m3d_t * a, wi_t slicesize)
 /**
   Allocates a m3_slice to consist of four equally sized windows
 */
-m3_slice * m3d_quarter(const m3d_t * a)
+m3_slice * m3d_quarter( m3d_t  const * a)
 {
 	 m3_slice * c = m1ri_malloc(sizeof(m3_slice));
 	 
@@ -845,29 +845,6 @@ void vbg_negation(vbg *r)
 
 
 
-
-
-static inline void iadd_vbg(vbg *r,vbg  const *  x)
-{
-    vec t;
-    t = x->units ^ r->sign;
-    r->sign = x->units ^ r->units;
-    r->units = x->units ^ r->units;
-    r->sign = r->sign & t;
-    t = t ^ x->sign;
-    r->units = t | r->units;
-}
-
-static inline void isub_m3d(vbg  *r,vbg  *x)
-{
-    vec t;
-    r->units = x->units ^ r->units;
-    t  = r->units | r->sign;
-    t = t ^ x->sign;
-    r->sign = x->units ^ r->sign;
-    r->sign = r->sign & t;
-    r->units = t | r->units;     
-}
 
 
 void  vbg_mul( vbg *r, vbg  *x, vbg  *y)            {
@@ -1131,44 +1108,8 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B);
 */
 
 
-/** 
-	\brief, addition base case
-	\param x augend
-	param  y addend
-	\return x as sum
-*/
-static inline void m3d_inc(vbg  * x, vbg const *  y)
-{ 
-    vec t;
-    x->sign  = y->units ^ x->sign;
-    t = (x->sign & x->units) ^ y->sign;
-    x->units = (y->units ^ x->units) |  t;
-    x->sign = t & x->sign;
-    
-}
 
 
-static inline void m3d_combine3(vbg *table, vbg const *input) {
-    vbg t, a, b, c;
-    t.sign = t.units = 0;
-    a = input[0];
-    b = input[1];
-    c = input[2];
-
-    table[0] = t;
-    table[1] = a;
-    table[2] = b;
-    table[4] = c;
-
-    add_vbg(&t, &a, &b);
-    table[3] = t;
-    m3d_inc(&t, &c);
-    table[7] = t;
-    isub_m3d(&t, &a);
-    table[6] = t;
-    
-    add_vbg(table+5, &a, &c);
-}
 
 static inline void m3d_combine4(vbg *table, vbg const *input) {
     vbg t, a, b, c, d;
@@ -1202,6 +1143,7 @@ static inline void m3d_combine4(vbg *table, vbg const *input) {
     m3d_inc(&t,&c);
     table[15] = t;
     isub_m3d(&t,&d);
+    
     table[7] = t;
     isub_m3d(&t,&b);
     table[5] = t;
@@ -1246,84 +1188,63 @@ static inline void m3d_combine6(vbg *table, vbg const *input) {
 
 }
 
-static inline void m3d_combine7(vbg *table, vbg const *input) {
-    vbg g, *t6;
-    int i;
 
-    m3d_combine6(table, input);
-    g = input[6];
-    t6 = table+64;
-    table[64] = g;
-    
-    for(i=1;i<64;i++)
-        add_vbg(t6 + i, table+i, &g);
-
-}
-
-static inline void m3d_combine8(vbg *table, vbg *input) {
-    vbg h, *t7;
-    int i;
-
-    m3d_combine7(table, input);
-    h = input[7];
-    t7 = table+128;
-    table[128] = h;
-    
-    for(i=1;i<128;i++)
-        add_vbg(t7 + i, table+i, &h);
-}
-
-
-void m3d_mul_64(vbg *R, vbg const *  A, vbg const *  B)
+void m3d_mul_64(vbg *R, vbg const *A, vbg  const *B)
 {
-     int i;
-    vec v1,v2;
-    vbg a, t1, t2, r1, r2;
+   
+    vbg t, r, a;
+    vec v;
+    int i;
+
     vbg tables6[4][64];
     vbg tables5[8][32];
-    for(i=0;i<4;i++) 
-    {
+
+    for(i=0;i<4;i++)
         m3d_combine6(tables6[i], B  + 6*i);
-    }
-    for(i=0;i<8;i++) {
+    for(i=0;i<8;i++)
         m3d_combine5(tables5[i], B + 24 + 5*i);
-    }
+
     for(i=0;i<64;i++) 
     {
+    
         a = A[i];
-        v2 = a.sign;
-        v1 = a.units ^ v2;
-        r1 = tables6[0][v1&63];                  v1 >>= 6;
-        r2 = tables6[0][v2&63];                  v2 >>= 6;
-        t1 = tables6[1][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
-        t2 = tables6[1][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
-        t1 = tables6[2][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
-        t2 = tables6[2][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
-        t1 = tables6[3][v1&63]; iadd_vbg(&r1, &t1); v1 >>= 6;
-        t2 = tables6[3][v2&63]; iadd_vbg(&r2, &t2); v2 >>= 6;
-        t1 = tables5[0][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
-        t2 = tables5[0][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
-        t1 = tables5[1][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
-        t2 = tables5[1][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
-        t1 = tables5[2][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
-        t2 = tables5[2][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
-        t1 = tables5[3][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
-        t2 = tables5[3][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
-        t1 = tables5[4][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
-        t2 = tables5[4][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
-        t1 = tables5[5][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
-        t2 = tables5[5][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
-        t1 = tables5[6][v1&31]; iadd_vbg(&r1, &t1); v1 >>= 5;
-        t2 = tables5[6][v2&31]; iadd_vbg(&r2, &t2); v2 >>= 5;
-        t1 = tables5[7][v1&31]; iadd_vbg(&r1, &t1);          
-        t2 = tables5[7][v2&31]; iadd_vbg(&r2, &t2);          
+        v = a.sign;
+        r = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; iadd_vbg(&r, &t); v >>= 6;
+        t = tables6[2][v&63]; iadd_vbg(&r, &t); v >>= 6;
+        t = tables6[3][v&63]; iadd_vbg(&r, &t); v >>= 6;
+        t = tables5[0][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[1][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[2][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[3][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[4][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[5][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[6][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[7][v&31]; iadd_vbg(&r, &t);
 
-        isub_m3d(&r1, &r2);
-        R[i] = r1;
-       /*  */
+        r.sign^=r.units;
+        v = a.units ^ a.sign;
+
+        t = tables6[0][v&63]; iadd_vbg(&r, &t); v >>= 6;
+        t = tables6[1][v&63]; iadd_vbg(&r, &t); v >>= 6;
+        t = tables6[2][v&63]; iadd_vbg(&r, &t); v >>= 6;
+        t = tables6[3][v&63]; iadd_vbg(&r, &t); v >>= 6;
+        t = tables5[0][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[1][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[2][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[3][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[4][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[5][v&31]; iadd_vbg(&r, &t); v >>= 5;
+        t = tables5[6][v&31]; iadd_vbg(&r, &t); v >>= 5;
+    	t = tables5[7][v&31]; iadd_vbg(&r, &t);
+		R[i] = r;
+        
     }
     
 }
+
+
+
 
 inline void m3d_mul_zero(m3d_t * a)
 {

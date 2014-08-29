@@ -35,10 +35,11 @@
 /******************************
 Creates  a struct of 128 bits
 ******************************/
-typedef struct vbg{
-    
-    vec units;
+typedef struct vbg
+{
     vec sign;
+    vec units;
+
 } vbg;
 
 /**********************************
@@ -502,6 +503,18 @@ static inline void  m3d_sub_unshackled(m3d_t * r,   const  m3d_t  *x, const m3d_
 }
 
 
+static inline void isub_m3d(vbg  *r,vbg  *x)
+{
+    vec t;
+    r->units = x->units ^ r->units;
+    t  = r->units | r->sign;
+    t = t ^ x->sign;
+    r->sign = x->units ^ r->sign;
+    r->sign = r->sign & t;
+    r->units = t | r->units;     
+}
+
+
 static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 {
@@ -534,6 +547,33 @@ static inline void   m3d_add_unshackled(m3d_t *c, const m3d_t  *a,const m3d_t  *
             	add_vbg(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);
         	}   
         }
+}
+
+/** 
+	\brief, addition base case
+	\param x augend
+	param  y addend
+	\return x as sum
+*/
+static inline void m3d_inc(vbg  * x, vbg const *  y)
+{ 
+    vec t;
+    x->sign  = y->units ^ x->sign;
+    t = (x->sign & x->units) ^ y->sign;
+    x->units = (y->units ^ x->units) |  t;
+    x->sign = t & x->sign;
+    
+}
+
+static inline void iadd_vbg(vbg *r,vbg  const *  x)
+{
+    vec t;
+    t = x->units ^ r->sign;
+    r->sign = x->units ^ r->units;
+    r->units = x->units ^ r->units;
+    r->sign = r->sign & t;
+    t = t ^ x->sign;
+    r->units = t | r->units;
 }
 
 
