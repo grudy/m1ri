@@ -227,7 +227,7 @@ void  m3d_rand(m3d_t * a)
             
             }
             	
-    			ula->rows[i][z].sign = m1ri_rand();
+    			a->rows[i][z].sign = m1ri_rand();
        			a->rows[i][z].units = m1ri_rand();
        			a->rows[i][z].sign =  a->rows[i][z].sign & a->rows[i][z].units;
        			a->rows[i][z].sign = a->rows[i][z].sign & mask_rand;
