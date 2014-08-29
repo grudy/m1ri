@@ -238,7 +238,7 @@ vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width)
 vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows)
 {
 	int i;
-    rows = m1ri_malloc( nrows * width * sizeof(vtri *));
+    rows = m1ri_malloc( nrows * sizeof(vtri *));
     for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = (block + (i * width));

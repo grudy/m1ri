@@ -113,14 +113,15 @@ void m3d_strassen_test(int y, int z)
    // printf("\nOutput of first matrix a of size %d, by %d\n", y, z);
    //	m3d_print(a);
     
-    
+    m3d_print(a);
+    m3d_print(b);
     
 	clock_t begin, end;
 	double time_spent;
 	begin = clock();
 	c = m3d_strassen(c, a, b);
 	//printf("\n %d by %d matrix \n", c->nrows, c->ncols);
-	//m3d_print(c);
+	m3d_print(c);
     time_t after;
     time(&after);
 	end = clock();
@@ -145,10 +146,11 @@ int main(int argc, const char * argv[])
 	
  	//m3d_strassen_test(64, 64);
    	//m3d_strassen_test(512, 512);
-   
-   m3d_mul_associative_test(4, 4);
-   
-    
+
+
+   m3d_mul_associative_test(
+   4, 4);
+ 
    
     
    return 0 ; 

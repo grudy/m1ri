@@ -279,7 +279,7 @@ static inline void m3d_qrt_mul(m3d_t * c, m3d_t  const *   a, m3d_t  const *   b
     
     else if(c->ncols  == M1RI_RADIX )
     {
-    	 m3d_mul_64(c->rows[0], a->rows[0], b->rows[0]);
+    	 m3d_mul_64(c->block, a->block, b->block);
     
     
     } 
@@ -305,10 +305,10 @@ m3d_t *  m3d_strassen(m3d_t *c, m3d_t  const *a, m3d_t  const  *b)
 
 	else 
 	{
-	if (c->nrows != a->nrows || c->ncols != b->ncols) 
-	{
-		m1ri_die("m3d_strassen: Provided return matrix has wrong dimensions.\n");
-    }
+		if (c->nrows != a->nrows || c->ncols != b->ncols) 
+		{
+			m1ri_die("m3d_strassen: Provided return matrix has wrong dimensions.\n");
+    	}
 	
 	}
 	
@@ -327,13 +327,17 @@ m3d_t *  m3d_strassen(m3d_t *c, m3d_t  const *a, m3d_t  const  *b)
 	acbr =  powerof2(acbr);
 	bccc =  powerof2(bccc);
 	
-
+	arcr = MAX(arcr, 64);
+	acbr = MAX(acbr, 64);
+	bccc = MAX(bccc, 64);
+	
 	int lasta, lastb, lastboth;
 	lasta = 64 - a->nrows%64;
 	lastb = 64 -  b->ncols%64;  
 	lastboth = 64 - a->nrows; 
 
-	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (b->ncols))
+	
+	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc) != (b->ncols)  )
 	{
 		m3d_t * padded_a,   * padded_b , * padded_c;
 	
@@ -343,10 +347,11 @@ m3d_t *  m3d_strassen(m3d_t *c, m3d_t  const *a, m3d_t  const  *b)
 		padded_c = m3d_create(arcr, bccc);
 		padded_a = m3d_copy(padded_a, a);
 		padded_b = m3d_copy(padded_b, b);
-		padded_c = m3d_copy(padded_c, c);
-	
+		//padded_c = m3d_copy(padded_c, c);
+		m3d_print(padded_a);
 		m3d_qrt_mul(padded_c, padded_a, padded_b); 
 		c  = m3d_copy_cutoff(c, padded_c);
+		//m3d_print(padded_c);
 		m3d_free(padded_a);
 		m3d_free(padded_b);
 		m3d_free(padded_c);
@@ -355,10 +360,12 @@ m3d_t *  m3d_strassen(m3d_t *c, m3d_t  const *a, m3d_t  const  *b)
 	}
 	
 	
+	
 	else
 	{
 	
 		m3d_qrt_mul(c, a, b); 
+		
 	}
 	
 
@@ -513,6 +520,10 @@ m5d_t *  m5d_strassen(m5d_t *c, m5d_t const  *a, const  m5d_t   *b)
 	arcr =  powerof2(arcr);
 	acbr =  powerof2(acbr);
 	bccc =  powerof2(bccc);
+	
+	arcr = MAX(arcr, 64);
+	acbr = MAX(acbr, 64);
+	bccc = MAX(bccc, 64);
 	
 	int lasta, lastb, lastboth;
 	lasta = 64 - a->nrows%64;
@@ -681,7 +692,6 @@ m7d_t *  m7d_strassen(m7d_t *c,const m7d_t  *a,const m7d_t   *b)
 	{
 		m1ri_die("m7d_strassen: Provided return matrix has wrong dimensions.\n");
     	
-	
 	}
 	
 
@@ -696,6 +706,10 @@ m7d_t *  m7d_strassen(m7d_t *c,const m7d_t  *a,const m7d_t   *b)
 	arcr =  powerof2(arcr);
 	acbr =  powerof2(acbr);
 	bccc =  powerof2(bccc);
+	
+	arcr = MAX(arcr, 64);
+	acbr = MAX(acbr, 64);
+	bccc = MAX(bccc, 64);
 	
 	int lasta, lastb, lastboth;
 	lasta = 64 - a->nrows%64;

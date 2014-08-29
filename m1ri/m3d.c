@@ -208,9 +208,42 @@ m3d_t * m3d_create( rci_t nrows, rci_t ncols)
 void  m3d_rand(m3d_t * a)
 {
     int i,  z;
-    for(i = 0; i < (a->nrows); i++)
+    rci_t cutoff = a->ncols% 64;
+    if(cutoff)
     {
-        for( z = 0; z  < (a->width); z++)
+    
+    
+    	vec mask_rand = (leftbit  >> (cutoff -1)) - 1;
+    	mask_rand = ~mask_rand;
+    	
+    	for(i = 0; i < (a->nrows); i++)
+   	 	{
+        	for( z = 0; z  < (a->width - 1 ); z++)
+            {  
+       			a->rows[i][z].sign = m1ri_rand();
+       			a->rows[i][z].units = m1ri_rand();
+       			a->rows[i][z].sign =  a->rows[i][z].sign & a->rows[i][z].units;
+            
+            
+            }
+            	
+    			ula->rows[i][z].sign = m1ri_rand();
+       			a->rows[i][z].units = m1ri_rand();
+       			a->rows[i][z].sign =  a->rows[i][z].sign & a->rows[i][z].units;
+       			a->rows[i][z].sign = a->rows[i][z].sign & mask_rand;
+       			a->rows[i][z].units = a->rows[i][z].units & mask_rand;
+            
+   	 	}
+    
+    
+    
+    }
+    
+    else
+    {
+    	for(i = 0; i < (a->nrows); i++)
+   	 	{
+        	for( z = 0; z  < (a->width); z++)
             {  
        			a->rows[i][z].sign = m1ri_rand();
        			a->rows[i][z].units = m1ri_rand();
@@ -219,8 +252,8 @@ void  m3d_rand(m3d_t * a)
             
             }
     
-    }
-    
+   	 	}
+ 	}   
    
 }
 
@@ -1111,7 +1144,8 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B);
 
 
 
-static inline void m3d_combine4(vbg *table, vbg const *input) {
+static inline void m3d_combine4(vbg *table, vbg const *input) 
+{
     vbg t, a, b, c, d;
     t.sign = t.units = 0;
     a = input[0];
@@ -1153,7 +1187,8 @@ static inline void m3d_combine4(vbg *table, vbg const *input) {
     table[9] = t;
 }
 
-static inline void m3d_combine5(vbg *table, vbg const *input) {
+static inline void m3d_combine5(vbg *table, vbg const *input) 
+{
     vbg e, *t4;
     int i;
 
@@ -1166,7 +1201,8 @@ static inline void m3d_combine5(vbg *table, vbg const *input) {
         add_vbg(t4 + i, table+i, &e);
 }
     
-static inline void m3d_combine6(vbg *table, vbg const *input) {
+static inline void m3d_combine6(vbg *table, vbg const *input) 
+{
     vbg e, *t4;
     vbg f, *t5;
     int i;
@@ -1200,7 +1236,7 @@ void m3d_mul_64(vbg *R, vbg const *A, vbg  const *B)
     vbg tables5[8][32];
 
     for(i=0;i<4;i++)
-        m3d_combine6(tables6[i], B  + 6*i);
+        m3d_combine6(tables6[i], B  + 0 + 6*i);
     for(i=0;i<8;i++)
         m3d_combine5(tables5[i], B + 24 + 5*i);
 
@@ -1213,6 +1249,7 @@ void m3d_mul_64(vbg *R, vbg const *A, vbg  const *B)
         t = tables6[1][v&63]; iadd_vbg(&r, &t); v >>= 6;
         t = tables6[2][v&63]; iadd_vbg(&r, &t); v >>= 6;
         t = tables6[3][v&63]; iadd_vbg(&r, &t); v >>= 6;
+        
         t = tables5[0][v&31]; iadd_vbg(&r, &t); v >>= 5;
         t = tables5[1][v&31]; iadd_vbg(&r, &t); v >>= 5;
         t = tables5[2][v&31]; iadd_vbg(&r, &t); v >>= 5;
@@ -1229,6 +1266,7 @@ void m3d_mul_64(vbg *R, vbg const *A, vbg  const *B)
         t = tables6[1][v&63]; iadd_vbg(&r, &t); v >>= 6;
         t = tables6[2][v&63]; iadd_vbg(&r, &t); v >>= 6;
         t = tables6[3][v&63]; iadd_vbg(&r, &t); v >>= 6;
+       
         t = tables5[0][v&31]; iadd_vbg(&r, &t); v >>= 5;
         t = tables5[1][v&31]; iadd_vbg(&r, &t); v >>= 5;
         t = tables5[2][v&31]; iadd_vbg(&r, &t); v >>= 5;
