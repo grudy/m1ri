@@ -569,7 +569,7 @@ static inline void iadd_vbg(vbg *r,vbg  const *  x)
 {
     vec t;
     t = x->units ^ r->sign;
-    r->sign = x->units ^ r->units;
+    r->sign = x->sign ^ r->units;
     r->units = x->units ^ r->units;
     r->sign = r->sign & t;
     t = t ^ x->sign;

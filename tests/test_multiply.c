@@ -148,8 +148,7 @@ int main(int argc, const char * argv[])
    	//m3d_strassen_test(512, 512);
 
 
-   m3d_mul_associative_test(
-   4, 4);
+   m3d_mul_associative_test(64, 64);
  
    
     

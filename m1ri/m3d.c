@@ -1236,10 +1236,13 @@ void m3d_mul_64(vbg *R, vbg const *A, vbg  const *B)
     vbg tables5[8][32];
 
     for(i=0;i<4;i++)
+    {
         m3d_combine6(tables6[i], B  + 0 + 6*i);
+    }
     for(i=0;i<8;i++)
+    {
         m3d_combine5(tables5[i], B + 24 + 5*i);
-
+	}
     for(i=0;i<64;i++) 
     {
     
