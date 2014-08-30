@@ -107,7 +107,7 @@
          }
     
     }
-   
+  
   m3d_free(a);
   m3d_free(b);
   m3d_free(c);

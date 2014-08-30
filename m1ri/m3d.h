@@ -565,16 +565,8 @@ static inline void m3d_inc(vbg  * x, vbg const *  y)
     
 }
 
-static inline void iadd_vbg(vbg *r,vbg  const *  x)
-{
-    vec t;
-    t = x->units ^ r->sign;
-    r->sign = x->sign ^ r->units;
-    r->units = x->units ^ r->units;
-    r->sign = r->sign & t;
-    t = t ^ x->sign;
-    r->units = t | r->units;
-}
+
+
 
 
 /**
