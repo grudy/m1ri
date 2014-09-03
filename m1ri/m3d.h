@@ -716,7 +716,7 @@ static inline void m3d_set_zero(m3d_t * a)
 								GF(3)
 ****************************************************/
 /* 64 * 64,4096 bit, 512 byte matrix(slice) multiplication */
-void m3d_mul_64(vbg *, vbg const * , vbg const * );
+void m3d_mul_64(vbg **, vbg  **  const, vbg  **  const);
 
 
 #endif
