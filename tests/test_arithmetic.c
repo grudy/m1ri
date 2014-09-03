@@ -39,7 +39,7 @@
     
     d = m3d_sub(d, c, b);
    
-
+	m3d_print(a);
 	if(!(m3d_equal(d, a)))
     {
      	{

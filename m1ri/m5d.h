@@ -127,6 +127,35 @@ typedef struct
     
 }m5_slice;
 
+/** 
+	\brief, addition base case
+	\param r augend
+	param  x addend
+	\return r as sum
+*/
+static inline void iadd_vfd(vfd *r,vfd *x)
+{
+    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    c = x->units ^ r->units;
+    d = x->middle ^ r->middle;
+    e = x->sign ^ r->sign;
+    f = d & c;
+    g = f | x->middle;
+    h = f ^ r->sign;
+    i = h | e;
+	r->sign = i;  /** */
+    j = i ^ x->units;
+    k = j ^ r->middle;
+    l = k | c;
+    m = l ^ e;
+    n = m ^ g;
+	r->middle = n; /** */
+    o = m | d;
+    p = o ^ c;
+    q = p^n;
+    r->sign = q; /** */
+   
+}
 
 /**
  * \brief Releases a m5d_t into the wilderness.  
@@ -197,7 +226,7 @@ static inline void m5d_col_swap_in_rows(m5d_t *M, rci_t col_a, rci_t col_b, rci_
           {
 		     
 		  
-		           tempa.units  = (b_place  & M->rows[i][block_b].units) ? (a_place  ): 0;
+		     tempa.units  = (b_place  & M->rows[i][block_b].units) ? (a_place  ): 0;
 		     tempb.units  = (a_place  & M->rows[i][block_a].units) ? (b_place  ): 0; 
 		     
 		     tempa.middle  = (b_place  & M->rows[i][block_b].middle) ? (a_place  ): 0;
@@ -630,6 +659,8 @@ m5d_t *m5d_mul_scalar(m5d_t *, const long , const m5d_t *);
  \
  */
 void m5d_add_row(m5d_t *, rci_t , const m5d_t *, rci_t , rci_t );
+
+
 
  
  

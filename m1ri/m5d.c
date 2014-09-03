@@ -494,32 +494,6 @@ def sub(a,b):
 
 }
 
-/** *******************************************
- matrix r = (direct sum matrix r + matrix x)
- ********************************************/
-inline void iadd_vfd(vfd *r,vfd *x)
-{
-    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
-    c = x->units ^ r->units;
-    d = x->middle ^ r->middle;
-    e = x->sign ^ r->sign;
-    f = d & c;
-    g = f | x->middle;
-    h = f ^ r->sign;
-    i = h | e;
-	r->sign = i;  /** */
-    j = i ^ x->units;
-    k = j ^ r->middle;
-    l = k | c;
-    m = l ^ e;
-    n = m ^ g;
-	r->middle = n; /** */
-    o = m | d;
-    p = o ^ c;
-    q = p^n;
-    r->sign = q; /** */
-   
-}
 
  /* matrix r = (matrix r - matrix x) */
 void fb_i(vfd *r,vfd *x) 

@@ -78,16 +78,16 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
     
     	buffer[i++] = '[';
     	buffer[i++] = ' ';
-        out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
+        out = (( a & (rightbit <<  x)) == (b & (rightbit  << x))) ? 0:  1;
         
-        if((out == 0) && (b & (leftbit  >> x)))
+        if((out == 0) && (b & (rightbit  << x)))
         {
         	
         	buffer[i++] = '2'; 
               /*  printf("[ 1 ]"); */
         }
         
-        else if(out == 1) /* && (b & (leftbit  >> x))) */
+        else if(out == 1) /* && (b & (rightbit  << x))) */
         {
         	buffer[i++] = '1'; 
             /* printf("[ 2 ]"); */
@@ -171,6 +171,7 @@ static inline void print_m3d_block_more_buffered(vec a, vec b, u_int32_t l_unuse
              {
                  print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, 0);
                  ++m;
+                 
              }
              
              if(a->ncols%64 == 0)
@@ -181,7 +182,9 @@ static inline void print_m3d_block_more_buffered(vec a, vec b, u_int32_t l_unuse
              
              if(a->ncols%64 != 0)
              {
+             
               print_m3d_block(a->rows[i][m].units, a->rows[i][m].sign, 0, (64 - a->ncols%64) );
+              printf("got here \n");
              }
          
     

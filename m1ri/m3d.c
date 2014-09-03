@@ -52,7 +52,7 @@ vec m3d_rs_bits(m3d_t const *M, rci_t  x, rci_t  y, int  n)
     wi_t  block = (y  ) / M1RI_RADIX;
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
-    bits  = (n == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].sign))  : ((leftbit >> spill) | (M->rows[x][block].units));
+    bits  = (n == 0) ? (~(rightbit << spill) &  (M->rows[x][block].sign))  : ((rightbit << spill) | (M->rows[x][block].units));
     return bits;
 }
 
@@ -62,7 +62,7 @@ vec m3d_ru_bits(m3d_t const *M, rci_t  x, rci_t  y, int  n)
 	wi_t  block = (y  ) / M1RI_RADIX;
 	int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
-    bits  = (n == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
+    bits  = (n == 0) ? (~(rightbit << spill) &  (M->rows[x][block].units))  : ((rightbit << spill) | (M->rows[x][block].units));
     return bits;   
 }
 
@@ -99,8 +99,8 @@ void  m3d_colswap(m3d_t *M, rci_t col_a, rci_t col_b)
          block_b = (col_b-1)/M1RI_RADIX;
          dif_a = col_a%M1RI_RADIX;
          dif_b = col_b%M1RI_RADIX;
-         a_place =  leftbit >>  dif_a ;
-         b_place =  leftbit >> dif_b ;
+         a_place =  rightbit << dif_a ;
+         b_place =  rightbit <<  dif_b ;
         if(block_a == block_b)
         { 
 
@@ -143,8 +143,8 @@ void m3d_colswap_capped_row(m3d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
          block_b = (col_b-1)/M1RI_RADIX;
          dif_a = col_a%M1RI_RADIX;
          dif_b = col_b%M1RI_RADIX;
-         a_place =  leftbit >>  dif_a ;
-         b_place =  leftbit >> dif_b ;
+         a_place =  rightbit <<  dif_a ;
+         b_place =  rightbit <<  dif_b ;
        
 
               
@@ -182,8 +182,8 @@ void  m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
 {
     wi_t  block = (y  ) / M1RI_RADIX;
     int   spill =  (y  % M1RI_RADIX) ;
-    M->rows[x][block].units  = (u == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
-    M->rows[x][block].sign  = (s == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].sign))  : ((leftbit  >> spill) | (M->rows[x][block].sign));
+    M->rows[x][block].units  = (u == 0) ? (~(rightbit <<  spill) &  (M->rows[x][block].units))  : ((rightbit <<  spill) | (M->rows[x][block].units));
+    M->rows[x][block].sign  = (s == 0) ? (~(rightbit << spill) &  (M->rows[x][block].sign))  : ((rightbit << spill) | (M->rows[x][block].sign));
     
 }
 
@@ -213,8 +213,8 @@ void  m3d_rand(m3d_t * a)
     {
     
     
-    	vec mask_rand = (leftbit  >> (cutoff -1)) - 1;
-    	mask_rand = ~mask_rand;
+    	vec mask_rand = (rightbit  << (cutoff )) - 1;
+    	//mask_rand = ~mask_rand;
     	
     	for(i = 0; i < (a->nrows); i++)
    	 	{
@@ -270,10 +270,10 @@ m3d_t * m3d_transposewin(const m3d_t  *a )
 	for(x = 0; x < a->ncols; x ++)
 	{
 	
-		temp.units =  (a->rows[x][0].units & (leftbit >> i) );
-		temp.sign =  (a->rows[x][0].sign & (leftbit >> i) );
-		b->rows[i][0].units = (temp.units) ?  b->rows[i][0].units | (leftbit >> x) : b->rows[i][0].units ;
-        b->rows[i][0].sign = (temp.sign) ? b->rows[i][0].sign | (leftbit >> x) : b->rows[i][0].sign  ;      
+		temp.units =  (a->rows[x][0].units & (rightbit << i) );
+		temp.sign =  (a->rows[x][0].sign & (rightbit << i) );
+		b->rows[i][0].units = (temp.units) ?  b->rows[i][0].units | (rightbit <<  x) : b->rows[i][0].units ;
+        b->rows[i][0].sign = (temp.sign) ? b->rows[i][0].sign | (rightbit <<  x) : b->rows[i][0].sign  ;      
 	}
 	
 
@@ -299,7 +299,7 @@ static inline void m3d_set_one_ui(m3d_t * a)
             for ( k = 0 ; k < M1RI_RADIX; k++)
             {
                 
-              a->rows[l][j].units = (leftbit)>>k;
+              a->rows[l][j].units = (rightbit)<<k;
               l++;
                 
             }
@@ -314,7 +314,7 @@ static inline void m3d_set_one_ui(m3d_t * a)
             for(i = 0; i < (M1RI_RADIX - l); i++)
             {
                 
-              a->rows[k + i][a->width-1].units = (leftbit)>>i;
+              a->rows[k + i][a->width-1].units = (rightbit)<<i;
             }
             
         }
@@ -325,7 +325,7 @@ static inline void m3d_set_one_ui(m3d_t * a)
             for(i = 0; i < 64; i++)
                 
             {
-              a->rows[l][a->width -1].units = (leftbit)>>i;
+              a->rows[l][a->width -1].units = (rightbit)<<i;
                 l++;
                 
             }
@@ -354,8 +354,8 @@ static inline void m3d_set_two_ui(m3d_t * a)
             for ( k = 0 ; k < M1RI_RADIX; k++)
             {
                 
-              a->rows[l][j].units = (leftbit)>>k;
-              a->rows[l][j].sign = (leftbit)>>k;
+              a->rows[l][j].units = (rightbit )<<k;
+              a->rows[l][j].sign = (rightbit)<<k;
               l++;
                 
             }
@@ -370,8 +370,8 @@ static inline void m3d_set_two_ui(m3d_t * a)
             for(i = 0; i < (M1RI_RADIX - l); i++)
             {
                 
-              a->rows[k + i][a->width-1].units = (leftbit)>>i;
-              a->rows[k + i][a->width-1].sign = (leftbit)>>i;
+              a->rows[k + i][a->width-1].units = (rightbit)<<i;
+              a->rows[k + i][a->width-1].sign = (rightbit)<<i;
             }
             
         }
@@ -382,8 +382,8 @@ static inline void m3d_set_two_ui(m3d_t * a)
             for(i = 0; i < 64; i++)
                 
             {
-              a->rows[l][a->width -1].units = (leftbit)>>i;
-              a->rows[l][a->width -1].sign = (leftbit)>>i;
+              a->rows[l][a->width -1].units = (rightbit)<<i;
+              a->rows[l][a->width -1].sign = (rightbit)<<i;
                 l++;
                 
             }
@@ -472,6 +472,8 @@ m3d_t *    m3d_init_window(const m3d_t *c, const rci_t strow, const rci_t stvbg,
 
  m3d_t *    m3d_init_window_unshackled(const m3d_t *c, const rci_t strow, const rci_t stvbg,const rci_t sizerows,const rci_t sizecols)
 {
+
+	
 
 	m3d_t * submatrix = m1ri_malloc(sizeof(m3d_t));
     int i, f;
@@ -741,10 +743,10 @@ m3_slice * m3d_quarter( m3d_t  const * a)
 
      
      
-     c->row[0] = m3d_init_window_unshackled(a,  0, 0 , a->nrows/128, a->ncols/128);
-	 c->row[1] = m3d_init_window_unshackled(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
-     c->row[2] = m3d_init_window_unshackled(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
-	 c->row[3] = m3d_init_window_unshackled(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
+     c->row[0] = m3d_init_window(a,  0, 0 , a->nrows/128, a->ncols/128);
+	 c->row[1] = m3d_init_window(a, 0, a->ncols/128 , a->nrows/128, a->ncols/128);   
+     c->row[2] = m3d_init_window(a, a->nrows/128, 0 , a->nrows/128, a->ncols/128);
+	 c->row[3] = m3d_init_window(a, a->nrows/128,a->ncols/128,  a->nrows/128, a->ncols/128);
 	 
 	 
 	 
@@ -760,10 +762,10 @@ static inline vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
     {
         for(x = 0; x < 64; x ++)
         {
-        	temp.units =  (a[x][0].units & (leftbit >> i) );
-        	temp.sign =  (a[x][0].sign & (leftbit >> i) );
-       	   	b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
-       		b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
+        	temp.units =  (a[x][0].units & (rightbit << i) );
+        	temp.sign =  (a[x][0].sign & (rightbit << i ) );
+       	   	b[i][0].units = (temp.units) ?  b[i][0].units | (rightbit << x) : b[i][0].units ;
+       		b[i][0].sign = (temp.sign) ? b[i][0].sign | (rightbit << x) : b[i][0].sign  ;
         }
     }
     return *b;
@@ -1030,7 +1032,7 @@ m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lo
   		S = m3d_create(s_rows, s_cols);
  	}
  	
- 	vec temp_mask_l = ((leftbit >> ((lowc%M1RI_RADIX) -1)) - 1);
+ 	vec temp_mask_l = ((rightbit << ((lowc%M1RI_RADIX) -1)) - 1);
 	vec temp_mask_r = ~temp_mask_l;
  	rci_t s_width = lowc/M1RI_RADIX;
  	if(!(lowc % M1RI_RADIX))
@@ -1053,7 +1055,7 @@ m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lo
  		if(s_cols%64)
  		{
  	
-				   vec temp_mask = ~((leftbit >> ((s_cols%64) -1)) - 1);
+				   vec temp_mask = ~((rightbit << ((s_cols%64) -1)) - 1);
  		   vbg temp;
  		   for(int i = 0; i < s_rows; i++)
  		   {
@@ -1073,7 +1075,7 @@ m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lo
 	else 
 	{
 		
-		vec temp_mask_l = ((leftbit >> ((lowc%M1RI_RADIX) -1)) - 1);
+		vec temp_mask_l = ((rightbit <<((lowc%M1RI_RADIX) -1)) - 1);
 		vec temp_mask_r = ~temp_mask_l;
 		//vbg tempr;
 		vbg temp;
@@ -1136,6 +1138,7 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B);
 
 
 /*
+ 
   Matrix Multiplication Lookup tables
 
 */

@@ -206,6 +206,22 @@ m3d_t *  m3d_create(  rci_t , rci_t );
 void m3d_rand(m3d_t * );
 
 /** 
+ \brief random matrix of size n * n
+ \param a null m3d_t 
+ \param n size of rows and column of matrix
+ \
+ \Returns an n * n identity matrix
+*/
+static inline m3d_t * m3d_create_rand(m3d_t * a, rci_t n)
+{
+	 
+	 a = m3d_create( n, n);
+	 m3d_rand(a);
+	 return a;
+	
+
+}
+/** 
  \brief Make an Identity Matrix times a scalar 'length'
  \param a = Identity matrix 
  \param length = matrix size (row length and column width)
@@ -217,7 +233,7 @@ void m3d_set_ui(m3d_t *A,unsigned int );
 
 /** 
  \brief identity matrix of size n * n
- \param matrix 
+ \param a matrix 
  \param n size of rows and column of matrix
  \
  \Returns an n * n identity matrix
@@ -605,15 +621,15 @@ m3d_t * m3d_hadamard(m3d_t * , m3d_t const * , m3d_t const * );
 
 
 
-static inline void m3d_add_64(vbg *R, vbg const   *A, vbg  const *B)
+static inline void m3d_add_64(vbg **R, vbg    ** const A, vbg   ** const B)
 {
-	/*
+	
 	int i;
     for (i = 0; i < M1RI_RADIX; i++ )
     {
-         add_vbg(R + i, A + i, B + i);
+         add_vbg(R[i], A[i], B[i]);
     }
-    */
+    
     
     
     
