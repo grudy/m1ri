@@ -519,7 +519,7 @@ static inline void  m3d_sub_unshackled(m3d_t * r,   const  m3d_t  *x, const m3d_
 }
 
 
-static inline void isub_m3d(vbg  *r,vbg  *x)
+static inline void isub_m3d(vbg  *r,vbg const  *x)
 {
     vec t;
     r->units = x->units ^ r->units;
@@ -552,7 +552,7 @@ static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 
 
-static inline void   m3d_add_unshackled(m3d_t *c, const m3d_t  *a,const m3d_t  *b)
+static inline void   m3d_add_unshackled(m3d_t *c,  m3d_t const *a, m3d_t const *b)
 {
 
    int i, j;
@@ -583,7 +583,9 @@ static inline void m3d_inc(vbg  * x, vbg const *  y)
 
 
 
+void m3d_add_i(m3d_t * , m3d_t *); 
 
+void m3d_sub_i(m3d_t * , m3d_t *); 
 
 /**
 	Return the value of the matrix multiplied
@@ -642,7 +644,7 @@ static inline void m3d_add_64(vbg **R, vbg    ** const A, vbg   ** const B)
  \param a  augend
  \param b  addend
  */
-m3d_t  * m3d_add(m3d_t *, const m3d_t  *,const  m3d_t  *);
+m3d_t  * m3d_add(m3d_t *,  m3d_t const  *,  m3d_t  const *);
 
 //void   m3d_add_unshackled(m3d_t *, const m3d_t  *,const  m3d_t  *);
 
@@ -716,7 +718,7 @@ static inline void m3d_set_zero(m3d_t * a)
 								GF(3)
 ****************************************************/
 /* 64 * 64,4096 bit, 512 byte matrix(slice) multiplication */
-void m3d_mul_64(vbg **, vbg  **  const, vbg  **  const);
+void m3d_mul_64(vbg **, vbg  **  , vbg  **  const);
 
 
 #endif

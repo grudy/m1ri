@@ -133,7 +133,7 @@ typedef struct
 	param  x addend
 	\return r as sum
 */
-static inline void iadd_vfd(vfd *r,vfd *x)
+static inline void m5d_inc(vfd *r,vfd *x)
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
     c = x->units ^ r->units;
@@ -216,8 +216,8 @@ static inline void m5d_col_swap_in_rows(m5d_t *M, rci_t col_a, rci_t col_b, rci_
          block_b = (col_b-1)/M1RI_RADIX;
          dif_a = col_a%M1RI_RADIX;
          dif_b = col_b%M1RI_RADIX;
-         a_place =  leftbit >>  dif_a ;
-         b_place =  leftbit >> dif_b ;
+         a_place =  rightbit << i ; dif_a ;
+         b_place =  rightbit << i ; dif_b ;
         if(block_a == block_b)
         { 
 
@@ -493,7 +493,7 @@ void m5d_sub_64(vfd **c ,vfd  ** a , vfd **b);
  * \
  * \returns r with difference
  */      
-void m5d_sub_i(vfd *,vfd *);
+void isub_m5d(vfd *,vfd *);
 
 /**
  * \brief scalar multiplication of vfd vector
@@ -519,26 +519,14 @@ vfd m5d_mul4(vfd);
 
 
 
-/* These Functions are expanded upon Toms 
- implementation of the method of four RUSSIANS
- */
-void *  m5d_combine3(vfd *, vfd * );
-void m5d_combine4(vfd *, vfd * );
-void m5d_combine5(vfd *, vfd * );
-void m5d_combine6(vfd *, vfd * );
-void m5d_combine7(vfd *, vfd * );
-void m5d_combine8(vfd *, vfd *);
+
 
 /* ***************************************************
 				GF(5) base cases for multiplication
 *************************************************** */
 
 void m5d_mul_64(vfd **, vfd **, vfd **);
-void m5d_mul_32(vfd *, vfd *, vfd *);
-void m5d_mul_16(vfd *, vfd *, vfd *);
-void m5d_mul_8(vfd *, vfd *, vfd *);
-void m5d_mul_4(vfd *R, vfd *A, vfd *B);
-/* vfd * m5d_transpose_vfd(vfd  **, vfd **); */
+
 void  m5d_transpose(m5d_t   * a);
 
 

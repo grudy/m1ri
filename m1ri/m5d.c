@@ -36,7 +36,7 @@ vec m5d_rm_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 	wi_t  block = (y  ) / M1RI_RADIX;
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
-    bits = (spill <= 0) ? M->rows[x][block].middle << -spill : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].middle >> spill);
+    bits = (spill <= 0) ? M->rows[x][block].middle << -spill : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].middle << spill);
     return bits;
       
 }
@@ -47,7 +47,7 @@ vec m5d_rs_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
 	wi_t  block = (y  ) / M1RI_RADIX;
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
-    bits = (spill <= 0) ? M->rows[x][block].sign << -spill : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].sign >> spill);
+    bits = (spill <= 0) ? M->rows[x][block].sign << -spill : (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].sign << spill);
 
     return bits;
 }
@@ -63,7 +63,7 @@ vec m5d_ru_bits(m5d_t *M, rci_t  x, rci_t  y, int  n) {
     wi_t  block = (y  ) / M1RI_RADIX;
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vec bits;
-    bits = (spill <= 0) ? M->rows[x][block].units << -spill : (M->rows[x][block + 1].units<< (M1RI_RADIX - spill)) | (M->rows[x][block].units>> spill);
+    bits = (spill <= 0) ? M->rows[x][block].units << -spill : (M->rows[x][block + 1].units<< (M1RI_RADIX - spill)) | (M->rows[x][block].units << spill);
   
     return bits;
 }
@@ -248,7 +248,7 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
             j = i - 1;
             for ( k = 0 ; k < M1RI_RADIX; k++)
             {
-              	a->rows[l][j].units = (leftbit)>>k;
+              	a->rows[l][j].units = (rightbit)<<k;
 				l++;   
             }     
         }
@@ -260,7 +260,7 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
             l = M1RI_RADIX - l;
             for(i = 0; i < (M1RI_RADIX - l); i++)
             {   
-                a->rows[k + i][a->width-1].units = (leftbit)>>i;
+                a->rows[k + i][a->width-1].units = (rightbit)<<i;
                 a->rows[l][a->width -1].middle = 0;
                 a->rows[l][a->width -1].sign = 0;
             }
@@ -273,7 +273,7 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
             for(i  = 0; i < M1RI_RADIX; i++)
                 
             {
-                a->rows[l][a->width -1].units = (leftbit)>>i;
+                a->rows[l][a->width -1].units = (rightbit)<<i;
                 a->rows[l][a->width -1].middle = 0;
                 a->rows[l][a->width -1].sign = 0;
                 l++;    
@@ -732,360 +732,185 @@ void m5d_sub_d(m5d_t  * a , m5d_t * b)
 }
 
 
-void *  m5d_combine3(vfd *table, vfd *input )
-{
-    vfd t, a, b, c;
-    t.sign = t.middle =  t.units = 0;
-    a = input[0];
-    b = input[1];
-    c = input[2];
-    
-    table[0] = t;
-    table[1] = a;
-    table[2] = b;
-    table[4] = c;
-    
-    add_vfd(&t, &a, &b);
-    table[3] = t;
-    iadd_vfd(&t, &c);
-    table[7] = t;
-    m5d_sub_i(&t, &a);
-    table[6] = t;
-    add_vfd((table + 5), &a , &b);
-    
-    return 0;
-    
-}
 
 
-void m5d_combine4(vfd *table, vfd *input )
+static inline void m5d_combine4(vfd *table, vfd  ** const input) 
 {
-    vfd t, a, b, c , d;
-    t.sign = t.middle = t.units = 0;
-    a = input[0];
-    b = input[1];
-    c = input[2];
-    d = input[3];
-    
+    vfd  t,   a,  b,  c,  d;
+    t.sign = t.units = 0;
+    a = *input[0];
+    b = *input[1];
+    c = *input[2];
+    d = *input[3];
+
     table[0] = t;
     table[1] = a;
     table[2] = b;
     table[4] = c;
     table[8] = d;
-    
-    add_vfd(&t, &c, &d);
-    
+
+    add_vfd(&t,&c,&d);
     table[12] = t;
     
     add_vfd(&t,&b,&c);
     table[6] = t;
-    iadd_vfd(&t,&d);
+    m5d_inc(&t,&d);
     table[14] = t;
     m5d_sub_i(&t,&c);
     table[10] = t;
-    
-    add_vfd(&t,&b,&c);
+
+    add_vfd(&t,&a,&b);
     table[3] = t;
-    iadd_vfd(&t, &d);
+    m5d_inc(&t,&d);
     
     table[11] = t;
-    iadd_vfd(&t, &c);
+    m5d_inc(&t,&c);
     table[15] = t;
-    m5d_sub_i(&t, &d);
+    m5d_sub_i(&t,&d);
+    
     table[7] = t;
-    m5d_sub_i(&t, &b);
+    m5d_sub_i(&t,&b);
     table[5] = t;
-    iadd_vfd(&t, &d);
+    m5d_inc(&t,&d);
     table[13] = t;
-    m5d_sub_i(&t, &c);
+	m5d_sub_i(&t,&c);
     table[9] = t;
-  
 }
 
-
-void m5d_combine5(vfd *table, vfd *input )
+static inline void m5d_combine5(vfd *table, vfd  **  const input) 
 {
-	int i;
-    vfd e, *t4;
+    vfd *e, *t4;
+    int i;
+
+    m5d_combine4(table, input);
+    e = input[4];
+    t4 = table+16;
+    table[16] = *e;
+    
+    for(i=1;i<16;i++)
+        add_vfd(t4 + i, table+i, e);
+}
+    
+static inline void m5d_combine6(vfd *table, vfd  ** const input) 
+{
+    vfd *e, *t4;
+    vfd * f, *t5;
+    int i;
     
     m5d_combine4(table, input);
     e = input[4];
-    t4 = table + 16;
-    table[16] = e;
-    
-    for ( i = 1; i < 16 ; i ++ ) {
-        add_vfd(t4 + i, table + i, &e);
-    }
+    t4 = table+16;
+    table[16] = *e;
 
-}
-
-void m5d_combine6(vfd *table, vfd *input )
-
-{
-    vfd f, *t5;
-    int i;
-    m5d_combine5(table, input);
     f = input[5];
-    t5 = (table + 32);
-    table [32] = f;
+    t5 = table+32;
+    table[32] = *f;
     
-    for (i = 1; i < 32; i++)
-        add_vfd((t5 + i), (table + i), &f);
-    
+    for(i=1;i<16;i++)
+        add_vfd(t4 + i, table+i, e);
+
+    for(i=1;i<32;i++)
+        add_vfd(t5 + i, table+i, f);
+
 }
 
-void m5d_combine7(vfd *table, vfd *input )
+
+void m5d_mul_64(vfd **R, vfd  ** const A, vfd   ** const B)
 {
-    vfd g, *t6;
-    int i;
    
-    m5d_combine6(table, input);
-    g = input[6];
-    t6 = (table+64);
-    table[64] = g;
-    
-    for (i = 1; i < 64; i = i +1) {
-        add_vfd((t6 + i), (table + i), &g );
-    }
-    
-}
-
-
-void m5d_combine8(vfd *table, vfd *input)
-{
-    vfd h, *t7;
+    vfd t, r1, r2 ,r3, * a;
+    vec v;
     int i;
-    
-    m5d_combine7(table, input);
-    h = input[7];
-    t7 = (table+128);
-    table[128] = h;
-    
-    for (i = 1; i < 128; i++)
-        add_vfd((t7 + i), (table+i), &h);
-}
- 
- 
- 
-/** 
-GF(5), base case  still needs to be tuned for 
-optimization and checked for correctness 
-*/  
-void m5d_mul_64(vfd **R, vfd **A, vfd **B)
-{
-    int i;
-    vfd t1, t2, t3,  r1, r2, r3 , a;
-    vec v1, v2, v3;
-    
-    vfd  tables6[9][64];
-    vfd tables5[2][32];
-    
-    for (i = 0; i < 9; i ++)
+
+    vfd tables6[4][64];
+    vfd tables5[8][32];
+
+    for(i=0;i<4;i++)
     {
-        m5d_combine6(&tables6[i][0], &(B [6*i][0]));
+        m5d_combine6(tables6[i], B + 6*i);
     }
+    for(i=0;i<8;i++)
+    {
+        m5d_combine5(tables5[i], B + 24 + (5*i));
+	}
+    for(i=0;i<64;i++) 
+    {
+    /*
+    	001 1	
+		011 2
+		101 3
+		111 4
+    
+    */
+    
+    
+    	/*   first part is ones */
+        a = A[i];
+        v = a->sign;
+        
+        
+        r1 = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m5d_inc(&r1, &t); v >>= 6;
+        t = tables6[2][v&63]; m5d_inc(&r1, &t); v >>= 6;
+        t = tables6[3][v&63]; m5d_inc(&r1, &t); v >>= 6;
+        
+        t = tables5[0][v&31]; m5d_inc(&r1, &t); v >>= 5;
+        t = tables5[1][v&31]; m5d_inc(&r1, &t); v >>= 5;
+        t = tables5[2][v&31]; m5d_inc(&r1, &t); v >>= 5;
+        t = tables5[3][v&31]; m5d_inc(&r1, &t); v >>= 5;
+        t = tables5[4][v&31]; m5d_inc(&r1, &t); v >>= 5;
+        t = tables5[5][v&31]; m5d_inc(&r1, &t); v >>= 5;
+        t = tables5[6][v&31]; m5d_inc(&r1, &t); v >>= 5;
+        t = tables5[7][v&31]; m5d_inc(&r1, &t);
+
       
-    for (i = 0; i < 2; i ++)
-    {
-        m5d_combine5(&tables5[i][0], &(B[54 + (5 * i)][0]));
-    }
-  
-    
-    for (i = 0; i < 64; i ++  )/* i from 0 <= i < 64 */
-    {
-        a = A[i][0];
-        
-  		v3 = a.sign;
-        v2 = a.sign & a.middle;
-    	v1 = v2 & a.units;
-        r1 = tables6[0][v1&63];
-        v1 >>= 6;
-        r2 = tables6[0][v2&63];
-        v2 >>= 6;
-        t1 = tables6[1][v1&63]; iadd_vfd(&r1, &t1);v1 >>= 6;
-        t2 = tables6[1][v2&63]; iadd_vfd(&r2, &t2); v2 >>= 6;
-        t3 = tables6[1][v3&63]; iadd_vfd(&r3, &t3); v3 >>= 6;
-        t1 = tables6[2][v1&63]; iadd_vfd(&r1, &t1); v1 >>= 6;
-        t2 = tables6[2][v2&63]; iadd_vfd(&r2, &t2); v2 >>= 6;
-        t3 = tables6[1][v3&63]; iadd_vfd(&r3, &t3); v3 >>= 6;
-        t1 = tables6[3][v1&63]; iadd_vfd(&r1, &t1); v1 >>= 6;
-        t2 = tables6[3][v2&63]; iadd_vfd(&r2, &t2); v2 >>= 6;
-        t3 = tables6[1][v3&63]; iadd_vfd(&r3, &t3); v3 >>= 6;
-        t1 = tables6[4][v1&63]; iadd_vfd(&r1, &t1); v1 >>= 6;
-        t2 = tables6[4][v2&63]; iadd_vfd(&r2, &t2); v2 >>= 6;
-        t3 = tables6[1][v3&63]; iadd_vfd(&r3, &t3); v3 >>= 6;
-        t1 = tables6[5][v1&63]; iadd_vfd(&r1, &t1); v1 >>= 6;
-        t2 = tables6[5][v2&63]; iadd_vfd(&r2, &t2); v2 >>= 6;
-        t3 = tables6[1][v3&63]; iadd_vfd(&r3, &t3); v3 >>= 6;
-        t1 = tables6[6][v1&63]; iadd_vfd(&r1, &t1); v1 >>= 6;
-        t2 = tables6[6][v2&63]; iadd_vfd(&r2, &t2); v2 >>= 6;
-        t3 = tables6[1][v3&63]; iadd_vfd(&r3, &t3); v3 >>= 6;
-        t1 = tables6[7][v1&63]; iadd_vfd(&r1, &t1); v1 >>= 6;
-        t2 = tables6[7][v2&63]; iadd_vfd(&r2, &t2); v2 >>= 6;
-        t3 = tables6[1][v3&63]; iadd_vfd(&r3, &t3); v3 >>= 6;
-        t1 = tables6[8][v1&63]; iadd_vfd(&r1, &t1); v1 >>= 6;
-        t2 = tables6[8][v2&63]; iadd_vfd(&r2, &t2); v2 >>= 6;
-        t3 = tables6[1][v3&63]; iadd_vfd(&r3, &t3); v3 >>= 6;
-        t1 = tables5[0][v1&31]; iadd_vfd(&r1, &t1); v1 >>= 5;
-        t2 = tables5[0][v2&31]; iadd_vfd(&r2, &t2); v2 >>= 5;
-        t1 = tables5[1][v1&31]; iadd_vfd(&r1, &t1);
-        t2 = tables5[1][v2&31]; iadd_vfd(&r2, &t2);
-        t3 = tables5[1][v3&31]; iadd_vfd(&r3, &t3);
-        
-        iadd_vfd(&r1, &r2);
-        m5d_add2_i(&r1, &r3);
-        R[i][0] = r1;
-    }   
-}
+      
+      
+      	v = a->middle;
 
-/* 32 * 64,2048 bit, 256 byte matrix(slice) multiplication */
-void m5d_mul_32(vfd *R, vfd *A, vfd *B)
-{
-    long i;
-    vfd t1, t2, t3, r1, r2, r3, a;
-    long v1, v2, v3;
-    
-    vfd tables5[4][32];
-    vfd tables4[3][16];
-    for (i = 1; i < 4; i ++)
-        
-        m5d_combine5(tables5[i], B + 0 + 5*i);
-    for (i = 0; i < 3; i++)
-        m5d_combine4(tables4[i], B + 20 + 4*i);
-    
-    for (i = 0;i < 32; i++)
-    {
-        a = A[i];
- 		v3 = a.sign;
-        v2 = a.sign & a.middle;
-    	v1 = v2 & a.units;
-        t1 = tables5[0][v1&31]; v1 >>= 5;
-        t2 = tables5[0][v2&31]; v2 >>= 5;
-        t3 = tables5[0][v3&31]; v3 >>= 5;
-        t1 = tables5[1][v1&31]; iadd_vfd(&r1, &t1); v1 >>= 5;
-        t2 = tables5[1][v2&31]; iadd_vfd(&r2, &t2); v2 >>= 5;
-        t3 = tables5[0][v3&31]; iadd_vfd(&r3, &t3); v3 >>= 5;
-        t1 = tables5[2][v1&31]; iadd_vfd(&r1, &t1); v1 >>= 5;
-        t2 = tables5[2][v2&31]; iadd_vfd(&r2, &t2); v2 >>= 5;
-        t3 = tables5[0][v3&31]; iadd_vfd(&r3, &t3); v3 >>= 5;
-        t1 = tables5[3][v1&31]; iadd_vfd(&r1, &t1); v1 >>= 5;
-        t2 = tables5[3][v2&31]; iadd_vfd(&r2, &t2); v2 >>= 5;
-        t3 = tables5[0][v3&31]; iadd_vfd(&r3, &t3); v3 >>= 5;
-        t1 = tables4[0][v1&15]; iadd_vfd(&r1, &t1); v1 >>= 4;
-        t2 = tables4[0][v2&15]; iadd_vfd(&r2, &t2); v2 >>= 4;
-        t3 = tables5[0][v3&31]; iadd_vfd(&r3, &t3); v3 >>= 5;
-        t1 = tables4[1][v1&15]; iadd_vfd(&r1, &t1); v1 >>= 4;
-        t2 = tables4[1][v2&15]; iadd_vfd(&r2, &t2); v2 >>= 4;
-        t3 = tables5[0][v3&31]; iadd_vfd(&r3, &t3); v3 >>= 5;
-        t1 = tables4[2][v1&15]; iadd_vfd(&r1, &t1);
-        t2 = tables4[2][v2&15]; iadd_vfd(&r2, &t2);
-        t3 = tables4[2][v3&15]; iadd_vfd(&r3, &t3);
-        /*  m5d_sub_i(&r1, &r2); */
-        iadd_vfd(&r1, &r2);
-        m5d_add2_i(&r1, &r3);
-        
-        R[i] = r1;
-    }
-    
-}
+        t = tables6[0][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        t = tables6[1][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        t = tables6[2][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        t = tables6[3][v&63]; m5d_inc(&r2, &t); v >>= 6;
+       
+        t = tables5[0][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[1][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[2][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[3][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[4][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[5][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[6][v&31]; m5d_inc(&r2, &t); v >>= 5;
+    	t = tables5[7][v&31]; m5d_inc(&r2, &t);
 
-/* 16 * 64,1024 bit, 128 byte matrix(slice) multiplication */
-void m5d_mul_16(vfd *R, vfd *A, vfd *B)
-{
-    long i;
-    vfd t1, t2, t3, r1, r2, r3, a;
-    long v1, v2, v3;
-    
-    vfd tables4[4][16];
-    for (i = 0; i < 4; i++)
-        m5d_combine4(tables4[i], B + (4*i));
-    for (i = 0;  i < 16; i++)
-    {
-        a = A[i];
-  		v3 = a.sign;
-        v2 = a.sign & a.middle;
-    	v1 = v2 & a.units;
-        r1 = tables4[0][v1&15]; v1 >>= 4;
-        r2 = tables4[0][v2&15]; v2 >>= 4;
-        r3 = tables4[0][v3&15]; v3 >>= 4;
-        t1 = tables4[1][v1&15]; iadd_vfd(&r1, &t1); v1 >>= 4;
-        t2 = tables4[1][v2&15]; iadd_vfd(&r2, &t2); v2 >>= 4;
-        t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3); v3 >>= 4;
-        t1 = tables4[2][v1&15]; iadd_vfd(&r1, &t1); v1 >>= 4;
-        t2 = tables4[2][v2&15]; iadd_vfd(&r2, &t2); v2 >>= 4;
-        t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3); v3 >>= 4;
-        t1 = tables4[3][v1&15]; iadd_vfd(&r1, &t1);
-        t2 = tables4[3][v2&15]; iadd_vfd(&r2, &t2);
-        t3 = tables4[3][v3&15]; iadd_vfd(&r3, &t3);
-    
-    	iadd_vfd(&r1, &r2);
-        m5d_add2_i(&r1, &r3);
-            
-        R[i] = r1;
-    }
-}
 
-/* 8 * 64,512 bit, m1ri_word byte matrix(slice) multiplication */
-void m5d_mul_8(vfd *R, vfd *A, vfd *B)
-{
 
-    int i;
-    vfd t1, t2, t3 ,  r1, r2, r3,a;
-    vec v1, v2, v3;
-    
-    vfd tables4[2][16];
-    for (i = 0; i < 2; i++)
-        m5d_combine4(tables4[i], B + (4*i));
-    for (i = 0; i < 8; i++)
-    {
-    	a = A[i];
-     	v3 = a.sign;
-        v2 = a.sign & a.middle;
-    	v1 = v2 & a.units;
-    	r1 = tables4[0][v1&15]; v1 >>= 4;
-    	r2 = tables4[0][v2&15]; v2 >>= 4;
-    	r3 = tables4[0][v3&15]; v3 >>= 4;
-   	 	t1 = tables4[1][v1&15]; iadd_vfd(&r1, &t1);
-    	t2 = tables4[1][v2&15]; iadd_vfd(&r2, &t2);
-    	t3 = tables4[1][v3&15]; iadd_vfd(&r3, &t3);
-    	/*  m5d_sub_i((&r1, &r2); */
+		v = a->units;
+		t = tables6[0][v&63]; m5d_inc(&r3, &t); v >>= 6;
+        t = tables6[1][v&63]; m5d_inc(&r3, &t); v >>= 6;
+        t = tables6[2][v&63]; m5d_inc(&r3, &t); v >>= 6;
+        t = tables6[3][v&63]; m5d_inc(&r3, &t); v >>= 6;
+       
+        t = tables5[0][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t = tables5[1][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t = tables5[2][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t = tables5[3][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t = tables5[4][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t = tables5[5][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t = tables5[6][v&31]; m5d_inc(&r3, &t); v >>= 5;
+    	t = tables5[7][v&31]; m5d_inc(&r3, &t);    	
     	
-    	iadd_vfd(&r1, &r2);
-		m5d_add2_i(&r1, &r3);
+ 		//m5d_inc(&r0, &t);
+    	
+    	
+    	
+		R[i][0] = r1;
         
-        R[i] = r1;
     }
+    
 }
 
-/* 4 * 64,256 bit, 32 byte matrix(slice) multiplication */
-void m5d_mul_4(vfd *R, vfd *A, vfd *B)
-{
-    int i;
-    vfd r1, r2, r3,  a;
-    vec v1, v2, v3;
-    
-    vfd table4[16];
-    for (i = 0; i < 1; i++)
-        m5d_combine4(table4, B + (4*i));
-    for(i = 0; i < 4; i++)
-    {
-        a = A[i];
-        v3 = a.sign;
-        v2 = a.sign & a.middle;
-    	v1 = v2 & a.units;
-		v2  = a.sign & a.middle;
-		v3 =  v2 & a.units; 
-        r1 = table4[v1&15];
-        r2 = table4[v2&15];
-        r3 = table4[v3&15];
-     	
-     	iadd_vfd(&r1, &r2);
-        m5d_add2_i(&r1, &r3);
-        
-        R[i] = r1;
-    }
-    
-}
+
+
  
 m5d_t  * m5_blockslice_allocate(rci_t  nrows,  wi_t  width)
 {
@@ -1161,12 +986,12 @@ static inline vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
       for(x = 0; x < 64; x ++)
        {
        
-        temp.units =  (a[x][0].units & (leftbit >> i) );
-        temp.sign =  (a[x][0].sign & (leftbit >> i) );
-        temp.middle =  (a[x][0].middle & (leftbit >> i) );    
-        b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
-        b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
-        b[i][0].middle = (temp.middle) ? b[i][0].middle | (leftbit >> x) : b[i][0].middle;    
+        temp.units =  (a[x][0].units & (rightbit << i ) );
+        temp.sign =  (a[x][0].sign & (rightbit <<  i) );
+        temp.middle =  (a[x][0].middle & (rightbit << i) );    
+        b[i][0].units = (temp.units) ?  b[i][0].units | (rightbit << x) : b[i][0].units ;
+        b[i][0].sign = (temp.sign) ? b[i][0].sign | (rightbit << x) : b[i][0].sign  ;
+        b[i][0].middle = (temp.middle) ? b[i][0].middle | (rightbit <<  x) : b[i][0].middle;    
         }
 
     }
@@ -1378,8 +1203,8 @@ void  m5d_colswap(m5d_t *M, rci_t col_a, rci_t col_b)
          block_b = (col_b-1)/M1RI_RADIX;
          dif_a = col_a%M1RI_RADIX;
          dif_b = col_b%M1RI_RADIX;
-         a_place =  leftbit >>  dif_a ;
-         b_place =  leftbit >> dif_b ;
+         a_place =  rightbit <<   dif_a ;
+         b_place =  rightbit <<  dif_b ;
         if(block_a == block_b)
         { 
 
@@ -1431,12 +1256,11 @@ void m5d_colswap_capped_row(m5d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
          block_b = (col_b-1)/M1RI_RADIX;
          dif_a = col_a%M1RI_RADIX;
          dif_b = col_b%M1RI_RADIX;
-         a_place =  leftbit >>  dif_a ;
-         b_place =  leftbit >> dif_b ;
+         a_place =  rightbit <<  dif_a ;
+         b_place =  rightbit <<  dif_b ;
         if(block_a == block_b)
         { 
 
-              
           for( i = start_row; i < M->nrows; i++)
           {
 		     

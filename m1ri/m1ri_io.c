@@ -252,9 +252,9 @@ void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
     for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
         value = 0;
-		out[0] = ( a & (leftbit >>  x));
-        out[1] =  ( b & (leftbit >>  x));
-        out[2]  = ( c & (leftbit >>  x));
+		out[0] = ( a & (rightbit <<  x));
+        out[1] =  ( b & (rightbit <<  x));
+        out[2]  = ( c & (rightbit <<  x));
         
         if (out[2] > 0) {
             value =  value + 1;
@@ -327,9 +327,9 @@ static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_i
     short value;/* , x ; */
     for( int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
     {
-        out[0] =  a & (leftbit >>  x);
-        out[1] =   b & (leftbit >>  x);
-        out[2]  =  c & (leftbit >>  x);
+        out[0] =  a & (rightbit <<  x);
+        out[1] =   b & (rightbit <<  x);
+        out[2]  =  c & (rightbit <<  x);
         
     	if((out[2]  ==  out[1]) & (out[1] == out[0]))
        	{

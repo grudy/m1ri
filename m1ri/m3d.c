@@ -187,6 +187,34 @@ void  m3d_write_elem( m3d_t * M,rci_t x, rci_t y, vec s, vec u )
     
 }
 
+void m3d_add_i(m3d_t * x, m3d_t *y) 
+{
+	 int i, j;
+        for( i = 0; i < x->nrows; i++)
+        {
+            for(j = 0; j < (x->width ); j++)
+            {
+            	m3d_inc(&x->rows[i][j], &y->rows[i][j]);
+        	}   
+        }
+	
+
+}
+
+void m3d_sub_i(m3d_t * x, m3d_t *y) 
+{
+	 int i, j;
+        for( i = 0; i < x->nrows; i++)
+        {
+            for(j = 0; j < (x->width ); j++)
+            {
+            	isub_m3d(&x->rows[i][j], &y->rows[i][j]);
+        	}   
+        }
+	
+
+}
+
 m3d_t * m3d_create( rci_t nrows, rci_t ncols)
 {
     m3d_t * a;
@@ -979,7 +1007,7 @@ m3d_t *  m3d_sub(m3d_t * r,   const  m3d_t  *x, const m3d_t  *y)
 
 
 
-m3d_t  * m3d_add(m3d_t *c, const m3d_t  *a,const m3d_t  *b)
+m3d_t  * m3d_add(m3d_t *c,  m3d_t const *a, m3d_t const *b)
 {
     
     if (c == NULL)
@@ -1264,9 +1292,9 @@ void m3d_mul_64(vbg **R, vbg  ** const A, vbg   ** const B)
         t = tables5[5][v&31]; m3d_inc(&r, &t); v >>= 5;
         t = tables5[6][v&31]; m3d_inc(&r, &t); v >>= 5;
         t = tables5[7][v&31]; m3d_inc(&r, &t);
-
-        r.sign^=r.units;
-        v = a->units ^ a->sign;
+		// The ones and twos are added above
+		r.sign^=r.units;  //this subtracts the twos
+		v = a->units ^ a->sign;
 
         t = tables6[0][v&63]; m3d_inc(&r, &t); v >>= 6;
         t = tables6[1][v&63]; m3d_inc(&r, &t); v >>= 6;
@@ -1281,6 +1309,12 @@ void m3d_mul_64(vbg **R, vbg  ** const A, vbg   ** const B)
         t = tables5[5][v&31]; m3d_inc(&r, &t); v >>= 5;
         t = tables5[6][v&31]; m3d_inc(&r, &t); v >>= 5;
     	t = tables5[7][v&31]; m3d_inc(&r, &t);
+    	
+    	
+    	
+    	
+    	
+    	
 		R[i][0] = r;
         
     }

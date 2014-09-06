@@ -41,7 +41,7 @@ void m3d_mul_associative_test(int y, int z)
 	m3d_rand(a);
 	m3d_rand(b);
 	m3d_rand(c);
-	 m3d_print(c);  
+	
 	/*
 		testing if 
 		(a * b)  * c  == a * (b * c)
@@ -54,8 +54,7 @@ void m3d_mul_associative_test(int y, int z)
 	
 
 	d = m3d_classic_mul(d, a, b);
-	printf("\n matrix d below\n");
-	m3d_print(d);
+	
 	f = m3d_classic_mul(f, d, c);
 	
 	
@@ -66,7 +65,75 @@ void m3d_mul_associative_test(int y, int z)
 	
 	
 	
-	if((y <= 256) && (z <= 256))
+	if((y <= 512) && (z <= 512))
+	{
+		/*
+		printf("\n matrix f \n");
+		m3d_print(f);
+		printf("\n matrix g \n");
+		m3d_print(g);
+		*/
+	}
+	
+	
+	if(!(m3d_equal(f, g)))
+	{
+	
+	
+		printf("\nm3d_classic_mul on two %d by %d matrix matrices not associative ", y, z  );
+		m1ri_die("");
+	
+	}
+	
+	
+	m3d_print(f);
+	
+    printf("----------------------------------------------------------------------");
+    
+    
+    
+    m3d_free(a);
+    m3d_free(b);
+    m3d_free(c);
+    m3d_free(d);
+    m3d_free(e);
+    m3d_free(f);
+    m3d_free(g);
+    
+    
+    
+	a = m3d_create(y, z);
+	b = m3d_create(y, z);
+	c  = m3d_create(y, z);
+
+	 
+	m3d_rand(a);
+	m3d_rand(b);
+	m3d_rand(c);
+	
+	/*
+		testing if 
+		(a * b)  * c  == a * (b * c)
+		 d 	     * c  == a *   e  
+				f     ==   g
+ 		
+		where * is matrix multiplication 
+	
+	*/
+	
+	d = f = e = g = NULL;
+	d = m3d_strassen(d, a, b);
+	
+	f = m3d_strassen(f, d, c);
+	
+	
+	e = m3d_strassen(e, b, c);
+	g = m3d_strassen(g, a, e);
+	
+	
+	
+	
+	if((y <= 512) && (z <= 512))
 	{
 		printf("\n matrix f \n");
 		m3d_print(f);
@@ -95,11 +162,11 @@ void m3d_mul_associative_test(int y, int z)
     m3d_free(a);
     m3d_free(b);
     m3d_free(c);
+    
     m3d_free(d);
     m3d_free(e);
     m3d_free(f);
     m3d_free(g);
-    
     
 
 }
@@ -152,19 +219,21 @@ int main(int argc, const char * argv[])
    	//m3d_strassen_test(512, 512);
 
  	//m3d_mul_associative_test(512, 512);
-   //m3d_mul_associative_test(128, 128);
+   m3d_mul_associative_test(128, 128);
    //m3d_mul_associative_test(64, 64);
  	
  	
- 	
+ 	/*
  	m3d_t * a, *b, *c;
-	//a = m3d_create(128, 128);
+	a = m3d_create(256, 256);
 		
-	a = m3d_identity(a, 128);
-	b = m3d_identity(b, 128);
-	c = m3d_classic_mul(c, a, b);
+	a = m3d_identity(a, 256);
+	b = m3d_identity(b, 256);
+	//c = m3d_strassen(c, a, b);
 	m3d_print(c);
+	*/
    
-    
+   
+   
    return 0 ; 
 }    
