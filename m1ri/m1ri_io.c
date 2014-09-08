@@ -36,35 +36,7 @@
  
  
 
- /*
-static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused)
-{
-	int x;
-    bool out;
-    for( x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
-    {
-        out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
-        
-        if((out == 0) && (b & (leftbit  >> x)))
-        {
-               printf("[ 1 ]");
-        }
-        
-        else if((out == 1) && (b & (leftbit  >> x)))
-        {
-            printf("[ 2 ]");
-        }
-        
-		else
-        {   
-           printf("[ %d ]", out);
-        }
-    }
-  
-    
-}
 
-*/
 
 /* /print_m3d_block_buffered original title */
 
@@ -105,44 +77,6 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
     printf("%s", buffer);
     
 }
-
-static inline void print_m3d_block_more_buffered(vec a, vec b, u_int32_t l_unused, u_int32_t r_unused, char buffer[], int * i)
-{
-	 
-    bool out;
-    
-    for(int x = (0  + l_unused); x < (64 - r_unused); x = x + 1)
-    {
-    
-    	buffer[*i++] = '[';
-    	buffer[*i++] = ' ';
-        out = (( a & (leftbit >>  x)) == (b & (leftbit  >> x))) ? 0:  1;
-        
-        if((out == 0) && (b & (leftbit  >> x)))
-        {
-        	
-        	buffer[*i++] = '2'; 
-              /*  printf("[ 1 ]"); */
-        }
-        
-        else if(out == 1) /* && (a & (leftbit  >> x))) */
-        {
-        	buffer[*i++] = '1'; 
-            /* printf("[ 2 ]"); */
-        }
-        
-		else
-        {   
-           buffer[*i++] = '0';
-        }
-        
-        buffer[*i++] = ' ';
-        buffer[*i++] = ']';
-    }
-   
-    
-}
-
 
 
 
@@ -624,7 +558,7 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
   
 		  for(int q  = 0; q < 64 ; q++)
 		  {
-			ep_bit[q] = leftbit >> q;
+			ep_bit[q] = rightbit  << q;
   
 		  } 
   
