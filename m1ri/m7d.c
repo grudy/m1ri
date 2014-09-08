@@ -877,7 +877,7 @@ void m7d_mul_64(vtri **R, vtri **A, vtri **B)
         v2 >>= 6;
         t1 = tables6[1][v1&63]; iadd_vtri(&r1, &t1);v1  >>= 6;
         t2 = tables6[1][v2&63]; iadd_vtri(&r2, &t2); v2 >>= 6;
-        t3 = tables6[1][v3&63]; iadd_vtri(&r3, &t3); v3 >>= 6;
+        t3 = tables6[1][v3&63]; iadd_vtri(&r3, &t3); v3 >>= 6; 
         t1 = tables6[2][v1&63]; iadd_vtri(&r1, &t1); v1 >>= 6;
         t2 = tables6[2][v2&63]; iadd_vtri(&r2, &t2); v2 >>= 6;
         t2 = tables6[1][v2&63]; iadd_vtri(&r2, &t2); v2 >>= 6;

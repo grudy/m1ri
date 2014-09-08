@@ -1040,8 +1040,49 @@ m3d_t  * m3d_add(m3d_t *c,  m3d_t const *a, m3d_t const *b)
 
 
 
+/*
+
+	\brief incremental subtraction, but where the subtrahend is changed
+	
+*/
 
 
+ 
+
+static inline void sub_m3d_r(vbg  const *r,vbg   *x)
+{
+	vbg m;
+	m.units = x->units;
+	m.sign =  x->sign;
+    vec t;
+    x->units = m.units ^ r->units;
+     t  = x->units | r->sign;
+    t = t ^ m.sign;
+    x->sign = m.units ^ r->sign;
+    x->sign = x->sign & t;
+    x->units = t | x->units;  
+         
+}
+
+
+void m3d_sub_r(m3d_t   *x , m3d_t   const *r)
+{
+  
+	int n , i;
+	for(i = 0; i < x->nrows; i++)
+    {
+    	for(n = 0; n < x->width; n++)
+        {
+        
+       
+		  sub_m3d_r(r->rows[i] + n,  x->rows[i] + n );
+        }
+    }
+   
+
+
+
+}
 m3d_t * m3d_submatrix(m3d_t *S, const m3d_t *M, const rci_t lowr, const rci_t lowc, const rci_t highr, const rci_t highc)
 {
   	rci_t s_rows =  highr -  lowr ;

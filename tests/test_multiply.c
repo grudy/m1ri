@@ -219,21 +219,38 @@ int main(int argc, const char * argv[])
    	//m3d_strassen_test(512, 512);
 
  	//m3d_mul_associative_test(512, 512);
-   m3d_mul_associative_test(128, 128);
+  	//m3d_mul_associative_test(128, 128);
    //m3d_mul_associative_test(64, 64);
  	
  	
- 	/*
- 	m3d_t * a, *b, *c;
+ 	
+ 	m3d_t * a, *b, *c, *d;
 	a = m3d_create(256, 256);
 		
 	a = m3d_identity(a, 256);
 	b = m3d_identity(b, 256);
-	//c = m3d_strassen(c, a, b);
+	c = m3d_strassen(c, a, b);
+	d = m3d_classic_mul(d, a, b);
 	m3d_print(c);
-	*/
+	m3d_print(d);
+	
    
-   
-   
+   /*
+   m3d_t * s, *m;
+   s = m3d_create_rand(4, 4);
+	 m = m3d_create_rand(4, 4);
+  printf("m = s - m");
+  
+  	printf("\ns)");
+ 	m3d_print(s);
+  
+  	printf("\nm)");
+  	m3d_print(m);
+  
+	m3d_sub_r(m, s);
+	printf("m");
+   	m3d_print(m);
+   	
+   	*/
    return 0 ; 
 }    

@@ -518,7 +518,10 @@ static inline void  m3d_sub_unshackled(m3d_t * r,   const  m3d_t  *x, const m3d_
 
 }
 
+/**
+  * \brief subtract matrix r by x;
 
+*/
 static inline void isub_m3d(vbg  *r,vbg const  *x)
 {
     vec t;
@@ -529,6 +532,7 @@ static inline void isub_m3d(vbg  *r,vbg const  *x)
     r->sign = r->sign & t;
     r->units = t | r->units;     
 }
+
 
 
 static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
@@ -587,6 +591,15 @@ void m3d_add_i(m3d_t * , m3d_t *);
 
 void m3d_sub_i(m3d_t * , m3d_t *); 
 
+
+
+
+/*
+
+	\brief incremental subtraction, but where the subtrahend is changed
+	
+*/
+void m3d_sub_r(m3d_t   *,  m3d_t const *);
 /**
 	Return the value of the matrix multiplied
 */

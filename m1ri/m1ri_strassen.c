@@ -247,32 +247,41 @@ static inline void m3d_qrt_mul(m3d_t * c, m3d_t  const *   a, m3d_t  const *   b
         m3d_qrt_mul(c_slice->row[3], x1, x2);        // 6 
         
         
-        m3d_sub_unshackled(x1, x1,a_slice->row[0]);    // 7 
-        m3d_sub_unshackled(x2, b_slice->row[3],x2);      // 8 
+        m3d_sub_i( x1,a_slice->row[0]);    // 7 
+        m3d_sub_r( x2, b_slice->row[3]);      // 8 
         m3d_qrt_mul(c_slice->row[1],x1,x2);     // 9 
-        m3d_sub_unshackled(x1, a_slice->row[1],x1);        // 10 
+        m3d_sub_r(x1, a_slice->row[1]);        // 10 
         
         
         
         m3d_qrt_mul(c_slice->row[0],x1,b_slice->row[3]);       // 11 
         m3d_qrt_mul( x1 , a_slice->row[0], b_slice->row[0]);      // 12 
-        m3d_add_unshackled(c_slice->row[1], x1 , c_slice->row[1]);       // 13 
+        m3d_add_i(c_slice->row[1], x1 );       // 13 
         
         
         
-        m3d_add_unshackled(c_slice->row[2], c_slice->row[1] , c_slice->row[2]);       // 14 
-        m3d_add_unshackled(c_slice->row[1], c_slice->row[1] , c_slice->row[3]);       // 15 
-        m3d_add_unshackled(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);        // 16 
-        m3d_add_unshackled(c_slice->row[1], c_slice->row[1] , c_slice->row[0]);      // 17 
+        m3d_add_i( c_slice->row[2] , c_slice->row[1]);       // 14 
         
         
         
-        m3d_sub_unshackled(x2, x2, b_slice->row[2]);                // 18 
+        m3d_add_i( c_slice->row[1] , c_slice->row[3]);       // 15 
+        
+        
+        
+        m3d_add_i( c_slice->row[3] , c_slice->row[2]);        // 16 
+        m3d_add_i(c_slice->row[1] , c_slice->row[0]);      // 17 
+        
+        
+        
+        m3d_sub_i( x2, b_slice->row[2]);                // 18 
+       
         m3d_qrt_mul(c_slice->row[0], a_slice->row[3], x2);                // 19 
-       m3d_sub_unshackled( c_slice->row[2], c_slice->row[2], c_slice->row[0]);      // 20 
+     
+       m3d_sub_i( c_slice->row[2], c_slice->row[0]);      // 20 
+	       
 
         m3d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]); //21
-         m3d_add_unshackled(c_slice->row[0], x1,c_slice->row[0] );		//22
+         m3d_add_i(c_slice->row[0], x1);		//22
     	
        	
        	
