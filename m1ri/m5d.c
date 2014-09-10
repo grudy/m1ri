@@ -223,14 +223,61 @@ m5d_t *    m5d_init_window(const m5d_t *c,const rci_t strow, const rci_t stvfd, 
 
 vfd * m5d_rand(m5d_t * a)
 {
-    int i;
-    for( i = 0; i < (a->nrows * a->width); i++)
+    int i,  z;
+    rci_t cutoff = a->ncols% 64;
+    if(cutoff)
     {
-        a->block[i].sign = m1ri_rand();
-        a->block[i].middle = m1ri_rand() &  a->block[i].sign;
-        a->block[i].units = m1ri_rand() &  a->block[i].sign;;
+    
+    
+    	vec mask_rand = (rightbit  << (cutoff )) - 1;
+    	//mask_rand = ~mask_rand;
+    	
+    	for(i = 0; i < (a->nrows); i++)
+   	 	{
+        	for( z = 0; z  < (a->width - 1 ); z++)
+            {  
+       			a->rows[i][z].sign = m1ri_rand();
+       			a->rows[i][z].units = m1ri_rand();
+       			a->rows[i][z].middle = m1ri_rand();
+       			
+       			a->rows[i][z].sign =  a->rows[i][z].sign | a->rows[i][z].units | a->rows[i][z].middle;
+            
+            
+            }
+				a->rows[i][z].sign = m1ri_rand();
+       			a->rows[i][z].units = m1ri_rand();
+       			a->rows[i][z].middle = m1ri_rand();
+       			
+       			a->rows[i][z].sign =  a->rows[i][z].sign | a->rows[i][z].units | a->rows[i][z].middle;
+            
+       			a->rows[i][z].sign = a->rows[i][z].sign & mask_rand;
+       			a->rows[i][z].middle  = a->rows[i][z].middle & mask_rand;
+
+       			a->rows[i][z].units = a->rows[i][z].units & mask_rand;
+            
+   	 	}
+    
+    
+    
     }
-    return a->block;
+    
+    else
+    {
+    	for(i = 0; i < (a->nrows); i++)
+   	 	{
+        	for( z = 0; z  < (a->width); z++)
+            {  
+       			a->rows[i][z].sign = m1ri_rand();
+       			a->rows[i][z].units = m1ri_rand();
+       			a->rows[i][z].middle = m1ri_rand();
+       			
+       			a->rows[i][z].sign =  a->rows[i][z].sign | a->rows[i][z].units | a->rows[i][z].middle;
+            
+            
+            }
+    
+   	 	}
+ 	}   
 }
 
 
@@ -241,18 +288,18 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
     if(a->ncols == a->nrows)
     {
         int k,i,  j,l;
-        /*
+        
         for( i  = 1; i < (a->width  ) ; ++i)
         {
             l =  ((i - 1) * M1RI_RADIX);
             j = i - 1;
             for ( k = 0 ; k < M1RI_RADIX; k++)
             {
-              	a->rows[l][j].units = (rightbit)<<k;
+              	a->rows[l][j].sign = (rightbit)<<k;
 				l++;   
             }     
         }
-        */
+        
         if((a->ncols%M1RI_RADIX) != 0)
         {
             l = a->ncols %M1RI_RADIX;
@@ -260,9 +307,9 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
             l = M1RI_RADIX - l;
             for(i = 0; i < (M1RI_RADIX - l); i++)
             {   
-                a->rows[k + i][a->width-1].units = (rightbit)<<i;
+                a->rows[k + i][a->width-1].units = 0;
                 a->rows[l][a->width -1].middle = 0;
-                a->rows[l][a->width -1].sign = 0;
+                a->rows[l][a->width -1].sign = (rightbit)<<i;
             }
         }
         
@@ -273,9 +320,9 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
             for(i  = 0; i < M1RI_RADIX; i++)
                 
             {
-                a->rows[l][a->width -1].units = (rightbit)<<i;
+                a->rows[l][a->width -1].units = 0;
                 a->rows[l][a->width -1].middle = 0;
-                a->rows[l][a->width -1].sign = 0;
+                a->rows[l][a->width -1].sign = (rightbit)<<i;
                 l++;    
             }
             
@@ -286,9 +333,9 @@ void   m5d_set_ui(m5d_t * a, rci_t value)
 }
 
 
-m5d_t *  m5d_identity(rci_t n)
+m5d_t *  m5d_identity(m5d_t * a, rci_t n)
 {
-	m5d_t * a;
+	
     a = m5d_create( n, n);
     m5d_set_ui(a, 1);
     
@@ -329,7 +376,10 @@ void add_vfd(vfd * r, vfd * a, vfd * b)
     o = m | d;
     p = o ^ c;
     q = p^n;
-    /** */r->units = q;
+    r->units = q;
+    
+        /** */
+
 	/** 
 	more optimized? 
     vec c, d, e, f,   j,  m;
@@ -523,60 +573,59 @@ void fb_i(vfd *r,vfd *x)
 /** 
 	Scalar Multiplication
 */
-vfd m5d_mul2(vfd a)
+void m5d_mul2(vfd * a)
 {
-    vec temp = a.sign;
-    a.sign = a.sign ^ temp;
-    a.units = a.middle & temp;
-    a.middle = temp;
+    vec temp = a->sign;
+    a->sign = a->sign ^ temp;
+    a->units = a->middle & temp;
+    a->middle = temp;
     
-    return a;
 }
 /** 
 	Scalar Multiplication
 */
-vfd m5d_mul3(vfd a)
+void m5d_mul3(vfd * a)
 {
-    vec temp = a.middle ^ a.sign;
-    a.sign = a.middle;
-    a.middle = a.units | temp;
-    a.units = temp;
+    vec temp = a->middle ^ a->sign;
+    a->sign = a->middle;
+    a->middle = a->units | temp;
+    a->units = temp;
     
-    return a;
 }
 /** 
 	Scalar Multiplication
 */
-vfd m5d_mul4(vfd a)
+void m5d_mul4(vfd * a)
 {
-    vec x = a.units ^ a.sign;
-    a.units = x & a.sign;
-    a.middle = x;
+    vec x = a->units ^ a->sign;
+    a->units = x & a->sign;
+    a->middle = x;
     
-    return a; 
+
 }
  /* matrix r = (matrix r - matrix x) */
-void m5d_sub_i(vfd *r,vfd *x) 
+void isub_m5d(vfd *r,vfd *x) 
 {
-    vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
+    vec c, d, e, f, g, h,  i, j, k, l, m, o, p, q;
     c = x->units ^ r->units;
     d = x->middle ^ r->middle;
     e = c ^ x->sign;
-    f = e ^ x->middle;
+    f = e | x->units;
     g = f ^ r->sign;
     h = g | d;
-    i = h | c;
-    r->sign = i;
-    j = i ^ c;
-    k = j & r->sign;
+    
+	i = r->sign;
+    r->sign =  h | c;
+    j = r->sign ^ c;
+    k = j & i;
     l = k | x->middle;
     m = l ^ g;
-    n = m ^ r->middle;
-    r->middle = n;
+	q = r->middle;
+    r->middle = m ^ r->middle;
     o = m | d;
     p = o ^ c;
-    q = p ^ r->middle;
-    r->units = q;
+    r->units = p ^ q;
+    
        
 }
 
@@ -722,7 +771,7 @@ void m5d_sub_d(m5d_t  * a , m5d_t * b)
         {
             for(j = 0; j < (a->width ); j++)
             {   
-                m5d_sub_i(&a->rows[i][j], &b->rows[i][j]);
+                isub_m5d(&a->rows[i][j], &b->rows[i][j]);
             }
         }
         
@@ -756,7 +805,7 @@ static inline void m5d_combine4(vfd *table, vfd  ** const input)
     table[6] = t;
     m5d_inc(&t,&d);
     table[14] = t;
-    m5d_sub_i(&t,&c);
+    isub_m5d(&t,&c);
     table[10] = t;
 
     add_vfd(&t,&a,&b);
@@ -766,14 +815,14 @@ static inline void m5d_combine4(vfd *table, vfd  ** const input)
     table[11] = t;
     m5d_inc(&t,&c);
     table[15] = t;
-    m5d_sub_i(&t,&d);
+    isub_m5d(&t,&d);
     
     table[7] = t;
-    m5d_sub_i(&t,&b);
+    isub_m5d(&t,&b);
     table[5] = t;
     m5d_inc(&t,&d);
     table[13] = t;
-	m5d_sub_i(&t,&c);
+	isub_m5d(&t,&c);
     table[9] = t;
 }
 
@@ -868,39 +917,45 @@ void m5d_mul_64(vfd **R, vfd  ** const A, vfd   ** const B)
       
       	v = a->middle;
 
-        t = tables6[0][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        t = tables6[1][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        t = tables6[2][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        t = tables6[3][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        r2 = tables6[0][v&63];  v >>= 6;
+        t  = tables6[1][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        t  = tables6[2][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        t  = tables6[3][v&63]; m5d_inc(&r2, &t); v >>= 6;
        
-        t = tables5[0][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[1][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[2][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[3][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[4][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[5][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[6][v&31]; m5d_inc(&r2, &t); v >>= 5;
-    	t = tables5[7][v&31]; m5d_inc(&r2, &t);
-
+        t  = tables5[0][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t  = tables5[1][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t  = tables5[2][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t  = tables5[3][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t  = tables5[4][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t  = tables5[5][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t  = tables5[6][v&31]; m5d_inc(&r2, &t); v >>= 5;
+    	t  = tables5[7][v&31]; m5d_inc(&r2, &t);
+		
 
 
 		v = a->units;
-		t = tables6[0][v&63]; m5d_inc(&r3, &t); v >>= 6;
-        t = tables6[1][v&63]; m5d_inc(&r3, &t); v >>= 6;
-        t = tables6[2][v&63]; m5d_inc(&r3, &t); v >>= 6;
-        t = tables6[3][v&63]; m5d_inc(&r3, &t); v >>= 6;
+		
+		r3 = tables6[0][v&63];  v >>= 6;
+        t  = tables6[1][v&63]; m5d_inc(&r3, &t); v >>= 6;
+        t  = tables6[2][v&63]; m5d_inc(&r3, &t); v >>= 6;
+        t  = tables6[3][v&63]; m5d_inc(&r3, &t); v >>= 6;
        
-        t = tables5[0][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[1][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[2][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[3][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[4][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[5][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[6][v&31]; m5d_inc(&r3, &t); v >>= 5;
-    	t = tables5[7][v&31]; m5d_inc(&r3, &t);    	
+        t  = tables5[0][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t  = tables5[1][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t  = tables5[2][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t  = tables5[3][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t  = tables5[4][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t  = tables5[5][v&31]; m5d_inc(&r3, &t); v >>= 5;
+        t  = tables5[6][v&31]; m5d_inc(&r3, &t); v >>= 5;
+    	t  = tables5[7][v&31]; m5d_inc(&r3, &t);    	
+     	
     	
+    	
+    	m5d_mul2(&r3);
+    	m5d_inc(&r1, &r2);
+    	m5d_inc(&r1, &r3);
  		//m5d_inc(&r0, &t);
-    	
+    	//m5d_add2_i(r1, 
     	
     	
 		R[i][0] = r1;

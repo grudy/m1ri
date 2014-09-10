@@ -153,7 +153,7 @@ static inline void m5d_inc(vfd *r,vfd *x)
     o = m | d;
     p = o ^ c;
     q = p^n;
-    r->sign = q; /** */
+    r->units = q; /** */
    
 }
 
@@ -391,7 +391,7 @@ void   m5d_set_ui(m5d_t *, rci_t );
  \
  \Returns an n * n identity matrix
 */
-m5d_t  *  m5d_identity(rci_t );
+m5d_t  *  m5d_identity(m5d_t * , rci_t  );
 
 
 
@@ -500,21 +500,21 @@ void isub_m5d(vfd *,vfd *);
  * \param a vfd to be multiplied
  * \returns each value in the vector multiplied by 2
  */
-vfd m5d_mul2(vfd);
+void m5d_mul2(vfd * );
 
 /**
  * \brief scalar multiplication of vfd vector
  * \param a vfd to be multiplied
  * \returns each value in the vector multiplied by 3
  */
-vfd m5d_mul3(vfd);
+void m5d_mul3(vfd * );
 
 /**
  * \brief scalar multiplication of vfd vector
  * \param a vfd to be multiplied
  * \returns each value in the vector multiplied by r
  */
-vfd m5d_mul4(vfd);
+void m5d_mul4(vfd * );
 
 
 

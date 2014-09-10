@@ -211,6 +211,186 @@ void m3d_strassen_test(int y, int z)
 }
 
 
+void m5d_mul_associative_test(int y, int z)
+{
+	m5d_t * a, *b, *c, *d, * e, *f, *g;
+	a = m5d_create(y, z);
+	b = m5d_create(y, z);
+	c  = m5d_create(y, z);
+
+	 
+	m5d_rand(a);
+	m5d_rand(b);
+	m5d_rand(c);
+	
+	/*
+		testing if 
+		(a * b)  * c  == a * (b * c)
+		 d 	     * c  == a *   e  
+				f     ==   g
+ 		
+		where * is matrix multiplication 
+	
+	*/
+	
+
+	d = m5d_classic_mul(d, a, b);
+	
+	f = m5d_classic_mul(f, d, c);
+	
+	
+	e = m5d_classic_mul(e, b, c);
+	g = m5d_classic_mul(g, a, e);
+	
+	
+	
+	
+	
+	if((y <= 512) && (z <= 512))
+	{
+		
+		printf("\n matrix f \n");
+		m5d_print(f);
+		printf("\n matrix g \n");
+		m5d_print(g);
+		
+	}
+	
+	
+	if(!(m5d_equal(f, g)))
+	{
+	
+	
+		printf("\nm5d_classic_mul on two %d by %d matrix matrices not associative ", y, z  );
+		m1ri_die("");
+	
+	}
+	
+	
+	m5d_print(f);
+	
+    printf("----------------------------------------------------------------------");
+    
+    
+    
+    m5d_free(a);
+    m5d_free(b);
+    m5d_free(c);
+    m5d_free(d);
+    m5d_free(e);
+    m5d_free(f);
+    m5d_free(g);
+    
+    
+    
+	a = m5d_create(y, z);
+	b = m5d_create(y, z);
+	c  = m5d_create(y, z);
+
+	 
+	m5d_rand(a);
+	m5d_rand(b);
+	m5d_rand(c);
+	
+	/*
+		testing if 
+		(a * b)  * c  == a * (b * c)
+		 d 	     * c  == a *   e  
+				f     ==   g
+ 		
+		where * is matrix multiplication 
+	
+	*/
+	
+	d = f = e = g = NULL;
+	d = m5d_strassen(d, a, b);
+	
+	f = m5d_strassen(f, d, c);
+	
+	
+	e = m5d_strassen(e, b, c);
+	g = m5d_strassen(g, a, e);
+	
+	
+	
+	
+	if((y <= 512) && (z <= 512))
+	{
+		printf("\n matrix f \n");
+		m5d_print(f);
+		printf("\n matrix g \n");
+		m5d_print(g);
+	
+	}
+	
+	
+	if(!(m5d_equal(f, g)))
+	{
+	
+	
+		printf("\nm5d_strassen on two %d by %d matrix matrices not associative ", y, z  );
+		m1ri_die("");
+	
+	}
+	
+	
+	m5d_print(f);
+	
+    printf("----------------------------------------------------------------------");
+    
+    
+    
+    m5d_free(a);
+    m5d_free(b);
+    m5d_free(c);
+    
+    m5d_free(d);
+    m5d_free(e);
+    m5d_free(f);
+    m5d_free(g);
+    
+
+}
+
+
+void m5d_strassen_test(int y, int z)
+{
+	m5d_t * a, *b, *c;
+	a = m5d_create(y, z);
+    b = m5d_create(y, z);
+    
+    m5d_rand(a);
+    m5d_rand(b);
+    
+   // printf("\nOutput of first matrix a of size %d, by %d\n", y, z);
+   //	m5d_print(a);
+    
+    //m5d_print(a);
+    //m5d_print(b);
+    
+	clock_t begin, end;
+	double time_spent;
+	begin = clock();
+	c = m5d_strassen(c, a, b);
+	//printf("\n %d by %d matrix \n", c->nrows, c->ncols);
+	m5d_print(c);
+    time_t after;
+    time(&after);
+	end = clock();
+	time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    
+    printf("----------------------------------------------------------------------");
+    printf("\nm5d_strassen on two %d by %d matrix matrices.", y, z  );
+    printf(" \n------------------->Runs in%9f seconds. \n", time_spent);
+    printf("----------------------------------------------------------------------");
+    m5d_free(a);
+    m5d_free(b);
+    m5d_free(c);
+    
+    
+
+}
+
 int main(int argc, const char * argv[])
 {
 	
@@ -222,7 +402,7 @@ int main(int argc, const char * argv[])
   	//m3d_mul_associative_test(128, 128);
    //m3d_mul_associative_test(64, 64);
  	
- 	
+ 	/*
  	
  	m3d_t * a, *b, *c, *d;
 	a = m3d_create(256, 256);
@@ -233,7 +413,7 @@ int main(int argc, const char * argv[])
 	d = m3d_classic_mul(d, a, b);
 	m3d_print(c);
 	m3d_print(d);
-	
+	*/
    
    /*
    m3d_t * s, *m;
@@ -252,5 +432,16 @@ int main(int argc, const char * argv[])
    	m3d_print(m);
    	
    	*/
+ 
+ 	m5d_t * a, *b, *c, *d;
+	a = m5d_create(256, 256);
+		
+	a = m5d_identity(a, 256);
+	b = m5d_identity(b, 256);
+	d = m5d_classic_mul(d, a, b);
+
+	m5d_print(d);
+	
+   	
    return 0 ; 
 }    

@@ -60,8 +60,8 @@ int main(int argc, const char * argv[])
     
     m7d_write_elem(test_m7d_output, 1, 1, 1, 1, 1);
 
-    d = m7d_identity(64);
-    e = m7d_identity(64);
+    d = m7d_identity(d, 64);
+    e = m7d_identity(e, 64);
     isequal = m7d_equal(d, e);
     
     if(isequal)

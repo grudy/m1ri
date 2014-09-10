@@ -229,7 +229,7 @@ void  m7d_set_ui(m7d_t *, rci_t );
  \
  \Returns an n * n identity matrix
 */
-m7d_t  *  m7d_identity(rci_t );
+m7d_t  *  m7d_identity(m7d_t * , rci_t );
 
 
 
@@ -317,12 +317,7 @@ m7d_t *  m7d_sub(m7d_t *,   const  m7d_t  *, const m7d_t  *);
 
 void m7d_vtri_sub(vtri *, vtri *, vtri *  );
 void m7d_sub_64(vtri **, vtri   **, vtri  **);
-/* Scalar  multiplication */
-vtri vtri_mul_2(vtri);
-vtri vtri_mul_3(vtri);
-vtri vtri_mul_4(vtri);
-vtri vtri_mul_5(vtri);
-vtri vtri_mul_6(vtri);
+
 
 
 
@@ -380,23 +375,10 @@ m7d_t  * m7_blockslice_allocate( rci_t  ,  wi_t  );
 m7d_t ** m7_rowslice_allocate(m7d_t * ,  wi_t , rci_t );
 
 
-/*These are for  the method of four Russians */
-
-/*
-void *  m7d_combine3(vtri *, vtri * );
-void m7d_combine4(vtri *, vtri * );
-void m7d_combine5(vtri *, vtri * );
-void m7d_combine6(vtri *, vtri * );
-void m7d_combine7(vtri *, vtri * );
-void m7d_combine8(vtri *, vtri *);
-*/
 
 
 void m7d_mul_64(vtri **, vtri **, vtri **);
-void m7d_mul_32(vtri *, vtri *, vtri *);
-void m7d_mul_16(vtri *, vtri *, vtri *);
-void m7d_mul_8(vtri *, vtri *, vtri *);
-void m7d_mul_4(vtri *, vtri *, vtri *);
+
 
 void  m7d_transpose(m7d_t   * );
 m7d_t * m7d_hadamard(m7d_t * ,const m7d_t  * ,const m7d_t  *  );

@@ -60,9 +60,9 @@ int main(int argc, const char * argv[])
     m5d_write_elem(test_m5d_output, 1, 1, 1, 1, 1);
     
     
-    d = m5d_identity(64);
-    e = m5d_identity(64);
-	f = m5d_identity(64);
+    d = m5d_identity(d, 64);
+    e = m5d_identity(e, 64);
+	f = m5d_identity(f, 64);
 	
 
     isequal = m5d_equal(d, e);

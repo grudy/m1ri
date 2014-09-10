@@ -203,7 +203,7 @@ void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unuse
         {
             value = value + 2;
         }
-        printf("[%d]", value);
+        printf("[ %d ]", value);
     }
 }
 
