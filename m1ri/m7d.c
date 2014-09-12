@@ -276,7 +276,7 @@ m7d_t  * m7d_init_window(const m7d_t *c,const rci_t strow, const rci_t svtri,con
     
     m7d_t * submatrix = m1ri_malloc(sizeof(m7d_t));
     /** c->width should not be compared twice */
-    if((strow + sizerows) > c->width)
+    if((strow + sizerows) > c->nrows)
     {    
         return  0;
     }
@@ -673,7 +673,7 @@ m7d_t * m7d_add(m7d_t * c,const   m7d_t *a, const m7d_t *b)
     }
 
         int i, j;
-     	c = m7d_create(b->nrows, b->ncols);
+     	
         for( i = 0; i < a->nrows; i++)
         {
             for(j = 0; j < (a->width ); j++)
@@ -1536,7 +1536,79 @@ m7d_t *m7d_mul_scalar(m7d_t *C, const long a, const m7d_t *B)
   return C;
 }
 
+void m7d_add_i(m7d_t * x, m7d_t *y) 
+{
+	 int i, j;
+        for( i = 0; i < x->nrows; i++)
+        {
+            for(j = 0; j < (x->width ); j++)
+            {
+            	m7d_inc(&x->rows[i][j], &y->rows[i][j]);
+        	}   
+        }
+	
 
+}
+
+void m7d_sub_i(m7d_t * x, m7d_t *y) 
+{
+	 int i, j;
+        for( i = 0; i < x->nrows; i++)
+        {
+            for(j = 0; j < (x->width ); j++)
+            {
+            	m7d_dec(&x->rows[i][j], &y->rows[i][j]);
+        	}   
+        }
+	
+
+}
+
+
+
+
+static inline void sub_m7d_r(vtri  const *r,vtri   *y)
+{
+	vtri a;
+	vtri b;
+   	a.units = ~y->units;
+   	a.middle = ~y->middle;
+   	a.sign = ~y->sign;
+   	
+   	b.units = r->units;
+   	b.middle = r->middle;
+   	b.sign = r->sign;
+   	
+   	
+   	m7d_inc( &b, &a);
+   	y->units = b.units;
+   	y->middle = b.middle;
+   	y->sign  = b.sign;
+   
+
+         
+}
+
+
+
+void m7d_sub_r(m7d_t   *x , m7d_t   const *r)
+{
+  
+	int n , i;
+	for(i = 0; i < x->nrows; i++)
+    {
+    	for(n = 0; n < x->width; n++)
+        {
+        
+       
+		  sub_m7d_r(r->rows[i] + n,  x->rows[i] + n );
+        }
+    }
+   
+
+
+
+} 
 void m7d_add_row(m7d_t *A, rci_t ar, const m7d_t *B, rci_t br, rci_t start_col)
 {
 	rci_t s_width = start_col/M1RI_RADIX;

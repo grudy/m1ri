@@ -549,7 +549,22 @@ m7d_t  * m7d_stack(m7d_t * ,const   m7d_t * , const m7d_t * );
 */ 
 int m7d_is_zero(const m7d_t *);
 
+void m7d_add_i(m7d_t * , m7d_t *); 
 
+void m7d_sub_i(m7d_t * , m7d_t *); 
+
+
+
+
+/*
+
+	\brief incremental subtraction, but where the subtrahend is changed
+	
+*/
+void m7d_sub_r(m7d_t   *,  m7d_t const *);
+/**
+	Return the value of the matrix multiplied
+*/
 
  /**
  \Brief Return a scalar product of the input Matrix B, return result to C

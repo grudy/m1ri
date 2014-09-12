@@ -591,8 +591,7 @@ int main(int argc, const char * argv[])
 	*/
 	//m5d_mul_associative_test(64, 64);
 	//m5d_mul_associative_test(256, 256);
-
-	m5d_mul_associative_test(256, 256);	
+	m7d_mul_associative_test(256, 256);	
 	
 	
 	/*

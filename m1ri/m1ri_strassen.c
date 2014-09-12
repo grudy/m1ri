@@ -732,110 +732,101 @@ m5d_t *  m5d_strassen(m5d_t *c, m5d_t const  *a, const  m5d_t   *b)
 	
 */
 
-
-static inline void m7d_qrt_mul(m7d_t * c,const m7d_t *   a,const m7d_t *   b )
+static inline void m7d_qrt_mul(m7d_t * c,const m7d_t *   a, const m7d_t *   b )
 {
-  	m7d_t * x1;
-    m7d_t * x2;
-	
-   	
+
+    	
+    
+	m7_slice  * a_slice, * b_slice,*  c_slice;
+    	
+    	
+    	
+    	a_slice = m7d_quarter( a);
+   	b_slice = m7d_quarter(b);
+   	c_slice = m7d_quarter( c);
+   
 
 	if((c->ncols) > (M1RI_RADIX << 1))
     {
-     m7_slice  * a_slice, * b_slice,*  c_slice;
-    	
-    x1 = m7d_create( c->nrows/2, c->ncols/2);
-    x2 = m7d_create( c->nrows/2, c->ncols/2);
-    a_slice = m7d_quarter( a);
-   	b_slice = m7d_quarter(b);
-   	c_slice = m7d_quarter( c);
+     
+         	m7d_t * x1;
+   			 m7d_t * x2;
+
+   		
+    	x1 = m7d_create( c->nrows/2, c->ncols/2);
+    	x2 = m7d_create( c->nrows/2, c->ncols/2);
+         
+        m7d_sub(x1 ,  a_slice->row[0], a_slice->row[2]);      // 1 
+       	m7d_sub(x2, b_slice->row[3],b_slice->row[1]);      // 2 
+        m7d_qrt_mul(c_slice->row[2], x1, x2);      // 3 
+        
+        
+        
+        m7d_add(x1, a_slice->row[2],a_slice->row[3]);      // 4 
+        m7d_sub(x2, b_slice->row[1],b_slice->row[0]);      // 5 
+        m7d_qrt_mul(c_slice->row[3], x1, x2);        // 6 
+        
+        
+        m7d_sub_i( x1,a_slice->row[0]);    // 7 
+        m7d_sub_r( x2, b_slice->row[3]);      // 8 
+        m7d_qrt_mul(c_slice->row[1],x1,x2);     // 9 
+        m7d_sub_r(x1, a_slice->row[1]);        // 10 
+        
+        
+        
+        m7d_qrt_mul(c_slice->row[0],x1,b_slice->row[3]);       // 11 
+        m7d_qrt_mul( x1 , a_slice->row[0], b_slice->row[0]);      // 12 
+        m7d_add_i(c_slice->row[1], x1 );       // 13 
+        
+        
+        
+        m7d_add_i( c_slice->row[2] , c_slice->row[1]);       // 14 
+        
+        
+        
+        m7d_add_i( c_slice->row[1] , c_slice->row[3]);       // 15 
+        
+        
+        
+        m7d_add_i( c_slice->row[3] , c_slice->row[2]);        // 16 
+        m7d_add_i(c_slice->row[1] , c_slice->row[0]);      // 17 
+        
+        
+        
+        m7d_sub_i( x2, b_slice->row[2]);                // 18 
        
+        m7d_qrt_mul(c_slice->row[0], a_slice->row[3], x2);                // 19 
+     
+       m7d_sub_i( c_slice->row[2], c_slice->row[0]);      // 20 
+	       
 
-   
-        x1 = m7d_sub( x1, a_slice->row[0], a_slice->row[2]);  /* 1 */
-        x2 = m7d_sub(x2, b_slice->row[1],b_slice->row[1]);  /* 2 */
-        m7d_qrt_mul(c_slice->row[2], x1, x2);  /* 3 */
-        x1 = m7d_add(x1, a_slice->row[2],a_slice->row[1]);  /* 4 */
-        x2 = m7d_sub(x2, b_slice->row[1],b_slice->row[0]);  /* 5 */
-        m7d_qrt_mul(c_slice->row[3], x1, x2);    /* 6 */
-        x1 = m7d_sub(x1, x1,a_slice->row[0]);/* 7 */
-        x2 = m7d_sub(x2, b_slice->row[1],x2);  /* 8 */
-        m7d_qrt_mul(c_slice->row[1],x1,x2); /* 9 */
-        x1 = m7d_sub(x1, a_slice->row[1],x1);    /* 10 */
-        m7d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   /* 11 */
-        m7d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  /* 12 */
-        c_slice->row[1] = m7d_add(c_slice->row[1] , x1 , c_slice->row[1]);   /* 13 */
-        c_slice->row[2] = m7d_add( c_slice->row[2], c_slice->row[1] , c_slice->row[2]);   /* 14 */
-        c_slice->row[1] = m7d_add(c_slice->row[1] , c_slice->row[1] , c_slice->row[3]);   /* 15 */
-        c_slice->row[3] = m7d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);    /* 16 */
-        c_slice->row[3] = m7d_add(c_slice->row[3] ,c_slice->row[2] , c_slice->row[3]);  /* 17 */
-        x2 = m7d_sub(x2, x2, b_slice->row[2]);            /* 18 */
-        m7d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            /* 19 */
-        c_slice->row[2] = m7d_sub(c_slice->row[2] ,  c_slice->row[2], c_slice->row[0]);  /* 20 */
-
-        m7d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]);
-        c_slice->row[0] = m7d_add(c_slice->row[0], x1,c_slice->row[0] );
-        m7d_free(x1);
+        m7d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]); //21
+         m7d_add_i(c_slice->row[0], x1);		//22
+    	m7d_free(x1);
     	m7d_free(x2);
-    	m7d_quarter_free(a_slice);
-    	m7d_quarter_free(b_slice);
-    	m7d_quarter_free(c_slice);
-    	
-       
+       	
     }
+    
     
     else if((c->ncols ) == (M1RI_RADIX  << 1))
     {
-
-		m7_slice  * a_slice, * b_slice,*  c_slice;
+		m7d_mul_128(c_slice, a_slice, b_slice);
     	
-   		x1 = m7d_create( c->nrows/2, c->ncols/2);
-    	x2 = m7d_create( c->nrows/2, c->ncols/2);
-    	a_slice = m7d_quarter( a);
-   		b_slice = m7d_quarter(b);
-   		c_slice = m7d_quarter( c);
-		m7d_sub_64(x1->rows, a_slice->row[0]->rows, a_slice->row[2]->rows);  /* 1 */
-        m7d_sub_64(x2->rows,b_slice->row[3]->rows,b_slice->row[1]->rows) ;  /* 2 */
-        m7d_mul_64(c_slice->row[2]->rows, x1->rows, x2->rows);  /* 3 */
-        m7d_add_64(x1->rows,a_slice->row[2]->rows,a_slice->row[3]->rows) ;  /* 4 */
-        m7d_sub_64(x2->rows,b_slice->row[1]->rows,b_slice->row[0]->rows) ;  /* 5 */
-
-     	m7d_mul_64(c_slice->row[3]->rows, x1->rows, x2->rows);    /* 6 */
-        m7d_sub_64(x1->rows,x1->rows,a_slice->row[0]->rows) ;/* 7 */
-        m7d_sub_64(x2->rows,b_slice->row[3]->rows,x2->rows);  /* 8 */
-        m7d_mul_64(c_slice->row[1]->rows,x1->rows,x2->rows); /* 9 */
-        m7d_sub_64(x1->rows,a_slice->row[1]->rows,x1->rows);    /* 10 */
-
-        m7d_mul_64(c_slice->row[0]->rows,x1->rows,b_slice->row[3]->rows);   /* 11 */
-        m7d_mul_64(x1->rows, a_slice->row[3]->rows, b_slice->row[3]->rows);  /* 12 */
-        m7d_add_64(c_slice->row[1]->rows,x1->rows , c_slice->row[1]->rows) ;   /* 13 */
-        m7d_add_64(c_slice->row[2]->rows,c_slice->row[1]->rows , c_slice->row[2]->rows) ;   /* 14 */
-        m7d_add_64(c_slice->row[1]->rows,c_slice->row[1]->rows , c_slice->row[3]->rows) ;   /* 15 */
-        m7d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;    /* 16 */
-        m7d_add_64(c_slice->row[3]->rows,c_slice->row[2]->rows , c_slice->row[3]->rows) ;  /* 17 */
-
-    	m7d_sub_64(x2->rows, x2->rows, b_slice->row[2]->rows) ;            /* 18 */
-        m7d_mul_64(c_slice->row[2]->rows, a_slice->row[3]->rows, x2->rows);            /* 19 */
-        m7d_sub_64(c_slice->row[2]->rows, c_slice->row[2]->rows,c_slice->row[0]->rows);  /* 20 */
-        m7d_mul_64(c_slice->row[0]->rows, a_slice->row[1]->rows,b_slice->row[2]->rows);
-        m7d_add_64(c_slice->row[0]->rows, x1->rows,c_slice->row[0]->rows) ; 
- 
-	   	m7d_quarter_free(a_slice);
-    	m7d_quarter_free(b_slice);
-    	m7d_quarter_free(c_slice);
-
-        m7d_free(x1);
-    	m7d_free(x2);
     }
     
-    else if(c->ncols  == M1RI_RADIX )
+    else if((c->ncols ) == (M1RI_RADIX ))
     {
-    	 m7d_mul_64(c->rows, a->rows, b->rows);
+
+    	m7d_mul_64(c->rows, a->rows, b->rows);
     
-    } 
+    }
     
-  
+    m7d_quarter_free(a_slice);
+    m7d_quarter_free(b_slice);
+    m7d_quarter_free(c_slice);
+  	
 }
+
 
 /**
 	Strassen  algorithm on an m7d_t
@@ -996,9 +987,13 @@ static inline void m7d_mul_naive_square(m7d_t *c,  m7d_t const *a,  m7d_t  const
 	
   	m7_slice *  a_slice, *  b_slice, *  c_slice;
 
-   	a_slice = m7d_quarter( a);
-   /* m7d_print(a_slice->row[0][0]); */
-    b_slice = m7d_quarter( b);
+
+
+
+	 /* m7d_print(a_slice->row[0][0]); */
+   	
+   	a_slice = m7d_quarter(a);
+  	b_slice = m7d_quarter(b);
     c_slice = m7d_quarter(c);
    
    if((c->ncols) > (M1RI_RADIX << 1))
@@ -1019,12 +1014,13 @@ static inline void m7d_mul_naive_square(m7d_t *c,  m7d_t const *a,  m7d_t  const
        	c_slice->row[2] = m7d_add(c_slice->row[2], x1, x2); 
 	    m7d_mul_naive_square(x1, a_slice->row[2], b_slice->row[1]);
 		m7d_mul_naive_square(x2, a_slice->row[3], b_slice->row[3]); 
+		
  	    c_slice->row[3] = m7d_add(c_slice->row[3], x1, x2) ;
  	    
- 	   
+ 	   m7d_print( c_slice->row[3]); 
  	 	m7d_free(x1);
 		m7d_free(x2);
-		
+		printf("small");
 	
     }
    
@@ -1037,7 +1033,8 @@ static inline void m7d_mul_naive_square(m7d_t *c,  m7d_t const *a,  m7d_t  const
     {
     	 m7d_mul_64(c->rows, a->rows, b->rows);
     
-    } 
+    }
+    
     m7d_quarter_free(a_slice);
     m7d_quarter_free(b_slice);
     m7d_quarter_free(c_slice);
@@ -1087,7 +1084,7 @@ m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
 	{
 		m7d_t * padded_a,   * padded_b , * padded_c;
 	
-	
+		
 		padded_a = m7d_create(arcr, acbr);
 		padded_b = m7d_create(acbr, bccc);
 		padded_c = m7d_create(arcr, bccc);
