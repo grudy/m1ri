@@ -78,12 +78,7 @@
    	
    	}
    	
-   	printf("\n a \n ======================================= \n");
-   	
-   	
-   	m5d_print(a);
-   	printf("\n b \n ======================================= \n");
-   	
+
    	
    	m5d_print(b);
 	
@@ -93,7 +88,6 @@
    	
    	
    	
-   	printf("\n c \n ======================================= \n");
    	
    	
    	m5d_print(c);
@@ -119,8 +113,7 @@
    	
    	}
  
-	printf("\na after subtracted from b ");
-		m5d_print(a);
+
 
 	if(!(m5d_equal(a, c)))
     {
@@ -291,7 +284,7 @@ void m7d_test_addition(int m,int  n)
 
 int main(int argc, const char * argv[])
 {
-    /*
+    
     m3d_test_addition(4, 4);
     m3d_test_addition(64, 64);
     m3d_test_addition(64, 4);
@@ -312,21 +305,21 @@ int main(int argc, const char * argv[])
     m3d_test_inc(342, 64);
     m3d_test_inc(64, 44);
     m3d_test_inc(142, 181);
-	*/    
+	
 
 	
 	m5d_test_inc(4, 4);
-	//m5d_test_inc(64, 64);
-    //m5d_test_inc(64, 4);
-    //m5d_test_inc(4, 800);
-    //m5d_test_inc(14, 294);
-    //m5d_test_inc(342, 64);
-    //m5d_test_inc(64, 44);
-    //m5d_test_inc(142, 181);
+	m5d_test_inc(64, 64);
+    m5d_test_inc(64, 4);
+    m5d_test_inc(4, 800);
+    m5d_test_inc(14, 294);
+    m5d_test_inc(342, 64);
+    m5d_test_inc(64, 44);
+    m5d_test_inc(142, 181);
     
     
     
-    /*
+    
     m5d_test_addition(4, 4);
     m5d_test_addition(64, 64);
     m5d_test_addition(64, 4);
@@ -349,7 +342,7 @@ int main(int argc, const char * argv[])
     m7d_test_addition(142, 181);
     printf("\nm7d addition and subtraction test passed\n");
 
-	*/
+	
   
   
   return 0;

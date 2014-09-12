@@ -667,6 +667,18 @@ m5d_t *  m5d_strassen(m5d_t *c, m5d_t const  *a, const  m5d_t   *b)
 		padded_b = m5d_copy(padded_b, b);
 		padded_c  = m5d_copy(padded_c, c);
 		m5d_qrt_mul(padded_c, padded_a, padded_b); 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		m5d_free(padded_a);
 		m5d_free(padded_b);
 		m5d_free(padded_c);
@@ -894,51 +906,48 @@ m5d_t * m5d_classic_mul(m5d_t *c, const m5d_t  *a, const m5d_t  *b)
 	
 	
 	
-	
 	/** * arcr, acbr, bccc hold the padded matrix sizes*/
-	u_int32_t  arcr, acbr, bccc, g;
+	
+	    	
+	u_int32_t  arcr, acbr, bccc;
 	arcr = a->nrows;
 	acbr = a->ncols;
-	bccc  = b->ncols;
+	bccc = b->ncols;
+
+    
 	arcr =  powerof2(arcr);
 	acbr =  powerof2(acbr);
 	bccc =  powerof2(bccc);
-	g = (M1RI_RADIX  << 1);
-	while (arcr <  g)
-	{
-		arcr = arcr << 1;
 	
-	}
-	while (acbr < g )
-	{
-	acbr = 	acbr << 1;
+	arcr = MAX(arcr, 64);
+	acbr = MAX(acbr, 64);
+	bccc = MAX(bccc, 64);
 	
-	}
-	
-	while (bccc <  g)
-	{
-		bccc = bccc << 1;
-	
-	}
-	
+	int lasta, lastb, lastboth;
+	lasta = 64 - a->nrows%64;
+	lastb = 64 -  b->ncols%64;  
+	lastboth = 64 - a->nrows; 
 
 	
-
+	
 	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
 	{
-		m5d_t * padded_a  = m1ri_malloc(sizeof(m5d_t));
-		m5d_t  * padded_b  = m1ri_malloc(sizeof(m5d_t));
-		m5d_t * padded_c = m1ri_malloc(sizeof(m5d_t));
-		padded_a = m5d_create( arcr, acbr);
-		padded_b = m5d_create( acbr, bccc);
-		padded_c = m5d_create( arcr, bccc);
-		m5d_copy(padded_a, a);
-		m5d_copy(padded_b, b);
+		m5d_t * padded_a,   * padded_b , * padded_c;
+	
+	
+		padded_a = m5d_create(arcr, acbr);
+		padded_b = m5d_create(acbr, bccc);
+		padded_c = m5d_create(arcr, bccc);
+		padded_a = m5d_copy(padded_a, a);
+		padded_b = m5d_copy(padded_b, b);
+		padded_c = m5d_copy(padded_c, c);
+
 		m5d_mul_naive_square(padded_c, padded_a, padded_b); 
-		m5d_copy_cutoff(c, padded_c);
+		c  = m5d_copy_cutoff(c, padded_c);
 		m5d_free(padded_a);
 		m5d_free(padded_b);
 		m5d_free(padded_c);
+		
 	}
 		
 	else
@@ -947,7 +956,6 @@ m5d_t * m5d_classic_mul(m5d_t *c, const m5d_t  *a, const m5d_t  *b)
 	}
 	
 	return c;
-	
 	
 }
 

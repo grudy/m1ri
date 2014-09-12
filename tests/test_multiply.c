@@ -432,16 +432,18 @@ int main(int argc, const char * argv[])
    	m3d_print(m);
    	
    	*/
- 
- 	m5d_t * a, *b, *c, *d;
-	a = m5d_create(256, 256);
+ 	//m5d_mul_associative_test(64, 64);
+ 	m5d_t * a, *b,  *d;
+	a = m5d_create(64, 64);
 		
-	a = m5d_identity(a, 256);
-	b = m5d_identity(b, 256);
+	a = m5d_identity(a, 64);
+	b = m5d_identity(b, 64);
 	d = m5d_classic_mul(d, a, b);
-
+	m5d_print(a);
 	m5d_print(d);
-	
+	m5d_free(a);
+	m5d_free(b);
+	m5d_free(d);
    	
    return 0 ; 
 }    

@@ -1319,7 +1319,7 @@ void m3d_mul_64(vbg **R, vbg  ** const A, vbg   ** const B)
     {
     
         a = A[i];
-        v = a->sign;
+        v = a->sign;// finds values equal to one
         r = tables6[0][v&63];                 v >>= 6;
         t = tables6[1][v&63]; m3d_inc(&r, &t); v >>= 6;
         t = tables6[2][v&63]; m3d_inc(&r, &t); v >>= 6;
@@ -1334,8 +1334,8 @@ void m3d_mul_64(vbg **R, vbg  ** const A, vbg   ** const B)
         t = tables5[6][v&31]; m3d_inc(&r, &t); v >>= 5;
         t = tables5[7][v&31]; m3d_inc(&r, &t);
 		// The ones and twos are added above
-		r.sign^=r.units;  //this subtracts the twos
-		v = a->units ^ a->sign;
+		r.sign^=r.units;  //this multiplies r by two
+		v = a->units ^ a->sign;	//this finds values that are equal to one
 
         t = tables6[0][v&63]; m3d_inc(&r, &t); v >>= 6;
         t = tables6[1][v&63]; m3d_inc(&r, &t); v >>= 6;

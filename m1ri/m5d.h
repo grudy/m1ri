@@ -266,7 +266,7 @@ static inline void m5d_col_swap_in_rows(m5d_t *M, rci_t col_a, rci_t col_b, rci_
  * \param b matrix to copy
  */
 m5d_t *  m5d_copy(m5d_t  * , const m5d_t  * );
-void m5d_copy_cutoff(m5d_t  * , m5d_t const * );
+m5d_t *  m5d_copy_cutoff(m5d_t  * , m5d_t const * );
 
 
 
