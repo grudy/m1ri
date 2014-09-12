@@ -562,11 +562,23 @@ void m7d_sub_64(vtri **R, vtri  **A, vtri  **B)
 m7d_t * m7d_sub(m7d_t * r, const   m7d_t  *x, const m7d_t  *y)
 {
 	
+	if (r == NULL)
+	{
+		r= m7d_create(x->nrows, y->ncols);
+
+	} 
+	else if( (r->nrows != x->nrows || r->ncols != y->ncols)) 
+	{
+		m1ri_die("m7d_sub: Provided return matrix has wrong dimensions.\n");
+    	
+	
+	}	
+	
 	int n , i;
   	if((x->nrows == y->nrows) && ( x->ncols == y->ncols))
   	{
   	
-  	  r = m7d_create( x->nrows , y->ncols);
+  	  
   	  for(i = 0; i < x->nrows; i++)
     	{
         
@@ -679,7 +691,7 @@ m7d_t * m7d_add(m7d_t * c,const   m7d_t *a, const m7d_t *b)
             for(j = 0; j < (a->width ); j++)
             {
                 
-                /*  */
+        
                 add_vtri(&c->rows[i][j], &a->rows[i][j], &b->rows[i][j]);    
             }
         }

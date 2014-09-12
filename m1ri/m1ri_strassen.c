@@ -1017,10 +1017,10 @@ static inline void m7d_mul_naive_square(m7d_t *c,  m7d_t const *a,  m7d_t  const
 		
  	    c_slice->row[3] = m7d_add(c_slice->row[3], x1, x2) ;
  	    
- 	   m7d_print( c_slice->row[3]); 
+
  	 	m7d_free(x1);
 		m7d_free(x2);
-		printf("small");
+
 	
     }
    

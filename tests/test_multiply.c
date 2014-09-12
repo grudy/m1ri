@@ -540,83 +540,19 @@ int main(int argc, const char * argv[])
  	//m3d_strassen_test(64, 64);
    	//m3d_strassen_test(512, 512);
 
- 	//m3d_mul_associative_test(512, 512);
-  	//m3d_mul_associative_test(128, 128);
-  // m3d_mul_associative_test(64, 64);
+ 	m3d_mul_associative_test(512, 512);
+  	m3d_mul_associative_test(128, 128);
+    m3d_mul_associative_test(64, 64);
  	
- 	/*
- 	
- 	m3d_t * a, *b, *c, *d;
-	a = m3d_create(256, 256);
-		
-	a = m3d_identity(a, 256);
-	b = m3d_identity(b, 256);
-	c = m3d_strassen(c, a, b);
-	d = m3d_classic_mul(d, a, b);
-	m3d_print(c);
-	m3d_print(d);
-	*/
-   
-   /*
-   	m3d_t * s, *m;
-   	s = m3d_create_rand(4, 4);
-	 m = m3d_create_rand(4, 4);
-  	printf("m = s - m");
-  
-  	printf("\ns)");
- 	m3d_print(s);
-  
-  	printf("\nm)");
-  	m3d_print(m);
-  
-	m3d_sub_r(m, s);
-	printf("m");
-   	m3d_print(m);
-   	
-   	*/
-   	
-   	
- 	//m7d_mul_associative_test(64, 64);
- 	/*m7d_t * a, *b,  *d;
-	a = m7d_create(64, 64);
-		
-	a = m7d_identity(a, 64);
-	b = m7d_identity(b, 64);
-	d = m7d_classic_mul(d, a, b);
-	m7d_print(a);
-	m7d_print(d);
-	m7d_free(a);
-	m7d_free(b);
-	m7d_free(d);
-	*/
-	//m5d_mul_associative_test(64, 64);
-	//m5d_mul_associative_test(256, 256);
+	m5d_mul_associative_test(64, 64);
+	m5d_mul_associative_test(256, 256);
+	
+	m7d_mul_associative_test(128, 128);	
+
 	m7d_mul_associative_test(256, 256);	
 	
 	
-	/*
-	m5d_t * a, *a2, * a3, *  a4, * a5 , * a6;
-	
-	a = m5d_create_rand(a, 6);
-	a2 = m5d_mul_scalar(a2, 2,  a);
-	a3 = m5d_mul_scalar(a3, 3, a);
-	a4 = m5d_mul_scalar(a4, 4, a);
 
-
-	m5d_print(a);
-	m5d_print(a2);
-	m5d_print(a3);
-	m5d_print(a4);
-
-
-	
-	
-	m5d_free(a);
-	m5d_free(a2);
-	m5d_free(a3);
-	m5d_free(a4);
-	*/
-	
    	
    return 0 ; 
 }    
