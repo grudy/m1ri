@@ -208,7 +208,7 @@ void m3d_sub_i(m3d_t * x, m3d_t *y)
         {
             for(j = 0; j < (x->width ); j++)
             {
-            	isub_m3d(&x->rows[i][j], &y->rows[i][j]);
+            	m3d_dec(&x->rows[i][j], &y->rows[i][j]);
         	}   
         }
 	
@@ -1238,7 +1238,7 @@ static inline void m3d_combine4(vbg *table, vbg  ** const input)
     table[6] = t;
     m3d_inc(&t,&d);
     table[14] = t;
-    isub_m3d(&t,&c);
+    m3d_dec(&t,&c);
     table[10] = t;
 
     add_vbg(&t,&a,&b);
@@ -1248,14 +1248,14 @@ static inline void m3d_combine4(vbg *table, vbg  ** const input)
     table[11] = t;
     m3d_inc(&t,&c);
     table[15] = t;
-    isub_m3d(&t,&d);
+    m3d_dec(&t,&d);
     
     table[7] = t;
-    isub_m3d(&t,&b);
+    m3d_dec(&t,&b);
     table[5] = t;
     m3d_inc(&t,&d);
     table[13] = t;
-    isub_m3d(&t,&c);
+    m3d_dec(&t,&c);
     table[9] = t;
 }
 

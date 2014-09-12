@@ -118,7 +118,7 @@ static inline void iadd_vbg(vbg *r,vbg  const *  x)
     r->units = t | r->units;
 }
 
-static inline void isub_m3d(vbg  *r,vbg  const *x)
+static inline void m3d_dec(vbg  *r,vbg  const *x)
 {
     vec t;
     r->units = x->units ^ r->units;
@@ -284,7 +284,7 @@ void *  m3d_combine3(vbg *table, vbg *input )
     table[3] = t;
     iadd_vbg(&t, &c);
     table[7] = t;
-    isub_m3d(&t, &a);
+    m3d_dec(&t, &a);
     table[6] = t;
     add_vbg((table + 5), &a , &b);
 
@@ -316,7 +316,7 @@ void m3d_combine4(vbg *table, vbg *input )
     table[6] = t;
     iadd_vbg(&t,&d);
     table[14] = t;
-    isub_m3d(&t,&c);
+    m3d_dec(&t,&c);
     table[10] = t;
     
     add_vbg(&t,&b,&c);
@@ -328,13 +328,13 @@ void m3d_combine4(vbg *table, vbg *input )
     table[11] = t;
     iadd_vbg(&t, &c);
     table[15] = t;
-    isub_m3d(&t, &d);
+    m3d_dec(&t, &d);
     table[7] = t;
-    isub_m3d(&t, &b);
+    m3d_dec(&t, &b);
     table[5] = t;
     iadd_vbg(&t, &d);
     table[13] = t;
-    isub_m3d(&t, &c);
+    m3d_dec(&t, &c);
     table[9] = t;
     
     
@@ -454,7 +454,7 @@ void m3d_mul_64(vbg **R, vbg **  A, vbg **  B)
         t1 = tables5[1][v1&31]; iadd_vbg(&r1, &t1);
         t2 = tables5[1][v2&31]; iadd_vbg(&r2, &t2);
         
-        isub_m3d(&r1, &r2);
+        m3d_dec(&r1, &r2);
         R[i][0] = r1;
        /*  */
     }
@@ -497,7 +497,7 @@ void mul_32_m3d(vbg *R, vbg *A, vbg *B)
         t1 = tables4[2][v1&15]; iadd_vbg(&r1, &t1);
         t2 = tables4[2][v2&15]; iadd_vbg(&r2, &t2);
         
-        isub_m3d(&r1, &r2);
+        m3d_dec(&r1, &r2);
         R[i] = r1;
     }
     
@@ -527,7 +527,7 @@ void mul_16_m3d(vbg *R, vbg *A, vbg *B)
         t1 = tables4[3][v1&15]; iadd_vbg(&r1, &t1);
         t2 = tables4[3][v2&15]; iadd_vbg(&r2, &t2);
     
-        isub_m3d(&r1, &r2);
+        m3d_dec(&r1, &r2);
         R[i] = r1;
     }
 }
@@ -553,7 +553,7 @@ void mul_8_m3d(vbg *R, vbg *A, vbg *B)
     t1 = tables4[1][v1&15]; iadd_vbg(&r1, &t1);
     t2 = tables4[1][v2&15]; iadd_vbg(&r2, &t2);
     
-    isub_m3d(&r1, &r2);
+    m3d_dec(&r1, &r2);
     R[i] = r1;
     }
 }
@@ -581,7 +581,7 @@ void mul_4_m3d(vbg *R, vbg *A, vbg *B)
         r1 = table4[v1&15];
         r2 = table4[v2&15];
         
-        isub_m3d(&r1, &r2);
+        m3d_dec(&r1, &r2);
         R[i] = r1;
     }
     

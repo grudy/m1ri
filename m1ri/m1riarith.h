@@ -51,7 +51,7 @@ vbg sub_m3dr(vbg , vbg );               /*  */
  ********************************************/
 /* void iadd_vbg(vbg *,vbg  *); */
 
-/* void isub_m3d(vbg *,vbg  *); */
+/* void m3d_dec(vbg *,vbg  *); */
 
 
 

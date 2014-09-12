@@ -325,14 +325,14 @@ static inline void m3d_qrt_mul(m3d_t * c, m3d_t  const *   a, m3d_t  const *   b
        //m3d_add_i
        //m3d_sub_i
        
-        m3d_sub_unshackled(x1 ,  a_slice->row[0], a_slice->row[2]);      // 1 
-       	m3d_sub_unshackled(x2, b_slice->row[3],b_slice->row[1]);      // 2 
+        m3d_sub(x1 ,  a_slice->row[0], a_slice->row[2]);      // 1 
+       	m3d_sub(x2, b_slice->row[3],b_slice->row[1]);      // 2 
         m3d_qrt_mul(c_slice->row[2], x1, x2);      // 3 
         
         
         
-        m3d_add_unshackled(x1, a_slice->row[2],a_slice->row[3]);      // 4 
-        m3d_sub_unshackled(x2, b_slice->row[1],b_slice->row[0]);      // 5 
+        m3d_add(x1, a_slice->row[2],a_slice->row[3]);      // 4 
+        m3d_sub(x2, b_slice->row[1],b_slice->row[0]);      // 5 
         m3d_qrt_mul(c_slice->row[3], x1, x2);        // 6 
         
         
@@ -569,30 +569,55 @@ static inline void m5d_qrt_mul(m5d_t * c,const m5d_t *   a, const m5d_t *   b )
    		
     	x1 = m5d_create( c->nrows/2, c->ncols/2);
     	x2 = m5d_create( c->nrows/2, c->ncols/2);
-        x1 = m5d_sub(x1,  a_slice->row[0], a_slice->row[2]);  // 1 
-        x2 = m5d_sub(x2, b_slice->row[1],b_slice->row[1]);  // 2 
-        m5d_qrt_mul(c_slice->row[2], x1, x2);  // 3 
-        x1 = m5d_add(x1 ,a_slice->row[2],a_slice->row[1]);  // 4 
-        x2 = m5d_sub(x2, b_slice->row[1],b_slice->row[0]);  // 5 
-        m5d_qrt_mul(c_slice->row[3], x1, x2);    // 6 
-        x1 = m5d_sub(x1, x1,a_slice->row[0]);// 7 
-        x2 = m5d_sub(x2, b_slice->row[1],x2);  // 8 
-        m5d_qrt_mul(c_slice->row[1],x1,x2); // 9 
-        x1 = m5d_sub(x1, a_slice->row[1],x1);    // 10 
-        m5d_qrt_mul(c_slice->row[0],x1,b_slice->row[1]);   // 11 
-        m5d_qrt_mul( x1 , a_slice->row[1], b_slice->row[1]);  // 12 
-        c_slice->row[1] = m5d_add(c_slice->row[1] , x1 , c_slice->row[1]);   // 13 
-        c_slice->row[2] = m5d_add(c_slice->row[2] , c_slice->row[1] , c_slice->row[2]);   // 14 
-        c_slice->row[1] = m5d_add(c_slice->row[1] , c_slice->row[1] , c_slice->row[3]);   // 15 
-        c_slice->row[3] = m5d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);    // 16 
-        c_slice->row[3] = m5d_add(c_slice->row[3], c_slice->row[2] , c_slice->row[3]);  // 17 
-        x2 = m5d_sub(x2, x2, b_slice->row[2]);            // 18 
-        m5d_qrt_mul(c_slice->row[2], a_slice->row[1], x2);            // 19 
-        c_slice->row[2] = m5d_sub(c_slice->row[2],  c_slice->row[2], c_slice->row[0]);  // 20 
-        m5d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]);
-        c_slice->row[0] = m5d_add(c_slice->row[0], x1,c_slice->row[0] );
-        m5d_free(x1);
-    	m5d_free(x2);
+         
+        m5d_sub(x1 ,  a_slice->row[0], a_slice->row[2]);      // 1 
+       	m5d_sub(x2, b_slice->row[3],b_slice->row[1]);      // 2 
+        m5d_qrt_mul(c_slice->row[2], x1, x2);      // 3 
+        
+        
+        
+        m5d_add(x1, a_slice->row[2],a_slice->row[3]);      // 4 
+        m5d_sub(x2, b_slice->row[1],b_slice->row[0]);      // 5 
+        m5d_qrt_mul(c_slice->row[3], x1, x2);        // 6 
+        
+        
+        m5d_sub_i( x1,a_slice->row[0]);    // 7 
+        m5d_sub_r( x2, b_slice->row[3]);      // 8 
+        m5d_qrt_mul(c_slice->row[1],x1,x2);     // 9 
+        m5d_sub_r(x1, a_slice->row[1]);        // 10 
+        
+        
+        
+        m5d_qrt_mul(c_slice->row[0],x1,b_slice->row[3]);       // 11 
+        m5d_qrt_mul( x1 , a_slice->row[0], b_slice->row[0]);      // 12 
+        m5d_add_i(c_slice->row[1], x1 );       // 13 
+        
+        
+        
+        m5d_add_i( c_slice->row[2] , c_slice->row[1]);       // 14 
+        
+        
+        
+        m5d_add_i( c_slice->row[1] , c_slice->row[3]);       // 15 
+        
+        
+        
+        m5d_add_i( c_slice->row[3] , c_slice->row[2]);        // 16 
+        m5d_add_i(c_slice->row[1] , c_slice->row[0]);      // 17 
+        
+        
+        
+        m5d_sub_i( x2, b_slice->row[2]);                // 18 
+       
+        m5d_qrt_mul(c_slice->row[0], a_slice->row[3], x2);                // 19 
+     
+       m5d_sub_i( c_slice->row[2], c_slice->row[0]);      // 20 
+	       
+
+        m5d_qrt_mul(c_slice->row[0], a_slice->row[1], b_slice->row[2]); //21
+         m5d_add_i(c_slice->row[0], x1);		//22
+    	
+       	
        	
     }
     

@@ -522,7 +522,7 @@ static inline void  m3d_sub_unshackled(m3d_t * r,   const  m3d_t  *x, const m3d_
   * \brief subtract matrix r by x;
 
 */
-static inline void isub_m3d(vbg  *r,vbg const  *x)
+static inline void m3d_dec(vbg  *r,vbg const  *x)
 {
     vec t;
     r->units = x->units ^ r->units;

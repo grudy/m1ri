@@ -265,11 +265,11 @@ void m5d_mul_associative_test(int y, int z)
 	
 	}
 	
-	
+	/*
 	m5d_print(f);
 	
     printf("----------------------------------------------------------------------");
-    
+    */
     
     
     m5d_free(a);
@@ -332,11 +332,11 @@ void m5d_mul_associative_test(int y, int z)
 	
 	}
 	
-	
+	/*
 	m5d_print(f);
 	
     printf("----------------------------------------------------------------------");
-    
+    */
     
     
     m5d_free(a);
@@ -558,10 +558,10 @@ int main(int argc, const char * argv[])
 	*/
    
    /*
-   m3d_t * s, *m;
-   s = m3d_create_rand(4, 4);
+   	m3d_t * s, *m;
+   	s = m3d_create_rand(4, 4);
 	 m = m3d_create_rand(4, 4);
-  printf("m = s - m");
+  	printf("m = s - m");
   
   	printf("\ns)");
  	m3d_print(s);
@@ -589,9 +589,10 @@ int main(int argc, const char * argv[])
 	m7d_free(b);
 	m7d_free(d);
 	*/
-	m5d_mul_associative_test(64, 64);
-	//m7d_mul_associative_test(64, 64);
-	
+	//m5d_mul_associative_test(64, 64);
+	//m5d_mul_associative_test(256, 256);
+
+	m5d_mul_associative_test(256, 256);	
 	
 	
 	/*

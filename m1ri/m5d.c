@@ -604,7 +604,7 @@ void m5d_mul4(vfd * a)
 
 }
  /* matrix r = (matrix r - matrix x) */
-void isub_m5d(vfd *r,vfd *x) 
+void m5d_dec(vfd *r,vfd *x) 
 {
     vec c, d, e, f, g, h,  i, j, k, l, m, o, p, q;
     c = x->units ^ r->units;
@@ -771,7 +771,7 @@ void m5d_sub_d(m5d_t  * a , m5d_t * b)
         {
             for(j = 0; j < (a->width ); j++)
             {   
-                isub_m5d(&a->rows[i][j], &b->rows[i][j]);
+                m5d_dec(&a->rows[i][j], &b->rows[i][j]);
             }
         }
         
@@ -805,7 +805,7 @@ static inline void m5d_combine4(vfd *table, vfd  ** const input)
     table[6] = t;
     m5d_inc(&t,&d);
     table[14] = t;
-    isub_m5d(&t,&c);
+    m5d_dec(&t,&c);
     table[10] = t;
 
     add_vfd(&t,&a,&b);
@@ -815,14 +815,14 @@ static inline void m5d_combine4(vfd *table, vfd  ** const input)
     table[11] = t;
     m5d_inc(&t,&c);
     table[15] = t;
-    isub_m5d(&t,&d);
+    m5d_dec(&t,&d);
     
     table[7] = t;
-    isub_m5d(&t,&b);
+    m5d_dec(&t,&b);
     table[5] = t;
     m5d_inc(&t,&d);
     table[13] = t;
-	isub_m5d(&t,&c);
+	m5d_dec(&t,&c);
     table[9] = t;
 }
 
@@ -867,7 +867,7 @@ static inline void m5d_combine6(vfd *table, vfd  ** const input)
 void m5d_mul_64(vfd **R, vfd  ** const A, vfd   ** const B)
 {
    
-    vfd t, r, r2, r3, r4, * a;
+    vfd t, r, r2, * a;
     vec v;
     int i;
 
@@ -941,49 +941,49 @@ void m5d_mul_64(vfd **R, vfd  ** const A, vfd   ** const B)
 
 		m5d_mul2(&r2);
 		v = (a->units) &   (~a->middle) & a->sign;
-
+		m5d_inc(&r, &r2);
 
 		
-		r3 = tables6[0][v&63];                 v >>= 6;
-        t = tables6[1][v&63]; m5d_inc(&r3, &t); v >>= 6;
-        t = tables6[2][v&63]; m5d_inc(&r3, &t); v >>= 6;
-        t = tables6[3][v&63]; m5d_inc(&r3, &t); v >>= 6;
+		r2 = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        t = tables6[2][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        t = tables6[3][v&63]; m5d_inc(&r2, &t); v >>= 6;
         
-        t = tables5[0][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[1][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[2][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[3][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[4][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[5][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[6][v&31]; m5d_inc(&r3, &t); v >>= 5;
-        t = tables5[7][v&31]; m5d_inc(&r3, &t);
+        t = tables5[0][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[1][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[2][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[3][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[4][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[5][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[6][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[7][v&31]; m5d_inc(&r2, &t);
 
     	
     		
 
 		v  = a->units   & a->middle & a->sign;
-		m5d_mul3(&r3);
+		m5d_mul3(&r2);
+		m5d_inc(&r, &r2);
 
 
 
-    	r4 = tables6[0][v&63];                 v >>= 6;
-        t = tables6[1][v&63]; m5d_inc(&r4, &t); v >>= 6;
-        t = tables6[2][v&63]; m5d_inc(&r4, &t); v >>= 6;
-        t = tables6[3][v&63]; m5d_inc(&r4, &t); v >>= 6;
+    	r2 = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        t = tables6[2][v&63]; m5d_inc(&r2, &t); v >>= 6;
+        t = tables6[3][v&63]; m5d_inc(&r2, &t); v >>= 6;
         
-        t = tables5[0][v&31]; m5d_inc(&r4, &t); v >>= 5;
-        t = tables5[1][v&31]; m5d_inc(&r4, &t); v >>= 5;
-        t = tables5[2][v&31]; m5d_inc(&r4, &t); v >>= 5;
-        t = tables5[3][v&31]; m5d_inc(&r4, &t); v >>= 5;
-        t = tables5[4][v&31]; m5d_inc(&r4, &t); v >>= 5;
-        t = tables5[5][v&31]; m5d_inc(&r4, &t); v >>= 5;
-        t = tables5[6][v&31]; m5d_inc(&r4, &t); v >>= 5;
-        t = tables5[7][v&31]; m5d_inc(&r4, &t);
+        t = tables5[0][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[1][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[2][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[3][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[4][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[5][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[6][v&31]; m5d_inc(&r2, &t); v >>= 5;
+        t = tables5[7][v&31]; m5d_inc(&r2, &t);
 
-    	m5d_mul4(&r4);
+    	m5d_mul4(&r2);
+    	
     	m5d_inc(&r, &r2);
-    	m5d_inc(&r, &r3);
-    	m5d_inc(&r, &r4);
     	
 		R[i][0] = r;
         
@@ -1169,6 +1169,95 @@ static inline void vfd_elem_order(vfd * a)
    
  }
  
+ 
+void m5d_add_i(m5d_t * x, m5d_t *y) 
+{
+	 int i, j;
+        for( i = 0; i < x->nrows; i++)
+        {
+            for(j = 0; j < (x->width ); j++)
+            {
+            	m5d_inc(&x->rows[i][j], &y->rows[i][j]);
+        	}   
+        }
+	
+
+} 
+ 
+ 
+ 
+ void m5d_sub_i(m5d_t * x, m5d_t *y) 
+{
+	 int i, j;
+        for( i = 0; i < x->nrows; i++)
+        {
+            for(j = 0; j < (x->width ); j++)
+            {
+            	m5d_dec(&x->rows[i][j], &y->rows[i][j]);
+        	}   
+        }
+	
+
+}
+ 
+ 
+/*
+
+	\brief incremental subtraction, but where the subtrahend is changed
+	
+*/
+
+
+ 
+
+static inline void sub_m5d_r(vfd  const *r,vfd   *x)
+{
+	vfd y;
+	y.units = x->units;
+	y.sign = x->sign;
+    
+      vec c, d, e, f, g, h,  i, j, k, l, m, o, p, q;
+    c = x->units ^ r->units;
+    d = x->middle ^ r->middle;
+    e = c ^ x->sign;
+    f = e | x->units;
+    g = f ^ r->sign;
+    h = g | d;
+    
+	i = r->sign;
+    x->sign =  h | c;
+    j = x->sign ^ c;
+    k = j & i;
+    l = k | x->middle;
+    m = l ^ g;
+	q = r->middle;
+    x->middle = m ^ r->middle;
+    o = m | d;
+    p = o ^ c;
+    x->units = p ^ q;
+         
+}
+
+
+
+void m5d_sub_r(m5d_t   *x , m5d_t   const *r)
+{
+  
+	int n , i;
+	for(i = 0; i < x->nrows; i++)
+    {
+    	for(n = 0; n < x->width; n++)
+        {
+        
+       
+		  sub_m5d_r(r->rows[i] + n,  x->rows[i] + n );
+        }
+    }
+   
+
+
+
+} 
  
 static inline void vfd_elem(vfd * c, vfd const * a, vfd const * b)
 {

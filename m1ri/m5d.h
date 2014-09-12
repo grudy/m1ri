@@ -504,7 +504,7 @@ void m5d_sub_64(vfd **c ,vfd  ** a , vfd **b);
  * \
  * \returns r with difference
  */      
-void isub_m5d(vfd *,vfd *);
+void m5d_dec(vfd *,vfd *);
 
 /**
  * \brief scalar multiplication of vfd vector
@@ -629,7 +629,23 @@ m5d_t *  m5d_concat(m5d_t * ,const   m5d_t * , const m5d_t * );
  	\
 */
 m5d_t  * m5d_stack(m5d_t * ,const   m5d_t * , const m5d_t * );
- 
+
+void m5d_add_i(m5d_t * , m5d_t *); 
+
+void m5d_sub_i(m5d_t * , m5d_t *); 
+
+
+
+
+/*
+
+	\brief incremental subtraction, but where the subtrahend is changed
+	
+*/
+void m5d_sub_r(m5d_t   *,  m5d_t const *);
+/**
+	Return the value of the matrix multiplied
+*/
  
  /** 
     

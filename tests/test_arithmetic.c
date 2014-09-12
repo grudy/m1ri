@@ -99,7 +99,7 @@
    		for(int j = 0; j < M1RI_DN(n, 64); j++)
    	  	{
 
-   	  		isub_m5d(a->rows[i]  + j, b->rows[i] + j);
+   	  		m5d_dec(a->rows[i]  + j, b->rows[i] + j);
    	  	}
    	
    	}
@@ -156,7 +156,7 @@
    		for(int j = 0; j < M1RI_DN(n, 64); j++)
    	  	{
 
-   	  		isub_m3d(a->rows[i]  + j, b->rows[i] + j);
+   	  		m3d_dec(a->rows[i]  + j, b->rows[i] + j);
    	  	}
    	
    	}
