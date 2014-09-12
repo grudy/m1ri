@@ -81,6 +81,27 @@ typedef struct {
 } m7d_t;
 
 
+static inline void m7d_inc(vtri  *x, vtri *y)
+{
+     vtri  r;
+    vec s;
+    vec t;
+
+    r.units = x->units ^ y->units;
+    s = (x->units & y->units);
+    r.middle = s^ x->middle ^ y->middle;
+    t = (((s) & (x->middle | y->middle)) | (x->middle & y->middle) );
+    r.sign = x->sign ^ y->sign ^ t;
+    s =  ((t) & (x->sign | y->sign)) | (x->sign & y->sign);
+    
+    t = (r.units & s );
+    x->units  = s ^ r.units;
+    s = t & r.middle;
+    x->middle  = r.middle ^ t ;
+    x->sign  = r.sign ^ s;
+
+}
+
 typedef struct
 {
      
@@ -212,9 +233,9 @@ m7d_t  * m7d_create(rci_t nrows, rci_t ncols);
 void reduce_vtri( vtri * );
 m7d_t m7d_rand(m7d_t * a);
 /** 
- Make an Identity Matrix
- a = Identity matrix
- n = matrix size (row length and column width)
+ \brief Make an Identity Matrix
+ \a = Identity matrix
+ \n = matrix size (row length and column width)
  
  
  */
@@ -231,6 +252,23 @@ void  m7d_set_ui(m7d_t *, rci_t );
 */
 m7d_t  *  m7d_identity(m7d_t * , rci_t );
 
+
+/** 
+ \brief random matrix of size n * n
+ \param a null m7d_t 
+ \param n size of rows and column of matrix
+ \
+ \Returns an n * n identity matrix
+*/
+static inline m7d_t * m7d_create_rand(m7d_t * a, rci_t n)
+{
+	 
+	 a = m7d_create( n, n);
+	 m7d_rand(a);
+	 return a;
+	
+
+}
 
 
 /** 
@@ -311,7 +349,15 @@ static inline void add_vtri(vtri * r, vtri * x, vtri * y)
 }
 
 
-void m7d_sub_i(vtri  *, vtri *);
+static inline void m7d_dec(vtri  * x, vtri * y)
+{
+	vtri temp;
+   	temp.units = ~y->units;
+   	temp.middle = ~y->middle;
+   	temp.sign = ~y->sign;
+   	m7d_inc( x, &temp);
+
+}
 
 m7d_t *  m7d_sub(m7d_t *,   const  m7d_t  *, const m7d_t  *);
 

@@ -381,6 +381,17 @@ vfd * m5d_rand(m5d_t * );
  \a = Identity matrix
  \n = matrix size (row length and column width)
 */
+/** 
+ \brief random matrix of size n * n
+ \param a null m5d_t 
+ \param n size of rows and column of matrix
+ \
+ \Returns an n * n identity matrix
+*/
+m5d_t * m5d_create_rand(m5d_t * , rci_t );
+
+
+
 void   m5d_set_ui(m5d_t *, rci_t );
 
 

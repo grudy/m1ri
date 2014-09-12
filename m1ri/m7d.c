@@ -410,36 +410,8 @@ void m7d_vtri_sub(vtri * r ,vtri * x, vtri * y)
 }
 
 
-void m7d_sub_i(vtri  *r, vtri *y)
-{
-	/** 
-	Subtraction function
-	*/
-
-}
 
 
-static inline void m7d_inc(vtri  *x, vtri *y)
-{
-    vtri  r;
-    vec s;
-    vec t;
-
-    r.sign = x->units ^ y->units;
-    s = (x->units & y->units);
-    r.middle = s^ x->middle ^ y->middle;
-    t = (((s) & (x->middle | y->middle)) | (x->middle & y->middle) );
-    r.sign = x->sign ^ y->sign ^ t;
-    s = x->sign | y->sign | t;
-    
-    t = (r.units & s );
-    x->units  = s ^ r.units;
-    x->middle  = x->middle ^ t ;
-    x->sign  = x->sign ^ (  t & x->middle);
-    /** Cleanup*/
-      
-
-}
 
 
 void reduce_vtri( vtri * a)
@@ -452,9 +424,31 @@ void reduce_vtri( vtri * a)
 
 
 
-
-
 void vtri_mul_2(vtri * a)
+{
+    vec temp = a->units;
+    a->units = a->sign;
+    a->sign = a->middle;
+    a->middle = temp;
+    
+    
+    
+    
+}
+
+
+void vtri_mul_3(vtri * a)
+{
+    vec z = a->units| a->middle | a->sign;
+    vec temp = a->units;
+    a->units = a->middle ^ z;
+    a->middle = a->sign ^ z;
+    a->sign = z ^ temp;
+    
+}
+
+
+void vtri_mul_4(vtri * a)
 {
     vec temp;
     temp = a->units;
@@ -464,7 +458,10 @@ void vtri_mul_2(vtri * a)
     
     
 }
-void vtri_mul_3(vtri * a)
+
+
+
+void vtri_mul_5(vtri * a)
 {
   
     vec z = a->units | a->middle | a->sign;
@@ -476,26 +473,7 @@ void vtri_mul_3(vtri * a)
     
     
 }
-void vtri_mul_4(vtri * a)
-{
-    vec temp = a->units;
-    a->units = a->sign;
-    a->sign = a->middle;
-    a->middle = temp;
-    
-    
-    
-    
-}
-void vtri_mul_5(vtri * a)
-{
-    vec z = a->units| a->middle | a->sign;
-    vec temp = a->units;
-    a->units = a->middle ^ z;
-    a->middle = a->sign ^ z;
-    a->sign = z ^ temp;
-    
-}
+
 void vtri_mul_6(vtri * a)
 {
     vec z = a->units | a->middle | a->sign;
@@ -735,7 +713,7 @@ static inline void m7d_combine4(vtri *table, vtri  ** const input)
     table[6] = t;
     m7d_inc(&t,&d);
     table[14] = t;
-    m7d_sub_i(&t,&c);
+    m7d_dec(&t,&c);
     table[10] = t;
 
     add_vtri(&t,&a,&b);
@@ -745,14 +723,14 @@ static inline void m7d_combine4(vtri *table, vtri  ** const input)
     table[11] = t;
     m7d_inc(&t,&c);
     table[15] = t;
-    m7d_sub_i(&t,&d);
+    m7d_dec(&t,&d);
     
     table[7] = t;
-    m7d_sub_i(&t,&b);
+    m7d_dec(&t,&b);
     table[5] = t;
     m7d_inc(&t,&d);
     table[13] = t;
-	m7d_sub_i(&t,&c);
+	m7d_dec(&t,&c);
     table[9] = t;
 }
 
@@ -917,7 +895,7 @@ void m7d_mul_64(vtri **R, vtri  ** const A, vtri   ** const B)
 		
 		//five
 		v  = a->units   & (~a->middle) & a->sign;
-		vtri_mul_3(&rv);
+		vtri_mul_4(&rv);
 
 		m7d_inc(&r, &rv);
 		
@@ -1425,7 +1403,8 @@ inline void m7d_mul_two(m7d_t *a, const m7d_t * b)
 		for(j = 0; j < a->width; j++)
 		{
 			
-			a->rows[i][j].sign = 	b->rows[i][j].sign;	
+			a->rows[i][j].sign = 	b->rows[i][j].sign;
+			a->rows[i][j].middle = 	b->rows[i][j].middle;		
 			a->rows[i][j].units = 	b->rows[i][j].units;	
 			vtri_mul_2(a->rows[i] + j);
 		
@@ -1446,7 +1425,8 @@ inline void m7d_mul_three(m7d_t *a, const m7d_t * b)
 	{
 		for(j = 0; j < a->width; j++)
 		{
-			a->rows[i][j].sign = 	b->rows[i][j].sign;	
+			a->rows[i][j].sign = 	b->rows[i][j].sign;
+			a->rows[i][j].middle = 	b->rows[i][j].middle;		
 			a->rows[i][j].units = 	b->rows[i][j].units;	
 			vtri_mul_3(a->rows[i] + j);	  
 		
@@ -1465,7 +1445,8 @@ inline void m7d_mul_fourth(m7d_t *a, const m7d_t * b)
 	{
 		for(j = 0; j < a->width; j++)
 		{
-			a->rows[i][j].sign = 	b->rows[i][j].sign;	
+			a->rows[i][j].sign = 	b->rows[i][j].sign;
+			a->rows[i][j].middle = 	b->rows[i][j].middle;		
 			a->rows[i][j].units = 	b->rows[i][j].units;	
 		  	 vtri_mul_4(a->rows[i] + j);
 			
@@ -1488,7 +1469,8 @@ inline void m7d_mul_five(m7d_t *a, const m7d_t * b)
 		{
 		
 		
-			a->rows[i][j].sign = 	b->rows[i][j].sign;	
+			a->rows[i][j].sign = 	b->rows[i][j].sign;
+			a->rows[i][j].middle = 	b->rows[i][j].middle;		
 			a->rows[i][j].units = 	b->rows[i][j].units;	
 			vtri_mul_5(a->rows[i] + j);
 		
@@ -1509,7 +1491,8 @@ inline void m7d_mul_six(m7d_t *a, const m7d_t * b)
 	{
 		for(j = 0; j < a->width; j++)
 		{
-			a->rows[i][j].sign = 	b->rows[i][j].sign;	
+			a->rows[i][j].sign = 	b->rows[i][j].sign;
+			a->rows[i][j].middle = 	b->rows[i][j].middle;		
 			a->rows[i][j].units = 	b->rows[i][j].units;	
 		  	 vtri_mul_6(a->rows[i] + j);
 		}

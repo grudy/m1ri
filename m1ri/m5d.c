@@ -575,10 +575,10 @@ void fb_i(vfd *r,vfd *x)
 */
 void m5d_mul2(vfd * a)
 {
-    vec temp = a->sign;
-    a->sign = a->sign ^ temp;
-    a->units = a->middle & temp;
-    a->middle = temp;
+    vec t = a->units;
+	a->units = a->middle;
+	a->middle = ~t & a->sign;
+    
     
 }
 /** 
@@ -586,10 +586,10 @@ void m5d_mul2(vfd * a)
 */
 void m5d_mul3(vfd * a)
 {
-    vec temp = a->middle ^ a->sign;
-    a->sign = a->middle;
-    a->middle = a->units | temp;
-    a->units = temp;
+    vec t = a->units;
+    a->units =  (~a->middle) & a->sign;
+    a->middle = t;
+    
     
 }
 /** 
@@ -597,9 +597,9 @@ void m5d_mul3(vfd * a)
 */
 void m5d_mul4(vfd * a)
 {
-    vec x = a->units ^ a->sign;
-    a->units = x & a->sign;
-    a->middle = x;
+  
+    a->units = (~a->units) & a->sign;
+    a->middle = (~a->middle) & a->sign;
     
 
 }
@@ -1440,7 +1440,7 @@ inline void m5d_mul_zero(m5d_t * a)
 	int i, j;
 	for(i = 0; i < a->nrows; i++)
 	{
-		for(j = 0; j < a->ncols; j++)
+		for(j = 0; j < a->width; j++)
 		{
 			a->rows[i][j].units = 0;
 			a->rows[i][j].middle = 0;
@@ -1459,12 +1459,14 @@ inline void m5d_mul_two(m5d_t * a, const m5d_t * b)
 	int i, j;
 	for(i = 0; i < a->nrows; i++)
 	{
-		for(j = 0; j < a->ncols; j++)
+		for(j = 0; j < a->width; j++)
 		{
 			
-			a->rows[i][j].middle = ~(b->rows[i][j].units) & (b->rows[i][j].sign);
-			a->rows[i][j].units = b->rows[i][j].middle ;
-		  
+					
+			a->rows[i][j].sign = 	b->rows[i][j].sign;
+			a->rows[i][j].middle = 	b->rows[i][j].middle;		
+			a->rows[i][j].units = 	b->rows[i][j].units;
+			m5d_mul2(a->rows[i] + j);
 		
 		}
 	
@@ -1479,12 +1481,13 @@ inline void m5d_mul_three(m5d_t * a, const m5d_t * b)
 	int i, j;
 	for(i = 0; i < a->nrows; i++)
 	{
-		for(j = 0; j < a->ncols; j++)
+		for(j = 0; j < a->width; j++)
 		{
-			a->rows[i][j].middle = b->rows[i][j].units; 
-			a->rows[i][j].units = ~(b->rows[i][j].middle) & b->rows[i][j].sign;
-		  
-		
+					
+			a->rows[i][j].sign = 	b->rows[i][j].sign;
+			a->rows[i][j].middle = 	b->rows[i][j].middle;		
+			a->rows[i][j].units = 	b->rows[i][j].units;
+			m5d_mul3(a->rows[i] + j);
 		}
 	
 	}
@@ -1498,13 +1501,14 @@ inline void m5d_mul_fourth(m5d_t * a, const m5d_t * b)
 	int i, j;
 	for(i = 0; i < a->nrows; i++)
 	{
-		for(j = 0; j < a->ncols; j++)
+		for(j = 0; j < a->width; j++)
 		{
 			
-			a->rows[i][j].middle = ~(b->rows[i][j].middle) & b->rows[i][j].sign;	
-			a->rows[i][j].units = ~(b->rows[i][j].units) & b->rows[i][j].sign;	
-		  
-		
+					
+			a->rows[i][j].sign = 	b->rows[i][j].sign;
+			a->rows[i][j].middle = 	b->rows[i][j].middle;		
+			a->rows[i][j].units = 	b->rows[i][j].units;
+			m5d_mul4(a->rows[i] + j);
 		}
 	
 	}
@@ -1532,14 +1536,27 @@ m5d_t *m5d_mul_scalar(m5d_t *C, const long a, const m5d_t *B)
 	{
 		case 0: m5d_mul_zero(C);
 		break ;
+		case 1: m5d_copy(C, B);
+		break;
   		case 2: m5d_mul_two(C, B);
 		break ;
   		case 3: m5d_mul_three(C, B);
 		break ;
   		case 4: m5d_mul_fourth(C, B);
+  		break;
   	}	
   
   return C;
+}
+
+m5d_t * m5d_create_rand(m5d_t * a, rci_t n)
+{
+	 
+	 a = m5d_create( n, n);
+	 m5d_rand(a);
+	 return a;
+	
+
 }
 
 

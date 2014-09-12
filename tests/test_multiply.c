@@ -210,6 +210,148 @@ void m3d_strassen_test(int y, int z)
 
 }
 
+void m5d_mul_associative_test(int y, int z)
+{
+	m5d_t * a, *b, *c, *d, * e, *f, *g;
+	a = m5d_create(y, z);
+	b = m5d_create(y, z);
+	c  = m5d_create(y, z);
+
+	 
+	m5d_rand(a);
+	m5d_rand(b);
+	m5d_rand(c);
+	
+	/*
+		testing if 
+		(a * b)  * c  == a * (b * c)
+		 d 	     * c  == a *   e  
+				f     ==   g
+ 		
+		where * is matrix multiplication 
+	
+	*/
+	
+
+	d = m5d_classic_mul(d, a, b);
+	
+	f = m5d_classic_mul(f, d, c);
+	
+	
+	e = m5d_classic_mul(e, b, c);
+	g = m5d_classic_mul(g, a, e);
+	
+	
+	
+	
+	
+	if((y <= 512) && (z <= 512))
+	{
+		
+		printf("\n matrix f \n");
+		m5d_print(f);
+		printf("\n matrix g \n");
+		m5d_print(g);
+		
+	}
+	
+	
+	if(!(m5d_equal(f, g)))
+	{
+	
+	
+		printf("\nm5d_classic_mul on two %d by %d matrix matrices not associative ", y, z  );
+		m1ri_die("");
+	
+	}
+	
+	
+	m5d_print(f);
+	
+    printf("----------------------------------------------------------------------");
+    
+    
+    
+    m5d_free(a);
+    m5d_free(b);
+    m5d_free(c);
+    m5d_free(d);
+    m5d_free(e);
+    m5d_free(f);
+    m5d_free(g);
+    
+    
+    
+	a = m5d_create(y, z);
+	b = m5d_create(y, z);
+	c  = m5d_create(y, z);
+
+	 
+	m5d_rand(a);
+	m5d_rand(b);
+	m5d_rand(c);
+	
+	/*
+		testing if 
+		(a * b)  * c  == a * (b * c)
+		 d 	     * c  == a *   e  
+				f     ==   g
+ 		
+		where * is matrix multiplication 
+	
+	*/
+	
+	d = f = e = g = NULL;
+	d = m5d_strassen(d, a, b);
+	
+	f = m5d_strassen(f, d, c);
+	
+	
+	e = m5d_strassen(e, b, c);
+	g = m5d_strassen(g, a, e);
+	
+	
+	
+	
+	if((y <= 512) && (z <= 512))
+	{
+		printf("\n matrix f \n");
+		m5d_print(f);
+		printf("\n matrix g \n");
+		m5d_print(g);
+	
+	}
+	
+	
+	if(!(m5d_equal(f, g)))
+	{
+	
+	
+		printf("\nm5d_strassen on two %d by %d matrix matrices not associative ", y, z  );
+		m1ri_die("");
+	
+	}
+	
+	
+	m5d_print(f);
+	
+    printf("----------------------------------------------------------------------");
+    
+    
+    
+    m5d_free(a);
+    m5d_free(b);
+    m5d_free(c);
+    
+    m5d_free(d);
+    m5d_free(e);
+    m5d_free(f);
+    m5d_free(g);
+    
+
+}
+
+
 
 void m7d_mul_associative_test(int y, int z)
 {
@@ -400,7 +542,7 @@ int main(int argc, const char * argv[])
 
  	//m3d_mul_associative_test(512, 512);
   	//m3d_mul_associative_test(128, 128);
-   //m3d_mul_associative_test(64, 64);
+  // m3d_mul_associative_test(64, 64);
  	
  	/*
  	
@@ -432,6 +574,8 @@ int main(int argc, const char * argv[])
    	m3d_print(m);
    	
    	*/
+   	
+   	
  	//m7d_mul_associative_test(64, 64);
  	/*m7d_t * a, *b,  *d;
 	a = m7d_create(64, 64);
@@ -445,19 +589,34 @@ int main(int argc, const char * argv[])
 	m7d_free(b);
 	m7d_free(d);
 	*/
+	m5d_mul_associative_test(64, 64);
+	//m7d_mul_associative_test(64, 64);
 	
 	
-	m7d_t * a, *b,  *d;
-	a
-		
-	a = m7d_identity(a, 64);
-	b = m7d_identity(b, 64);
-	d = m7d_classic_mul(d, a, b);
-	m7d_print(a);
-	m7d_print(d);
-	m7d_free(a);
-	m7d_free(b);
-	m7d_free(d);
+	
+	/*
+	m5d_t * a, *a2, * a3, *  a4, * a5 , * a6;
+	
+	a = m5d_create_rand(a, 6);
+	a2 = m5d_mul_scalar(a2, 2,  a);
+	a3 = m5d_mul_scalar(a3, 3, a);
+	a4 = m5d_mul_scalar(a4, 4, a);
+
+
+	m5d_print(a);
+	m5d_print(a2);
+	m5d_print(a3);
+	m5d_print(a4);
+
+
+	
+	
+	m5d_free(a);
+	m5d_free(a2);
+	m5d_free(a3);
+	m5d_free(a4);
+	*/
+	
    	
    return 0 ; 
 }    

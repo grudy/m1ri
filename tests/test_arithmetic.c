@@ -39,7 +39,7 @@
     
     d = m3d_sub(d, c, b);
    
-	m3d_print(a);
+
 	if(!(m3d_equal(d, a)))
     {
      	{
@@ -78,19 +78,10 @@
    	
    	}
    	
-
-   	
-   	m5d_print(b);
-	
-		
-
    	
    	
    	
    	
-   	
-   	
-   	m5d_print(c);
 
    	
    	if(m5d_equal(a, c))
@@ -184,6 +175,68 @@
   m3d_free(c);
   
  }
+ 
+ 
+ void m7d_test_inc(int m,int  n)
+{
+
+    m7d_t * a, * b, *c;
+    a = m7d_create(m, n);
+    b = m7d_create( m, n);
+    m7d_rand(a);
+    m7d_rand(b);
+    c = m7d_copy(c, a); 
+    
+   	for(int i = 0; i < m; i++)
+   	{
+   		for(int j = 0; j < M1RI_DN(n, 64); j++)
+   	  	{
+	  		m7d_inc(a->rows[i] + j, b->rows[i] + j);
+   	  		
+   	  	}
+   	
+   	}
+   	
+
+   	
+   	if(m7d_equal(a, c))
+    {
+     	{
+     	
+          m1ri_die("Error in m7d_inc size %d by %d,\n", m, n);
+    
+         }
+    
+    }
+   	
+   for(int i = 0; i < m; i++)
+   	{
+   		for(int j = 0; j < M1RI_DN(n, 64); j++)
+   	  	{
+
+   	  		m7d_dec(a->rows[i]  + j, b->rows[i] + j);
+   	  	}
+   	
+   	}
+   	
+
+
+
+	if(!(m7d_equal(a, c)))
+    {
+     	{
+          m1ri_die("Error in m7d_inc and subtraction of size %d by %d,\n", m, n);
+    
+         }
+    
+    }
+  
+  m7d_free(a);
+  m7d_free(b);
+  m7d_free(c);
+  
+ }
+
 
  void m5d_test_addition(int m,int  n)
  {
@@ -214,24 +267,7 @@
     
     }
     
-    	
-   	printf("\n e \n ======================================= \n");
-   	
-   	
-   	m5d_print(e);
-   	printf("\n f \n ======================================= \n");
-   	
-   	
-   	m5d_print(f);
-	
-		
-
-   	
-   	
-   	
-   	
-   	printf("\n g \n ========================================= \n");
-   	m5d_print(g);
+   
     
     
   m5d_free(e);
@@ -306,6 +342,7 @@ int main(int argc, const char * argv[])
     m3d_test_inc(64, 44);
     m3d_test_inc(142, 181);
 	
+	printf("\nm3d_inc test passed \n");
 
 	
 	m5d_test_inc(4, 4);
@@ -317,9 +354,9 @@ int main(int argc, const char * argv[])
     m5d_test_inc(64, 44);
     m5d_test_inc(142, 181);
     
-    
-    
-    
+    printf("\nm5d_inc test passed \n");
+ 
+	
     m5d_test_addition(4, 4);
     m5d_test_addition(64, 64);
     m5d_test_addition(64, 4);
@@ -331,7 +368,19 @@ int main(int argc, const char * argv[])
     printf("\nm5d addition and subtraction test passed\n");
 
     
+    
+    
+    m7d_test_inc(4, 4);
+	m7d_test_inc(64, 64);
+    m7d_test_inc(64, 4);
+    m7d_test_inc(4, 800);
+    m7d_test_inc(14, 294);
+    m7d_test_inc(342, 64);
+    m7d_test_inc(64, 44);
+    m7d_test_inc(142, 181);
             
+            
+    printf("\nm7d_inc test passed \n");        
     m7d_test_addition(4, 4);
     m7d_test_addition(64, 64);
     m7d_test_addition(64, 4);
@@ -341,7 +390,7 @@ int main(int argc, const char * argv[])
     m7d_test_addition(64, 44);
     m7d_test_addition(142, 181);
     printf("\nm7d addition and subtraction test passed\n");
-
+	
 	
   
   

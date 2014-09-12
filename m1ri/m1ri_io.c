@@ -267,7 +267,7 @@ static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_i
         
     	if((out[2]  ==  out[1]) & (out[1] == out[0]))
        	{
-       	printf("[0]");	
+       	printf("[ 0 ]");	
        	}
        
         else
@@ -285,7 +285,7 @@ static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_i
         {
             value = value + 4;           
         }
-        printf("[%d]", value);
+        printf("[ %d ]", value);
 		}
      
     
