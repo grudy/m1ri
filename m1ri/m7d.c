@@ -150,7 +150,7 @@ void m7d_set_ui(m7d_t * a, rci_t value )
             for ( k = 0 ; k < M1RI_RADIX; k++)
             {
                 
-              a->rows[l][j].units = (leftbit)>>k;
+              a->rows[l][j].units = (rightbit)<<k;
                 
                 l++;
                 
@@ -166,7 +166,7 @@ void m7d_set_ui(m7d_t * a, rci_t value )
             for(i = 0; i < (M1RI_RADIX - l); i++)
             {
                 
-                a->rows[k + i][a->width-1].units = (leftbit)>>i;
+                a->rows[k + i][a->width-1].units = (rightbit)<<i;
             }
             
         }
@@ -177,7 +177,7 @@ void m7d_set_ui(m7d_t * a, rci_t value )
             for(i  = 0; i < M1RI_RADIX; i++)
                 
             {
-                a->rows[l][a->width -1].units = (leftbit)>>i;
+                a->rows[l][a->width -1].units = (rightbit)<<i;
                 l++;
                 
             }
@@ -207,9 +207,9 @@ void *  m7d_write_elem( m7d_t * M,rci_t x, rci_t y, vec s, vec m,  vec u )
 {
     wi_t  block = (y  ) / M1RI_RADIX;
     int   spill =  (y  % M1RI_RADIX) ;
-    M->rows[x][block].units  = (u == 0) ? (~(leftbit >> spill) &  (M->rows[x][block].units))  : ((leftbit >> spill) | (M->rows[x][block].units));
-    M->rows[x][block].middle  = (m == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].middle))  : ((leftbit  >> spill) | (M->rows[x][block].middle));
-    M->rows[x][block].sign  = (s == 0) ? (~(leftbit  >> spill) &  (M->rows[x][block].sign))  : ((leftbit  >> spill) | (M->rows[x][block].sign));
+    M->rows[x][block].units  = (u == 0) ? (~(rightbit  << spill) &  (M->rows[x][block].units))  : ((rightbit << spill) | (M->rows[x][block].units));
+    M->rows[x][block].middle  = (m == 0) ? (~(rightbit  << spill) &  (M->rows[x][block].middle))  : ((rightbit << spill) | (M->rows[x][block].middle));
+    M->rows[x][block].sign  = (s == 0) ? (~(rightbit  << spill) &  (M->rows[x][block].sign))  : ((rightbit << spill) | (M->rows[x][block].sign));
     return 0;
 
 }
@@ -238,7 +238,7 @@ vtri  * m7d_block_allocate(vtri * block, rci_t  nrows,  wi_t  width)
 vtri ** m7d_row_alloc(vtri * block, vtri ** rows, wi_t width, rci_t nrows)
 {
 	int i;
-    rows = m1ri_malloc( nrows * sizeof(vtri *));
+    rows = m1ri_calloc( nrows ,  sizeof(vtri *));
     for ( i = 0; i <  nrows;  i++ )
     {
         rows[i]  = (block + (i * width));
@@ -322,7 +322,7 @@ static inline m7d_t  * m7d_init_window_unshackled(const m7d_t *c,const rci_t str
     submatrix->lblock = ( (sizerows +  strow)  ==  c->width)? c->lblock:  0;
     submatrix->fcol   = 0;
     submatrix->svtri = svtri;
-    
+    submatrix->flags = iswindowed;
     
     
     for(  i =   f; i < (f + (M1RI_RADIX * sizerows)) ; i++)
@@ -603,7 +603,7 @@ m7d_t * m7d_sub(m7d_t * r, const   m7d_t  *x, const m7d_t  *y)
 
 int m7d_equal(m7d_t const *a, m7d_t const *b)
 {
-	u_int64_t temp = (a->ncols%64 == 0)? 0:  ((leftbit >> ((a->ncols%64 ) - 1)) -1) ;
+	u_int64_t temp = (a->ncols%64 == 0)? 0:  ((rightbit << ((a->ncols%64 ) - 1)) -1) ;
 	temp = ~temp;
     if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
     {
@@ -650,7 +650,7 @@ int m7d_equal(m7d_t const *a, m7d_t const *b)
 
 
 
-void m7d_copy_cutoff(m7d_t  * r, m7d_t  const * x)
+m7d_t *  m7d_copy_cutoff(m7d_t  * r, m7d_t  const * x)
 {
 		int i, s;
         for( i = 0; i < r->nrows; i++)
@@ -661,7 +661,7 @@ void m7d_copy_cutoff(m7d_t  * r, m7d_t  const * x)
             }
             
         }
-	
+	return r;
 }
 
 void m7d_add_64(vtri **R, vtri   **A, vtri  **B)
@@ -710,38 +710,13 @@ m7d_t * m7d_add(m7d_t * c,const   m7d_t *a, const m7d_t *b)
     return c;
       
 }
-void *  m7d_combine3(vtri *table, vtri *input )
-{
-    vtri t, a, b, c;
-    t.sign = t.middle = t.units = 0;
-    a = input[0];
-    b = input[1];
-    c = input[2];
-    
-    table[0] = t;
-    table[1] = a;
-    table[2] = b;
-    table[4] = c;
-    
-    add_vtri(&t, &a, &b);
-    table[3] = t;
-    m7d_inc(&t, &c);
-    table[7] = t;
-    m7d_sub_i(&t, &a);
-    table[6] = t;
-    
-    add_vtri((table + 5), &a , &b);
-
-    return 0;
-    
-}
 
 
 
 static inline void m7d_combine4(vtri *table, vtri  ** const input) 
 {
     vtri  t,   a,  b,  c,  d;
-    t.sign = t.units = 0;
+    t.sign = t.units =  t.middle = 0;
     a = *input[0];
     b = *input[1];
     c = *input[2];
@@ -822,7 +797,7 @@ static inline void m7d_combine6(vtri *table, vtri  ** const input)
 void m7d_mul_64(vtri **R, vtri  ** const A, vtri   ** const B)
 {
    
-    vtri t, r1, r2 ,r3, * a;
+    vtri t, r, rv, * a;
     vec v;
     int i;
 
@@ -850,69 +825,141 @@ void m7d_mul_64(vtri **R, vtri  ** const A, vtri   ** const B)
     
     	/*   first part is ones */
         a = A[i];
-        v = a->sign;
+        
+		
+		
+		//one
+		v = (a->units) &  (~a->middle) & ~a->sign;
+
+		
         
         
-        r1 = tables6[0][v&63];                 v >>= 6;
-        t = tables6[1][v&63]; m7d_inc(&r1, &t); v >>= 6;
-        t = tables6[2][v&63]; m7d_inc(&r1, &t); v >>= 6;
-        t = tables6[3][v&63]; m7d_inc(&r1, &t); v >>= 6;
+        r = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m7d_inc(&r, &t); v >>= 6;
+        t = tables6[2][v&63]; m7d_inc(&r, &t); v >>= 6;
+        t = tables6[3][v&63]; m7d_inc(&r, &t); v >>= 6;
         
-        t = tables5[0][v&31]; m7d_inc(&r1, &t); v >>= 5;
-        t = tables5[1][v&31]; m7d_inc(&r1, &t); v >>= 5;
-        t = tables5[2][v&31]; m7d_inc(&r1, &t); v >>= 5;
-        t = tables5[3][v&31]; m7d_inc(&r1, &t); v >>= 5;
-        t = tables5[4][v&31]; m7d_inc(&r1, &t); v >>= 5;
-        t = tables5[5][v&31]; m7d_inc(&r1, &t); v >>= 5;
-        t = tables5[6][v&31]; m7d_inc(&r1, &t); v >>= 5;
-        t = tables5[7][v&31]; m7d_inc(&r1, &t);
+        t = tables5[0][v&31]; m7d_inc(&r, &t); v >>= 5;
+        t = tables5[1][v&31]; m7d_inc(&r, &t); v >>= 5;
+        t = tables5[2][v&31]; m7d_inc(&r, &t); v >>= 5;
+        t = tables5[3][v&31]; m7d_inc(&r, &t); v >>= 5;
+        t = tables5[4][v&31]; m7d_inc(&r, &t); v >>= 5;
+        t = tables5[5][v&31]; m7d_inc(&r, &t); v >>= 5;
+        t = tables5[6][v&31]; m7d_inc(&r, &t); v >>= 5;
+        t = tables5[7][v&31]; m7d_inc(&r, &t);
 
       
       
-      
-      	v = a->middle;
+      	//two
+      	v =  (~a->units)   & (a->middle) & (~a->sign);
+		
+		
+		
+        rv = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[2][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[3][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        
+        t = tables5[0][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[1][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[2][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[3][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[4][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[5][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[6][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[7][v&31]; m7d_inc(&rv, &t);
 
-        t = tables6[0][v&63]; m7d_inc(&r2, &t); v >>= 6;
-        t = tables6[1][v&63]; m7d_inc(&r2, &t); v >>= 6;
-        t = tables6[2][v&63]; m7d_inc(&r2, &t); v >>= 6;
-        t = tables6[3][v&63]; m7d_inc(&r2, &t); v >>= 6;
-       
-        t = tables5[0][v&31]; m7d_inc(&r2, &t); v >>= 5;
-        t = tables5[1][v&31]; m7d_inc(&r2, &t); v >>= 5;
-        t = tables5[2][v&31]; m7d_inc(&r2, &t); v >>= 5;
-        t = tables5[3][v&31]; m7d_inc(&r2, &t); v >>= 5;
-        t = tables5[4][v&31]; m7d_inc(&r2, &t); v >>= 5;
-        t = tables5[5][v&31]; m7d_inc(&r2, &t); v >>= 5;
-        t = tables5[6][v&31]; m7d_inc(&r2, &t); v >>= 5;
-    	t = tables5[7][v&31]; m7d_inc(&r2, &t);
 		
 
+		vtri_mul_2(&rv);
+		m7d_inc(&r, &rv);
+		//three
+		v = (a->units) &   (a->middle) & (~a->sign);
 
-		v = a->units;
-		t = tables6[0][v&63]; m7d_inc(&r3, &t); v >>= 6;
-        t = tables6[1][v&63]; m7d_inc(&r3, &t); v >>= 6;
-        t = tables6[2][v&63]; m7d_inc(&r3, &t); v >>= 6;
-        t = tables6[3][v&63]; m7d_inc(&r3, &t); v >>= 6;
-       
-        t = tables5[0][v&31]; m7d_inc(&r3, &t); v >>= 5;
-        t = tables5[1][v&31]; m7d_inc(&r3, &t); v >>= 5;
-        t = tables5[2][v&31]; m7d_inc(&r3, &t); v >>= 5;
-        t = tables5[3][v&31]; m7d_inc(&r3, &t); v >>= 5;
-        t = tables5[4][v&31]; m7d_inc(&r3, &t); v >>= 5;
-        t = tables5[5][v&31]; m7d_inc(&r3, &t); v >>= 5;
-        t = tables5[6][v&31]; m7d_inc(&r3, &t); v >>= 5;
-    	t = tables5[7][v&31]; m7d_inc(&r3, &t);    	
+
+		
+		rv = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[2][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[3][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        
+        t = tables5[0][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[1][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[2][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[3][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[4][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[5][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[6][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[7][v&31]; m7d_inc(&rv, &t);
+
+    	
+    		
+		//four
+		v  = (~a->units)   & (~a->middle) & (a->sign);
+		vtri_mul_3(&rv);
+
+		m7d_inc(&r, &rv);
+		
+    	rv = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[2][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[3][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        
+        t = tables5[0][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[1][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[2][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[3][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[4][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[5][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[6][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[7][v&31]; m7d_inc(&rv, &t);
+		
+		
+		//five
+		v  = a->units   & (~a->middle) & a->sign;
+		vtri_mul_3(&rv);
+
+		m7d_inc(&r, &rv);
+		
+		rv = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[2][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[3][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        
+        t = tables5[0][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[1][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[2][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[3][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[4][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[5][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[6][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[7][v&31]; m7d_inc(&rv, &t);
+		
+		//six
+		v  = (~a->units)   & (a->middle) & (a->sign);
+		vtri_mul_5(&rv);
+
+		m7d_inc(&r, &rv);
+		
+		rv = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[2][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        t = tables6[3][v&63]; m7d_inc(&rv, &t); v >>= 6;
+        
+        t = tables5[0][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[1][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[2][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[3][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[4][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[5][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[6][v&31]; m7d_inc(&rv, &t); v >>= 5;
+        t = tables5[7][v&31]; m7d_inc(&rv, &t);
+		vtri_mul_6(&rv);
+		
+    	m7d_inc(&r, &rv);
     	
     	
-    	
-    	vtri_mul_2(&r3);
-    	m7d_inc(&r1, &r2);
-    	m7d_inc(&r1, &r3);
- 		//m7d_inc(&r0, &t);
-    	//m7d_add2_i(r1, 
-    	
-    	
-		R[i][0] = r1;
+		R[i][0] = r;
         
     }
     
@@ -950,12 +997,12 @@ static inline  vtri *  m7d_transpose_vtri(vtri  **a, vtri  **b  )
       for(x = 0; x < 64; x ++)
       {
             
-        temp.units =  (a[x][0].units & (leftbit >> i) );
-        temp.sign =  (a[x][0].sign & (leftbit >> i) );
-        temp.middle =  (a[x][0].middle & (leftbit >> i) );
-        b[i][0].units = (temp.units) ?  b[i][0].units | (leftbit >> x) : b[i][0].units ;
-        b[i][0].sign = (temp.sign) ? b[i][0].sign | (leftbit >> x) : b[i][0].sign  ;
-        b[i][0].middle = (temp.middle) ? b[i][0].middle | (leftbit >> x) : b[i][0].middle;
+        temp.units =  (a[x][0].units & (rightbit <<  i) );
+        temp.sign =  (a[x][0].sign & (rightbit <<  i) );
+        temp.middle =  (a[x][0].middle & (rightbit <<  i) );
+        b[i][0].units = (temp.units) ?  b[i][0].units | (rightbit <<  x) : b[i][0].units ;
+        b[i][0].sign = (temp.sign) ? b[i][0].sign | (rightbit <<  x) : b[i][0].sign  ;
+        b[i][0].middle = (temp.middle) ? b[i][0].middle | (rightbit <<  x) : b[i][0].middle;
     
       }
     }
@@ -1194,8 +1241,8 @@ void  m7d_colswap(m7d_t *M, rci_t col_a, rci_t col_b)
          block_b = (col_b-1)/M1RI_RADIX;
          dif_a = col_a%M1RI_RADIX;
          dif_b = col_b%M1RI_RADIX;
-         a_place =  leftbit >>  dif_a ;
-         b_place =  leftbit >> dif_b ;
+         a_place =  rightbit <<   dif_a ;
+         b_place =  rightbit <<  dif_b ;
         if(block_a == block_b)
         { 
 
@@ -1248,8 +1295,8 @@ void m7d_colswap_capped_row(m7d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
          block_b = (col_b-1)/M1RI_RADIX;
          dif_a = col_a%M1RI_RADIX;
          dif_b = col_b%M1RI_RADIX;
-         a_place =  leftbit >>  dif_a ;
-         b_place =  leftbit >> dif_b ;
+         a_place =  rightbit <<   dif_a ;
+         b_place =  rightbit <<  dif_b ;
         if(block_a == block_b)
         { 
 

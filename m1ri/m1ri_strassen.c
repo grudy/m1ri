@@ -1027,65 +1027,61 @@ m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
 	} 
 	
 	else if (c->nrows != a->nrows || c->ncols != b->ncols) 
-		{
-			m1ri_die("m7d_mul_naive: Provided return matrix has wrong dimensions.\n");
+	{
+		m1ri_die("m7d_mul_naive: Provided return matrix has wrong dimensions.\n");
 	    	
 		
-		}
+	}
 		
 		
 		/** * arcr, acbr, bccc hold the padded matrix sizes*/
 		
 		
-		u_int32_t  arcr, acbr, bccc, g;
-		arcr = a->nrows;
-		acbr = a->ncols;
-		bccc  = b->ncols;
-		arcr =  powerof2(arcr);
-		acbr =  powerof2(acbr);
-		bccc =  powerof2(bccc);
-		g = (M1RI_RADIX  << 1);
-		while (arcr <  g)
-		{
-			arcr = arcr << 1;
-		
-		}
-		while (acbr < g )
-		{
-		acbr = 	acbr << 1;
-		
-		}
-		
-		while (bccc <  g)
-		{
-			bccc = bccc << 1;
-		
-		}
-		
-	
-		
-		if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
-		{
-			
-			m7d_t * padded_a,   * padded_b , * padded_c;
+		u_int32_t  arcr, acbr, bccc;
+	arcr = a->nrows;
+	acbr = a->ncols;
+	bccc = b->ncols;
 
-			padded_a = m7d_create( arcr, acbr);
-			padded_b = m7d_create( acbr, bccc);
-			padded_c = m7d_create( arcr, bccc);
-			m7d_copy(padded_a, a);
-			m7d_copy(padded_b, b);
-			m7d_mul_naive_square(padded_c, padded_a, padded_b); 
-			m7d_copy_cutoff(c, padded_c);
-			m7d_free(padded_a);
-			m7d_free(padded_b);
-			m7d_free(padded_c);
-		}
-			
-		else
-		{
-			m7d_mul_naive_square(c, a, b); 
-		}
+    
+	arcr =  powerof2(arcr);
+	acbr =  powerof2(acbr);
+	bccc =  powerof2(bccc);
 	
+	arcr = MAX(arcr, 64);
+	acbr = MAX(acbr, 64);
+	bccc = MAX(bccc, 64);
+	
+	int lasta, lastb, lastboth;
+	lasta = 64 - a->nrows%64;
+	lastb = 64 -  b->ncols%64;  
+	lastboth = 64 - a->nrows; 
+
+	
+	
+	if((arcr != a->nrows) || (acbr != a->ncols) || (bccc != b->ncols))
+	{
+		m7d_t * padded_a,   * padded_b , * padded_c;
+	
+	
+		padded_a = m7d_create(arcr, acbr);
+		padded_b = m7d_create(acbr, bccc);
+		padded_c = m7d_create(arcr, bccc);
+		padded_a = m7d_copy(padded_a, a);
+		padded_b = m7d_copy(padded_b, b);
+		padded_c = m7d_copy(padded_c, c);
+
+		m7d_mul_naive_square(padded_c, padded_a, padded_b); 
+		c  = m7d_copy_cutoff(c, padded_c);
+		m7d_free(padded_a);
+		m7d_free(padded_b);
+		m7d_free(padded_c);
+		
+	}
+		
+	else
+	{
+		m7d_mul_naive_square(c, a, b); 
+	}
 	
 	return c;
 	

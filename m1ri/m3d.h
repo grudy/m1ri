@@ -166,7 +166,7 @@ static inline void  * m3d_block_allocate(rci_t  nrows,  wi_t  width)
 {
 	
     //m3d_t * block = m1ri_calloc(nrows * width ,  sizeof(vbg) );
-    m3d_t * block = m1ri_calloc(nrows * width ,  sizeof(vbg) );
+    vbg * block = m1ri_calloc(nrows * width ,  sizeof(vbg) );
 
     return block;
 }

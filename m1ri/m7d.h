@@ -169,7 +169,7 @@ void  m7d_rowswap (m7d_t * M, rci_t row_a, rci_t  row_b);
 m7d_t *  m7d_copy(m7d_t  * , m7d_t const * );
 
 
-void m7d_copy_cutoff(m7d_t  * , m7d_t const * );
+m7d_t * m7d_copy_cutoff(m7d_t  * , m7d_t const * );
 
 
 void m7d_add_64(vtri ** , vtri **, vtri **);

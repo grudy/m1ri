@@ -193,8 +193,8 @@ static inline void m5d_quarter_free(m5_slice *a)
 static inline vfd  * m5d_block_allocate(vfd * block, rci_t  nrows,  wi_t  width)
 {
     
-    block  = m1ri_malloc(nrows * width * sizeof(vfd) );
-    return block;
+   	 block = m1ri_calloc(nrows * width ,  sizeof(vfd) );
+	return block;
      
 }
 /**
