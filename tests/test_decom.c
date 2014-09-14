@@ -210,7 +210,7 @@ void m7d_transpose_test(int y, int z)
 
  int main(int argc, const char * argv[])
 {
- 	/*
+ 	
 	m3d_transpose_test(64, 64);
 	
 	m3d_transpose_test(128, 128);
@@ -230,19 +230,19 @@ void m7d_transpose_test(int y, int z)
 	
 	m5d_transpose_test(512, 512);
 	
-		m5d_transpose_test(40, 120);
+	m5d_transpose_test(40, 120);
 	
 	m7d_transpose_test(64, 64);
 	
 	m7d_transpose_test(128, 128);
 
-*/
+
 
 	m7d_transpose_test(59, 59);
 
-//	m7d_transpose_test(40, 120);
+	m7d_transpose_test(40, 120);
 
-	//m7d_transpose_test(512, 512);
+	m7d_transpose_test(512, 512);
 
 
 	return 0;
