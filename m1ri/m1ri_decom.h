@@ -22,17 +22,27 @@
 
  */
  
-#ifndef M1RIPROJECT_M3D_DECOM_H
-#define M1RIPROJECT_M3D_DECOM_h
+#ifndef M1RIPROJECT_DECOM_H
+#define M1RIPROJECT_DECOM_h
 
 #include <stdlib.h>
 #include <m1ri/m1riwrappers.h>
+#include <m1ri/m3d.h>
+#include <m1ri/m5d.h>
+#include <m1ri/m7d.h>
+#include <m1ri/m1ri_io.h>
 
 
 
 
+void  m3d_transpose_64( vbg **, vbg ** );
+m3d_t * m3d_transpose(m3d_t *, m3d_t const  *);
 
+void  m5d_transpose_64( vfd **, vfd ** );
+m5d_t * m5d_transpose(m5d_t *, m5d_t const  *);
 
+void  m7d_transpose_64( vtri **, vtri ** );
+m7d_t * m7d_transpose(m7d_t *, m7d_t const  *);
 /**
 	\brief Solves L X = B with X and B matrices and L upper triangular
 	\ X replaces B
@@ -97,6 +107,9 @@ void m3d_inverse_triangular(m3d_t * a);
 
 
 void m5d_inverse_triangular(m5d_t * a);
+
+
+m3d_t * m3d_transpose(m3d_t *, m3d_t const  *);
 
 
 void m7d_inverse_triangular(m7d_t * a);

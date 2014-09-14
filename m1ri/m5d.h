@@ -133,6 +133,9 @@ typedef struct
 	param  x addend
 	\return r as sum
 */
+
+
+
 static inline void m5d_inc(vfd *r,vfd *x)
 {
     vec c, d, e, f, g, h, i, j, k, l, m, n ,o, p, q;
@@ -143,17 +146,17 @@ static inline void m5d_inc(vfd *r,vfd *x)
     g = f | x->middle;
     h = f ^ r->sign;
     i = h | e;
-	r->sign = i;  /** */
+	r->sign = i;  
     j = i ^ x->units;
     k = j ^ r->middle;
     l = k | c;
     m = l ^ e;
     n = m ^ g;
-	r->middle = n; /** */
+	r->middle = n; 
     o = m | d;
     p = o ^ c;
     q = p^n;
-    r->units = q; /** */
+    r->units = q; 
    
 }
 
@@ -374,7 +377,7 @@ m5d_t * m5d_create( rci_t nrows, rci_t ncols);
 
 
 
-vfd * m5d_rand(m5d_t * );
+void m5d_rand(m5d_t * );
 
 /** 
  \brief Make an Identity Matrix
@@ -538,7 +541,6 @@ void m5d_mul4(vfd * );
 
 void m5d_mul_64(vfd **, vfd **, vfd **);
 
-void  m5d_transpose(m5d_t   * a);
 
 
 
@@ -566,7 +568,7 @@ void  m5d_slices(m5_slice *  , m5d_t * , wi_t );
 m5_slice *  m5d_quarter(const m5d_t * );
 
 
-m5d_t *  m5d_transpose_sliced(m5d_t * );
+
 
 m5d_t  * m5_blockslice_allocate( rci_t  ,  wi_t  );
 

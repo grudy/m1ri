@@ -304,6 +304,9 @@ void m7d_apply_p_right_trans(m7d_t *, m7p_t const *);
  * \param Q Permutation.
  */
 void  m3d_apply_p_right_trans_tri(m3d_t *, m3p_t const *);
+
+
+
 void  m5d_apply_p_right_trans_tri(m5d_t *, m5p_t const *);
 void  m7d_apply_p_right_trans_tri(m7d_t *, m7p_t const *);
 

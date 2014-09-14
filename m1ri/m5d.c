@@ -221,7 +221,7 @@ m5d_t *    m5d_init_window(const m5d_t *c,const rci_t strow, const rci_t stvfd, 
     return submatrix;
 }
 
-vfd * m5d_rand(m5d_t * a)
+void m5d_rand(m5d_t * a)
 {
     int i,  z;
     rci_t cutoff = a->ncols% 64;
@@ -1041,46 +1041,6 @@ void  m5d_slices(m5_slice *  c, m5d_t * a, wi_t slicesize)
     }
 }
 
-static inline vfd *  m5d_transpose_vfd(vfd  **a, vfd  **b  )
-{
-    int i, x;
-    vfd temp;
-    for(i = 0; i <64; i ++)
-    {
-      for(x = 0; x < 64; x ++)
-       {
-       
-        temp.units =  (a[x][0].units & (rightbit << i ) );
-        temp.sign =  (a[x][0].sign & (rightbit <<  i) );
-        temp.middle =  (a[x][0].middle & (rightbit << i) );    
-        b[i][0].units = (temp.units) ?  b[i][0].units | (rightbit << x) : b[i][0].units ;
-        b[i][0].sign = (temp.sign) ? b[i][0].sign | (rightbit << x) : b[i][0].sign  ;
-        b[i][0].middle = (temp.middle) ? b[i][0].middle | (rightbit <<  x) : b[i][0].middle;    
-        }
-
-    }
-    
-    return *b;
-}
-
-m5d_t *  m5d_transpose_sliced(m5d_t * a)
-{
-    int x, y;
-    m5d_t * c;
-    c = m5d_create(a->ncols, a->nrows);
-    m5_slice * b, *d;
-    d = malloc(sizeof(m5_slice));
-    b = malloc(sizeof(m5_slice));
-    m5d_slices(b, a, 1);
-    m5d_slices(d, c, 1);
-    for (x = 0; x < b->nrows; x++) {
-        for (y = 0; y < b->ncols; y ++) {
-			m5d_transpose_vfd(b->row[x][y].rows, d->row[y][x].rows);  
-        }
-    }
-    return c;
-}
-
 
 /*
 m5d_init_window without checks
@@ -1449,33 +1409,6 @@ void m5d_colswap_capped_row(m5d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
     } 
 
 }
-
-
-void  m5d_transpose(m5d_t   * a)
-{
-
-   
-  	int x, y;
-    m5d_t * c;
-    c = m5d_create( a->ncols, a->nrows);
-    m5_slice * b, *d;
-    d = malloc(sizeof(m5_slice));
-    b = malloc(sizeof(m5_slice));
-    m5d_slices(b, a, 1);
-    m5d_slices(d, c, 1);
-    for (x = 0; x < b->nrows; x++) 
-    {
-        for (y = 0; y < b->ncols; y ++) 
-        {
-         	 m5d_transpose_vfd(b->row[x][y].rows, d->row[y][x].rows);
-            
-        }
-    }
-
-
-   
-}
-
 
 int m5d_is_zero(const m5d_t *A)
 {

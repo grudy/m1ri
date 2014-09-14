@@ -356,7 +356,7 @@ void vtri_negate(vtri * a)
 	a->sign = !a->sign;
 }
 /** Fills a matrix over GF(7) with random Variables*/
-m7d_t  m7d_rand(m7d_t * a)
+void  m7d_rand(m7d_t * a)
 {
     int i;
     
@@ -372,7 +372,7 @@ m7d_t  m7d_rand(m7d_t * a)
    		a->block[i].units  =  a->block[i].units | temp;
    		
     }
-    return *a;
+
 }
 
 
@@ -559,7 +559,7 @@ void m7d_sub_64(vtri **R, vtri  **A, vtri  **B)
     }
     
 }
-m7d_t * m7d_sub(m7d_t * r, const   m7d_t  *x, const m7d_t  *y)
+m7d_t * m7d_sub(m7d_t * r,    m7d_t  const *x,  m7d_t const *y)
 {
 	
 	if (r == NULL)
@@ -591,53 +591,33 @@ m7d_t * m7d_sub(m7d_t * r, const   m7d_t  *x, const m7d_t  *y)
     return r;
 }
 
+/**
+  Checks if an m7d_t is equal to another.
+*/
 int m7d_equal(m7d_t const *a, m7d_t const *b)
 {
-	u_int64_t temp = (a->ncols%64 == 0)? 0:  ((rightbit << ((a->ncols%64 ) - 1)) -1) ;
-	temp = ~temp;
     if ((a->nrows != b->nrows)    || ( a->ncols != b->ncols)  )
     {
         return 0;
     }
-   
-  
+    int i, j;
     
-    for(int i = 0; i < a->nrows; i++)
+    for( i = 0; i < a->nrows; i++)
     {
         
-        for(int j = 0; j < (b->width -1); j++)
+        for(j = 0; j < b->width; j++)
         {
-            if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].units != b->rows[i][j].units ) || (a->rows[i][j].middle != b->rows[i][j].middle ))
+            if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].units != b->rows[i][j].units) ||(a->rows[i][j].middle != b->rows[i][j].middle) )
             {
+                printf("row [%d][%d] not equal \n", i, j);
                 return 0;
             }
+             printf("row [%d][%d]  equal \n", i, j);
             
         }
     }
-	
-	for(int i = 0; i < a->nrows; i++)
-    {
-        
-        for(int j =  b->width - 1; j < b->width; j++)
-        {
-            if(((a->rows[i][j].sign & temp )!= (b->rows[i][j].sign & temp)) ||
-             ((a->rows[i][j].units & temp) != (b->rows[i][j].units & temp)) ||
-              ((a->rows[i][j].middle & temp) != (b->rows[i][j].middle & temp)))
-            {
-        
-                return 0;
-            
-          
-			}            
-        }
-    }
-	
-     
-       
     return 1;
 }
-
-
 
 
 m7d_t *  m7d_copy_cutoff(m7d_t  * r, m7d_t  const * x)
@@ -654,16 +634,7 @@ m7d_t *  m7d_copy_cutoff(m7d_t  * r, m7d_t  const * x)
 	return r;
 }
 
-void m7d_add_64(vtri **R, vtri   **A, vtri  **B)
-{
-    int i;
-    for (i = 0; i < M1RI_RADIX; i++ )
-    {
-    	add_vtri(&R[i][0], &A[i][0], &B[i][0]);
-       /*  R[i][0] = add_m7dr(A[i][0], B[i][0]); */
-    }
 
-}
 
 m7d_t * m7d_add(m7d_t * c,const   m7d_t *a, const m7d_t *b)
 {
@@ -923,27 +894,6 @@ m7d_t ** m7_rowslice_allocate(m7d_t * block,  wi_t width, rci_t nrows)
 
 
 
-static inline  vtri *  m7d_transpose_vtri(vtri  **a, vtri  **b  )
-{
-    int i, x;
-    vtri temp;
-    for(i = 0; i <64; i ++)
-    {
-      for(x = 0; x < 64; x ++)
-      {
-            
-        temp.units =  (a[x][0].units & (rightbit <<  i) );
-        temp.sign =  (a[x][0].sign & (rightbit <<  i) );
-        temp.middle =  (a[x][0].middle & (rightbit <<  i) );
-        b[i][0].units = (temp.units) ?  b[i][0].units | (rightbit <<  x) : b[i][0].units ;
-        b[i][0].sign = (temp.sign) ? b[i][0].sign | (rightbit <<  x) : b[i][0].sign  ;
-        b[i][0].middle = (temp.middle) ? b[i][0].middle | (rightbit <<  x) : b[i][0].middle;
-    
-      }
-    }
-    
-    return *b;
-}
 
 void  m7d_slices(m7_slice *  c, m7d_t * a, wi_t slicesize)
 {
@@ -991,31 +941,6 @@ void  m7d_slices(m7_slice *  c, m7d_t * a, wi_t slicesize)
     }
    
 }
-
-m7d_t * m7d_transpose_sliced(m7d_t * a)
-{
-    int x, y;
-    m7d_t *  c;
-    c = m7d_create( a->ncols, a->nrows);
-    m7_slice * b, *d;
-    d = malloc(sizeof(m7_slice));
-    b = malloc(sizeof(m7_slice));
-    m7d_slices(b, a, 1);
-    m7d_slices(d, c, 1);
-    for (x = 0; x < b->nrows; x++)
-     {
-        for (y = 0; y < b->ncols; y ++)
-         {
-         
-         	m7d_transpose_vtri(b->row[x][y].rows, d->row[y][x].rows);  
-         	 
-        }
-    }
-    
-    return c;
-}
-
-
 
 
 m7_slice *  m7d_quarter(const  m7d_t * a)
@@ -1273,29 +1198,6 @@ void m7d_colswap_capped_row(m7d_t *M, rci_t col_a, rci_t col_b, rci_t start_row)
 }
 
 
-
-void  m7d_transpose(m7d_t   * a)
-{
-
-   
-  int x, y;
-     m7d_t * c;
-    c = m7d_create( a->ncols, a->nrows);
-    m7_slice * b, *d;
-    d = malloc(sizeof(m7_slice));
-    b = malloc(sizeof(m7_slice));
-    m7d_slices(b, a, 1);
-    m7d_slices(d, c, 1);
-    for (x = 0; x < b->nrows; x++) {
-        for (y = 0; y < b->ncols; y ++) {
-         m7d_transpose_vtri(b->row[x][y].rows, d->row[y][x].rows);
-            
-        }
-    }
-
-
-   
-}
 
 
 int m7d_is_zero(const m7d_t *A)

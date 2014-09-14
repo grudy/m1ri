@@ -254,12 +254,13 @@ int main(int argc, const char * argv[])
 	m3d_strassen_test(16384, 16384);
 	
 	*/
- 	m3d_classic_mul_test(64, 64);
+ 	//m3d_classic_mul_test(64, 64);
    	//m3d_classic_mul_test(256, 256);
    //	m3d_classic_mul_test(512, 512);
 	//m3d_classic_mul_test(1024, 1024);
 	//m3d_classic_mul_test(2048, 2048);
     m3d_classic_mul_test(4096, 4096);
+    m3d_strassen_test(4096, 4096);
    // m3d_classic_mul_test(8192, 8192);
 	//m3d_classic_mul_test(16384, 16384);     
 

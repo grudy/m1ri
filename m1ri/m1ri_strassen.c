@@ -286,7 +286,6 @@ m3d_t * m3d_classic_mul(m3d_t *c,  m3d_t  const *a,  m3d_t const *b)
 		padded_c = m3d_create(arcr, bccc);
 		padded_a = m3d_copy(padded_a, a);
 		padded_b = m3d_copy(padded_b, b);
-		padded_c = m3d_copy(padded_c, c);
 
 		m3d_mul_naive_square(padded_c, padded_a, padded_b); 
 		c  = m3d_copy_cutoff(c, padded_c);
@@ -452,7 +451,7 @@ m3d_t *  m3d_strassen(m3d_t *c, m3d_t  const *a, m3d_t  const  *b)
 		padded_c = m3d_create(arcr, bccc);
 		padded_a = m3d_copy(padded_a, a);
 		padded_b = m3d_copy(padded_b, b);
-		//padded_c = m3d_copy(padded_c, c);
+		
 	
 		m3d_qrt_mul(padded_c, padded_a, padded_b); 
 		c  = m3d_copy_cutoff(c, padded_c);
@@ -832,7 +831,7 @@ static inline void m7d_qrt_mul(m7d_t * c,const m7d_t *   a, const m7d_t *   b )
 /**
   Strassen  algorithm on an m7d_t	
 */
-m7d_t *  m7d_strassen(m7d_t *c,const m7d_t  *a,const m7d_t   *b)
+m7d_t *  m7d_strassen(m7d_t *c, m7d_t const *a, m7d_t  const *b)
 {
 	if (c == NULL)
 	{
@@ -874,7 +873,6 @@ m7d_t *  m7d_strassen(m7d_t *c,const m7d_t  *a,const m7d_t   *b)
 		padded_a = m7d_create(arcr, bccc);
 		padded_a = m7d_copy(padded_a, a);
 		padded_b = m7d_copy(padded_b, b);
-		padded_c = m7d_copy(padded_c, c);
 	
 	
 		m7d_qrt_mul(padded_c, padded_a, padded_b); 
@@ -953,7 +951,6 @@ m5d_t * m5d_classic_mul(m5d_t *c, const m5d_t  *a, const m5d_t  *b)
 		padded_c = m5d_create(arcr, bccc);
 		padded_a = m5d_copy(padded_a, a);
 		padded_b = m5d_copy(padded_b, b);
-		padded_c = m5d_copy(padded_c, c);
 
 		m5d_mul_naive_square(padded_c, padded_a, padded_b); 
 		c  = m5d_copy_cutoff(c, padded_c);
@@ -1037,7 +1034,7 @@ static inline void m7d_mul_naive_square(m7d_t *c,  m7d_t const *a,  m7d_t  const
     m7d_quarter_free(c_slice);
 
 }
-m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
+m7d_t * m7d_classic_mul(m7d_t *c,  m7d_t const *a,  m7d_t const *b)
 {
 	if (c == NULL)
 	{
@@ -1087,7 +1084,6 @@ m7d_t * m7d_classic_mul(m7d_t *c, const m7d_t  *a, const m7d_t  *b)
 		padded_c = m7d_create(arcr, bccc);
 		padded_a = m7d_copy(padded_a, a);
 		padded_b = m7d_copy(padded_b, b);
-		padded_c = m7d_copy(padded_c, c);
 
 		m7d_mul_naive_square(padded_c, padded_a, padded_b); 
 		c  = m7d_copy_cutoff(c, padded_c);

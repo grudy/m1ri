@@ -197,8 +197,10 @@
    	
    	}
    	
-
-   	
+   	printf("m7d_test_inc a");
+   	m7d_print(a);
+   	printf("m7d_test_inc c");
+	m7d_print(c);
    	if(m7d_equal(a, c))
     {
      	{
@@ -390,7 +392,6 @@ int main(int argc, const char * argv[])
     m7d_test_addition(64, 44);
     m7d_test_addition(142, 181);
     printf("\nm7d addition and subtraction test passed\n");
-	
 	
   
   

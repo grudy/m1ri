@@ -15,8 +15,8 @@ TESTS = \
 	m5d_tests.c	\
 	test_m7d.c
     test_arithmetic.c\
-    test_permutations.c
-    
+    test_permutations.c\
+    test_decom.c
 
 pkgincludesubdir = $(includedir)/m1ri
 M1RI_HEADERS = ../src/m1ri/m5d.h\

@@ -193,7 +193,6 @@ m7d_t *  m7d_copy(m7d_t  * , m7d_t const * );
 m7d_t * m7d_copy_cutoff(m7d_t  * , m7d_t const * );
 
 
-void m7d_add_64(vtri ** , vtri **, vtri **);
 
 
 
@@ -231,7 +230,7 @@ m7d_t  * m7d_create(rci_t nrows, rci_t ncols);
  
  */
 void reduce_vtri( vtri * );
-m7d_t m7d_rand(m7d_t * a);
+void m7d_rand(m7d_t * a);
 /** 
  \brief Make an Identity Matrix
  \a = Identity matrix
@@ -314,7 +313,7 @@ void vtri_negate( vtri * );
  matrix r = (direct sum matrix r + matrix x)
  ******************************/
 
-static inline void add_vtri(vtri * r, vtri * x, vtri * y)
+static inline void add_vtri(vtri * r, vtri  const * x, vtri const * y)
 
 {
     
@@ -349,6 +348,29 @@ static inline void add_vtri(vtri * r, vtri * x, vtri * y)
 }
 
 
+
+/**
+
+ \Brief Add a 64 by 64 m3d_t matrix where the 
+ \param R = Where sum is written, may be Null 
+ \param A = augend
+ \param B = addend
+ \Assumes there are 64 values, doesn't check
+*/
+
+
+
+static inline void m7d_add_64(vtri **R, vtri   * const *A, vtri  * const *B)
+{
+    int i;
+    for (i = 0; i < M1RI_RADIX; i++ )
+    {
+    	add_vtri(&R[i][0], &A[i][0], &B[i][0]);
+       /*  R[i][0] = add_m7dr(A[i][0], B[i][0]); */
+    }
+
+}
+
 static inline void m7d_dec(vtri  * x, vtri * y)
 {
 	vtri temp;
@@ -358,6 +380,17 @@ static inline void m7d_dec(vtri  * x, vtri * y)
    	m7d_inc( x, &temp);
 
 }
+
+
+
+/**
+ * \brief subtract a by by vector b.   The difference is vector r.
+ * \param r = matrix, may be null 
+ * \param x = minuend
+ * \param y = subtrahend
+ * \
+ * \returns r with difference
+ */
 
 m7d_t *  m7d_sub(m7d_t *,   const  m7d_t  *, const m7d_t  *);
 
@@ -416,7 +449,6 @@ void  m7d_slices(m7_slice *  , m7d_t * , wi_t );
 m7_slice * m7d_quarter(const m7d_t * );
 
 
-m7d_t * m7d_transpose_sliced(m7d_t * );
 m7d_t  * m7_blockslice_allocate( rci_t  ,  wi_t  );
 m7d_t ** m7_rowslice_allocate(m7d_t * ,  wi_t , rci_t );
 
@@ -427,7 +459,7 @@ void m7d_mul_64(vtri **, vtri **, vtri **);
 
 
 
-void  m7d_transpose(m7d_t   * );
+
 m7d_t * m7d_hadamard(m7d_t * ,const m7d_t  * ,const m7d_t  *  );
 
 
@@ -457,8 +489,8 @@ static inline void m7d_col_swap_in_rows(m7d_t *M, rci_t col_a, rci_t col_b, rci_
          block_b = (col_b-1)/M1RI_RADIX;
          dif_a = col_a%M1RI_RADIX;
          dif_b = col_b%M1RI_RADIX;
-         a_place =  leftbit >>  dif_a ;
-         b_place =  leftbit >> dif_b ;
+         a_place =  rightbit <<  dif_a ;
+         b_place =  rightbit << dif_b ;
         if(block_a == block_b)
         { 
 

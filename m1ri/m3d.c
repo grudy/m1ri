@@ -287,29 +287,6 @@ void  m3d_rand(m3d_t * a)
 
 
 
-m3d_t * m3d_transposewin(const m3d_t  *a )
-{
-    m3d_t *b = m1ri_malloc(sizeof(m3d_t));
-    b = m3d_create(a->nrows, a->ncols);
-	int i, x;
-	vbg temp;
-	for(i = 0; i < a->nrows; i ++)
-	{
-	for(x = 0; x < a->ncols; x ++)
-	{
-	
-		temp.units =  (a->rows[x][0].units & (rightbit << i) );
-		temp.sign =  (a->rows[x][0].sign & (rightbit << i) );
-		b->rows[i][0].units = (temp.units) ?  b->rows[i][0].units | (rightbit <<  x) : b->rows[i][0].units ;
-        b->rows[i][0].sign = (temp.sign) ? b->rows[i][0].sign | (rightbit <<  x) : b->rows[i][0].sign  ;      
-	}
-	
-
-    }
-                                                
-        return b;
-                                                
-}
 
                                                                                         
 static inline void m3d_set_one_ui(m3d_t * a)
@@ -669,7 +646,8 @@ void m3d_free( m3d_t *  a)
     m1ri_free(a->rows);
     if(a->flags == notwindowed)
     {
-	  m1ri_free(a->block); 	
+    
+		m1ri_free(a->block); 	
 	}
     
     m1ri_free(a);
@@ -782,66 +760,9 @@ m3_slice * m3d_quarter( m3d_t  const * a)
     return c;
 }
 
-static inline vbg *  m3d_transpose_vbg(vbg  **a, vbg  **b  )
-{
-    int i, x;
-    vbg temp;
-    for(i = 0; i <64; i ++)
-    {
-        for(x = 0; x < 64; x ++)
-        {
-        	temp.units =  (a[x][0].units & (rightbit << i) );
-        	temp.sign =  (a[x][0].sign & (rightbit << i ) );
-       	   	b[i][0].units = (temp.units) ?  b[i][0].units | (rightbit << x) : b[i][0].units ;
-       		b[i][0].sign = (temp.sign) ? b[i][0].sign | (rightbit << x) : b[i][0].sign  ;
-        }
-    }
-    return *b;
-}
-
-m3d_t * m3d_transpose_sliced(m3d_t * a)
-{
-    int x, y;
-    m3d_t * c;
-    c = m3d_create(a->ncols, a->nrows);
-    m3_slice * b, *d;
-    d = malloc(sizeof(m3_slice));
-    b = malloc(sizeof(m3_slice));
-    m3d_slices(b, a, 1);
-    m3d_slices(d, c, 1);
-    for (x = 0; x < b->nrows; x++) {
-        for (y = 0; y < b->ncols; y ++) {
-         m3d_transpose_vbg(b->row[x][y].rows, d->row[y][x].rows);
-            
-        }
-    }
-    return c;
-  
-}
 
 
-void  m3d_transpose(m3d_t   * a)
-{
 
-   
-  	int x, y;
-    m3d_t * c;
-    c = m3d_create( a->ncols, a->nrows);
-    m3_slice * b, *d;
-    d = malloc(sizeof(m3_slice));
-    b = malloc(sizeof(m3_slice));
-    m3d_slices(b, a, 1);
-    m3d_slices(d, c, 1);
-    for (x = 0; x < b->nrows; x++) {
-        for (y = 0; y < b->ncols; y ++) {
-         m3d_transpose_vbg(b->row[x][y].rows, d->row[y][x].rows);
-            
-        }
-    }
-
-
-   
-}
 
 m3d_t *  m3d_copy(m3d_t * a, m3d_t const *b)
 {
@@ -1429,7 +1350,6 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B)
   
   return C;
 }
-
 
 
 

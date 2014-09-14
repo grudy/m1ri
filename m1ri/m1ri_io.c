@@ -176,7 +176,7 @@ static inline void print_m3d_block(vec a, vec b, u_int32_t l_unused, u_int32_t r
      } 
 
 
-    printf("\n \n \n ");
+    printf("\n \n \n");
     
 }
 void print_m5d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
@@ -251,7 +251,7 @@ void m5d_print(const m5d_t *a)
             printf("\n");
     }
     
-    printf("\n \n \n ");
+    printf("\n \n \n");
 }
 
 static inline void print_m7d_block(vec a, vec b, vec c,  u_int32_t l_unused, u_int32_t r_unused)
@@ -342,7 +342,7 @@ void m7d_print(const m7d_t *a)
             printf("\n");
     }
     
-    printf("\n \n \n ");
+    printf("\n \n \n");
 }
 
 void m3d_specs(const m3d_t * a)

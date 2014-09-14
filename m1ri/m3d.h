@@ -93,8 +93,8 @@ typedef struct
  y = columns
  M = Matrix read from
  *
-void m3d_transpose( m3d_t   *);
-*/
+ */
+
 
 /**
  \Brief Read n sign bits
@@ -126,8 +126,6 @@ vec m3d_ru_bits(m3d_t const  *, rci_t  , rci_t  , int  );
 vbg m3d_read_elems(m3d_t const *, rci_t  , rci_t  , int  );
 
 
-
-//m3d_t *  m3d_transposewin(const m3d_t   * );
 
 /**
  \Brief Swap rows in m3d_t 
@@ -407,13 +405,6 @@ m3_slice *  m3d_quarter( const m3d_t * a );
 
 
 
-/**
- * \brief Creates 4 equally sized windows  
- * \param a Matrix over GF(3) 
- * \
- * \ 
- */
-m3d_t  * m3d_transpose_sliced(m3d_t * );
 
 /**
  \Brief Swap columns in m3d_t after a certain row
@@ -556,7 +547,7 @@ static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 /**
 
-	Same as m3d_add, but without the checks for proper values.
+	/brief Same as m3d_add, but without the checks for proper values.
 
 */
 
@@ -628,11 +619,8 @@ m3d_t * m3d_hadamard(m3d_t * , m3d_t const * , m3d_t const * );
 
 
 
-/** * * * * * * * * * * * * * * * * * * * * * *
- Add a 1 kilobyte Matrix from another
- 1 kilobyte Matrix
- * * * * * * * * * * * * * * * * * * * * * * */
- /**
+/**
+
  \Brief Add a 64 by 64 m3d_t matrix where the 
  \param R = Where sum is written, may be Null 
  \param A = augend
