@@ -358,20 +358,65 @@ void vtri_negate(vtri * a)
 /** Fills a matrix over GF(7) with random Variables*/
 void  m7d_rand(m7d_t * a)
 {
-    int i;
-    
-    for( i = 0; i < (a->nrows * a->width); i++)
+
+	int i,  z;
+    rci_t cutoff = a->ncols% 64;
+    if(cutoff)
     {
-        
-        a->block[i].sign = m1ri_rand();
-        a->block[i].middle = m1ri_rand() ;
-        a->block[i].units = m1ri_rand();
-        vec temp = (~(a->block[i].sign) & ~(a->block[i].middle) & ~(a->block[i].units));
-   		a->block[i].sign   = a->block[i].sign | temp;
-   		a->block[i].middle = a->block[i].middle | temp;
-   		a->block[i].units  =  a->block[i].units | temp;
-   		
+    
+    
+    	vec mask_rand = (rightbit  << (cutoff )) - 1;
+    	//mask_rand = ~mask_rand;
+    	
+    	for(i = 0; i < (a->nrows); i++)
+   	 	{
+        	for( z = 0; z  < (a->width - 1 ); z++)
+            {  
+       			a->rows[i][z].sign = m1ri_rand();
+       			a->rows[i][z].units = m1ri_rand();
+       			a->rows[i][z].middle = m1ri_rand();
+       			
+       			a->rows[i][z].units =  (a->rows[i][z].units)  |  ~(a->rows[i][z].middle | a->rows[i][z].sign); 
+            
+            
+            }
+				a->rows[i][z].sign = m1ri_rand();
+       			a->rows[i][z].units = m1ri_rand();
+       			a->rows[i][z].middle = m1ri_rand();
+       			
+       			a->rows[i][z].units =  (a->rows[i][z].units)  |  ~(a->rows[i][z].middle | a->rows[i][z].sign); 
+            
+       			a->rows[i][z].sign = a->rows[i][z].sign & mask_rand;
+       			a->rows[i][z].middle  = a->rows[i][z].middle & mask_rand;
+
+       			a->rows[i][z].units = a->rows[i][z].units & mask_rand;
+            
+   	 	}
+    
+    
+    
     }
+    
+    else
+    {
+    	for(i = 0; i < (a->nrows); i++)
+   	 	{
+        	for( z = 0; z  < (a->width); z++)
+            {  
+       			a->rows[i][z].sign = m1ri_rand();
+       			a->rows[i][z].units = m1ri_rand();
+       			a->rows[i][z].middle = m1ri_rand();
+       			
+       			a->rows[i][z].units =  (a->rows[i][z].units)  |  ~(a->rows[i][z].middle | a->rows[i][z].sign);  
+            
+            
+            }
+    
+   	 	}
+ 	}   
+ 	
+ 	
+ 	
 
 }
 
@@ -601,21 +646,62 @@ int m7d_equal(m7d_t const *a, m7d_t const *b)
         return 0;
     }
     int i, j;
-    
-    for( i = 0; i < a->nrows; i++)
+    if(!(a->ncols%M1RI_RADIX))
     {
+    	for( i = 0; i < a->nrows; i++)
+    	{
         
-        for(j = 0; j < b->width; j++)
-        {
-            if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].units != b->rows[i][j].units) ||(a->rows[i][j].middle != b->rows[i][j].middle) )
-            {
-                printf("row [%d][%d] not equal \n", i, j);
+        	for(j = 0; j < b->width; j++)
+        	{
+        	
+        
+            	if((a->rows[i][j].sign != b->rows[i][j].sign) || (a->rows[i][j].units != b->rows[i][j].units) ||(a->rows[i][j].middle != b->rows[i][j].middle) )
+            	{
+                //printf("row [%d][%d] not equal \n", i, j);
                 return 0;
-            }
-             printf("row [%d][%d]  equal \n", i, j);
+            	}
+             //printf("row [%d][%d]  equal \n", i, j);
             
-        }
+        	}
+    	}
     }
+    else if (a->ncols%M1RI_RADIX)
+    {
+    	vec temp = (rightbit << a->ncols%M1RI_RADIX) - 1;
+    	for( i = 0; i < a->nrows; i++)
+    	{
+        
+        	for(j = 0; j < b->width; j++)
+        	{
+        	
+        
+            	if((a->rows[i][j].sign & temp) != (b->rows[i][j].sign & temp))
+            	{
+            		return 0;
+            	
+            	} 
+            	
+            	if ((a->rows[i][j].units & temp) != (b->rows[i][j].units & temp)) 
+            	{
+            		return 0;
+
+            	
+            	}
+            	
+            	if((a->rows[i][j].middle & temp) != (b->rows[i][j].middle & temp)) 
+            	{
+            		return 0;
+
+            	
+            	}
+            	
+            	
+            
+            
+        	}
+    	}
+    
+    }	
     return 1;
 }
 

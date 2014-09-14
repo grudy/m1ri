@@ -377,6 +377,7 @@ static inline void m7d_dec(vtri  * x, vtri * y)
    	temp.units = ~y->units;
    	temp.middle = ~y->middle;
    	temp.sign = ~y->sign;
+   	
    	m7d_inc( x, &temp);
 
 }

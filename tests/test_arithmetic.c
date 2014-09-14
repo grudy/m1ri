@@ -186,7 +186,7 @@
     m7d_rand(a);
     m7d_rand(b);
     c = m7d_copy(c, a); 
-    
+  
    	for(int i = 0; i < m; i++)
    	{
    		for(int j = 0; j < M1RI_DN(n, 64); j++)
@@ -196,11 +196,7 @@
    	  	}
    	
    	}
-   	
-   	printf("m7d_test_inc a");
-   	m7d_print(a);
-   	printf("m7d_test_inc c");
-	m7d_print(c);
+
    	if(m7d_equal(a, c))
     {
      	{
@@ -210,7 +206,7 @@
          }
     
     }
-   	
+  	
    for(int i = 0; i < m; i++)
    	{
    		for(int j = 0; j < M1RI_DN(n, 64); j++)
@@ -222,8 +218,7 @@
    	}
    	
 
-
-
+	
 	if(!(m7d_equal(a, c)))
     {
      	{
@@ -232,7 +227,7 @@
          }
     
     }
-  
+
   m7d_free(a);
   m7d_free(b);
   m7d_free(c);
@@ -372,7 +367,9 @@ int main(int argc, const char * argv[])
     
     
     
-    m7d_test_inc(4, 4);
+    m7d_test_inc(1, 4);
+    
+   	
 	m7d_test_inc(64, 64);
     m7d_test_inc(64, 4);
     m7d_test_inc(4, 800);
@@ -380,7 +377,7 @@ int main(int argc, const char * argv[])
     m7d_test_inc(342, 64);
     m7d_test_inc(64, 44);
     m7d_test_inc(142, 181);
-            
+          
             
     printf("\nm7d_inc test passed \n");        
     m7d_test_addition(4, 4);
@@ -392,9 +389,8 @@ int main(int argc, const char * argv[])
     m7d_test_addition(64, 44);
     m7d_test_addition(142, 181);
     printf("\nm7d addition and subtraction test passed\n");
-	
-  
-  
+
+
   return 0;
   
 
