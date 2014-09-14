@@ -426,6 +426,7 @@ m7d_t ** m7_rowslice_allocate(m7d_t * ,  wi_t , rci_t );
 void m7d_mul_64(vtri **, vtri **, vtri **);
 
 
+
 void  m7d_transpose(m7d_t   * );
 m7d_t * m7d_hadamard(m7d_t * ,const m7d_t  * ,const m7d_t  *  );
 

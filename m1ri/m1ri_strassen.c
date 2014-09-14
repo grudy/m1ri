@@ -456,7 +456,6 @@ m3d_t *  m3d_strassen(m3d_t *c, m3d_t  const *a, m3d_t  const  *b)
 	
 		m3d_qrt_mul(padded_c, padded_a, padded_b); 
 		c  = m3d_copy_cutoff(c, padded_c);
-		//m3d_print(padded_c);
 		m3d_free(padded_a);
 		m3d_free(padded_b);
 		m3d_free(padded_c);
@@ -483,7 +482,7 @@ m3d_t *  m3d_strassen(m3d_t *c, m3d_t  const *a, m3d_t  const  *b)
 
 
 /**
-	Recursive Matrix Multiplication over GF(5), on a square matrix.
+	/brief Recursive Matrix Multiplication over GF(5), on a square matrix.
 */
 static inline void m5d_mul_naive_square(m5d_t *c,  m5d_t const *a,  m5d_t  const *b)
 {
@@ -492,7 +491,6 @@ static inline void m5d_mul_naive_square(m5d_t *c,  m5d_t const *a,  m5d_t  const
   	m5_slice *  a_slice, *  b_slice, *  c_slice;
 
    	a_slice = m5d_quarter( a);
-   /* m5d_print(a_slice->row[0][0]); */
     b_slice = m5d_quarter( b);
     c_slice = m5d_quarter(c);
    
@@ -543,7 +541,7 @@ static inline void m5d_mul_naive_square(m5d_t *c,  m5d_t const *a,  m5d_t  const
 
 
 /**
-	This handles the arithmetic of m5d_strassen
+	/brief This handles the arithmetic of m5d_strassen
 */
 
 static inline void m5d_qrt_mul(m5d_t * c,const m5d_t *   a, const m5d_t *   b )
@@ -573,7 +571,6 @@ static inline void m5d_qrt_mul(m5d_t * c,const m5d_t *   a, const m5d_t *   b )
         m5d_sub(x1 ,  a_slice->row[0], a_slice->row[2]);      // 1 
        	m5d_sub(x2, b_slice->row[3],b_slice->row[1]);      // 2 
         m5d_qrt_mul(c_slice->row[2], x1, x2);      // 3 
-        
         
         
         m5d_add(x1, a_slice->row[2],a_slice->row[3]);      // 4 

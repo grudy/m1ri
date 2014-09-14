@@ -552,6 +552,12 @@ int main(int argc, const char * argv[])
 	m7d_mul_associative_test(256, 256);	
 	
 	
+	m7d_t * a, *b, *c;
+	a = m7d_identity(a, 128);
+	b = m7d_identity(b, 128);
+	c = m7d_strassen(c, a ,b );
+	m7d_print(c);
+	
 
    	
    return 0 ; 

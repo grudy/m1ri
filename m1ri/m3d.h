@@ -554,7 +554,11 @@ static inline void add_vbg(vbg *   r, vbg const *   x, vbg const * y)
 
 }
 
+/**
 
+	Same as m3d_add, but without the checks for proper values.
+
+*/
 
 static inline void   m3d_add_unshackled(m3d_t *c,  m3d_t const *a, m3d_t const *b)
 {
@@ -586,7 +590,9 @@ static inline void m3d_inc(vbg  * x, vbg const *  y)
 }
 
 
-
+/** 
+	\brief, m3d_inc for arbitrary m3d_t's 
+*/
 void m3d_add_i(m3d_t * , m3d_t *); 
 
 void m3d_sub_i(m3d_t * , m3d_t *); 
