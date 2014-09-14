@@ -579,7 +579,7 @@ static inline void   m3d_add_unshackled(m3d_t *c,  m3d_t const *a, m3d_t const *
 	param  y addend
 	\return x as sum
 */
-static inline void m3d_inc(vbg  * x, vbg const *  y)
+static inline void m3d_inc(vbg  *  x, vbg const   *  y)
 { 
     vec t;
     x->sign  = y->units ^ x->sign;

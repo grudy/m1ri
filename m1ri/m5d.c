@@ -867,7 +867,7 @@ static inline void m5d_combine6(vfd *table, vfd  ** const input)
 void m5d_mul_64(vfd **R, vfd  ** const A, vfd   ** const B)
 {
    
-    vfd t, r, r2, * a;
+    vfd t, r, rv, * a;
     vec v;
     int i;
 
@@ -897,7 +897,7 @@ void m5d_mul_64(vfd **R, vfd  ** const A, vfd   ** const B)
         a = A[i];
         
 		
-		v = ~(a->units) &  ~(a->middle) & a->sign;
+		v = a->sign;
 
 		
         
@@ -919,71 +919,53 @@ void m5d_mul_64(vfd **R, vfd  ** const A, vfd   ** const B)
       
       
       
-      	v =  (~a->units)   & (a->middle) & a->sign;
-		
+      	v =  a->middle;
+	
 		
 	
-        r2 = tables6[0][v&63];                 v >>= 6;
-        t = tables6[1][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        t = tables6[2][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        t = tables6[3][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        
-        t = tables5[0][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[1][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[2][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[3][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[4][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[5][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[6][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[7][v&31]; m5d_inc(&r2, &t);
-
 		
 
-		m5d_mul2(&r2);
-		v = (a->units) &   (~a->middle) & a->sign;
-		m5d_inc(&r, &r2);
+	
 
 		
-		r2 = tables6[0][v&63];                 v >>= 6;
-        t = tables6[1][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        t = tables6[2][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        t = tables6[3][v&63]; m5d_inc(&r2, &t); v >>= 6;
+		rv = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m5d_inc(&rv, &t); v >>= 6;
+        t = tables6[2][v&63]; m5d_inc(&rv, &t); v >>= 6;
+        t = tables6[3][v&63]; m5d_inc(&rv, &t); v >>= 6;
         
-        t = tables5[0][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[1][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[2][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[3][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[4][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[5][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[6][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[7][v&31]; m5d_inc(&r2, &t);
+        t = tables5[0][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[1][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[2][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[3][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[4][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[5][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[6][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[7][v&31]; m5d_inc(&rv, &t);
 
     	
     		
 
-		v  = a->units   & a->middle & a->sign;
-		m5d_mul3(&r2);
-		m5d_inc(&r, &r2);
+		v  = a->units ;
+		m5d_inc(&r, &rv);
 
 
-
-    	r2 = tables6[0][v&63];                 v >>= 6;
-        t = tables6[1][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        t = tables6[2][v&63]; m5d_inc(&r2, &t); v >>= 6;
-        t = tables6[3][v&63]; m5d_inc(&r2, &t); v >>= 6;
+    	rv = tables6[0][v&63];                 v >>= 6;
+        t = tables6[1][v&63]; m5d_inc(&rv, &t); v >>= 6;
+        t = tables6[2][v&63]; m5d_inc(&rv, &t); v >>= 6;
+        t = tables6[3][v&63]; m5d_inc(&rv, &t); v >>= 6;
         
-        t = tables5[0][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[1][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[2][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[3][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[4][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[5][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[6][v&31]; m5d_inc(&r2, &t); v >>= 5;
-        t = tables5[7][v&31]; m5d_inc(&r2, &t);
+        t = tables5[0][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[1][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[2][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[3][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[4][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[5][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[6][v&31]; m5d_inc(&rv, &t); v >>= 5;
+        t = tables5[7][v&31]; m5d_inc(&rv, &t);
 
-    	m5d_mul4(&r2);
+    	m5d_mul2(&rv);
     	
-    	m5d_inc(&r, &r2);
+    	m5d_inc(&r, &rv);
     	
 		R[i][0] = r;
         
