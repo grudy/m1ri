@@ -117,8 +117,8 @@ void m7d_specs(m7d_t *);
  */
 
 void m3p_print(m3p_t const *);
-void m5p_print(m3p_t const *);
-void m7p_print(m3p_t const *);
+void m5p_print(m5p_t const *);
+void m7p_print(m7p_t const *);
 
 #if __M1RI_HAVE_LIBPNG
 int m3d_to_png(const m3d_t *, const char *, int , const char *, int );

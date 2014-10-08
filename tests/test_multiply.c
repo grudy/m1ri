@@ -535,7 +535,7 @@ void m7d_strassen_test(int y, int z)
 
 int main(int argc, const char * argv[])
 {
-	
+	/*
 	
  	//m3d_strassen_test(64, 64);
    	//m3d_strassen_test(512, 512);
@@ -557,8 +557,15 @@ int main(int argc, const char * argv[])
 	b = m7d_identity(b, 128);
 	c = m7d_strassen(c, a ,b );
 	m7d_print(c);
-	
+	*/
+	m3d_t * a;
+	a = m3d_create_rand(a, 64);
+	m3d_print(a);
+	vbg vbg_a = m3d_read_elems(a, 0, 0, 3);
+	//m3d_col_swap_in_rows(a, 0, 4, 0, 1);
+	a->rows[0][0] = vbg_a;
+	m3d_print(a);
 
-   	
+   	m3d_free(a);
    return 0 ; 
 }    

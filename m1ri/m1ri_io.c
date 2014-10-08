@@ -438,21 +438,44 @@ void m7d_fullinfo(m7d_t * a)
 
 
 
-void m3p_print(m3p_t const *P)
+void m3p_print(m3p_t const * P )
 {
-  
-  
-
+ 	printf("[ ");
+  	for(rci_t i = 0; i < P->length; ++i) 
+  	{
+    	printf("%zd ", (size_t)P->values[i]);
+  	}
+  	printf("]");
 }
-void m5p_print(m3p_t const *P)
+
+void m5p_print(m5p_t const * P)
 {
-
+ 	printf("[ ");
+  	for(rci_t i = 0; i < P->length; ++i) 
+  	{
+    	printf("%zd ", (size_t)P->values[i]);
+  	}
+  	printf("]");
 }
 
-void m7p_print(m3p_t const *P)
+
+
+void m7p_print(m7p_t const * P)
 {
-
+ 	printf("[ ");
+  	for(rci_t i = 0; i < P->length; ++i) 
+  	{
+    	printf("%zd ", (size_t)P->values[i]);
+  	}
+  	printf("]");
 }
+
+   
+
+ 
+
+ 
+
 
  m3d_t m3d_read_textfile(const char * fn)
  {

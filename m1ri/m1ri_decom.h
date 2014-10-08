@@ -2,6 +2,10 @@
  Matrix Represenations and basic operations
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
+ Rank-profile revealing Gaussian elimination and the CUP matrix decomposition
+ Claude-Pierre Jeannerod, Clément Pernet, Arne Storjohann
+ 
+ http://arxiv.org/abs/1112.5717
  
  Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
  
@@ -44,16 +48,16 @@ m5d_t * m5d_transpose(m5d_t *, m5d_t const  *);
 void  m7d_transpose_64( vtri **, vtri ** );
 m7d_t * m7d_transpose(m7d_t *, m7d_t const  *);
 /**
-	\brief Solves L X = B with X and B matrices and L upper triangular
+	\brief Solves L X = B with X and B matrices and L upper right triangular
 	\ X replaces B
 */
-void m3d_upper_triangular(m3d_t * L, m3d_t B);
+void m3d_tsrm_ur(m3d_t * L, m3d_t B);
 
 
-void m5d_upper_triangular(m5d_t * L, m5d_t B);
+void m5d_tsrm_ur(m5d_t * L, m5d_t B);
 
 
-void m7d_upper_triangular(m7d_t * L, m7d_t * B);
+void m7d_tsrm_ur(m7d_t * L, m7d_t * B);
  
  
  
@@ -63,57 +67,58 @@ void m7d_upper_triangular(m7d_t * L, m7d_t * B);
    \param 
  */
 
-void m3d_upper_left_triangular(m3d_t const *U, m3d_t *B  );
+void m3d_tsrm_ul(m3d_t const *U, m3d_t *B  );
 
 
-void m5d_upper_left_triangular(m5d_t const *U, m5d_t *B );
+void m5d_tsrm_ul(m5d_t const *U, m5d_t *B );
 
 
-void m7d_upper_left_triangular(m7d_t const *U, m7d_t *B);
+void m7d_tsrm_ul(m7d_t const *U, m7d_t *B);
 
  
  /**
-   Solves U X = B with X and B matrices and U lower triangular
+   Solves U X = B with X and B matrices and U lower left triangular
    X replaces B
  */
 
 
-void m3d_lower_triangular(m3d_t const *U, m3d_t *B);
+void m3d_tsrm_ll(m3d_t const *U, m3d_t *B);
 
 
-void m5d_lower_triangular(m5d_t const *U, m5d_t *B);
+void m5d_tsrm_ll(m5d_t const *U, m5d_t *B);
 
 
-void m7d_lower_triangular(m7d_t const *U, m7d_t *B);
+void m7d_tsrm_ll(m7d_t const *U, m7d_t *B);
  
   /**
    Solves U X = B with X and B matrices and U  lower right triangular
    X replaces B
  */
 
-void m3d_lower_right_triangular(m3d_t const *U, m3d_t *B );
+void m3d_tsrm_lr(m3d_t const *U, m3d_t *B );
 
 
-void m5d_lower_right_triangular(m5d_t const *U, m5d_t *B); 
+void m5d_lower_r_triangular(m5d_t const *U, m5d_t *B); 
 
 
-void m7d_lower_right_triangular(m7d_t const *U, m7d_t *B);
+void m7d_tsrm_lr(m7d_t const *U, m7d_t *B);
  
  
  /**
-   \brief Invert triangular matrix a
+   \brief Invert upper triangular matrix a
  */
-void m3d_inverse_triangular(m3d_t * a);
+void m3d_trtri_upper(m3d_t * a);
 
 
-void m5d_inverse_triangular(m5d_t * a);
+void m5d_trtri_upper(m5d_t * a);
 
 
-m3d_t * m3d_transpose(m3d_t *, m3d_t const  *);
 
 
-void m7d_inverse_triangular(m7d_t * a);
+void m7d_trtri_upper(m7d_t * a);
  
+ 
+
 
 
 

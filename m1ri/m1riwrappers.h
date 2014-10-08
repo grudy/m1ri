@@ -59,6 +59,7 @@ typedef u_int64_t vec;
 
 static	const u_int64_t leftbit	= (1ULL)<<(M1RI_RADIX-1);
 static	const u_int64_t rightbit = 1;
+static	const u_int64_t allbits = ~0;
 
 
 

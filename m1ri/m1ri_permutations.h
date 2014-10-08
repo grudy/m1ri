@@ -21,7 +21,7 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  
  
- Matrix Represenations and basic operations over GF(3)
+ Matrix Permutations
  m1ri_permutations.h
  */
 
@@ -354,7 +354,6 @@ void _m7d_compress_l(m7d_t *, rci_t r1, rci_t n1, rci_t r2);
 
 
    
-
 
  
 

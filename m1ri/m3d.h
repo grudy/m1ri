@@ -269,8 +269,8 @@ static inline void m3d_col_swap_in_rows(m3d_t *M, rci_t col_a, rci_t col_b, rci_
          block_b = (col_b-1)/M1RI_RADIX;
          dif_a = col_a%M1RI_RADIX;
          dif_b = col_b%M1RI_RADIX;
-         a_place =  leftbit >>  dif_a ;
-         b_place =  leftbit >> dif_b ;
+         a_place =  rightbit <<  dif_a ;
+         b_place =  rightbit << dif_b ;
     
 
               
@@ -719,6 +719,119 @@ static inline void m3d_set_zero(m3d_t * a)
 
 
 
+static inline void m3d_colswap_in_rows(m3d_t *M, rci_t col_a, rci_t col_b, rci_t start_row, rci_t end_row)
+{
+    if((M->ncols >= (col_a ) && (M->ncols >= col_b)))
+    {
+        int i;
+        vec block_a, block_b, dif_a, dif_b, a_place, b_place; 
+        vbg tempa, tempb;
+         block_a = (col_a-1)/M1RI_RADIX;
+         block_b = (col_b-1)/M1RI_RADIX;
+         dif_a = col_a%M1RI_RADIX;
+         dif_b = col_b%M1RI_RADIX;
+         a_place =  rightbit <<  dif_a ;
+         b_place =  rightbit <<  dif_b ;
+       
+
+              
+          for( i = start_row; i < end_row; i++)
+          {
+		     
+		  
+		           tempa.units  = (b_place  & M->rows[i][block_b].units) ? (a_place  ): 0;
+		     tempb.units  = (a_place  & M->rows[i][block_a].units) ? (b_place  ): 0; 
+		       M->rows[i][block_a].units  = (tempa.units)  ? M->rows[i][block_a].units  | tempa.units :   M->rows[i][block_a].units  & ~a_place; 
+		       M->rows[i][block_b].units  = (tempb.units)  ? M->rows[i][block_a].units  | tempb.units :   M->rows[i][block_b].units  & ~b_place;  
+		         tempa.sign  = (b_place  & M->rows[i][block_b].sign) ? (a_place  ): 0;
+		     tempb.sign  = (a_place  & M->rows[i][block_a].sign) ? (b_place  ): 0; 
+		       M->rows[i][block_a].sign  = (tempa.sign)  ? (M->rows[i][block_a].sign  | tempa.sign) :   M->rows[i][block_a].sign  & ~a_place; 
+		       M->rows[i][block_b].sign  = (tempb.sign)  ? (M->rows[i][block_a].sign  | tempb.sign) :   M->rows[i][block_b].sign  & ~b_place; 
+		     
+		       
+
+		       
+          
+    
+        }
+        
+      
+        
+        
+    }
+    
+
+
+}
+
+
+static inline void m3d_clear_vbg(m3d_t * a, rci_t s_row, rci_t s_col, int n)
+{
+  assert(n>0 && n <= M1RI_RADIX);
+  vec values = allbits >> (M1RI_RADIX - n);
+  int const spot   = s_col % M1RI_RADIX;
+  wi_t const block = s_col / M1RI_RADIX;
+  a->rows[s_row][block].units &= ~(values << spot);
+  a->rows[s_row][block].units &= ~(values << spot);
+  
+  int const space = M1RI_RADIX - spot;
+  if (n > space)
+  {
+    a->rows[s_row][block + 1].sign &= ~(values >> space); 
+    a->rows[s_row][block + 1].units &= ~(values >> space);
+    
+  }
+
+}
+
+
+/**
+ * \brief add n bits from values to m starting a position (s_row, s_col).
+ *
+ * \param m Source matrix.
+ * \param s_row Starting row.
+ * \param s_col Starting column.
+ * \param n Number of bits (<= M1RI_RADIX);
+ * \param values vbg with values;
+ */
+
+static inline void m3d_add_elems(m3d_t * m, rci_t s_row, rci_t s_col, int n, vbg values)
+{
+	
+	  int const spot   = s_col % M1RI_RADIX;
+	  vbg temp = values;
+	temp.units = temp.units << spot;
+	temp.sign = temp.sign << spot; 
+	  
+  wi_t const block = s_col / M1RI_RADIX;
+  m3d_inc(m->rows[s_row]  + block, &temp);
+  
+  int const space = M1RI_RADIX - spot;
+  if (n > space)
+  {
+   values.units = values.units >> space;
+   values.sign = values.sign >> space;
+   
+    m3d_inc(m->rows[s_row]  + (block + 1) , &values);
+
+  }  
+}
+
+static inline void m3d_clear_bits(m3d_t const *a, rci_t const x, rci_t const y, int const n) 
+{
+	vec values = allbits >> (M1RI_RADIX - n);
+  	int const spot   = y % M1RI_RADIX;
+  	wi_t const block = y / M1RI_RADIX;
+  	a->rows[x][block].sign &= ~(values << spot);
+  	a->rows[x][block].units &= ~(values << spot);
+  	int const space = M1RI_RADIX - spot;
+  	if (n > space)
+  	{
+    	a->rows[x][block + 1].sign &= ~(values >> space);
+    	a->rows[x][block + 1].units &= ~(values >> space);
+  	}  
+}    
+    
 
 
 /** **************************************************

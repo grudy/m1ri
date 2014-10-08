@@ -71,17 +71,25 @@ vbg m3d_read_elems(m3d_t const *M, rci_t  x, rci_t  y, int  n)
     wi_t  block = (y  ) / M1RI_RADIX;
     int  spill = (y  % M1RI_RADIX) + n - M1RI_RADIX;
     vbg elem;
+    if(spill <= 0)
+    {
     
-    elem.units = (spill <= 0) ? M->rows[x][block].units << -spill : ((M->rows[x][(block + 1)].units<< (64 - spill)) | (M->rows[x][block].units >> spill));
+    	elem.sign =  M->rows[x][block ].sign <<  - spill; 
+    	elem.units =  M->rows[x][block].units << -spill  ;
+
+    }
+    else
+    {
+    	elem.sign = (M->rows[x][block + 1].sign << (M1RI_RADIX - spill)) | (M->rows[x][block].sign>> spill);
+    	elem.units = (M->rows[x][block + 1].units << (M1RI_RADIX - spill)) | (M->rows[x][block].units>> spill);
+    }
     
-    elem.sign = (spill <= 0) ?  (M->rows[x][block].sign << -spill) : (M->rows[x][block + 1].sign << (64 - spill)) | (M->rows[x][block].sign>> spill);
     
-    elem.units = (elem.units >> (M1RI_RADIX - n));
     
     elem.sign = (elem.sign >> (M1RI_RADIX - n));
     
-    
-    
+    elem.units = (elem.units >> (M1RI_RADIX - n));
+
     return elem;
     
     
@@ -1355,8 +1363,7 @@ m3d_t *m3d_mul_scalar(m3d_t *C, const long a, const m3d_t *B)
 
 void m3d_add_row(m3d_t *A, rci_t ar, const m3d_t *B, rci_t br, rci_t start_col)
 {
-  
-
+    
 
 }
 

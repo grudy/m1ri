@@ -15,6 +15,7 @@ TESTS = \
 	test_m5d.c\
  	test_m7d.c\
 	test_multiply.c\
+	test_permutations.c\
 	test_decom.c
 
 
