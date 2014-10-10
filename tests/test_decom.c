@@ -50,7 +50,7 @@ void m3d_transpose_test(int y, int z)
 	*/
 	
 
-	
+	/*
 	if((y <= 512) && (z <= 512))
 	{
 		
@@ -62,7 +62,7 @@ void m3d_transpose_test(int y, int z)
 		m3d_print(c);
 		
 	}
-	
+	*/
 	
 	if(!(m3d_equal(a, c)))
 	{
@@ -110,8 +110,8 @@ void m5d_transpose_test(int y, int z)
 	*/
 	
 
-	
-	if((y <= 512) && (z <= 512))
+	/*
+	if((y <= 256) && (z <= 256))
 	{
 		
 		printf("\n matrix a \n ");
@@ -122,7 +122,7 @@ void m5d_transpose_test(int y, int z)
 		m5d_print(c);
 		
 	}
-	
+	*/
 	
 	if(!(m5d_equal(a, c)))
 	{
@@ -170,8 +170,8 @@ void m7d_transpose_test(int y, int z)
 	*/
 	
 
-	
-	if((y <= 512) && (z <= 512))
+	/*
+	if((y <= 256) && (z <= 256))
 	{
 		
 		printf("\n matrix a \n ");
@@ -182,7 +182,7 @@ void m7d_transpose_test(int y, int z)
 		m7d_print(c);
 		
 	}
-	
+	*/
 	
 	if(!(m7d_equal(a, c)))
 	{

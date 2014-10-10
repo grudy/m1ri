@@ -49,3 +49,5 @@ test_multiply
 m3d_mul_benchmark_now
 
 test_decom
+
+test_permutations
