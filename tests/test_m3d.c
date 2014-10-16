@@ -38,10 +38,10 @@ void m3d_test_stack_concat(int m, int n)
 	
 	
 	m3d_specs(s->row[0]);
-	m3d_print(s->row[0]);
-	m3d_print(s->row[1]);
-	m3d_print(s->row[2]);
-	m3d_print(s->row[3]);
+	//m3d_print(s->row[0]);
+	//m3d_print(s->row[1]);
+	//m3d_print(s->row[2]);
+	//m3d_print(s->row[3]);
 	
  
 	ab = m3d_concat(ab, s->row[0], s->row[1]);
@@ -53,13 +53,13 @@ void m3d_test_stack_concat(int m, int n)
 	m3d_specs(abcd);
 	
 	printf("\nab\n");
-	m3d_print(ab);
+	//m3d_print(ab);
 	printf("\ncd\n");
-	m3d_print(cd);
+	//m3d_print(cd);
 	printf("\n abcd \n");
-	m3d_print(abcd);
+	//m3d_print(abcd);
 	printf("\no\n");
-	m3d_print(o);
+	//m3d_print(o);
 	if(!m3d_equal(o, abcd))
 	{
 	
@@ -86,10 +86,10 @@ void m3d_test_stack_concat(int m, int n)
 	v = m3d_create( 4, 4);
 	
 	m3d_rand(v);
-	m3d_print(v);
+	//m3d_print(v);
 
 	m3d_colswap(v, 1, 2);
-	m3d_print(v);
+	//m3d_print(v);
 
 
   /*
@@ -112,15 +112,15 @@ void m3d_test_stack_concat(int m, int n)
 	m3d_rand(w2);
   	w3 = m3d_classic_mul(w3, w0, w1);
   	printf("w2x");
-  	m3d_print(w2);
+  	//m3d_print(w2);
   	printf("w3");
-  	m3d_print(w3);
+  	//m3d_print(w3);
 	w4 = m3d_classic_mul(w4, w1, w2);
 	w5 = m3d_classic_mul(w5, w3, w2);
 	w6 = m3d_classic_mul(w6, w0, w4);
    	
 
-   m3d_print(w5);
+   //m3d_print(w5);
  
   
   
@@ -168,8 +168,8 @@ void m3d_test_stack_concat(int m, int n)
 		
 	a = m3d_identity(a, 64);
 	b = m3d_identity(b, 64);	
-	m3d_print(a);
-	m3d_print(b);
+	//m3d_print(a);
+	//m3d_print(b);
 	
 	if(!m3d_equal(a, b))
 	{

@@ -25,11 +25,15 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 #include <m1ri/m1ri.h>
  int main(int argc, const char * argv[])
 {
+
+	
 	m3d_t * a;
-	a = m3d_create_rand(a, 128);
+	a = m3d_create_rand(a, 64);
 	m3d_print(a); 
-	m3d_compress_l(a, 2, 5,  84);
+	m3d_compress_l(a, 2, 5,  34);
 	m3d_print(a);
+
+	
     return 0;
 }
 

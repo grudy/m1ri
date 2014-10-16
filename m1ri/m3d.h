@@ -816,7 +816,14 @@ static inline void m3d_add_elems(m3d_t * m, rci_t s_row, rci_t s_col, int n, vbg
 
   }  
 }
-
+/**
+ * \brief clear bits in row
+ *
+ * \param a Source matrix.
+ * \param x Starting row.
+ * \param y Starting column.
+ * \param n Number of bits (<= M1RI_RADIX);
+ */
 static inline void m3d_clear_bits(m3d_t const *a, rci_t const x, rci_t const y, int const n) 
 {
 	vec values = allbits >> (M1RI_RADIX - n);
@@ -829,7 +836,8 @@ static inline void m3d_clear_bits(m3d_t const *a, rci_t const x, rci_t const y, 
   	{
     	a->rows[x][block + 1].sign &= ~(values >> space);
     	a->rows[x][block + 1].units &= ~(values >> space);
-  	}  
+  	}
+
 }    
     
 

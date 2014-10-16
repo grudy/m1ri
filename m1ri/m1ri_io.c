@@ -540,7 +540,7 @@ int m3d_to_png(const m3d_t *A, const char *fn, int compression_level, const char
   png_set_compression_level(png_ptr, compression_level);
 
   png_set_IHDR(png_ptr, info_ptr, A->ncols, A->nrows, 2, \
-               PNG_COLOR_TYPE_GRAY, \
+               PNG_COLOR_TYPE_PALETTE, \
                PNG_INTERLACE_NONE, \
                PNG_COMPRESSION_TYPE_DEFAULT, \
                PNG_FILTER_TYPE_DEFAULT);

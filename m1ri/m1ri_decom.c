@@ -479,10 +479,7 @@ m7d_t *  m7d_transpose(m7d_t *c, m7d_t  const *a)
 	
 		m7d_transpose_il(padded_c, padded_a); 
 		c  = m7d_copy_cutoff(c, padded_c);
-		m7d_print(padded_a);
-		m7d_print(padded_c);
-		m7d_free(padded_a);
-		m7d_free(padded_c);
+
 		
 		
 	}
