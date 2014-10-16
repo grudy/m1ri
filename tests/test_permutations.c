@@ -30,7 +30,7 @@ Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
 	m3d_t * a;
 	a = m3d_create_rand(a, 64);
 	m3d_print(a); 
-	m3d_compress_l(a, 2, 5,  34);
+
 	m3d_print(a);
 
 	
