@@ -24,7 +24,7 @@
 #include "m1ri_io.h"
 #if __M1RI_HAVE_LIBPNG
 #include <png.h>
-#endif /* __M4RI_HAVE_LIBPNG */
+#endif /* __M1RI_HAVE_LIBPNG */
 /** 
  
  Print a block of an m3d
