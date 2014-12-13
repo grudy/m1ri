@@ -1,34 +1,34 @@
 #ifndef M1RIPROJECT_M1RIWRAPPERS_H
 #define M1RIPROJECT_M1RIWRAPPERS_H
-/** 
- 
+/**
+
 Function wrappers
 TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
 RUSSIANS OVER LARGER FINITE FIELDS"
 
 Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- 
+
  m1riwrappers.h
  */
 
 #ifdef HAVE_CONFIG_H
 
 #include <m1ri/config.h>
-#include <m1ri/config.h>
+#include <m1ri/m1ri_config.h>
 #endif
 
 #include <stdint.h>
@@ -80,8 +80,8 @@ static inline u_int32_t powerof2(u_int32_t v)
 	v |= v >> 4;
 	v |= v >> 8;
 	v |= v >> 16;
-	v++; 
-	return v; 
+	v++;
+	return v;
 }
 
 static inline void * m1ri_malloc(size_t size) {
@@ -89,61 +89,61 @@ static inline void * m1ri_malloc(size_t size) {
 	if(allocate == NULL)
 	{
 		m1ri_die("Out of memory, exiting\n");
-	}	
+	}
 	return allocate;
 }
 
 /*
 	Wrapper for calloc
 */
-static inline void * m1ri_calloc(size_t nobj, size_t size) 
+static inline void * m1ri_calloc(size_t nobj, size_t size)
 {
 	void * allocate = calloc(nobj, size);
 	if(allocate == NULL)
 	{
 		m1ri_die("Out of memory, exiting\n");
-	}	
+	}
 	return allocate;
 }
 
-/** 
-	Wrapper for realloc	
+/**
+	Wrapper for realloc
  */
-static inline void * m1ri_realloc(void * val, size_t size) 
+static inline void * m1ri_realloc(void * val, size_t size)
 {
-	
+
 	void * reallocate =	realloc(val, size);
 	if(reallocate == NULL)
 	{
 		m1ri_die("Out of memory, exiting\n");
 	}
-		
+
 	return reallocate;
 }
 
-/** 
+/**
  \Releases a value into the wilderness
  \param val pointer to be freed
 */
 
 static inline void m1ri_free(void * val) {
-free(val);	
+free(val);
 }
 
-/** 
+/**
  \brief For testing if windowed
  */
-static u_int8_t const iswindowed = 0x1; 
+static u_int8_t const iswindowed = 0x1;
 
 static u_int8_t const notwindowed = 0x2;
 
 
-/** 
+/**
  \brief Wrapper for rand
  \
- \Made for working on 64 bit variables "vecs" 
+ \Made for working on 64 bit variables "vecs"
  */
-static inline u_int64_t	m1ri_rand() 
+static inline u_int64_t	m1ri_rand()
 {
 
 	assert(RAND_MAX >= ((1ULL<<25)-1));
@@ -155,7 +155,7 @@ static inline u_int64_t	m1ri_rand()
 
 static inline void m1ri_sort( const void *ptr, size_t count, size_t size, int (*comp)(const void *, const void *))
 {
-	qsort(	&ptr,	count, size,	comp); 
+	qsort(	&ptr,	count, size,	comp);
 }
 
 

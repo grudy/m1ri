@@ -53,3 +53,7 @@ test_decom
 test_permutations
 
 tests/Makefile
+
+io.png
+
+m3d_test_io.png

@@ -1,23 +1,23 @@
 /** * M1RI
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
- 
+
  Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- 
+
  m1ri_io.h
 */
 #ifndef M1RIPROJECT_M1RO_IO_H
@@ -34,14 +34,14 @@
  \  brief prints an m3d_t matrix
  \  param  a matrix to be printed
  \
- \	Prints an m3d_t to standard output 
+ \	Prints an m3d_t to standard output
  */
 void m3d_print(const m3d_t * );
 /**
  \  brief prints an m5d_t matrix
  \  param  a matrix to be printed
  \
- \	Prints an m5d_t to standard output 
+ \	Prints an m5d_t to standard output
  */
 void m5d_print(const m5d_t *);
 
@@ -51,7 +51,7 @@ void m5d_print(const m5d_t *);
  \  brief prints an m7d_t matrix
  \  param  a matrix to be printed
  \
- \	Prints an m7d_t to standard output 
+ \	Prints an m7d_t to standard output
  */
 void m7d_print(const m7d_t * );
 
@@ -112,7 +112,7 @@ void m7d_specs(m7d_t *);
 
 /**
  * Print  permutation matrices
- * 
+ *
  *
  */
 
@@ -122,7 +122,7 @@ void m7p_print(m7p_t const *);
 
 #if __M1RI_HAVE_LIBPNG
 int m3d_to_png(const m3d_t *, const char *, int , const char *, int );
-#endif 
+#endif
 
 
 

@@ -1,37 +1,37 @@
- 
+
 /** *
 
 
 
 
- 
+
  TOMAS J. BOOTHBY AND ROBERT W. BRADSHAW "BITSLICING AND THE METHOD OF FOUR
  RUSSIANS OVER LARGER FINITE FIELDS"
- 
- Copyright (C) 2008 Martin Albrecht <malb@informatik.uni-bremen.de> 
+
+ Copyright (C) 2008 Martin Albrecht <malb@informatik.uni-bremen.de>
  Copyright 2013 William Andrew Alumbaugh <williamandrewalumbaugh@gmail.com>
- 
+
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation; either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program; if not, write to the Free Software
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- 
- 
+
+
  Matrix Represenations and basic operations over GF(3)
  m1ri_permutations.c
  */
- 
- 
- 
+
+
+
 
 #include "m1ri_permutations.h"
 
@@ -51,8 +51,8 @@ m3p_t *m3p_init(rci_t length)
   {
     a->values[i] = i;
   }
-  
-  
+
+
   return a;
 }
 
@@ -65,8 +65,8 @@ m5p_t *m5p_init(rci_t length)
   	{
    	 a->values[i] = i;
   	}
-  
-  
+
+
   return a;
 
 }
@@ -80,10 +80,10 @@ m7p_t *m7p_init(rci_t length)
   	{
    	 a->values[i] = i;
   	}
-  
-  
+
+
   return a;
-  
+
 }
 
 /**
@@ -172,7 +172,7 @@ static inline void m3d_write_col_to_rows_blockd(m3d_t *A, m3d_t const *B, rci_t 
     vec bitmasks[M1RI_RADIX];
 
     /* we pre-compute bit access in advance */
-    for(int k = 0; k < todo; ++k) 
+    for(int k = 0; k < todo; ++k)
     {
         rci_t const colb = permutation[i + k];
         vecs[k] = colb / M1RI_RADIX;
@@ -180,15 +180,15 @@ static inline void m3d_write_col_to_rows_blockd(m3d_t *A, m3d_t const *B, rci_t 
         bitmasks[k] = rightbit << bits[k];
     }
 
-    for (rci_t r = start_row; r < stop_row; ++r) 
+    for (rci_t r = start_row; r < stop_row; ++r)
     {
       vbg const *Brow = B->rows[r-start_row];
       vbg *Arow = A->rows[r];
       register vec value = 0;
 
-      switch(todo-1) 
+      switch(todo-1)
       {
-    	  case 63: value |= ((Brow[vecs[63]].units & bitmasks[63]) >> bits[63]) << 63;	
+    	  case 63: value |= ((Brow[vecs[63]].units & bitmasks[63]) >> bits[63]) << 63;
 	      case 62: value |= ((Brow[vecs[62]].units & bitmasks[62]) >> bits[62]) << 62;
 	      case 61: value |= ((Brow[vecs[61]].units & bitmasks[61]) >> bits[61]) << 61;
 	      case 60: value |= ((Brow[vecs[60]].units & bitmasks[60]) >> bits[60]) << 60;
@@ -260,7 +260,7 @@ static inline void m3d_write_col_to_rows_blockd(m3d_t *A, m3d_t const *B, rci_t 
 /*       } */
       /* and write the vec once */
       Arow[a_vec].units |= value;
-      
+
       value = 0;
 
       /* gathering sign bits*/
@@ -333,15 +333,15 @@ static inline void m3d_write_col_to_rows_blockd(m3d_t *A, m3d_t const *B, rci_t 
       default:
         break;
       }
-      
+
 		Arow[a_vec].sign |= value;
- 
+
     	}
 	}
-  
+
 }
 
-void m3d_apply_p_right_even(m3d_t *A, m3p_t const *P, rci_t start_row, rci_t start_col, int notrans) 
+void m3d_apply_p_right_even(m3d_t *A, m3p_t const *P, rci_t start_row, rci_t start_col, int notrans)
 {
   	if(A->nrows - start_row == 0)
    		return;
@@ -359,9 +359,9 @@ void m3d_apply_p_right_even(m3d_t *A, m3p_t const *P, rci_t start_row, rci_t sta
   	for(rci_t i = 0; i < A->ncols; ++i)
     	permutation[i] = i;
 
-	if (!notrans) 
+	if (!notrans)
 	{
-    	for(rci_t i = start_col; i < length; ++i) 
+    	for(rci_t i = start_col; i < length; ++i)
     	{
       	rci_t t = permutation[i];
       	permutation[i] = permutation[P->values[i]];
@@ -369,8 +369,8 @@ void m3d_apply_p_right_even(m3d_t *A, m3p_t const *P, rci_t start_row, rci_t sta
     	}
   	}
   	else {
-  	
-    for(rci_t i = start_col; i < length; ++i) 
+
+    for(rci_t i = start_col; i < length; ++i)
     {
     	rci_t t = permutation[length - i - 1];
       	permutation[length - i - 1] = permutation[P->values[length - i - 1]];
@@ -380,46 +380,46 @@ void m3d_apply_p_right_even(m3d_t *A, m3p_t const *P, rci_t start_row, rci_t sta
 
   /* we have a bitmask to encode where to write to */
   vec *write_mask = (vec*)m1ri_calloc(width, sizeof(vec));
-  
-  for(rci_t i = 0; i < A->ncols; i += M1RI_RADIX) 
+
+  for(rci_t i = 0; i < A->ncols; i += M1RI_RADIX)
   {
 	int const todo = MIN(M1RI_RADIX, A->ncols - i);
-    for(int k = 0; k < todo; ++k) 
+    for(int k = 0; k < todo; ++k)
     {
-      if(permutation[i + k] == i + k) 
+      if(permutation[i + k] == i + k)
       {
         write_mask[i / M1RI_RADIX] |= rightbit << k;
       }
     }
-    
+
   }
   write_mask[width-1] |=  ~(allbits >> (	M1RI_RADIX - (A->ncols)) % M1RI_RADIX);
 
-  	for(rci_t i = start_row; i < A->nrows; i += step_size) 
+  	for(rci_t i = start_row; i < A->nrows; i += step_size)
   	{
    		step_size = MIN(step_size, A->nrows - i);
-    	for(int k = 0; k < step_size; ++k) 
+    	for(int k = 0; k < step_size; ++k)
     	{
 	    	Arow = A->rows[i+k];
       		Brow = B->rows[k];
-      		
+
 
       /*copy row & clear those values which will be overwritten */
-		for(wi_t j = 0; j < width; ++j) 
+		for(wi_t j = 0; j < width; ++j)
 		{
         	Brow[j].units = Arow[j].units;
         	Brow[j].sign  = Arow[j].sign;
-        	
+
         	Arow[j].units = Arow[j].units & write_mask[j];
         	Arow[j].sign  = Arow[j].sign & write_mask[j];
 
       	}
     }
-   
+
     	/* write out the permutation */
     	m3d_write_col_to_rows_blockd(A, B, permutation, write_mask, i, i + step_size, length);
   }
-  
+
   m1ri_free(permutation);
   m1ri_free(write_mask);
   m3d_free(B);
@@ -440,7 +440,7 @@ static inline void m5d_write_col_to_rows_blockd(m5d_t *A, m5d_t const *B, rci_t 
     vec bitmasks[M1RI_RADIX];
 
     /* we pre-compute bit access in advance */
-    for(int k = 0; k < todo; ++k) 
+    for(int k = 0; k < todo; ++k)
     {
         rci_t const colb = permutation[i + k];
         vecs[k] = colb / M1RI_RADIX;
@@ -448,15 +448,15 @@ static inline void m5d_write_col_to_rows_blockd(m5d_t *A, m5d_t const *B, rci_t 
         bitmasks[k] = rightbit << bits[k];
     }
 
-    for (rci_t r = start_row; r < stop_row; ++r) 
+    for (rci_t r = start_row; r < stop_row; ++r)
     {
       vfd const *Brow = B->rows[r-start_row];
       vfd *Arow = A->rows[r];
       register vec value = 0;
 
-      switch(todo-1) 
+      switch(todo-1)
       {
-    	  case 63: value |= ((Brow[vecs[63]].units & bitmasks[63]) >> bits[63]) << 63;	
+    	  case 63: value |= ((Brow[vecs[63]].units & bitmasks[63]) >> bits[63]) << 63;
 	      case 62: value |= ((Brow[vecs[62]].units & bitmasks[62]) >> bits[62]) << 62;
 	      case 61: value |= ((Brow[vecs[61]].units & bitmasks[61]) >> bits[61]) << 61;
 	      case 60: value |= ((Brow[vecs[60]].units & bitmasks[60]) >> bits[60]) << 60;
@@ -528,11 +528,11 @@ static inline void m5d_write_col_to_rows_blockd(m5d_t *A, m5d_t const *B, rci_t 
 /*       } */
       /* and write the vec once */
       Arow[a_vec].units |= value;
-      
+
       value = 0;
-      switch(todo-1) 
+      switch(todo-1)
        {
-		  case 63: value |= ((Brow[vecs[63]].middle& bitmasks[63]) >> bits[63]) << 63;	
+		  case 63: value |= ((Brow[vecs[63]].middle& bitmasks[63]) >> bits[63]) << 63;
 	      case 62: value |= ((Brow[vecs[62]].middle& bitmasks[62]) >> bits[62]) << 62;
 	      case 61: value |= ((Brow[vecs[61]].middle& bitmasks[61]) >> bits[61]) << 61;
 	      case 60: value |= ((Brow[vecs[60]].middle& bitmasks[60]) >> bits[60]) << 60;
@@ -598,9 +598,9 @@ static inline void m5d_write_col_to_rows_blockd(m5d_t *A, m5d_t const *B, rci_t 
 	      case  0: value |= ((Brow[vecs[ 0]].middle& bitmasks[ 0]) >> bits[ 0]) <<  0;
      	 default:
       	  break;
-      }	  
+      }
       /* gathering sign bits*/
-      
+
       Arow[a_vec].middle |= value;
 
       value = 0;
@@ -673,25 +673,25 @@ static inline void m5d_write_col_to_rows_blockd(m5d_t *A, m5d_t const *B, rci_t 
       default:
         break;
       }
-      
+
 		Arow[a_vec].sign |= value;
-	
+
 /*       for(int k = 0; k < todo; ++k) { */
 /*         value |= ((Brow[vecs[k]].units & bitmasks[k]) << bits[k]) >> k; */
 /*       } */
       /* and write the vec once */
-      
-		 
+
+
     }
   }
-	
-  
+
+
 }
 
 
 
 
-void m5d_apply_p_right_even(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t start_col, int notrans) 
+void m5d_apply_p_right_even(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t start_col, int notrans)
 {
   	if(A->nrows - start_row == 0)
    		return;
@@ -709,9 +709,9 @@ void m5d_apply_p_right_even(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t sta
   	for(rci_t i = 0; i < A->ncols; ++i)
     	permutation[i] = i;
 
-	if (!notrans) 
+	if (!notrans)
 	{
-    	for(rci_t i = start_col; i < length; ++i) 
+    	for(rci_t i = start_col; i < length; ++i)
     	{
       	rci_t t = permutation[i];
       	permutation[i] = permutation[P->values[i]];
@@ -719,8 +719,8 @@ void m5d_apply_p_right_even(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t sta
     	}
   	}
   	else {
-  	
-    for(rci_t i = start_col; i < length; ++i) 
+
+    for(rci_t i = start_col; i < length; ++i)
     {
     	rci_t t = permutation[length - i - 1];
       	permutation[length - i - 1] = permutation[P->values[length - i - 1]];
@@ -730,46 +730,46 @@ void m5d_apply_p_right_even(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t sta
 
   /* we have a bitmask to encode where to write to */
   vec *write_mask = (vec*)m1ri_calloc(width, sizeof(vec));
-  
-  for(rci_t i = 0; i < A->ncols; i += M1RI_RADIX) 
+
+  for(rci_t i = 0; i < A->ncols; i += M1RI_RADIX)
   {
 	int const todo = MIN(M1RI_RADIX, A->ncols - i);
-    for(int k = 0; k < todo; ++k) 
+    for(int k = 0; k < todo; ++k)
     {
-      if(permutation[i + k] == i + k) 
+      if(permutation[i + k] == i + k)
       {
         write_mask[i / M1RI_RADIX] |= rightbit << k;
       }
     }
-    
+
   }
   write_mask[width-1] |=  ~(allbits >> (	M1RI_RADIX - (A->ncols)) % M1RI_RADIX);
 
-  	for(rci_t i = start_row; i < A->nrows; i += step_size) 
+  	for(rci_t i = start_row; i < A->nrows; i += step_size)
   	{
    		step_size = MIN(step_size, A->nrows - i);
-    	for(int k = 0; k < step_size; ++k) 
+    	for(int k = 0; k < step_size; ++k)
     	{
 	    	Arow = A->rows[i+k];
       		Brow = B->rows[k];
-      		
+
 
       /*copy row & clear those values which will be overwritten */
-		for(wi_t j = 0; j < width; ++j) 
+		for(wi_t j = 0; j < width; ++j)
 		{
         	Brow[j].units = Arow[j].units;
         	Brow[j].sign  = Arow[j].sign;
-        	
+
         	Arow[j].units = Arow[j].units & write_mask[j];
         	Arow[j].sign  = Arow[j].sign & write_mask[j];
 
       	}
     }
-   
+
     	/* write out the permutation */
     	m5d_write_col_to_rows_blockd(A, B, permutation, write_mask, i, i + step_size, length);
   }
-  
+
   m1ri_free(permutation);
   m1ri_free(write_mask);
   m5d_free(B);
@@ -791,7 +791,7 @@ static inline void m7d_write_col_to_rows_blockd(m7d_t *A, m7d_t const *B, rci_t 
     vec bitmasks[M1RI_RADIX];
 
     /* we pre-compute bit access in advance */
-    for(int k = 0; k < todo; ++k) 
+    for(int k = 0; k < todo; ++k)
     {
         rci_t const colb = permutation[i + k];
         vecs[k] = colb / M1RI_RADIX;
@@ -799,15 +799,15 @@ static inline void m7d_write_col_to_rows_blockd(m7d_t *A, m7d_t const *B, rci_t 
         bitmasks[k] = rightbit << bits[k];
     }
 
-    for (rci_t r = start_row; r < stop_row; ++r) 
+    for (rci_t r = start_row; r < stop_row; ++r)
     {
       vtri const *Brow = B->rows[r-start_row];
       vtri *Arow = A->rows[r];
       register vec value = 0;
 
-      switch(todo-1) 
+      switch(todo-1)
       {
-    	  case 63: value |= ((Brow[vecs[63]].units & bitmasks[63]) >> bits[63]) << 63;	
+    	  case 63: value |= ((Brow[vecs[63]].units & bitmasks[63]) >> bits[63]) << 63;
 	      case 62: value |= ((Brow[vecs[62]].units & bitmasks[62]) >> bits[62]) << 62;
 	      case 61: value |= ((Brow[vecs[61]].units & bitmasks[61]) >> bits[61]) << 61;
 	      case 60: value |= ((Brow[vecs[60]].units & bitmasks[60]) >> bits[60]) << 60;
@@ -879,11 +879,11 @@ static inline void m7d_write_col_to_rows_blockd(m7d_t *A, m7d_t const *B, rci_t 
 /*       } */
       /* and write the vec once */
       Arow[a_vec].units |= value;
-      
+
       value = 0;
-      switch(todo-1) 
+      switch(todo-1)
        {
-		  case 63: value |= ((Brow[vecs[63]].middle& bitmasks[63]) >> bits[63]) << 63;	
+		  case 63: value |= ((Brow[vecs[63]].middle& bitmasks[63]) >> bits[63]) << 63;
 	      case 62: value |= ((Brow[vecs[62]].middle& bitmasks[62]) >> bits[62]) << 62;
 	      case 61: value |= ((Brow[vecs[61]].middle& bitmasks[61]) >> bits[61]) << 61;
 	      case 60: value |= ((Brow[vecs[60]].middle& bitmasks[60]) >> bits[60]) << 60;
@@ -949,9 +949,9 @@ static inline void m7d_write_col_to_rows_blockd(m7d_t *A, m7d_t const *B, rci_t 
 	      case  0: value |= ((Brow[vecs[ 0]].middle& bitmasks[ 0]) >> bits[ 0]) <<  0;
      	 default:
       	  break;
-      }	  
+      }
       /* gathering sign bits*/
-      
+
       Arow[a_vec].middle |= value;
 
       value = 0;
@@ -1024,22 +1024,22 @@ static inline void m7d_write_col_to_rows_blockd(m7d_t *A, m7d_t const *B, rci_t 
       default:
         break;
       }
-      
+
 		Arow[a_vec].sign |= value;
-	
+
 /*       for(int k = 0; k < todo; ++k) { */
 /*         value |= ((Brow[vecs[k]].units & bitmasks[k]) << bits[k]) >> k; */
 /*       } */
       /* and write the vec once */
-      
-		 
+
+
     }
   }
-	
-  
+
+
 }
 
-void m7d_apply_p_right_even(m7d_t *A, m7p_t const *P, rci_t start_row, rci_t start_col, int notrans) 
+void m7d_apply_p_right_even(m7d_t *A, m7p_t const *P, rci_t start_row, rci_t start_col, int notrans)
 {
   	if(A->nrows - start_row == 0)
    		return;
@@ -1057,9 +1057,9 @@ void m7d_apply_p_right_even(m7d_t *A, m7p_t const *P, rci_t start_row, rci_t sta
   	for(rci_t i = 0; i < A->ncols; ++i)
     	permutation[i] = i;
 
-	if (!notrans) 
+	if (!notrans)
 	{
-    	for(rci_t i = start_col; i < length; ++i) 
+    	for(rci_t i = start_col; i < length; ++i)
     	{
       	rci_t t = permutation[i];
       	permutation[i] = permutation[P->values[i]];
@@ -1067,8 +1067,8 @@ void m7d_apply_p_right_even(m7d_t *A, m7p_t const *P, rci_t start_row, rci_t sta
     	}
   	}
   	else {
-  	
-    for(rci_t i = start_col; i < length; ++i) 
+
+    for(rci_t i = start_col; i < length; ++i)
     {
     	rci_t t = permutation[length - i - 1];
       	permutation[length - i - 1] = permutation[P->values[length - i - 1]];
@@ -1078,46 +1078,46 @@ void m7d_apply_p_right_even(m7d_t *A, m7p_t const *P, rci_t start_row, rci_t sta
 
   /* we have a bitmask to encode where to write to */
   vec *write_mask = (vec*)m1ri_calloc(width, sizeof(vec));
-  
-  for(rci_t i = 0; i < A->ncols; i += M1RI_RADIX) 
+
+  for(rci_t i = 0; i < A->ncols; i += M1RI_RADIX)
   {
 	int const todo = MIN(M1RI_RADIX, A->ncols - i);
-    for(int k = 0; k < todo; ++k) 
+    for(int k = 0; k < todo; ++k)
     {
-      if(permutation[i + k] == i + k) 
+      if(permutation[i + k] == i + k)
       {
         write_mask[i / M1RI_RADIX] |= rightbit << k;
       }
     }
-    
+
   }
   write_mask[width-1] |=  ~(allbits >> (	M1RI_RADIX - (A->ncols)) % M1RI_RADIX);
 
-  	for(rci_t i = start_row; i < A->nrows; i += step_size) 
+  	for(rci_t i = start_row; i < A->nrows; i += step_size)
   	{
    		step_size = MIN(step_size, A->nrows - i);
-    	for(int k = 0; k < step_size; ++k) 
+    	for(int k = 0; k < step_size; ++k)
     	{
 	    	Arow = A->rows[i+k];
       		Brow = B->rows[k];
-      		
+
 
       /*copy row & clear those values which will be overwritten */
-		for(wi_t j = 0; j < width; ++j) 
+		for(wi_t j = 0; j < width; ++j)
 		{
         	Brow[j].units = Arow[j].units;
         	Brow[j].sign  = Arow[j].sign;
-        	
+
         	Arow[j].units = Arow[j].units & write_mask[j];
         	Arow[j].sign  = Arow[j].sign & write_mask[j];
 
       	}
     }
-   
+
     	/* write out the permutation */
     	m7d_write_col_to_rows_blockd(A, B, permutation, write_mask, i, i + step_size, length);
   }
-  
+
   m1ri_free(permutation);
   m1ri_free(write_mask);
   m7d_free(B);
@@ -1137,68 +1137,68 @@ m3p_t * m3p_copy(m3p_t *P, const m3p_t *Q)
   if(Q == NULL)
   {
     m1ri_die("Matrix to be copied is NULL");
-  
+
   }
-  
+
   if(P->values != NULL)
   {
     m1ri_free(P->values);
   }
-  
+
   P->values = m1ri_malloc(sizeof(rci_t) * Q->length);
   P->length = Q->length;
-  
+
   for(int i = 0; i < Q->length; i++)
   {
-    P->values[i] = Q->values[i]; 
-  
+    P->values[i] = Q->values[i];
+
   }
-  
-  
+
+
 }
 m5p_t * m5p_copy(m5p_t *P, const m5p_t *Q)
 {
     if(Q == NULL)
   {
     m1ri_die("Matrix to be copied is NULL");
-  
+
   }
     if(P->values != NULL)
   {
     m1ri_free(P->values);
   }
-  
+
   P->values = m1ri_malloc(sizeof(rci_t) * Q->length);
   P->length = Q->length;
-  
+
   for(int i = 0; i < Q->length; i++)
   {
-    P->values[i] = Q->values[i]; 
-  
+    P->values[i] = Q->values[i];
+
   }
-  
+
 }
 m7p_t * m7p_copy(m7p_t *P, const m7p_t *Q)
 {
     if(Q->values == NULL)
   {
     m1ri_die("Matrix to be copied is NULL");
-  
+
   }
     if(P->values != NULL)
   {
     m1ri_free(P->values);
   }
-  
+
   P->values = m1ri_malloc(sizeof(rci_t) * Q->length);
   P->length = Q->length;
-  
+
   for(int i = 0; i < Q->length; i++)
   {
-    P->values[i] = Q->values[i]; 
-  
+    P->values[i] = Q->values[i];
+
   }
-  
+
 }
 
 
@@ -1222,7 +1222,7 @@ void m3p_set_ui(m3p_t *P, unsigned int value)
   }
 }
 void m5p_set_ui(m5p_t *P, unsigned int value)
-{ 
+{
    assert(value == 1);
   for(int i = 0; i < P->length; i++)
   {
@@ -1236,8 +1236,8 @@ void m7p_set_ui(m7p_t *P, unsigned int value)
   {
      P->values[i] = i;
   }
-  
-  
+
+
 }
 
 /**
@@ -1251,7 +1251,7 @@ void m7p_set_ui(m7p_t *P, unsigned int value)
 
 void m3d_apply_p_left(m3d_t *A, m3p_t const *P)
 {
-  
+
  	if(A->ncols == 0)
   	  return;
   	rci_t const length = MIN(P->length, A->nrows);
@@ -1268,7 +1268,7 @@ void m5d_apply_p_left(m5d_t *A, m5p_t const *P)
  	if(A->ncols == 0)
   	  return;
   	rci_t const length = MIN(P->length, A->nrows);
-  	for (rci_t i = 0; i < length; ++i) 
+  	for (rci_t i = 0; i < length; ++i)
   	{
    		assert(P->values[i] >= i);
    		m5d_rowswap(A, i, P->values[i]);
@@ -1282,7 +1282,7 @@ void m7d_apply_p_left(m7d_t *A, m7p_t const *P)
 	if(A->ncols == 0)
   	  return;
   	rci_t const length = MIN(P->length, A->nrows);
-  	for (rci_t i = 0; i < length; ++i) 
+  	for (rci_t i = 0; i < length; ++i)
   	{
    		assert(P->values[i] >= i);
     	m7d_rowswap(A, i, P->values[i]);
@@ -1309,11 +1309,11 @@ void m3d_apply_p_left_trans(m3d_t *A, m3p_t const *P)
     	assert(P->values[i] >= i);
     	m3d_rowswap(A, i, P->values[i]);
   	}
-  
+
 
 }
 void m5d_apply_p_left_trans(m5d_t *A, m5p_t const *P)
-{  
+{
 
 	if(A->ncols == 0)
     	return;
@@ -1323,7 +1323,7 @@ void m5d_apply_p_left_trans(m5d_t *A, m5p_t const *P)
     	assert(P->values[i] >= i);
     	m5d_rowswap(A, i, P->values[i]);
   	}
-    
+
 
 
 }
@@ -1338,7 +1338,7 @@ void m7d_apply_p_left_trans(m7d_t *A, m7p_t const *P)
     	assert(P->values[i] >= i);
     	m7d_rowswap(A, i, P->values[i]);
   	}
-  
+
 
 }
 
@@ -1353,24 +1353,24 @@ void m7d_apply_p_left_trans(m7d_t *A, m7p_t const *P)
 
 void m3d_apply_p_right(m3d_t *A, m3p_t const *P)
 {
-  
-   
+
+
   for(rci_t i = (P->length - 1); i >= 0; i--)
   {
-    
+
       m3d_colswap( A, i, P->values[i]);
-     
-     
+
+
   }
 }
 void m5d_apply_p_right(m5d_t *A, m5p_t const *P)
 {
     for(rci_t i = (P->length - 1); i >= 0; i--)
   {
-    
+
        m5d_colswap( A, i, P->values[i]);
-     
-     
+
+
   }
 }
 void m7d_apply_p_right(m7d_t *A, m7p_t const *P)
@@ -1378,10 +1378,10 @@ void m7d_apply_p_right(m7d_t *A, m7p_t const *P)
 
   for(rci_t i = (P->length - 1); i >= 0; i--)
   {
-    
+
       m7d_colswap( A, i, P->values[i]);
-     
-     
+
+
   }
 
 }
@@ -1398,26 +1398,26 @@ void m3d_apply_p_right_even_capped(m3d_t *A, m3p_t const *P, rci_t start_row, rc
 
   	if(!A->nrows)
     	return;
-   	m3d_apply_p_right_even(A, P, start_row, start_col, 1); 
-  
-  
+   	m3d_apply_p_right_even(A, P, start_row, start_col, 1);
+
+
 }
 void m5d_apply_p_right_even_capped(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t start_col)
-{  
+{
 
 	if(!A->nrows)
     	return;
-   	m5d_apply_p_right_even(A, P, start_row, start_col, 1); 
-  
+   	m5d_apply_p_right_even(A, P, start_row, start_col, 1);
+
 }
 void m7d_apply_p_right_even_capped(m7d_t *A, m7p_t const *P, rci_t start_row, rci_t start_col)
 {
 
 	if(!A->nrows)
     	return;
-   	m7d_apply_p_right_even(A, P, start_row, start_col, 1); 
-  
-  
+   	m7d_apply_p_right_even(A, P, start_row, start_col, 1);
+
+
 }
 
 
@@ -1425,19 +1425,19 @@ void m3d_apply_p_right_trans_even_capped(m3d_t *A, m3p_t const *P, rci_t start_r
 {
 	if(!A->nrows)
     	return;
-   	m3d_apply_p_right_even(A, P, start_row, start_col, 0); 
+   	m3d_apply_p_right_even(A, P, start_row, start_col, 0);
 }
 void m5d_apply_p_right_trans_even_capped(m5d_t *A, m5p_t const *P, rci_t start_row, rci_t start_col)
 {
 	if(!A->nrows)
     	return;
-   	m5d_apply_p_right_even(A, P, start_row, start_col, 0); 
+   	m5d_apply_p_right_even(A, P, start_row, start_col, 0);
 }
 void m7d_apply_p_right_trans_even_capped(m7d_t *A, m7p_t const *P, rci_t start_row, rci_t start_col)
 {
 	if(!A->nrows)
     	return;
-   	m7d_apply_p_right_even(A, P, start_row, start_col, 0); 
+   	m7d_apply_p_right_even(A, P, start_row, start_col, 0);
 }
 
 
@@ -1456,37 +1456,37 @@ void m3d_apply_p_right_trans(m3d_t *A, m3p_t const *P)
     return;
   	rci_t const length = MIN(P->length, A->ncols);
   	int const step_size = MAX(  4096 / A->width, 1);
-  	for(rci_t j = 0; j < A->nrows; j += step_size) 
+  	for(rci_t j = 0; j < A->nrows; j += step_size)
   	{
    		rci_t stop_row = MIN(j + step_size, A->nrows);
-    	
-    	for (rci_t i = 0; i < length; ++i) 
+
+    	for (rci_t i = 0; i < length; ++i)
     	{
       		assert(P->values[i] >= i);
       		m3d_col_swap_in_rows(A, i, P->values[i], j, stop_row);
     	}
-  }       
+  }
 }
 
 
 void m5d_apply_p_right_trans(m5d_t *A, m5p_t const *P)
-{   
+{
   	if(A->nrows == 0)
     	return;
   	rci_t const length = MIN(P->length, A->ncols);
-  	
+
   	int const step_size = MAX(  4096 / A->width, 1);
-  	
-  	for(rci_t j = 0; j < A->nrows; j += step_size) 
+
+  	for(rci_t j = 0; j < A->nrows; j += step_size)
   	{
    		rci_t stop_row = MIN(j + step_size, A->nrows);
-    	
-    	for (rci_t i = 0; i < length; ++i) 
+
+    	for (rci_t i = 0; i < length; ++i)
     	{
       		assert(P->values[i] >= i);
       		m5d_col_swap_in_rows(A, i, P->values[i], j, stop_row);
     	}
-  }       
+  }
 }
 
 
@@ -1496,16 +1496,16 @@ void m7d_apply_p_right_trans(m7d_t *A, m7p_t const *P)
     return;
   	rci_t const length = MIN(P->length, A->ncols);
   	int const step_size = MAX(  4096 / A->width, 1);
-  	for(rci_t j = 0; j < A->nrows; j += step_size) 
+  	for(rci_t j = 0; j < A->nrows; j += step_size)
   	{
    		rci_t stop_row = MIN(j + step_size, A->nrows);
-    	
-    	for (rci_t i = 0; i < length; ++i) 
+
+    	for (rci_t i = 0; i < length; ++i)
     	{
       		assert(P->values[i] >= i);
       		m7d_col_swap_in_rows(A, i, P->values[i], j, stop_row);
     	}
-  }       
+  }
 }
 
 
@@ -1516,16 +1516,16 @@ void  m3d_apply_p_right_trans_tri(m3d_t *A, m3p_t const *Q)
     return;
   	rci_t const length = MIN(Q->length, A->ncols);
   	int const step_size = MAX(  4096 / A->width, 1);
-  	for(rci_t j = 0; j < A->nrows; j += step_size) 
+  	for(rci_t j = 0; j < A->nrows; j += step_size)
   	{
    		rci_t stop_row = MIN(j + step_size, A->nrows);
-    	
-    	for (rci_t i = 0; i < length; ++i) 
+
+    	for (rci_t i = 0; i < length; ++i)
     	{
       		assert(Q->values[i] >= i);
       		m3d_col_swap_in_rows(A, i, Q->values[i], j, stop_row);
     	}
-  }       
+  }
 
 }
 
@@ -1537,19 +1537,19 @@ void  m5d_apply_p_right_trans_tri(m5d_t *A, m5p_t const *Q)
 	{
     	return;
   	}
-  	
+
   	rci_t const length = MIN(Q->length, A->ncols);
   	int const step_size = MAX(  4096 / A->width, 1);
-  	for(rci_t j = 0; j < A->nrows; j += step_size) 
+  	for(rci_t j = 0; j < A->nrows; j += step_size)
   	{
    		rci_t stop_row = MIN(j + step_size, A->nrows);
-    	
-    	for (rci_t i = 0; i < length; ++i) 
+
+    	for (rci_t i = 0; i < length; ++i)
     	{
       		assert(Q->values[i] >= i);
       		m5d_col_swap_in_rows(A, i, Q->values[i], j, stop_row);
     	}
-  }       
+  }
 }
 
 void  m7d_apply_p_right_trans_tri(m7d_t *A, m7p_t const *Q)
@@ -1557,158 +1557,20 @@ void  m7d_apply_p_right_trans_tri(m7d_t *A, m7p_t const *Q)
 	if(A->nrows == 0)
     {
         	return;
-    }	
+    }
   	rci_t const length = MIN(Q->length, A->ncols);
   	int const step_size = MAX(  4096 / A->width, 1);
-  	for(rci_t j = 0; j < A->nrows; j += step_size) 
+  	for(rci_t j = 0; j < A->nrows; j += step_size)
   	{
    		rci_t stop_row = MIN(j + step_size, A->nrows);
-    	
-    	for (rci_t i = 0; i < length; ++i) 
+
+    	for (rci_t i = 0; i < length; ++i)
     	{
       		assert(Q->values[i] >= i);
       		m7d_col_swap_in_rows(A, i, Q->values[i], j, stop_row);
     	}
-  }       
-}
-
-
-
-
-void m3d_compress_l(m3d_t *A, rci_t r1, rci_t n1, rci_t r2) 
-{
-  /**
-   * We are compressing this matrix
-\verbatim
-           r1           n1
-   ------------------------------------------
-   | \ \____|___        | A01               |
-   |  \     |   \       |                   |
- r1------------------------------------------ 
-   |   |    |           | \  \_____         |
-   | L1|    |           |  \       \________|
-   |   |    |           | L2|               |
-   ------------------------------------------
-\endverbatim
-  *
-  * to this matrix
-  *
-\verbatim
-           r1           n1
-   ------------------------------------------
-   | \ \____|___        | A01               |
-   |  \     |   \       |                   |
- r1------------------------------------------ 
-   |    \   |           |    \_____         |
-   |     \  |           |          \________|
-   |      | |           |                   |
-   ------------------------------------------
-\endverbatim
-  */
-
-  if (r1 == n1)
-    return;
-
-#if 0
-
-  m3p_t *shift = m3p_init(A->ncols);
-  for (rci_t i=r1,j=n1;i<r1+r2;i++,j++)
-  {
-    m3d_col_swap_in_rows(A, i, j, i, r1+r2);
-    shift->values[i] = j;
   }
-
-  m3d_apply_p_right_trans_even_capped(A, shift, r1+r2, 0);
-  m3p_free(shift);
-
-#else
-
-  for (rci_t i = r1, j = n1; i < r1 + r2; ++i, ++j)
-  {
-  	m3d_col_swap_in_rows(A, i, j, i, r1 + r2);
-  }
-  
-  vbg tmp;
-  wi_t block;
-
-  for(rci_t i = r1 + r2; i < A->nrows; ++i) {
-
-    rci_t j = r1;
-
-    /* first we deal with the rest of the current vbg we need to
-       write */
-    int const rest = M1RI_RADIX - (j % M1RI_RADIX);
-
-    tmp = m3d_read_elems(A, i, n1, rest);
-    m3d_clear_bits(A, i, j, rest);
-    m3d_add_elems(A, i, j, rest, tmp);
-    
-    j += rest;
-
-    /* now each write is  a vbg write */
-
-    block = (n1 + j - r1) / M1RI_RADIX;
-
-    if (rest % M1RI_RADIX == 0) 
-    {
-      for( ; j + M1RI_RADIX <= r1 + r2; j += M1RI_RADIX, ++block) 
-      {
-      
-        tmp = A->rows[i][block];
-        A->rows[i][j / M1RI_RADIX] = tmp;
-	
-
-      }
-      
-    } 
-    
-    else 
-    {
-      for(; j + M1RI_RADIX <= r1 + r2; j += M1RI_RADIX, ++block) 
-      {
-        tmp.units = (A->rows[i][block].sign >> rest) | ( A->rows[i][block + 1].sign << (M1RI_RADIX - rest)); 
-        tmp.units = (A->rows[i][block].units >> rest) | ( A->rows[i][block + 1].units << (M1RI_RADIX - rest)); 
-
-        A->rows[i][j / M1RI_RADIX] = tmp;
-
-      }
-      
-    }
-
-
-
-    if (j < r1 + r2) 
-    {
-      tmp = m3d_read_elems(A, i, n1 + j - r1, r1 + r2 - j);
-      A->rows[i][j / M1RI_RADIX] = tmp;
-    }
-
-    j = r1 + r2;
-    m3d_clear_bits(A, i, j, M1RI_RADIX - (j % M1RI_RADIX));
-
-    j += M1RI_RADIX - (j % M1RI_RADIX);
-
-
-
-    for(; j < n1 + r2; j += M1RI_RADIX) 
-    {
-      A->rows[i][j / M1RI_RADIX].sign =  A->rows[i][j / M1RI_RADIX].units = 0;
-    }
-  }
- 
-	#endif
-
-
 }
-void _m5d_compress_l(m5d_t *A, rci_t r1, rci_t n1, rci_t r2)
-{
-	
-	
-	
-}
-void _m7d_compress_l(m7d_t *A, rci_t r1, rci_t n1, rci_t r2)
-{
 
-}
 
 
