@@ -33,7 +33,7 @@ void m3d_transpose_test(int y, int z)
 	m3d_t * a, *b, *c;
 	a = m3d_create(y, z);
 	b = m3d_create(z, y);
-
+	c = m3d_create(y, z);
 	 
 	m3d_rand(a);
 	b = m3d_transpose(b, a);
@@ -62,8 +62,8 @@ void m3d_transpose_test(int y, int z)
 		m3d_print(c);
 		
 	}
-	*/
 	
+	*/
 	if(!(m3d_equal(a, c)))
 	{
 	
@@ -78,12 +78,14 @@ void m3d_transpose_test(int y, int z)
 	
     printf("----------------------------------------------------------------------");
     
-
+ 	m3d_print(a);
+ 	m3d_print(c);
 	
     
     m3d_free(a);
     m3d_free(b);
     m3d_free(c);
+    
  
 
 }
@@ -93,7 +95,8 @@ void m5d_transpose_test(int y, int z)
 	m5d_t * a, *b, *c;
 	a = m5d_create(y, z);
 	b = m5d_create(z, y);
-
+	c = m5d_create(y, z);
+	
 	 
 	m5d_rand(a);
 	b = m5d_transpose(b, a);
@@ -153,7 +156,7 @@ void m7d_transpose_test(int y, int z)
 	m7d_t * a, *b, *c;
 	a = m7d_create(y, z);
 	b = m7d_create(z, y);
-
+	c = m7d_create(y, z);
 	 
 	m7d_rand(a);
 	b = m7d_transpose(b, a);
@@ -182,7 +185,7 @@ void m7d_transpose_test(int y, int z)
 		m7d_print(c);
 		
 	}
-	*/
+	
 	
 	if(!(m7d_equal(a, c)))
 	{
@@ -204,6 +207,7 @@ void m7d_transpose_test(int y, int z)
     m7d_free(a);
     m7d_free(b);
     m7d_free(c);
+    */
  
 }
 

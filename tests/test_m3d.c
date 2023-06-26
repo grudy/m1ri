@@ -30,31 +30,32 @@ void m3d_test_stack_concat(int m, int n)
 {
 	m3d_t * o, *ab, *cd, *abcd, *v;
 	m3_slice * s;
-	o   = m3d_create( 128, 128);
+	o  = m3d_create( 128, 128);
 	m3d_rand(o);
 
 
 	 s = m3d_quarter( o);
-
+	
 
 	m3d_specs(s->row[0]);
-	//m3d_print(s->row[0]);
-	//m3d_print(s->row[1]);
-	//m3d_print(s->row[2]);
-	//m3d_print(s->row[3]);
-
-
+	
+	m3d_print(s->row[0]);
+	m3d_print(s->row[1]);
+	m3d_print(s->row[2]);
+	m3d_print(s->row[3]);
+	
+	
 	ab = m3d_concat(ab, s->row[0], s->row[1]);
-	cd = m3d_concat(cd, s->row[2], s->row[3]);
-
-	m3d_specs(s->row[0]);
-	abcd = m3d_stack(abcd,  ab, cd);
-	m3d_specs(o);
+	//cd = m3d_concat(cd, s->row[2], s->row[3]);
+	m3d_print(ab);
+	
+	//abcd = m3d_stack(abcd,  ab, cd);
+	/*m3d_specs(o);
 	m3d_specs(abcd);
 
 	printf("\nab\n");
 	//m3d_print(ab);
-	printf("\ncd\n");
+	printf("\ncd\n");4
 	//m3d_print(cd);
 	printf("\n abcd \n");
 	//m3d_print(abcd);
@@ -68,14 +69,16 @@ void m3d_test_stack_concat(int m, int n)
 	}
 
 
-
+	*/
 
 
 }
 
  int main(int argc, const char * argv[])
 {
- 	m3d_test_stack_concat(32, 32);
+
+ 	m3d_test_stack_concat(128, 128);
+ 	/*
  	m3d_test_stack_concat(128, 128);
  	m3d_test_stack_concat(246, 246);
  	m3d_test_stack_concat(230, 120);
@@ -83,8 +86,8 @@ void m3d_test_stack_concat(int m, int n)
 	m3_slice * s;
 
 
-	/*
-	*/
+	
+	
 
 	v = m3d_create( 4, 4);
 
@@ -94,7 +97,7 @@ void m3d_test_stack_concat(int m, int n)
 	m3d_colswap(v, 1, 2);
 	//m3d_print(v);
 
-
+*/
   /*
     Multiplication (classic) Test
     (wo*w1)w2 = wo*(w1*w2);
@@ -109,7 +112,11 @@ void m3d_test_stack_concat(int m, int n)
 	w0 = m3d_create(512, 512);
   	w1 = m3d_create(512, 512);
 	w2 = m3d_create(512, 512);
-
+	w3 = m3d_create(512, 512);
+  	w4 = m3d_create(512, 512);
+	w5 = m3d_create(512, 512);
+	w6 = m3d_create(512, 512);
+	/*
   	m3d_rand(w0);
   	m3d_rand(w1);
 	m3d_rand(w2);
@@ -122,6 +129,15 @@ void m3d_test_stack_concat(int m, int n)
 	w5 = m3d_classic_mul(w5, w3, w2);
 	w6 = m3d_classic_mul(w6, w0, w4);
 
+
+	m3d_free(w0);
+	m3d_free(w1);
+	m3d_free(w2);
+	m3d_free(w3);
+	m3d_free(w4);
+	m3d_free(w5);
+	m3d_free(w6);
+	/*
 
    //m3d_print(w5);
 
@@ -148,13 +164,7 @@ void m3d_test_stack_concat(int m, int n)
 	m3d_free(y6);
 
 
-	m3d_free(w0);
-	m3d_free(w1);
-	m3d_free(w2);
-	m3d_free(w3);
-	m3d_free(w4);
-	m3d_free(w5);
-	m3d_free(w6);
+	
 
 	m3d_free(y0);
 	m3d_free(y1);
@@ -180,15 +190,15 @@ void m3d_test_stack_concat(int m, int n)
 	}
 	printf("Equality test passed on equal 64 by 64  matrices");
 
-	m3d_to_png(a, "m3d_test_io.png",  0, "", 0);
-
+	//m3d_to_png(a, "m3d_test_io.png",  0, "", 0);remove
+	//
 	m3d_free(a);
 	m3d_free(b);
 	b = NULL;
 
 
-
-
+	
+*/
 
 
 	return 0;

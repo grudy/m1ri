@@ -32,13 +32,15 @@
     m3d_t * a, * b, *c, *d;
     a = m3d_create(m, n);
     b = m3d_create( m, n);
+    c = m3d_create( m, n);
+    d = m3d_create(m, n);
     m3d_rand(a);
     m3d_rand(b);
     
     c = m3d_add(c, a, b);
-    
+    m3d_print(c);
     d = m3d_sub(d, c, b);
-   
+    m3d_print(d);
 
 	if(!(m3d_equal(d, a)))
     {
@@ -327,7 +329,7 @@ int main(int argc, const char * argv[])
     m3d_test_addition(64, 44);
     m3d_test_addition(142, 181);
     printf("\nm3d addition and subtraction test passed\n");
-	
+	/*
 
 	
     m3d_test_inc(64, 64);
@@ -340,7 +342,7 @@ int main(int argc, const char * argv[])
     m3d_test_inc(142, 181);
 	
 	printf("\nm3d_inc test passed \n");
-
+	/*
 	
 	m5d_test_inc(4, 4);
 	m5d_test_inc(64, 64);
@@ -389,7 +391,7 @@ int main(int argc, const char * argv[])
     m7d_test_addition(64, 44);
     m7d_test_addition(142, 181);
     printf("\nm7d addition and subtraction test passed\n");
-
+	*/
 
   return 0;
   

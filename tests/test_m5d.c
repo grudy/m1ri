@@ -101,11 +101,15 @@ int main(int argc, const char * argv[])
     
     k = m5d_classic_mul(k, i, j);
 	m5d_print(k);
-    
+
 	m5d_t * y0, *y1,* y2,* y3, *y4,* y5,* y6;
 	y0 = m5d_create(512, 512);
 	y1 = m5d_create(512, 512);
 	y2 = m5d_create(512, 512);
+	y3 = m5d_create(512, 512);
+	y4 = m5d_create(512, 512);
+	y5 = m5d_create(512, 512);
+	y6 = m5d_create(512, 512);
     m5d_rand(y0);
   	m5d_rand(y1);
   	m5d_rand(y2);

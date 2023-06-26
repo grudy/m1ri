@@ -22,7 +22,7 @@
  m5d.h
  */
 
-#ifndef M1RIPORJECT_M5D_H
+#ifndef M1RIPROJECT_M5D_H
 #define M1RIPROJECT_M5D_H
 
 #include <stdlib.h>

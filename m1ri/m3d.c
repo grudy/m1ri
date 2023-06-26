@@ -521,15 +521,15 @@ m3d_t *    m3d_init_window(const m3d_t *c, const rci_t strow, const rci_t stvbg,
     	m1ri_die("m3d_concat: bad arguments to concat!\n");
     
     }
-    if(c == NULL)
-    { 
-      c = m3d_create( (a->ncols + b->ncols),  a->nrows );
-    }
-    else if(c->nrows != a->nrows || c->ncols != (a->nrows + b->nrows))
-    {
-    	m1ri_die("m3d_concat: c has wrong dimensions!\n");
+   // if(c == NULL)
+    //{ 
+      //c = m3d_create( (a->ncols + b->ncols),  a->nrows );
+  //  }
+    //else if(c->nrows != a->nrows || c->ncols != (a->nrows + b->nrows))
+    //{
+    //	m1ri_die("m3d_concat: c has wrong dimensions!\n");
     
-    }
+    //}
 	
     	
 	c = m3d_create( a->nrows ,a->ncols + b->ncols);
@@ -552,7 +552,7 @@ m3d_t *    m3d_init_window(const m3d_t *c, const rci_t strow, const rci_t stvbg,
             
     }
         
-    
+
     return c;
 }
 

@@ -27,7 +27,7 @@
  */
 
 #ifndef M1RIPROJECT_DECOM_H
-#define M1RIPROJECT_DECOM_h
+#define M1RIPROJECT_DECOM_H
 
 #include <stdlib.h>
 #include <m1ri/m1riwrappers.h>
